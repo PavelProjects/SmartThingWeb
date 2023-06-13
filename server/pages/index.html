@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Smart thing control panel</title>
+    </head>
+    <body>
+        <div class="left-panel">
+            <div class="content-block">
+                <div class="content-label">
+                    <label for="server-info">Server info</label>
+                </div>
+                <div id="server-info"></div>
+            </div>
+    
+            <div class="content-block">
+                <div class="content-label">
+                    <label for="devices-list">Found devices</label>
+                </div>
+                <ul id="devices-list"></ul>
+            </div>
+        </div>
+
+        <div class="right-panel">
+            <div class="content-label">
+                <label for="devices-logs">Devices logs</label>
+            </div>
+            <div id="devices-logs"></div>
+        </div>
+    </body>
+    <script>
+        const searchWebSocket = undefined;
+        const logsWebSocket = undefined;
+
+        window.onload = function() {
+            loadInfo();
+            searchDevices();
+            getLogs();
+        }
+        window.addEventListener('beforeunload', function (e) {
+            if (this.searchWebSocket) {
+                this.searchWebSocket.close();
+            }
+            if (this.logsWebSocket) {
+                this.logsWebSocket.close();
+            }
+        });
+
+        async function loadInfo() {
+            restRequest(
+                "GET",
+                "/st/info",
+                null,
+                function(response) {
+                    if (response) {
+                        const info = JSON.parse(response);
+                        const parent = document.getElementById("server-info");
+                        parent.innerHTML = "";
+                        Object.entries(info).forEach(([key, value]) => {
+                            const div = document.createElement("div");
+                            div.innerHTML = key + ": " + value;
+                            parent.appendChild(div);
+                        });
+                    }
+                }
+            );
+        }
+
+        async function searchDevices() {
+            document.getElementById("devices-list").innerHTML = "";
+            connectToWs(
+                this.searchWebSocket,
+                "/find", 
+                (event) => {
+                    if (!this.devices) {
+                        this.devices = {};
+                    }
+                    if (event.data) {
+                        const data = String(event.data).split(":");
+                        if (!(data[0] in this.devices)) {
+                            console.log("Got new device " + data);
+                            this.devices[data[0]] = data;
+                            const item = document.createElement("li");
+                            item.id = data[0];
+                            item.innerHTML = "[" + data[0] + "] " + data[1];
+                            item.title = "Open device page";
+                            item.onclick = () => {
+                                console.log(data[0]);
+                                window.open("http://" + data[0], '_blank').focus();
+                            };
+                            loadDeviceInfo(data[0]);
+                            document.getElementById("devices-list").appendChild(item);
+                        }
+                    } else {
+                        console.warn("Empty ws message");
+                    }
+                }
+            );
+            console.log("Web socket connected (find)");
+        }
+
+        async function getLogs() {
+            connectToWs(
+                this.logsWebSocket,
+                "/logs",
+                (event) => {
+                    if (event.data) {
+                        console.log(event.data);
+                        const div = document.createElement("div");
+                        div.innerHTML = event.data;
+                        document.getElementById("devices-logs").prepend(div);
+                    }
+                }
+            );
+        }
+
+        async function loadDeviceInfo(deviceIp) {
+            if (!deviceIp) {
+                return;
+            }
+            restRequest(
+                "GET",
+                "/info",
+                null,
+                function (response) {
+                    if (response) {
+                        const element = document.getElementById(deviceIp);
+                        if (element) {
+                            const infoList = document.createElement("ul");
+                            const info = JSON.parse(response);
+                            Object.entries(info).forEach(([key, value]) => {
+                                const li = document.createElement("li");
+                                li.id = key;
+                                li.innerHTML = key + ": " + value;
+                                infoList.appendChild(li);
+                            });
+                            element.appendChild(infoList);
+                        }
+                    }
+                },
+                deviceIp
+            );
+        }
+
+        function connectToWs(socket, path, callback) {
+            const wsUrl = "ws://" + getHost() + "/ws" + path;
+            console.log("Ws connecting to " + wsUrl);
+            socket = new WebSocket(wsUrl);
+            socket.onmessage = (event) => callback(event);
+            socket.onerror = (event) => {
+                console.error(wsUrl, event);
+            };
+            socket.onclose = () => {
+                console.warn("web socket " + wsUrl + " closed");
+            };
+        }
+        
+        function restRequest(method, path, data, callback, host) {
+            if (!path) {
+                console.error("Empty path!");
+                return;
+            }
+            let xhr = new XMLHttpRequest();
+            if (!host) {
+                host = getHost();
+            }
+            xhr.open(method, "http://" + host + path);
+            xhr.setRequestHeader("Accept", "application/json");
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.onreadystatechange = function () {
+                    if (xhr.readyState === 4) {
+                        if (xhr.status >= 200 && xhr.status <= 299) {
+                            if (callback) callback(xhr.response);
+                        } else {
+                            console.error("Request " + host + path + " failed with code " + xhr.status1);
+                        }
+                    }
+                };
+            xhr.send(data ? JSON.stringify(data) : null);
+        }
+
+        function getHost() {
+            const { host } = window.location;
+            return host;
+        }
+    </script>
+    <style>
+        .content-block {
+            font-size: 20px;
+            padding: 10px;
+            margin: 5px;
+            border-radius: 10px;
+            border: 1px solid black;
+        }
+        .content-label {
+            font-size: 30px;
+            text-align: center;
+        }
+        .right-panel {
+            position: absolute;
+            right: 15px;
+            top: 10px;
+            width: 48%;
+            height: 80%;
+            border-radius: 10px;
+            border: 2px solid grey;
+            overflow: scroll;
+        }
+        .left-panel {
+            position: absolute;
+            left: 15px;
+            top: 10px;
+            width: 48%;
+            height: 80%;
+            border-radius: 10px;
+            border: 2px solid grey;
+        }
+        #devices-logs {
+            font-size: 15px;
+        }
+    </style>
+</html>
