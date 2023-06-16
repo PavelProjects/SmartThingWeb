@@ -15,7 +15,7 @@
 #include <string>
 
 #include "handlers/STRequestHandler.h"
-#include "handlers/PageRequestHandler.h"
+#include "handlers/ResourceRequestHandler.h"
 #include "handlers/WebSocketRequestHandler.h"
 
 using Poco::Net::HTTPRequestHandler;
@@ -31,26 +31,41 @@ using Poco::DateTimeFormat;
 
 class STWebRequestFactory: public HTTPRequestHandlerFactory {
     public:
-        STWebRequestFactory(const std::string &format) : _format(format){}
+        STWebRequestFactory(const std::string &format, const std::string &resourceDir) : _format(format), _resourceDir(resourceDir){}
         HTTPRequestHandler *createRequestHandler([[maybe_unused]] const HTTPServerRequest &request){
-            std::cout << "[" << request.getMethod() << "] " << request.getURI()<< std::endl;
-            if (request.getURI().rfind("/st") == 0) {
+            const std::string uri = request.getURI();
+            std::cout << "[" << request.getMethod() << "] " << uri<< std::endl;
+            if (uri.rfind("/st") == 0) {
                 return new STWebRequestHandler(_format);
-            } else if (request.getURI().rfind("/ws") == 0) {
+            } else if (uri.rfind("/ws") == 0) {
                 return new WebSocketRequestHandler(_format);
-            } else if (request.getURI() == "/" || request.getURI() == "/index.html") {
-                return new PageRequestHandler(_format);
+            } else if (uri == "/" || uri.rfind(RESOURCES_URI) == 0) {
+                return new ResourceRequestHandler(_format, _resourceDir);
             }
             return 0;
         }
     private:
         std::string _format;
+        std::string _resourceDir;
 };
 
 class STWebServer: public Poco::Util::ServerApplication {
     public:
         STWebServer() : _helpRequested(false){}
         ~STWebServer() {}
+        void setPort([[maybe_unused]] const std::string &name, const std::string &value) {
+            _port = atoi(value.c_str());
+        }
+        void setResourceDir([[maybe_unused]] const std::string &name, const std::string &value) {
+            if (value.length() <= 0) {
+                return;
+            }
+            if (value.at(value.size() - 1) == '/') {
+                _resourceDir = value.substr(0, value.size() - 1);
+            } else {
+                _resourceDir = value;
+            }
+        }
     protected:
         void initialize(Application &self) {
             loadConfiguration();
@@ -59,25 +74,47 @@ class STWebServer: public Poco::Util::ServerApplication {
         void uninitialize() {
             ServerApplication::uninitialize();
         }
+        void defineOptions(Poco::Util::OptionSet& options) {
+            Application::defineOptions(options);
+            options.addOption(
+				Poco::Util::Option("port", "p", "set service port")
+                    .required(false)
+                    .repeatable(false)
+                    .argument("port=value")
+                    .callback(Poco::Util::OptionCallback<STWebServer>(this, &STWebServer::setPort)
+                )
+            );
+            options.addOption(
+				Poco::Util::Option("resource_dir", "r", "path to resource directory")
+                    .required(true)
+                    .repeatable(false)
+                    .argument("resource_dir=value")
+                    .callback(Poco::Util::OptionCallback<STWebServer>(this, &STWebServer::setResourceDir)
+                )
+            );
+        }
+
         int main([[maybe_unused]] const std::vector<std::string> &args) {
-            const char * portValue = "8080";
             if (std::getenv("PORT") != nullptr) {
-                portValue = std::getenv("PORT");
+                _port = atoi(std::getenv("PORT"));
             }
 
             if (!_helpRequested) {
-                ServerSocket svs(Poco::Net::SocketAddress("0.0.0.0", atoi(portValue)));
-                HTTPServer srv(new STWebRequestFactory(DateTimeFormat::SORTABLE_FORMAT), svs, new HTTPServerParams);
+                ServerSocket svs(Poco::Net::SocketAddress("0.0.0.0", _port));
+                HTTPServer srv(new STWebRequestFactory(DateTimeFormat::SORTABLE_FORMAT, _resourceDir), svs, new HTTPServerParams);
                 srv.start();
-                std::cout << "server started on port " << portValue << std::endl;
+                std::cout << "Server started on port: " << _port << std::endl;
+                std::cout << "Resources directory: " << _resourceDir << std::endl;
                 waitForTerminationRequest();
                 srv.stop();
-                std::cout << "server stoped" << std::endl;
+                std::cout << "Server stoped" << std::endl;
             }
             return Application::EXIT_OK;
         }
     private:
         bool _helpRequested;
+        int _port = 8080;
+        std::string _resourceDir;
 };
 
 #endif

@@ -1,0 +1,55 @@
+.content-block {
+    font-size: 20px;
+    padding: 10px;
+    margin: 5px;
+    border-radius: 10px;
+    border: 1px solid black;
+}
+.content-label {
+    font-size: 30px;
+    text-align: center;
+}
+.right-panel {
+    position: absolute;
+    right: 15px;
+    top: 10px;
+    width: 48%;
+    height: 80%;
+    border-radius: 10px;
+    border: 2px solid grey;
+    overflow: scroll;
+}
+.left-panel {
+    position: absolute;
+    left: 15px;
+    top: 10px;
+    width: 48%;
+    height: 80%;
+    border-radius: 10px;
+    border: 2px solid grey;
+}
+.device-name {
+    border-radius: 10px;
+    width: fit-content;
+    padding: 5px;
+    margin: 5px;
+    cursor: pointer;
+}
+.logs-button {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 20px;
+}
+.positive {
+    background-color: #04AA6D; 
+    border: 1px solid green;
+}
+.alert {
+    background-color: red;
+}
+#devices-logs {
+    font-size: 15px;
+}

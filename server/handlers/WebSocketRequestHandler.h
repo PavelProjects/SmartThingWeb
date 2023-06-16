@@ -8,7 +8,6 @@
 #include "Poco/JSON/Object.h"
 #include <iostream>
 #include <string>
-#include <format>
 #include <chrono>
 #include <thread>
 #include<ctime>
@@ -75,9 +74,13 @@ class WebSocketRequestHandler: public HTTPRequestHandler {
                 std::cerr << "WS exception: " << e.what() << std::endl;
             }
 
-            closeSocket(sock);
-            ws.shutdown();
-            std::cout << "Websocket closed" << std::endl;
+            try {
+                closeSocket(sock);
+                ws.shutdown();
+                std::cout << "Websocket closed" << std::endl;
+            } catch (std::exception &e) {
+                std::cout << "Failed to close socket: " << e.what() << std::endl;
+            }
         }
     private:
         std::string _format;
