@@ -1,9 +1,10 @@
-<script>
+<script>  
   import DeviceInfoBlock from './DeviceInfoBlock.vue'
   import DeviceControlPanel from './DeviceControlPanel.vue'
 
   import SyncLoader from 'vue-spinner/src/SyncLoader.vue'
   import { Client } from '@stomp/stompjs';
+  import { h } from 'vue'
   
   const BROKER_URL = "ws://192.168.1.82:8080/smartthing-ws"
   const SEARCH_TOPIC = "/devices/search"
@@ -16,8 +17,9 @@
     },
     data() {
         return {
+            tabs: {},
             devices: {},
-            selectedDevice: null,
+            selectedIp: null,
             client: null,
             loading: true
         }
@@ -31,7 +33,7 @@
             this.client.onConnect = () => {
                 this.loading = true
                 this.devices = {}
-                this.selectedDevice = null
+                this.selectedIp = null
                 this.client.subscribe(SEARCH_TOPIC, (message) => {
                     if (message && message.body) {
                         const deviceInfo = JSON.parse(message.body)
@@ -60,6 +62,15 @@
             const url = "http://" + deviceIp + "/info/system"
             this.devices[deviceIp] = await (await fetch(url)).json()
         },
+        switchTab(ip, deviceInfo) {
+            if (!this.tabs[ip]) {
+                this.tabs[ip] = h(
+                    DeviceControlPanel,
+                    {key: ip, ip}
+                );
+            }
+            this.selectedIp = ip;
+        },
     },
   }
 </script>
@@ -67,45 +78,61 @@
 <template>
   <div class="panel">
     <div class="side-search">
-        <button v-if="!loading" v-on:click="connectToBroker"><h1>Search</h1></button>
+        <button class="clicable" v-if="!loading" v-on:click="connectToBroker">
+            <h1>Refresh</h1>
+        </button>
         <sync-loader :loading="loading"></sync-loader>
-        <div v-for="[ip, deviceInfo] in Object.entries(devices)">
-            <DeviceInfoBlock
-                v-bind:deviceIp="ip" 
-                v-bind:deviceInfo="deviceInfo"
-                v-on:selected="selectedDevice = {info: deviceInfo, ip}"
-            />
+        <div v-for="[ip, deviceInfo] in Object.entries(devices)" v-bind:key="ip">
+            <Transition name="slide-left">
+                <DeviceInfoBlock
+                    v-bind:ip="ip" 
+                    v-bind:deviceInfo="deviceInfo"
+                    v-bind:selected="selectedIp == ip"
+                    v-on:click="switchTab(ip)"
+                    class="clicable"
+                />
+            </Transition>
         </div>
     </div>
-    <div class="main-tab">
-        <DeviceControlPanel 
-            v-if="selectedDevice"
-            v-bind:deviceInfo="selectedDevice.info" 
-            v-bind:deviceIp="selectedDevice.ip"
-        />
+    <div class="main-tab" v-if="selectedIp">
+        <Transition name="slide-rigth">
+            <KeepAlive>
+                <component v-bind:is="tabs[selectedIp]"></component>
+            </KeepAlive>
+        </Transition>
     </div>
   </div>
 </template>
 
-<style>
+<style scoped>
+    .slide-rigth-enter-active {
+        transition: all 0.5s ease;
+    }
+    .slide-rigth-enter-from{
+      opacity: 0;
+    }
+    .slide-left-enter-active {
+        transition: all 0.5s ease;
+      }
+      .slide-left-enter-from{
+        transform: translateX(-200px);
+        opacity: 0;
+      }
     .panel {
         display: grid;
         grid-template-columns: auto;
-        grid-template-areas: 'search main';
+        grid-template-columns: 1fr 4fr;
         column-gap: 10px;
     }
     .side-search{
-        grid-area: search;
         display: grid;
         row-gap: 5px;
-        border: solid;
-        border-color: rgb(70, 70, 70);
-        border-radius: 10px;
         padding: 5px;
         height: 100%;
+        width: 400px;
     }
-    .main-tab {
-        grid-area: main;
+    .clicable {
+        cursor: pointer;
     }
     
 </style>

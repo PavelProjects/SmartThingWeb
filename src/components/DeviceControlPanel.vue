@@ -1,69 +1,93 @@
 <script>
-    const INFO_URL = "/info"
-    const ACTIONS_URL = INFO_URL + "/actions"
+    import DeviceInfoTab from './tabs/DeviceInfoTab.vue'
+    import DeviceActionsTab from './tabs/DeviceActionsTab.vue'
+    import { h } from 'vue'
 
     export default {
         name: 'DeviceControlPanel',
+        components: {
+            DeviceInfoTab,
+            DeviceActionsTab
+        },
         props: {
-            deviceIp: String,
-            deviceInfo: Object
+            ip: String
         },
         data() {
             return {
-                baseUrl: "http://" + this.deviceIp,
-                actions: null
+                currentTab: null,
+                tabs: {
+                    "info": {
+                        class: DeviceInfoTab,
+                        caption: "Device information",
+                        props: {
+                            ip: this.ip
+                        }
+                    },
+                    "actions": {
+                        class: DeviceActionsTab,
+                        caption: "Device actions",
+                        props: {
+                            ip: this.ip
+                        }
+                    }
+                }
             }
         },
         created() {
-            if (this.deviceIp) {
-                this.loadActions();
-            } else {
-                console.error("Device ip is missing!");
-            }
+            this.switchTab("info")
         },
         methods: {
-            async loadActions() {
-                this.actions = await (await fetch(this.baseUrl + ACTIONS_URL)).json()
-            },
-            async sendAction(action) {
-                const url = this.baseUrl + "/action?action=" + action
-                await fetch(url, {
-                    method: "PUT"
-                })
+            switchTab(name) {
+                if (!this.tabs[name]["render"]) {
+                    const tabInfo = this.tabs[name]
+                    this.tabs[name]["render"] = h(
+                        tabInfo.class,
+                        tabInfo.props
+                    )
+                }
+                this.currentTab = name
             }
         }
     }
 </script>
 
 <template>
-    <div>
-        <h1>{{deviceInfo.name}}</h1>
-        <h1>{{deviceIp}}</h1>
-        
-        <div class="buttons-panel">
-            <h1>Actions</h1>
-            <div v-if="actions" v-for="(caption, name) in actions">
-                <button @click="sendAction(name)">
-                    <h1>{{ caption }}</h1>
-                </button>
+    <div class="tab-view bordered">
+        <div class="tabs">
+            <h1>Tabs</h1>
+            <button v-for="[name, { caption }] in Object.entries(tabs)" :key="name" v-on:click="switchTab(name)">
+                <h2>{{ caption }}</h2>
+            </button>
+        </div>
+        <div class="wrapper">
+            <div v-if="currentTab && tabs[currentTab]['render']" class="view bordered">
+                <component :is="tabs[currentTab]['render']"></component>
+            </div>
+            <div v-else>
+                <h1>Select tab</h1>
             </div>
         </div>
     </div>
 </template>
 
-<style>
-    .buttons-panel {
-        display: grid;
-        row-gap: 5px;
-        width: 50%;
+<style scoped>
+    h1 {
         text-align: center;
-        border: solid;
-        border-color: rgb(70, 70, 70);
-        border-radius: 10px;
-        padding: 5px;
     }
-    .buttons-panel button{
-        width: 100%;
+    .tab-view {
+        display:grid;
+        grid-template-columns: 1fr 4fr;
+        column-gap: 5px;
+    }
+    .tabs {
+        grid-column: 1;
         height: 100%;
+    }
+    .tabs button {
+        width: 100%;
+        margin-bottom: 5px;
+    }
+    .view {
+        grid-column: 2;
     }
 </style>
