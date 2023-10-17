@@ -1,138 +1,125 @@
 <script>  
-  import DeviceInfoBlock from './DeviceInfoBlock.vue'
-  import DeviceControlPanel from './DeviceControlPanel.vue'
+    import SearchDeviceInfo from './SearchDeviceInfo.vue'
+    import DeviceControlPanel from './DeviceControlPanel.vue'
+    import TabItem from './tabs/TabItem.vue'
 
-  import SyncLoader from 'vue-spinner/src/SyncLoader.vue'
-  import { Client } from '@stomp/stompjs';
-  import { h } from 'vue'
-  
-  const BROKER_URL = "ws://192.168.1.82:8080/smartthing-ws"
-  const SEARCH_TOPIC = "/devices/search"
+    import SyncLoader from 'vue-spinner/src/SyncLoader.vue'
+    import { Client } from '@stomp/stompjs';
+    import { h } from 'vue'
+    import { DeviceApi } from "../api.js"
+    
+    const BROKER_URL = "ws://192.168.1.82:8080/smartthing-ws"
+    const SEARCH_TOPIC = "/devices/search"
+    const SEARCH_TIME = 10000
 
-  export default {
-    components: {
-        DeviceInfoBlock,
-        DeviceControlPanel,
-        SyncLoader
-    },
-    data() {
-        return {
-            tabs: {},
-            devices: {},
-            selectedIp: null,
-            client: null,
-            loading: true
-        }
-    },
-    created() {
-        this.connectToBroker()
-    },
-    methods: {
-        async connectToBroker() {
-            this.client = new Client({brokerURL: BROKER_URL});
-            this.client.onConnect = () => {
-                this.loading = true
-                this.devices = {}
-                this.selectedIp = null
-                this.client.subscribe(SEARCH_TOPIC, (message) => {
-                    if (message && message.body) {
-                        const deviceInfo = JSON.parse(message.body)
-                        if (!this.devices[deviceInfo.ip]) {
-                            this.devices[deviceInfo.ip] = {}
-                            this.loadDeviceInfo(deviceInfo.ip)
+    export default {
+        components: {
+            SearchDeviceInfo,
+            DeviceControlPanel,
+            SyncLoader,
+            TabItem
+        },
+        data() {
+            return {
+                tabs: {},
+                devices: {},
+                selectedIp: null,
+                client: null,
+                loading: true
+            }
+        },
+        created() {
+            this.connectToBroker()
+        },
+        methods: {
+            async connectToBroker() {
+                this.client = new Client({brokerURL: BROKER_URL});
+                this.client.onConnect = () => {
+                    this.loading = true
+                    this.devices = {}
+                    this.selectedIp = null
+                    this.client.subscribe(SEARCH_TOPIC, (message) => {
+                        if (message && message.body) {
+                            const deviceInfo = JSON.parse(message.body)
+                            if (!this.devices[deviceInfo.ip]) {
+                                this.devices[deviceInfo.ip] = {}
+                                this.loadDeviceInfo(deviceInfo.ip)
+                            }
+                        } else {
+                            console.warn("Empty topic message")
                         }
-                    } else {
-                        console.warn("Empty topic message")
-                    }
-                }, {id: "search"})
-            }
-            this.client.activate()
-            setTimeout(this.disconnectFromBroker, 2000)
+                    }, {id: "search"})
+                }
+                this.client.activate()
+                setTimeout(this.disconnectFromBroker, SEARCH_TIME)
+            },
+            async disconnectFromBroker() {
+                if (this.client) {
+                    this.client.unsubscribe("search")
+                    this.loading = false
+                    console.log("Unsubscribed from search topic")
+                } else {
+                    console.error("Can't disconnect from broker - client is null")
+                }
+            },
+            async loadDeviceInfo(deviceIp) {
+                this.devices[deviceIp] = await DeviceApi.getDeviceInfo(deviceIp)
+            },
+            switchTab(ip, deviceInfo) {
+                if (!this.tabs[ip]) {
+                    this.tabs[ip] = h(
+                        DeviceControlPanel,
+                        {key: ip, ip}
+                    );
+                }
+                this.selectedIp = ip;
+            },
         },
-        async disconnectFromBroker() {
-            if (this.client) {
-                this.client.unsubscribe("search")
-                this.loading = false
-                console.log("Unsubscribed from search topic")
-            } else {
-                console.error("Can't disconnect from broker - client is null")
-            }
-        },
-        async loadDeviceInfo(deviceIp) {
-            const url = "http://" + deviceIp + "/info/system"
-            this.devices[deviceIp] = await (await fetch(url)).json()
-        },
-        switchTab(ip, deviceInfo) {
-            if (!this.tabs[ip]) {
-                this.tabs[ip] = h(
-                    DeviceControlPanel,
-                    {key: ip, ip}
-                );
-            }
-            this.selectedIp = ip;
-        },
-    },
-  }
+    }
 </script>
 
 <template>
-  <div class="panel">
+  <div class="devices-table">
     <div class="side-search">
-        <button class="clicable" v-if="!loading" v-on:click="connectToBroker">
-            <h1>Refresh</h1>
-        </button>
-        <sync-loader :loading="loading"></sync-loader>
         <div v-for="[ip, deviceInfo] in Object.entries(devices)" v-bind:key="ip">
             <Transition name="slide-left">
-                <DeviceInfoBlock
-                    v-bind:ip="ip" 
-                    v-bind:deviceInfo="deviceInfo"
-                    v-bind:selected="selectedIp == ip"
-                    v-on:click="switchTab(ip)"
-                    class="clicable"
-                />
+                <TabItem v-if="deviceInfo && deviceInfo.name" v-bind:selected="selectedIp == ip">
+                    <SearchDeviceInfo
+                        v-bind:ip="ip" 
+                        v-bind:deviceInfo="deviceInfo"
+                        v-on:click="switchTab(ip)"
+                    />
+                </TabItem>
             </Transition>
         </div>
+        <sync-loader :loading="loading"></sync-loader>
+        <button class="clickable" v-if="!loading" v-on:click="connectToBroker">
+            <h1>Refresh</h1>
+        </button>
     </div>
     <div class="main-tab" v-if="selectedIp">
-        <Transition name="slide-rigth">
-            <KeepAlive>
-                <component v-bind:is="tabs[selectedIp]"></component>
-            </KeepAlive>
-        </Transition>
+        <KeepAlive>
+            <component v-bind:is="tabs[selectedIp]"></component>
+        </KeepAlive>
     </div>
   </div>
 </template>
 
-<style scoped>
-    .slide-rigth-enter-active {
-        transition: all 0.5s ease;
-    }
-    .slide-rigth-enter-from{
-      opacity: 0;
-    }
-    .slide-left-enter-active {
-        transition: all 0.5s ease;
-      }
-      .slide-left-enter-from{
-        transform: translateX(-200px);
-        opacity: 0;
-      }
-    .panel {
-        display: grid;
-        grid-template-columns: auto;
-        grid-template-columns: 1fr 4fr;
-        column-gap: 10px;
+<style>
+    .devices-table {
+        display: flex;
+        flex-direction: row;
     }
     .side-search{
         display: grid;
-        row-gap: 5px;
-        padding: 5px;
-        height: 100%;
-        width: 400px;
+        row-gap: var(--list-item-gap);
+        width: 30%;
+        margin-right: 5px;
+        height: fit-content;
     }
-    .clicable {
-        cursor: pointer;
+    .main-tab {
+        width: 100%;
+        height: 70%;
     }
     
 </style>

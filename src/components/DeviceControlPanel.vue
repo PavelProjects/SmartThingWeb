@@ -1,13 +1,19 @@
 <script>
-    import DeviceInfoTab from './tabs/DeviceInfoTab.vue'
-    import DeviceActionsTab from './tabs/DeviceActionsTab.vue'
+    import DeviceInfoView from './view/DeviceInfoView.vue'
+    import DeviceActionsView from './view/DeviceActionsView.vue'
+    import SensorsView from './view/SensorsView.vue'
+    import StatesView from './view/StatesView.vue'
+    import TabsView from './tabs/TabsView.vue'
     import { h } from 'vue'
 
     export default {
         name: 'DeviceControlPanel',
         components: {
-            DeviceInfoTab,
-            DeviceActionsTab
+            DeviceInfoView,
+            DeviceActionsView,
+            SensorsView,
+            StatesView,
+            TabsView
         },
         props: {
             ip: String
@@ -17,18 +23,24 @@
                 currentTab: null,
                 tabs: {
                     "info": {
-                        class: DeviceInfoTab,
-                        caption: "Device information",
-                        props: {
-                            ip: this.ip
-                        }
+                        class: DeviceInfoView,
+                        caption: "Information",
+                        props: {ip: this.ip}
                     },
                     "actions": {
-                        class: DeviceActionsTab,
-                        caption: "Device actions",
-                        props: {
-                            ip: this.ip
-                        }
+                        class: DeviceActionsView,
+                        caption: "Actions",
+                        props: {ip: this.ip}
+                    },
+                    "sensors": {
+                        class: SensorsView,
+                        caption: "Sensors",
+                        props: {ip: this.ip}
+                    },
+                    "states": {
+                        class: StatesView,
+                        caption: "States",
+                        props: {ip: this.ip}
                     }
                 }
             }
@@ -52,42 +64,18 @@
 </script>
 
 <template>
-    <div class="tab-view bordered">
-        <div class="tabs">
-            <h1>Tabs</h1>
-            <button v-for="[name, { caption }] in Object.entries(tabs)" :key="name" v-on:click="switchTab(name)">
-                <h2>{{ caption }}</h2>
-            </button>
-        </div>
-        <div class="wrapper">
-            <div v-if="currentTab && tabs[currentTab]['render']" class="view bordered">
-                <component :is="tabs[currentTab]['render']"></component>
-            </div>
-            <div v-else>
-                <h1>Select tab</h1>
-            </div>
-        </div>
+    <div class="control-panel bordered">
+        <TabsView
+            :tabs="tabs"
+            label="Tabs"
+            default-tab="info"
+        />
     </div>
 </template>
 
-<style scoped>
-    h1 {
-        text-align: center;
-    }
-    .tab-view {
-        display:grid;
-        grid-template-columns: 1fr 4fr;
-        column-gap: 5px;
-    }
-    .tabs {
-        grid-column: 1;
-        height: 100%;
-    }
-    .tabs button {
-        width: 100%;
-        margin-bottom: 5px;
-    }
-    .view {
-        grid-column: 2;
+<style>
+    .control-panel {
+        height: auto;
+        width: auto;
     }
 </style>

@@ -1,8 +1,9 @@
 <script>    
     import SyncLoader from 'vue-spinner/src/SyncLoader.vue'
+    import { DeviceApi } from "../../api.js"
 
     export default {
-        name: "DeviceActionsTab",
+        name: "DeviceActionsView",
         components: {
             SyncLoader
         },
@@ -21,22 +22,12 @@
         },
         methods: {
             async loadActions() {
-                this.loading = true
-                try {
-                    this.actions = await (await fetch(this.baseUrl + "/info/actions")).json()
-                } finally {
-                    this.loading = false
-                }
+                this.actions = await DeviceApi.getDeviceActionsInfo(this.ip)
             },
             async sendAction(action) {
-                this.loading = true
-                try {
-                    const url = this.baseUrl + "/action?action=" + action
-                    await fetch(url, {
-                        method: "PUT"
-                    })
-                } finally {
-                    this.loading = false
+                const res = await DeviceApi.executeDeviceAcion(this.ip, action)
+                if (!res) {
+                    console.error("Failed to execute device action " + action)
                 }
             }
         }

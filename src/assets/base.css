@@ -34,6 +34,7 @@
   --color-text: var(--vt-c-text-light-1);
 
   --section-gap: 160px;
+  --list-item-gap: 5px;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -83,4 +84,13 @@ body {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* animations */
+.slide-left-enter-active {
+  transition: all 0.5s ease;
+}
+.slide-left-enter-from{
+  transform: translateX(-200px);
+  opacity: 0;
 }
