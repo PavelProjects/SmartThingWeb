@@ -85,12 +85,3 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-
-/* animations */
-.slide-left-enter-active {
-  transition: all 0.5s ease;
-}
-.slide-left-enter-from{
-  transform: translateX(-200px);
-  opacity: 0;
-}

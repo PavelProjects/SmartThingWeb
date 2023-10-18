@@ -1,6 +1,10 @@
 <script>
-import { DeviceApi } from '../../api.js'
     import { systemNameToNormal } from "../../utils/StringUtils.js"
+    import InputWithLabel from "../fields/InputWithLabel.vue"
+    import Combobox from "../fields/Combobox.vue"
+    import { DeviceApi } from "../../api.js"
+    import { NEW_CALLBACK_ID } from "./CallbacksView.vue"
+    import { h } from "vue"
     
     const SYSTEM_FIELDS = ["id", "type", "readonly"]
 
@@ -10,20 +14,29 @@ import { DeviceApi } from '../../api.js'
             ip: String,
             callback: Object,
             observable: Object,
-            templates: Array
+            template: Array
+        },
+        components: {
+            InputWithLabel,
+            Combobox
         },
         data() {
             return {
-                editing: false,
-                defaultTemplate: this.templates["default"] || {},
+                editing: this.callback.id == NEW_CALLBACK_ID,
+                haveChanges: this.callback.id == NEW_CALLBACK_ID,
                 validationFailed: []
             }
         },
         computed: {
-            fields() {
+            visibleFields() {
                 return Object.entries(this.callback)
                     .filter(([key, _]) => !this.isDefaultField(key))
                     .reverse()
+            },
+            fieldsComponents() {
+                return this.visibleFields.map(([field, value]) => {
+                    return {key: field, value, render: this.getFieldComponent(field)}
+                })
             }
         },
         methods: {
@@ -35,34 +48,94 @@ import { DeviceApi } from '../../api.js'
                 if (!this.editing || this.isDefaultField(key)) {
                     return true
                 }
-                const template = this.templates[this.callback.type || ""]
-                return !(key in template)
+                return !(key in this.template)
             },
-            saveCallback() {
-                if (this.validate) {
-                    this.$emit("saveCallback", this.callback)
-                    this.editing = false
-                } else {
-                    console.error("Validation failed: " + this.validationFailed)
+            getFieldComponent(field) {
+                if (this.template[field] && this.template[field]["values"]) {
+                    return h(
+                        Combobox,
+                        {items: this.template[field]["values"]}
+                    )
                 }
+                return h(InputWithLabel, {})
+            },
+            async saveCallback() {
+                if (!this.haveChanges) {
+                    console.error("No changes were made")
+                    return
+                }
+                if (!this.validate()) {
+                    console.error("Validation failed: " + this.validationFailed)
+                    return
+                }
+                let res = false
+                if (this.callback.id !== NEW_CALLBACK_ID) {
+                    res = await DeviceApi.updateCallback(this.ip, this.observable, this.callback)
+                    this.$emit("reloadCallback", this.callback)
+                } else { 
+                    res = await DeviceApi.createCallback(this.ip, this.observable, this.callback)
+                    this.$emit("update")
+                }
+
+                if (res) {
+                    console.info("Callback was saved")
+                    this.editing = false
+                    this.haveChanges = false
+                }
+            },
+            async deleteCallback() {
+                if (this.callback.id !== 0 && !this.callback.id) {
+                    console.error("Callback id is missing")
+                    return
+                }
+                if (confirm("Are you sure you wan to delete callback " + this.callback.id + "?")) {
+                    const res = await DeviceApi.deleteCallback(this.ip, this.observable, this.callback.id)
+                    if (res) {
+                        console.info("Callback was deleted")
+                        this.$emit("update")
+                    }
+                }
+            },
+            cancel() {
+                this.validationFailed = []
+                this.editing = false
+                this.$emit('reloadCallback', this.callback)
             },
             validate() {
                 this.validationFailed = []
-                const template = this.templates[this.callback.type]
-                if (!template) {
-                    console.error("Template missing for type " + this.callback.type)
-                    return false
-                }
-
-                Object.entries(template).forEach(([key, {required}]) => {
+                Object.entries(this.template).forEach(([key, {required}]) => {
                     if (required) {
                         const value = this.callback[key]
-                        if (!(value || value === 0)) {
+                        if (!value && value !== 0) {
                             this.validationFailed.push(key)
                         }
                     }
                 })
                 return this.validationFailed.length == 0
+            },
+            setValue(key, value) {
+                if (!key) {
+                    console.error("Key is missing")
+                    return
+                }
+                let finalValue = value
+                const type = this.template[key]["type"]
+                if (type) {
+                    switch(type) {
+                        case "boolean":
+                            finalValue = value == "true"
+                            break
+                        case "integer":
+                            finalValue = Number.parseInt(value)
+                            break
+                        case "string":
+                            finalValue = value
+                        default:
+                            console.error("Type " + type + " not supported yet")
+                    }
+                }
+                this.callback[key] = finalValue
+                this.haveChanges = true
             }
         }
     }
@@ -73,29 +146,32 @@ import { DeviceApi } from '../../api.js'
         <div class="callback-header">
             <h3>[{{callback.id}}] {{ callback.caption || systemNameToNormal(callback.type) }}</h3>
             <div v-if="!callback.readonly" class="callback-view-controls">
-                <button>Delete</button>
+                <button v-if="!editing" v-on:click="deleteCallback">Delete</button>
+                <button v-if="editing" v-on:click="cancel">Cancel</button>
+
                 <button v-if="!editing" v-on:click="editing = true">Edit</button>
                 <button v-if="editing" v-on:click="saveCallback">Save</button>
             </div>
             <div v-else>
                 <h3 style="text-align: center;">Readonly</h3>
             </div>
-        </div>
+        </div>  
         <div>
-            <div class="callback-entry">
-                <h2>type</h2>
-                <input key="type" :value="callback.type" disabled="true" class="legit"/>
-            </div>
-            <div v-for="[key, value] in fields" :key="key" class="callback-entry">
-                <h2>{{ systemNameToNormal(key) }}</h2>
-                <input 
-                    :ref="key" 
-                    :value="value"
-                    @input="callback[key] = $event.target.value"
-                    :disabled="isFieldDisabled(key)"
-                    :class="{legit:true, required: validationFailed.includes(key)}"
-                />
-            </div>
+            <InputWithLabel
+                label="type"
+                :value="callback.type"
+                disabled=true
+            />
+            <component
+                v-for="{key, value, render} in fieldsComponents"
+                :is="render"
+                :key="key"
+                :label="systemNameToNormal(key)"
+                :value="value"
+                @input="setValue(key, $event.target.value)"
+                :disabled="isFieldDisabled(key)"
+                :validationFailed="validationFailed.includes(key)"
+            />
         </div>
     </div>
 </template>
@@ -110,22 +186,5 @@ import { DeviceApi } from '../../api.js'
         flex-direction: row-reverse;
         column-gap: var(--list-item-gap);
         margin-bottom: 5px;
-    }
-    .callback-entry {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-    }
-    .callback-entry h2 {
-        text-align: center;
-    }
-    .callback-entry input {
-        border-radius: 10px;
-        color: var(--color-text);
-    }
-    .legit {
-        background-color: transparent;
-    }
-    .required {
-        background-color: red;
     }
 </style>

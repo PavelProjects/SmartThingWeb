@@ -67,7 +67,6 @@
     <div class="control-panel bordered">
         <TabsView
             :tabs="tabs"
-            label="Tabs"
             default-tab="info"
         />
     </div>

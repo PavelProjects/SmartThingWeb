@@ -8,7 +8,7 @@
             TabItem
         },
         props: {
-            tabs: Array,
+            tabs: Object,
             defaultTab: String,
             label: String,
             tabTitle: String

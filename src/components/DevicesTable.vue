@@ -65,7 +65,7 @@
             async loadDeviceInfo(deviceIp) {
                 this.devices[deviceIp] = await DeviceApi.getDeviceInfo(deviceIp)
             },
-            switchTab(ip, deviceInfo) {
+            switchTab(ip) {
                 if (!this.tabs[ip]) {
                     this.tabs[ip] = h(
                         DeviceControlPanel,

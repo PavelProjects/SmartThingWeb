@@ -1,11 +1,16 @@
 
 async function defaultGet(path, expectedStatus = 200,errorMessage = "Failed to load data from " + path) {
-    const response = await fetch(path)
-    if (response.status !== expectedStatus) {
-        console.error(errorMessage)
+    try {
+        const response = await fetch(path)
+        if (response.status !== expectedStatus) {
+            console.error(errorMessage)
+            return null
+        }
+        return await response.json()
+    } catch (error) {
+        console.log(`Request to ${path} failed: ${error}`)
         return null
     }
-    return await response.json()
 }
 
 export const DeviceApi = {
@@ -23,29 +28,44 @@ export const DeviceApi = {
     },
     async addConfigValues(ip, values) {
         const body = JSON.stringify(values)
-        const response = await fetch(
-            `http://${ip}/config/add`,
-            {
-                method: 'POST',
-                body
-            }
-        )
-        return response.status == 200
+        try {
+            const response = await fetch(
+                `http://${ip}/config/add`,
+                {
+                    method: 'POST',
+                    body
+                }
+            )
+            return response.status == 200
+        } catch (error) {
+            console.log(`Failed to add config values: ${error}`)
+            return false
+        }
     },
     async deleteConfigValue(ip, key) {
-        const response = await fetch(
-            `http://${ip}/config/delete?name=${key}`,
-            {
-                method: 'DELETE'
-            }
-        )
-        return response.status == 200
+        try {
+            const response = await fetch(
+                `http://${ip}/config/delete?name=${key}`,
+                {
+                    method: 'DELETE'
+                }
+            )
+            return response.status == 200
+        } catch (error) {
+            console.log(`Failed to delete config values: ${error}`)
+            return false
+        }
     },
     async executeDeviceAcion(ip, actions) {
-        const response = await fetch(`http://${ip}/action?action=${actions}`, {
-            method: 'PUT'
-        })
-        return response.status == 200
+        try {
+            const response = await fetch(`http://${ip}/action?action=${actions}`, {
+                method: 'PUT'
+            })
+            return response.status == 200
+        } catch (error) {
+            console.log(`Failed to execute device action: ${error}`)
+            return false
+        }
     },
     async getDeviceSensors(ip) {
         return defaultGet(`http://${ip}/sensors`)
@@ -56,50 +76,65 @@ export const DeviceApi = {
     async getAllCallbacks(ip) {
         return defaultGet(`http://${ip}/callbacks`)
     },
-    async getCallbacks(ip, type, name) {
-        return defaultGet(`http://${ip}/callbacks/by/observable?observableType=${type}&name=${name}`)
+    async getCallbacks(ip, observable) {
+        return defaultGet(`http://${ip}/callbacks/by/observable?observableType=${observable.type}&name=${observable.name}`)
     },
-    async getCallbackById(ip, type, name, id) {
-        return defaultGet(`http://${ip}/callbacks/by/id?observableType=${type}&name=${name}&id=${id}`)
+    async getCallbackById(ip, observable, id) {
+        return defaultGet(`http://${ip}/callbacks/by/id?observableType=${observable.type}&name=${observable.name}&id=${id}`)
     },
     async getCallbacksTemplates(ip) {
         return defaultGet(`http://${ip}/callbacks/template`)
     },
     async createCallback(ip, observable, callback) {
-        const body = JSON.stringify({
-            observable,
-            callback
-        })
-        const response = await fetch (
-            `http://${ip}/callbacks/create`,
-            {
-                method: 'POST',
-                body
-            }
-        )
-        return response.status == 201
+        try {
+            const body = JSON.stringify({
+                observable,
+                callback
+            })
+            const response = await fetch (
+                `http://${ip}/callbacks/create`,
+                {
+                    method: 'POST',
+                    body
+                }
+            )
+            return response.status == 201
+        } catch (error) {
+            console.log(`Failed to create callback: ${error}`)
+            return false
+        }
     },
     async updateCallback(ip, observable, callback) {
-        const body = JSON.stringify({
-            observable,
-            callback
-        })
-        const response = await fetch (
-            `http://${ip}/callbacks/update`,
-            {
-                method: 'PUT',
-                body
-            }
-        )
-        return response.status == 200
+        try {
+            const body = JSON.stringify({
+                observable,
+                callback
+            })
+            const response = await fetch (
+                `http://${ip}/callbacks/update`,
+                {
+                    method: 'PUT',
+                    body
+                }
+            )
+            return response.status == 200
+        } catch (error) {
+            console.log(`Failed to update callback: ${error}`)
+            return false
+        }
     },
-    async deleteCallback(ip, type, name, id) {
-        const response = await fetch (
-            `http://${ip}/callbacks/delete?observableType=${type}&name=${name}&id=${id}`,
-            {
-                method: 'DELETE',
-            }
-        )
-        return response.status == 200    
+    async deleteCallback(ip, observable, id) {
+        try {
+            const response = await fetch (
+                `http://${ip}/callbacks/delete?observableType=${observable.type}&name=${observable.name}&id=${id}`,
+                {
+                    method: 'DELETE',
+                }
+            )
+            return response.status == 200    
+        } catch (error) {
+            console.log(`Failed to delete callback: ${error}`)
+            return false
+        }
     },
 }

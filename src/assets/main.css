@@ -37,3 +37,29 @@ button {
 .tabs-view-label, .tab-label {
   text-align: center;
 }
+
+/* animations */
+.slide-left-enter-active {
+  transition: all 0.5s ease;
+}
+.slide-left-enter-from{
+  transform: translateX(-200px);
+  opacity: 0;
+}
+
+.input-field-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+.input-field-container input, select {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background-color: var(--color-background);
+}
+.input-field-label {
+  text-align: center;
+}
+.required {
+  background-color: hsla(3, 100%, 37%, 0.2);
+  color: black;
+}

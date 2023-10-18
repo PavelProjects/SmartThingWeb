@@ -1,11 +1,16 @@
 <script>
+    import { systemNameToNormal } from "../../utils/StringUtils.js"
     import CallbackView from './CallbackView.vue'
     import { DeviceApi } from "../../api.js"
+    import Combobox from "../fields/Combobox.vue"
+
+    export const NEW_CALLBACK_ID = "New"
 
     export default {
         name: "CallbacksView",
         components: {
-            CallbackView
+            CallbackView,
+            Combobox
         },
         props: {
             ip: String,
@@ -13,8 +18,19 @@
         },
         data() {
             return {
+                selectedTemplate: null,
                 callbacks: [],
                 templates: {}
+            }
+        },
+        computed: {
+            callbackTypes() {
+                return Object.keys(this.templates)
+                    .filter(key => key !== 'default')
+                    .reduce((acc, key) => {
+                        acc[key] = systemNameToNormal(key)
+                        return acc
+                    }, {})
             }
         },
         async created() {
@@ -22,29 +38,39 @@
             this.loadCallbacks()
         },
         methods: {
+            update() {
+                this.loadCallbacks()
+            },
             async loadCallbacks() {                
-                this.callbacks = await DeviceApi.getCallbacks(this.ip, this.observable.type, this.observable.name)
+                this.callbacks = await DeviceApi.getCallbacks(this.ip, this.observable)
             },
             async loadTemplates() {
                 this.templates = await DeviceApi.getCallbacksTemplates(this.ip)
             },
-            update() {
-                this.loadCallbacks()
-            },
-            async saveCallback(callback) {
-                if (!callback) {
-                    console.error("Callback object missing")
-                }
-                const res = await DeviceApi.updateCallback(this.ip, this.observable, callback)
-                if (res) {
-                    this.reloadCallback(callback)
-                }
-            },
             async reloadCallback(callback) {
-                const index = this.callbacks.indexOf(callback)
-                if (index >= 0) {
-                    this.callbacks[index] = await DeviceApi.getCallbackById(this.ip, this.observable.type, this.observable.name, callback.id)
+                if (callback.id === NEW_CALLBACK_ID) {
+                    this.callbacks.shift()
+                } else {
+                    const index = this.callbacks.indexOf(callback)
+                    if (index >= 0) {
+                        this.callbacks[index] = await DeviceApi.getCallbackById(this.ip, this.observable, callback.id)
+                    }
                 }
+            },
+            addCallback() {
+                if (!this.selectedTemplate) {
+                    return
+                }
+                if (this.callbacks[0].id == NEW_CALLBACK_ID) {
+                    this.callbacks.shift()
+                }
+                const template = {...this.templates[this.selectedTemplate], ...this.templates["default"]}
+                const callbackFromTemplate = Object.entries(template)
+                    .reduce((acc, [key, info]) => {
+                        acc[key] = info["default"] || ""
+                        return acc
+                    }, {id: NEW_CALLBACK_ID, type: this.selectedTemplate})
+                this.callbacks.unshift(callbackFromTemplate)
             }
         }
     }
@@ -52,20 +78,37 @@
 
 <template>
     <h1>Callbacks</h1>
-    <div v-if="callbacks" class="callbacks-list-view">
+    <div class="add-callback-view">
+        <Combobox
+            label="Type"
+            :items="callbackTypes"
+            @input="selectedTemplate = $event.target.value"
+        />
+        <button
+            @click="addCallback"
+            class="add-callback"
+        >
+            <h2>Add callback</h2>
+        </button>
+    </div>
+    <div 
+        v-if="callbacks"
+        class="callbacks-list-view"
+    >
         <CallbackView
             v-for="callback in callbacks"
             :ip="ip"
             :key="callback.id"
             :observable="observable"
             :callback="callback"
-            :templates="templates"
-            @save-callback="saveCallback"
+            :template="{...templates[callback.type], ...templates['default']}"
+            @update="update"
+            @reload-callback="reloadCallback"
         />
     </div>
 </template>
 
-<style>
+<style scoped>
     h1 {
         text-align: center;
     }
@@ -75,5 +118,14 @@
         flex-direction: column;
         row-gap: var(--list-item-gap);
         overflow-y: auto;
+        margin-top: var(--list-item-gap);
+    }
+    .add-callback-view {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        column-gap: var(--list-item-gap);
+    }
+    .add-callback-view * {
+        width: 100%;
     }
 </style>
