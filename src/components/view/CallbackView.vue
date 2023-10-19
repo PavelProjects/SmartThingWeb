@@ -35,7 +35,13 @@
             },
             fieldsComponents() {
                 return this.visibleFields.map(([field, value]) => {
-                    return {key: field, value, render: this.getFieldComponent(field)}
+                    const { required } = this.template[field] || false
+                    return {
+                        key: field, 
+                        required,
+                        value, 
+                        render: this.getFieldComponent(field)
+                    }
                 })
             }
         },
@@ -163,11 +169,12 @@
                 disabled=true
             />
             <component
-                v-for="{key, value, render} in fieldsComponents"
+                v-for="{key, value, render, required} in fieldsComponents"
                 :is="render"
                 :key="key"
                 :label="systemNameToNormal(key)"
                 :value="value"
+                :notBlank="required"
                 @input="setValue(key, $event.target.value)"
                 :disabled="isFieldDisabled(key)"
                 :validationFailed="validationFailed.includes(key)"

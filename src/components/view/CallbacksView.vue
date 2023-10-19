@@ -57,19 +57,19 @@
                     }
                 }
             },
-            addCallback() {
-                if (!this.selectedTemplate) {
-                    return
-                }
+            addCallback(type) {
                 if (this.callbacks[0].id == NEW_CALLBACK_ID) {
                     this.callbacks.shift()
                 }
-                const template = {...this.templates[this.selectedTemplate], ...this.templates["default"]}
+                if (!type) {
+                    return
+                }
+                const template = {...this.templates[type], ...this.templates["default"]}
                 const callbackFromTemplate = Object.entries(template)
                     .reduce((acc, [key, info]) => {
                         acc[key] = info["default"] || ""
                         return acc
-                    }, {id: NEW_CALLBACK_ID, type: this.selectedTemplate})
+                    }, {id: NEW_CALLBACK_ID, type})
                 this.callbacks.unshift(callbackFromTemplate)
             }
         }
@@ -78,19 +78,13 @@
 
 <template>
     <h1>Callbacks</h1>
-    <div class="add-callback-view">
-        <Combobox
-            label="Type"
-            :items="callbackTypes"
-            @input="selectedTemplate = $event.target.value"
-        />
-        <button
-            @click="addCallback"
-            class="add-callback"
-        >
-            <h2>Add callback</h2>
-        </button>
-    </div>
+    <Combobox
+        label="Add callback of type "
+        :notBlank="true"
+        :items="callbackTypes"
+        :value="Object.keys(callbackTypes)[0]"
+        @input="addCallback($event.target.value)"
+    />
     <div 
         v-if="callbacks"
         class="callbacks-list-view"
@@ -119,13 +113,5 @@
         row-gap: var(--list-item-gap);
         overflow-y: auto;
         margin-top: var(--list-item-gap);
-    }
-    .add-callback-view {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        column-gap: var(--list-item-gap);
-    }
-    .add-callback-view * {
-        width: 100%;
     }
 </style>

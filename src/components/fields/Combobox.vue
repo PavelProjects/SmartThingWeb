@@ -5,6 +5,10 @@
             label: String,
             items: [Array, Object],
             value: [String, Boolean],
+            notBlank: {
+                type: Boolean,
+                default: false
+            },
             disabled: {
                 type: Boolean,
                 default: false
@@ -57,7 +61,7 @@
             :value="value" 
             :disabled="disabled"
         >
-            <option></option>
+            <option v-if="!notBlank"></option>
             <option
                 v-for="{key, caption} in mapedItems"
                 :key="key"
