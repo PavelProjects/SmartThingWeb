@@ -72,10 +72,3 @@
         </select>
     </div>
 </template>
-
-<style scoped>
-    select {
-        border-radius: 10px;
-        color: var(--color-text);
-    }
-</style>

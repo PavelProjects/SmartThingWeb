@@ -23,14 +23,30 @@ export const DeviceApi = {
     async getDeviceConfigInfo(ip) {
         return defaultGet(`http://${ip}/info/config`)
     },
+    async saveName(ip, name) {
+        const body = JSON.stringify({name})
+        try {
+            const response = await fetch(
+                `http://${ip}/info`,
+                {
+                    method: 'PUT',
+                    body
+                }
+            )
+            return response.status == 200
+        } catch (error) {
+            console.log(`Failed to save new device name: ${error}`)
+            return false
+        }
+    },
     async getConfig(ip) {
         return defaultGet(`http://${ip}/config`)
     },
-    async addConfigValues(ip, values) {
+    async saveConfigValues(ip, values) {
         const body = JSON.stringify(values)
         try {
             const response = await fetch(
-                `http://${ip}/config/add`,
+                `http://${ip}/config/save`,
                 {
                     method: 'POST',
                     body
@@ -46,6 +62,20 @@ export const DeviceApi = {
         try {
             const response = await fetch(
                 `http://${ip}/config/delete?name=${key}`,
+                {
+                    method: 'DELETE'
+                }
+            )
+            return response.status == 200
+        } catch (error) {
+            console.log(`Failed to delete config values: ${error}`)
+            return false
+        }
+    },
+    async deleteAllConfigValues(ip) {
+        try {
+            const response = await fetch(
+                `http://${ip}/config/delete/all`,
                 {
                     method: 'DELETE'
                 }

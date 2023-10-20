@@ -80,7 +80,6 @@
     <h1>Callbacks</h1>
     <Combobox
         label="Add callback of type "
-        :notBlank="true"
         :items="callbackTypes"
         :value="Object.keys(callbackTypes)[0]"
         @input="addCallback($event.target.value)"

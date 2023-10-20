@@ -42,8 +42,7 @@
                         if (message && message.body) {
                             const deviceInfo = JSON.parse(message.body)
                             if (!this.devices[deviceInfo.ip]) {
-                                this.devices[deviceInfo.ip] = {}
-                                this.loadDeviceInfo(deviceInfo.ip)
+                                this.devices[deviceInfo.ip] = deviceInfo
                             }
                         } else {
                             console.warn("Empty topic message")
@@ -61,9 +60,6 @@
                 } else {
                     console.error("Can't disconnect from broker - client is null")
                 }
-            },
-            async loadDeviceInfo(deviceIp) {
-                this.devices[deviceIp] = await DeviceApi.getDeviceInfo(deviceIp)
             },
             switchTab(ip) {
                 if (!this.tabs[ip]) {

@@ -132,9 +132,11 @@
                             finalValue = value == "true"
                             break
                         case "integer":
+                        case "number":    
                             finalValue = Number.parseInt(value)
                             break
                         case "string":
+                        case "text":    
                             finalValue = value
                         default:
                             console.error("Type " + type + " not supported yet")

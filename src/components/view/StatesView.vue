@@ -17,8 +17,7 @@
         data() {
             return {
                 states: null,
-                loading: false,
-                selectedState: ""
+                loading: false
             }
         },
         created() {
@@ -67,7 +66,7 @@
     />
 </template>
 
-<style>
+<style scoped>
     h1 {
         text-align: center;
     }

@@ -3,6 +3,7 @@
     import DeviceActionsView from './view/DeviceActionsView.vue'
     import SensorsView from './view/SensorsView.vue'
     import StatesView from './view/StatesView.vue'
+    import ConfigView from './view/ConfigView.vue'
     import TabsView from './tabs/TabsView.vue'
     import { h } from 'vue'
 
@@ -13,6 +14,7 @@
             DeviceActionsView,
             SensorsView,
             StatesView,
+            ConfigView,
             TabsView
         },
         props: {
@@ -40,6 +42,11 @@
                     "states": {
                         class: StatesView,
                         caption: "States",
+                        props: {ip: this.ip}
+                    },
+                    "config": {
+                        class: ConfigView,
+                        caption: "Configuration",
                         props: {ip: this.ip}
                     }
                 }

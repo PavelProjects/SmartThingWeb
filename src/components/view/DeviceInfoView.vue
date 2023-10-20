@@ -1,11 +1,15 @@
 <script>
     import SyncLoader from 'vue-spinner/src/SyncLoader.vue'
     import { DeviceApi } from "../../api.js"
+    import InputWithLabel from "../fields/InputWithLabel.vue"
+
+    const NAME_ERROR = "Name can't be empty!"
 
     export default {
         name: "DeviceInfoView",
         components: {
-            SyncLoader
+            SyncLoader,
+            InputWithLabel
         },
         props: {
             ip: String
@@ -13,16 +17,34 @@
         data() {
             return {
                 info: null,
-                loading: false
+                loading: false,
+                deviceName: "",
+                validName: true,
+                NAME_ERROR // bruh
             }
         },
         created() {
             this.loadInfo()
         },
+        watch: {
+            deviceName(value) {
+                this.validName = value.length != 0
+            }
+        },
         methods: {
             async loadInfo() {
                 this.info = await DeviceApi.getDeviceInfo(this.ip)
-            }
+                this.deviceName = this.info.name
+            },
+            async saveName() {
+                if (!this.validName) {
+                    console.error("Not valid name")
+                    return
+                }
+                if (await DeviceApi.saveName(this.ip, this.deviceName)) {
+                    this.loadInfo()
+                }
+            },
         }
     }
 </script>
@@ -32,11 +54,35 @@
     <sync-loader class="spinner" :loading="loading"></sync-loader>
     <div v-if="!loading && info" class="info-block">
         <!-- todo add change name implementation -->
-        <h2>Device name</h2><input :value="info.name" disabled="true"/> 
-        <h2>Device type</h2><input :value="info.type" disabled="true"/>
-        <h2>Firmware version</h2><input :value="info.version" disabled="true"/>
-        <h2>Chip model</h2><input :value="info.chip_model" disabled="true"/>
-        <h2>Chip revision</h2><input :value="info.chip_revision" disabled="true"/>
+        <InputWithLabel
+            label="Device name"
+            :title="validName ? '' : NAME_ERROR"
+            :value="deviceName"
+            :validationFailed="!validName"
+            @input="deviceName = $event.target.value.trim()"
+        >
+            <button @click="saveName"><h3>save</h3></button>
+        </InputWithLabel>
+        <InputWithLabel
+            label="Device type"
+            :value="info.type"
+            :disabled="true"
+        />
+        <InputWithLabel
+            label="Firmware version"
+            :value="info.version"
+            :disabled="true"
+        />
+        <InputWithLabel
+            label="Chip model"
+            :value="info.chip_model"
+            :disabled="true"
+        />
+        <InputWithLabel
+            label="Chip revision"
+            :value="info.chip_revision"
+            :disabled="true"
+        />
     </div>
 </template>
 
@@ -48,16 +94,8 @@
         text-align: center;
     }
     .info-block {
-        display: grid;
-    }
-    .info-block p {
-        grid-column: 1;
-    }
-    .info-block input {
-        grid-column: 2;
-        background-color: transparent;
-        color: grey;
-        margin: var(--list-item-gap);
-        border-radius: 10px;
+        display: flex;
+        flex-direction: column;
+        row-gap: var(--list-item-gap);
     }
 </style>

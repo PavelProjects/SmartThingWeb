@@ -4,6 +4,10 @@
         props: {
             label: String,
             value: String,
+            type: {
+                type: String,
+                default: "text"
+            },
             disabled: {
                 type: Boolean,
                 default: false
@@ -17,21 +21,19 @@
 </script>
 
 <template>
-    <div class="input-field-container">
+    <div :class="{legit: !validationFailed, required: validationFailed}"
+        class="input-field-container"
+    >
         <h2 
-            :class="{legit: !validationFailed, required: validationFailed}"
             class="input-field-label"
         >{{label }}</h2>
-        <input 
-            :value="value"
-            :disabled="disabled"
-        />
+        <div class="input-with-slot">
+            <input 
+                :value="value"
+                :disabled="disabled"
+                :type="type"
+            />
+            <slot></slot>
+        </div>
     </div>
 </template>
-
-<style scoped>
-    input {
-        border-radius: 10px;
-        color: var(--color-text);
-    }
-</style>
