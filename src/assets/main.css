@@ -65,12 +65,17 @@ button {
   border: 1px solid var(--color-border);
   border-radius: var(--border-radius);
 }
-.input-with-slot input, select{
+.input-with-slot input {
   flex-grow:2;
   border: none
 }
 .input-field-label {
   text-align: center;
+}
+.list {
+  display: flex;
+  flex-direction: column;
+  row-gap: var(--list-item-gap);
 }
 .required {
   background-color: hsla(3, 100%, 37%, 0.2);

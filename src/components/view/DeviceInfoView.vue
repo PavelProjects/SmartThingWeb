@@ -52,7 +52,7 @@
 <template>
     <h1>Device information</h1>
     <sync-loader class="spinner" :loading="loading"></sync-loader>
-    <div v-if="!loading && info" class="info-block">
+    <div v-if="!loading && info" class="list">
         <!-- todo add change name implementation -->
         <InputWithLabel
             label="Device name"
@@ -92,10 +92,5 @@
     }
     .spinner {
         text-align: center;
-    }
-    .info-block {
-        display: flex;
-        flex-direction: column;
-        row-gap: var(--list-item-gap);
     }
 </style>

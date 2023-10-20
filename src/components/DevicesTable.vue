@@ -6,8 +6,8 @@
     import SyncLoader from 'vue-spinner/src/SyncLoader.vue'
     import { Client } from '@stomp/stompjs';
     import { h } from 'vue'
-    import { DeviceApi } from "../api.js"
-    
+
+    //todo move to env variable
     const BROKER_URL = "ws://192.168.1.82:8080/smartthing-ws"
     const SEARCH_TOPIC = "/devices/search"
     const SEARCH_TIME = 10000
@@ -38,6 +38,7 @@
                     this.loading = true
                     this.devices = {}
                     this.selectedIp = null
+                    console.log("Connected to search topic")
                     this.client.subscribe(SEARCH_TOPIC, (message) => {
                         if (message && message.body) {
                             const deviceInfo = JSON.parse(message.body)
@@ -109,12 +110,12 @@
     .side-search{
         display: grid;
         row-gap: var(--list-item-gap);
-        width: 30%;
+        width: 400px;
         margin-right: 5px;
         height: fit-content;
     }
     .main-tab {
-        width: 100%;
+        width: calc(100% - 400px);
         height: 70%;
     }
     

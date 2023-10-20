@@ -81,12 +81,11 @@
     <Combobox
         label="Add callback of type "
         :items="callbackTypes"
-        :value="Object.keys(callbackTypes)[0]"
         @input="addCallback($event.target.value)"
     />
     <div 
         v-if="callbacks"
-        class="callbacks-list-view"
+        class="callbacks-list-view list"
     >
         <CallbackView
             v-for="callback in callbacks"
@@ -107,9 +106,6 @@
     }
     .callbacks-list-view {
         max-height: 80vh;
-        display: flex;
-        flex-direction: column;
-        row-gap: var(--list-item-gap);
         overflow-y: auto;
         margin-top: var(--list-item-gap);
     }

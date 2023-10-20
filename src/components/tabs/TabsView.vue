@@ -47,7 +47,7 @@
 
 <template>
     <div v-if="tabs" class="tabs-panel">
-        <div class="tabs-view">
+        <div class="tabs-view list">
             <h1 v-if="label" class="tabs-view-label">{{ label }}</h1>
             <TabItem
                 v-for="[name, { caption }] in Object.entries(tabs)"
@@ -74,19 +74,17 @@
     </div>
 </template>
 
-<style>
+<style scoped>
     .tabs-panel {
         display: flex;
         flex-direction: row;
+        width: 100%;
     }
     .tabs-view {
-        display: flex;
-        flex-direction: column;
-        width: 30%;
-        row-gap: var(--list-item-gap);
+        width: 250px;
     }
     .tab-content {
-        width: 70%;
+        width: calc(100% - 250px);
         margin-left: 5px;
         position: relative;
     }
