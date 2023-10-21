@@ -1,6 +1,7 @@
 <script>    
     import SyncLoader from 'vue-spinner/src/SyncLoader.vue'
     import { DeviceApi } from "../../../api/DeviceApi.js"
+    import {EventBus, NOTIFY} from '../../../EventBus.js'
 
     export default {
         name: "DeviceActionsView",
@@ -25,10 +26,7 @@
                 this.actions = await DeviceApi.getDeviceActionsInfo(this.ip)
             },
             async sendAction(action) {
-                const res = await DeviceApi.executeDeviceAcion(this.ip, action)
-                if (!res) {
-                    console.error("Failed to execute device action " + action)
-                }
+                await DeviceApi.executeDeviceAcion(this.ip, action)
             }
         }
     }

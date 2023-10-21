@@ -1,14 +1,52 @@
+import {EventBus, NOTIFY} from '../EventBus.js'
 
-async function defaultGet(path, expectedStatus = 200,errorMessage = "Failed to load data from " + path) {
+function notifyDescByStatus(status) {
+    switch (status) {
+        case 500:
+            return "Check device logs for the additional info"
+        case 404:
+            return "Endpoint not found"
+        default:
+            return ""
+    }
+}
+
+function sendNotification({result, info, infoDescription, error, errorDescription}) {
+    if (result) {
+        EventBus.emit(NOTIFY, {
+            caption: info,
+            description: infoDescription,
+            type: "success"
+        })
+    } else {
+        EventBus.emit(NOTIFY, {
+            caption: error,
+            description: errorDescription,
+            type: "error"
+        })
+    }
+}
+
+async function defaultGet(path, expectedStatus = 200, errorMessage = "Failed to load data from " + path) {
     try {
         const response = await fetch(path)
         if (response.status !== expectedStatus) {
             console.error(errorMessage)
+            EventBus.emit(NOTIFY, {
+                caption: "Request failed",
+                description: errorMessage,
+                type: "error"
+            })
             return null
         }
         return await response.json()
     } catch (error) {
         console.log(`Request to ${path} failed: ${error}`)
+        EventBus.emit(NOTIFY, {
+            caption: "Request failed",
+            description: errorMessage,
+            type: "error"
+        })
         return null
     }
 }
@@ -36,7 +74,14 @@ export const DeviceApi = {
                     }
                 }
             )
-            return response.status == 200
+            const res = response.status == 200
+            sendNotification({
+                result: res,
+                info: "Name changed",
+                error: "Failed to change name",
+                errorDescription: notifyDescByStatus(response.status)
+            })
+            return res
         } catch (error) {
             console.log(`Failed to save new device name: ${error}`)
             return false
@@ -58,7 +103,14 @@ export const DeviceApi = {
                     }
                 }
             )
-            return response.status == 200
+            const res = response.status == 200
+            sendNotification({
+                result: res,
+                info: "Configuration updated",
+                error: "Failed to update configuration",
+                errorDescription: notifyDescByStatus(response.status)
+            })
+            return res
         } catch (error) {
             console.log(`Failed to add config values: ${error}`)
             return false
@@ -72,7 +124,14 @@ export const DeviceApi = {
                     method: 'DELETE'
                 }
             )
-            return response.status == 200
+            const res = response.status == 200
+            sendNotification({
+                result: res,
+                info: "The configuration value has been removed",
+                error: "Failed to remove configuration value",
+                errorDescription: notifyDescByStatus(response.status)
+            })
+            return res
         } catch (error) {
             console.log(`Failed to delete config values: ${error}`)
             return false
@@ -86,18 +145,32 @@ export const DeviceApi = {
                     method: 'DELETE'
                 }
             )
-            return response.status == 200
+            const res = response.status == 200
+            sendNotification({
+                result: res,
+                info: "Configuration removed",
+                error: "Failed to update configuration",
+                errorDescription: notifyDescByStatus(response.status)
+            })
+            return res
         } catch (error) {
             console.log(`Failed to delete config values: ${error}`)
             return false
         }
     },
-    async executeDeviceAcion(ip, actions) {
+    async executeDeviceAcion(ip, action) {
         try {
-            const response = await fetch(`http://${ip}/action?action=${actions}`, {
+            const response = await fetch(`http://${ip}/action?action=${action}`, {
                 method: 'PUT'
             })
-            return response.status == 200
+            const res = response.status == 200
+            sendNotification({
+                result: res,
+                info: "Action completed",
+                error: "Failed to complete device action",
+                errorDescription: notifyDescByStatus(response.status)
+            })
+            return res
         } catch (error) {
             console.log(`Failed to execute device action: ${error}`)
             return false
@@ -137,7 +210,14 @@ export const DeviceApi = {
                     }
                 }
             )
-            return response.status == 201
+            const res = response.status == 201
+            sendNotification({
+                result: res,
+                info: "Callback created",
+                error: "Failed to create callback",
+                errorDescription: notifyDescByStatus(response.status)
+            })
+            return res
         } catch (error) {
             console.log(`Failed to create callback: ${error}`)
             return false
@@ -159,7 +239,14 @@ export const DeviceApi = {
                     }
                 }
             )
-            return response.status == 200
+            const res = response.status == 200
+            sendNotification({
+                result: res,
+                info: "Callback updated",
+                error: "Failed to update callback",
+                errorDescription: notifyDescByStatus(response.status)
+            })
+            return res
         } catch (error) {
             console.log(`Failed to update callback: ${error}`)
             return false
@@ -173,7 +260,14 @@ export const DeviceApi = {
                     method: 'DELETE',
                 }
             )
-            return response.status == 200    
+            const res = response.status == 200
+            sendNotification({
+                result: res,
+                info: "The callback has been deleted",
+                error: "Failed to delete callback",
+                errorDescription: notifyDescByStatus(response.status)
+            })
+            return res
         } catch (error) {
             console.log(`Failed to delete callback: ${error}`)
             return false

@@ -26,6 +26,9 @@
   --border-radius: 10px;
   --section-gap: 160px;
   --list-item-gap: 5px;
+  
+  --notification-width: 300px;
+  --notification-min-height: 50px;
 }
 
 /* semantic color variables for this project */

@@ -1,6 +1,7 @@
 <script>
     import { GatewayApi } from '../../../api/GatewayApi.js';
     import InputWithLabel from '../../fields/InputWithLabel.vue';
+    import {EventBus, NOTIFY} from '../../../EventBus.js'
 
     export default {
         name: "CloudInfoView",
@@ -47,7 +48,9 @@
                 this.status = await GatewayApi.getStatus()
             },
             async saveCloudInfo() {
-                await GatewayApi.updateCloudInfo(this.cloudInfo)
+                if (await GatewayApi.updateCloudInfo(this.cloudInfo)) {
+                    EventBus.emit(NOTIFY, {caption: "Cloud configuration was updated"})
+                }
             },
             openCloudInfoEditor() {
                 this.cloudPopupVisible = !this.cloudPopupVisible

@@ -39,13 +39,15 @@
                 this.values = await DeviceApi.getConfig(this.ip);
             },
             async saveConfig() {
-                await DeviceApi.saveConfigValues(this.ip, this.values)
-                this.loadConfigValues()
+                if (await DeviceApi.saveConfigValues(this.ip, this.values)) {
+                    this.loadConfigValues()
+                }
             },
             async deleteAllValues() {
                 if (confirm("Are you sure you want to delete all configuration values?")) {
-                    await DeviceApi.deleteAllConfigValues(this.ip)
-                    this.loadConfigValues()
+                    if (await DeviceApi.deleteAllConfigValues(this.ip)) {
+                        this.loadConfigValues()
+                    }
                 }
             },
             setValue(key, value) {

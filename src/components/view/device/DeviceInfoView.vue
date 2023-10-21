@@ -53,7 +53,6 @@
     <h1 class="title">Device information</h1>
     <sync-loader class="spinner" :loading="loading"></sync-loader>
     <div v-if="!loading && info" class="list">
-        <!-- todo add change name implementation -->
         <InputWithLabel
             label="Device name"
             :title="validName ? '' : NAME_ERROR"

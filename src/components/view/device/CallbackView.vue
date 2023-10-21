@@ -75,16 +75,18 @@
                     return
                 }
                 let res = false
+                let emitAction = ""
                 if (this.callback.id !== NEW_CALLBACK_ID) {
                     res = await DeviceApi.updateCallback(this.ip, this.observable, this.callback)
-                    this.$emit("reloadCallback", this.callback)
+                    emitAction = "reloadCallback"
                 } else { 
                     res = await DeviceApi.createCallback(this.ip, this.observable, this.callback)
-                    this.$emit("update")
+                    emitAction = "update"
                 }
 
                 if (res) {
                     console.info("Callback was saved")
+                    this.$emit(emitAction, this.callback)
                     this.editing = false
                     this.haveChanges = false
                 }
@@ -95,9 +97,7 @@
                     return
                 }
                 if (confirm("Are you sure you wan to delete callback " + this.callback.id + "?")) {
-                    const res = await DeviceApi.deleteCallback(this.ip, this.observable, this.callback.id)
-                    if (res) {
-                        console.info("Callback was deleted")
+                    if (await DeviceApi.deleteCallback(this.ip, this.observable, this.callback.id)) {
                         this.$emit("update")
                     }
                 }
