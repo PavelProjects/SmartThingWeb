@@ -1,7 +1,6 @@
 <script>
     import { GatewayApi } from '../../../api/GatewayApi.js';
     import InputWithLabel from '../../fields/InputWithLabel.vue';
-    import {EventBus, NOTIFY} from '../../../EventBus.js'
 
     export default {
         name: "CloudInfoView",
@@ -48,9 +47,7 @@
                 this.status = await GatewayApi.getStatus()
             },
             async saveCloudInfo() {
-                if (await GatewayApi.updateCloudInfo(this.cloudInfo)) {
-                    EventBus.emit(NOTIFY, {caption: "Cloud configuration was updated"})
-                }
+                await GatewayApi.updateCloudInfo(this.cloudInfo)
             },
             openCloudInfoEditor() {
                 this.cloudPopupVisible = !this.cloudPopupVisible
@@ -69,7 +66,7 @@
         </h2>
         <div v-if="cloudPopupVisible" class="overlay" @click="cloudPopupVisible = false"></div>
         <div v-if="cloudPopupVisible" class="cloud-popup">
-            <h2 class="title">Status</h2>
+            <h2 class="title">Cloud connection status</h2>
             <h3 :class="{green: gatewayInfoLoaded, red: !gatewayInfoLoaded}">
                 Gateway info {{ gatewayInfoLoaded ? 'loaded' : 'not loaded' }} 
             </h3>
@@ -80,7 +77,7 @@
                {{ subscribedToQueue ? 'Subscribed' : 'Not subscribed' }} to the message queue
             </h3>
 
-            <h2 class="title">Cloud configuration</h2>
+            <h2 class="title">Cloud connection configuration</h2>
             <InputWithLabel
                 label="Token"
                 :value="cloudInfo.token || 'Failed to load'"

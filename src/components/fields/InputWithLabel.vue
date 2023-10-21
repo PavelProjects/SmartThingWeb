@@ -3,7 +3,7 @@
         name: "InputWithLabel",
         props: {
             label: String,
-            value: String,
+            value: [String, Number, Boolean],
             type: {
                 type: String,
                 default: "text"

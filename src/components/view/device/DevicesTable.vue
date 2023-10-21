@@ -2,12 +2,10 @@
     import SearchDeviceInfo from './SearchDeviceInfo.vue'
     import DeviceControlPanel from './DeviceControlPanel.vue'
     import TabItem from '../../tabs/TabItem.vue'
-
     import SyncLoader from 'vue-spinner/src/SyncLoader.vue'
     import { Client } from '@stomp/stompjs';
     import { h } from 'vue'
 
-    //todo move to env variable
     const gatewayPath = import.meta.env.VITE_GATEWAY_PATH
     const gatewayPort = import.meta.env.VITE_GATEWAY_PORT
     const gatwayWs = import.meta.env.VITE_GATEWAY_WS

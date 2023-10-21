@@ -51,7 +51,7 @@
                 this.sensors = await DeviceApi.getDeviceSensors(this.ip)
             },
             update() {
-                this.loadStates()
+                this.loadSensors()
             }
         }
     }

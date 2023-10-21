@@ -8,7 +8,7 @@
     export default {
         name: "Notification",
         props: {
-            id: Number,
+            id: String,
             caption: String,
             description: String,
             type: {

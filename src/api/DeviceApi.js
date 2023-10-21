@@ -1,31 +1,4 @@
-import {EventBus, NOTIFY} from '../EventBus.js'
-
-function notifyDescByStatus(status) {
-    switch (status) {
-        case 500:
-            return "Check device logs for the additional info"
-        case 404:
-            return "Endpoint not found"
-        default:
-            return ""
-    }
-}
-
-function sendNotification({result, info, infoDescription, error, errorDescription}) {
-    if (result) {
-        EventBus.emit(NOTIFY, {
-            caption: info,
-            description: infoDescription,
-            type: "success"
-        })
-    } else {
-        EventBus.emit(NOTIFY, {
-            caption: error,
-            description: errorDescription,
-            type: "error"
-        })
-    }
-}
+import {notifyDescByStatus, sendNotification, notifyRequestFailed} from "./ApiNotifyUtils.js"
 
 async function defaultGet(path, expectedStatus = 200, errorMessage = "Failed to load data from " + path) {
     try {
@@ -42,11 +15,7 @@ async function defaultGet(path, expectedStatus = 200, errorMessage = "Failed to 
         return await response.json()
     } catch (error) {
         console.log(`Request to ${path} failed: ${error}`)
-        EventBus.emit(NOTIFY, {
-            caption: "Request failed",
-            description: errorMessage,
-            type: "error"
-        })
+        notifyRequestFailed(path)
         return null
     }
 }
@@ -84,6 +53,7 @@ export const DeviceApi = {
             return res
         } catch (error) {
             console.log(`Failed to save new device name: ${error}`)
+            notifyRequestFailed()
             return false
         }
     },
@@ -113,6 +83,7 @@ export const DeviceApi = {
             return res
         } catch (error) {
             console.log(`Failed to add config values: ${error}`)
+            notifyRequestFailed()
             return false
         }
     },
@@ -134,6 +105,7 @@ export const DeviceApi = {
             return res
         } catch (error) {
             console.log(`Failed to delete config values: ${error}`)
+            notifyRequestFailed()
             return false
         }
     },
@@ -155,6 +127,7 @@ export const DeviceApi = {
             return res
         } catch (error) {
             console.log(`Failed to delete config values: ${error}`)
+            notifyRequestFailed()
             return false
         }
     },
@@ -173,6 +146,7 @@ export const DeviceApi = {
             return res
         } catch (error) {
             console.log(`Failed to execute device action: ${error}`)
+            notifyRequestFailed()
             return false
         }
     },
@@ -220,6 +194,7 @@ export const DeviceApi = {
             return res
         } catch (error) {
             console.log(`Failed to create callback: ${error}`)
+            notifyRequestFailed()
             return false
         }
     },
@@ -249,6 +224,7 @@ export const DeviceApi = {
             return res
         } catch (error) {
             console.log(`Failed to update callback: ${error}`)
+            notifyRequestFailed()
             return false
         }
     },
@@ -263,13 +239,14 @@ export const DeviceApi = {
             const res = response.status == 200
             sendNotification({
                 result: res,
-                info: "The callback has been deleted",
-                error: "Failed to delete callback",
+                info: "The callback has been removed",
+                error: "Failed to remove callback",
                 errorDescription: notifyDescByStatus(response.status)
             })
             return res
         } catch (error) {
             console.log(`Failed to delete callback: ${error}`)
+            notifyRequestFailed()
             return false
         }
     },

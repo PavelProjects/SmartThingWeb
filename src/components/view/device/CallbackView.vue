@@ -5,6 +5,7 @@
     import { DeviceApi } from "../../../api/DeviceApi.js"
     import { NEW_CALLBACK_ID } from "./CallbacksView.vue"
     import { h } from "vue"
+    import {EventBus, NOTIFY} from '../../../EventBus.js'
     
     const SYSTEM_FIELDS = ["id", "type", "readonly"]
 
@@ -38,6 +39,7 @@
                     const { required } = this.template[field] || false
                     return {
                         key: field, 
+                        label: this.systemNameToNormal(field),
                         required,
                         value, 
                         render: this.getFieldComponent(field)
@@ -72,6 +74,11 @@
                 }
                 if (!this.validate()) {
                     console.error("Validation failed: " + this.validationFailed)
+                    EventBus.emit(NOTIFY, {
+                        caption: "Validation failed",
+                        description: `This fields cannot be empty: ${this.validationFailed}`,
+                        type: "error"
+                    })
                     return
                 }
                 let res = false
@@ -171,10 +178,10 @@
                 disabled=true
             />
             <component
-                v-for="{key, value, render, required} in fieldsComponents"
+                v-for="{key, label, value, render, required} in fieldsComponents"
                 :is="render"
                 :key="key"
-                :label="systemNameToNormal(key)"
+                :label="label"
                 :value="value"
                 :notBlank="required"
                 @input="setValue(key, $event.target.value)"

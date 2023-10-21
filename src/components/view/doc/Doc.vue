@@ -11,7 +11,7 @@
 
 <template>
     <div class="doc">
-        <h1 class="green">SmartThing</h1>
+        <h1 class="green" style="margin-left: 25px">SmartThing</h1>
         <CloudInfoView class="cloud-info"/>
     </div>
 </template>

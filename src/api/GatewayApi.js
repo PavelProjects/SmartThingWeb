@@ -1,3 +1,5 @@
+import {notifyDescByStatus, sendNotification, notifyRequestFailed} from "./ApiNotifyUtils.js"
+
 const GATEWAY_PATH = import.meta.env.VITE_GATEWAY_PATH
 const GATEWAY_PORT = import.meta.env.VITE_GATEWAY_PORT
 
@@ -18,6 +20,7 @@ export const GatewayApi = {
             return await response.json()
         } catch (error) {
             console.error("Failed to fetch gateway status: " + error)
+            notifyRequestFailed(URL_CLOUD_STATUS_GET)
             return {}
         }
     },
@@ -33,6 +36,7 @@ export const GatewayApi = {
             return await response.json()
         } catch (error) {
             console.error("Failed to fetch cloud info: " + error)
+            notifyRequestFailed(URL_CLOUD_INFO_GET)
             return {}
         }
     },
@@ -49,9 +53,18 @@ export const GatewayApi = {
                     body
                 }
             )
-            return response.status == 200
+            const res = response.status == 200
+            sendNotification({
+                result: res,
+                info: "Updated",
+                infoDescription: "Cloud connection configration was updated",
+                error: "Failed to update cloud configuration",
+                errorDescription: notifyDescByStatus(response.status)
+            })
+            return res
         } catch (error) {
             console.error("Failed to update cloud info: " + error)
+            notifyRequestFailed(URL_CLOUD_INFO_UPDATE)
             return false
         }
     }
