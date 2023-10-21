@@ -1,6 +1,6 @@
 <script>    
     import SyncLoader from 'vue-spinner/src/SyncLoader.vue'
-    import { DeviceApi } from "../../api.js"
+    import { DeviceApi } from "../../../api/DeviceApi.js"
 
     export default {
         name: "DeviceActionsView",
@@ -35,7 +35,7 @@
 </script>
 
 <template>
-    <h1>Device actions</h1>
+    <h1 class="title">Device actions</h1>
     <sync-loader :loading="loading"></sync-loader>
     <div class="buttons-panel" v-if="actions">
         <div v-for="(caption, name) in actions" :key="name">

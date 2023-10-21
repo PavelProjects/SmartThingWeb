@@ -60,9 +60,6 @@
             </TabItem>
         </div>
         <div v-if="currentTab && tabs[currentTab]['render']" class="tab-content">
-            <KeepAlive>
-                <component ref="content" :is="tabs[currentTab]['render']"></component>
-            </KeepAlive>
             <button 
                 class="update-button"
                 v-if="haveUpdateButton"
@@ -70,6 +67,9 @@
             >
                 <h3>Update</h3>
             </button>
+            <KeepAlive>
+                <component ref="content" :is="tabs[currentTab]['render']"></component>
+            </KeepAlive>
         </div>
     </div>
 </template>
@@ -86,11 +86,10 @@
     .tab-content {
         width: calc(100% - 250px);
         margin-left: 5px;
-        position: relative;
+        display: flex;
+        flex-direction: column;
     }
     .update-button {
-        position: absolute;
-        top: 0px;
-        right: 0px;
+        margin-left: auto;
     }
 </style>

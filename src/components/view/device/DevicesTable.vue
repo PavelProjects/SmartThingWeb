@@ -1,15 +1,19 @@
 <script>  
     import SearchDeviceInfo from './SearchDeviceInfo.vue'
     import DeviceControlPanel from './DeviceControlPanel.vue'
-    import TabItem from './tabs/TabItem.vue'
+    import TabItem from '../../tabs/TabItem.vue'
 
     import SyncLoader from 'vue-spinner/src/SyncLoader.vue'
     import { Client } from '@stomp/stompjs';
     import { h } from 'vue'
 
     //todo move to env variable
-    const BROKER_URL = "ws://192.168.1.82:8080/smartthing-ws"
-    const SEARCH_TOPIC = "/devices/search"
+    const gatewayPath = import.meta.env.VITE_GATEWAY_PATH
+    const gatewayPort = import.meta.env.VITE_GATEWAY_PORT
+    const gatwayWs = import.meta.env.VITE_GATEWAY_WS
+
+    const SEARCH_TOPIC = import.meta.env.VITE_GATEWAY_SEARCH_TOPIC
+    const BROKER_URL = `ws://${gatewayPath}:${gatewayPort}/${gatwayWs}`
     const SEARCH_TIME = 10000
 
     export default {
@@ -38,7 +42,7 @@
                     this.loading = true
                     this.devices = {}
                     this.selectedIp = null
-                    console.log("Connected to search topic")
+                    console.log("Subscribing to search topic " + SEARCH_TOPIC)
                     this.client.subscribe(SEARCH_TOPIC, (message) => {
                         if (message && message.body) {
                             const deviceInfo = JSON.parse(message.body)
@@ -50,6 +54,7 @@
                         }
                     }, {id: "search"})
                 }
+                console.log("Connecting to ws broker " + BROKER_URL)
                 this.client.activate()
                 setTimeout(this.disconnectFromBroker, SEARCH_TIME)
             },
@@ -78,6 +83,7 @@
 <template>
   <div class="devices-table">
     <div class="side-search">
+        <h1 class="title">Found devices</h1>
         <div v-for="[ip, deviceInfo] in Object.entries(devices)" v-bind:key="ip">
             <Transition name="slide-left">
                 <TabItem v-if="deviceInfo && deviceInfo.name" v-bind:selected="selectedIp == ip">
@@ -102,10 +108,11 @@
   </div>
 </template>
 
-<style>
+<style scoped>
     .devices-table {
         display: flex;
         flex-direction: row;
+        width: 1500px;
     }
     .side-search{
         display: grid;

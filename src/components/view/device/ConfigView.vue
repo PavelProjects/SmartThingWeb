@@ -1,6 +1,6 @@
 <script>
-    import { DeviceApi } from "../../api.js"
-    import InputWithLabel from "../fields/InputWithLabel.vue"
+    import { DeviceApi } from "../../../api/DeviceApi.js"
+    import InputWithLabel from "../../fields/InputWithLabel.vue"
    
     export default {
         name: "ConfigView",
@@ -78,7 +78,7 @@
 </script>
 
 <template>
-    <h1>Configuration</h1>
+    <h1 class="title">Configuration</h1>
     <div class="controls-holder"> 
         <button class="delete" @click="deleteAllValues"><h2>Delete all values</h2></button>
         <button @click="saveConfig"><h2>Save</h2></button>
@@ -95,7 +95,7 @@
 </template>
 
 <style scoped>
-    h1, h2 {
+    h2 {
         text-align: center;
     }
     .controls-holder {

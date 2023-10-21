@@ -22,10 +22,10 @@
 
 <template>
     <div :class="{legit: !validationFailed, required: validationFailed}"
-        class="input-field-container"
+        class="field-container"
     >
         <h2 
-            class="input-field-label"
+            class="field-label"
         >{{label }}</h2>
         <div class="input-with-slot">
             <input 

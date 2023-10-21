@@ -1,8 +1,8 @@
 <script>
     import SyncLoader from 'vue-spinner/src/SyncLoader.vue'
-    import { DeviceApi } from "../../api.js"
+    import { DeviceApi } from "../../../api/DeviceApi.js"
     import CallbacksView from './CallbacksView.vue'
-    import TabsView from '../tabs/TabsView.vue'
+    import TabsView from '../../tabs/TabsView.vue'
     
     export default {
         name: "SensorsView",
@@ -58,7 +58,7 @@
 </script>
 
 <template>
-    <h1>Sensors values</h1>
+    <h1 class="title">Sensors values</h1>
     <sync-loader class="spinner" :loading="loading"></sync-loader>
     <TabsView
         :tabs="tabs"
@@ -67,9 +67,6 @@
 </template>
 
 <style scoped>
-    h1 {
-        text-align: center;
-    }
     .spinner {
         text-align: center;
     }

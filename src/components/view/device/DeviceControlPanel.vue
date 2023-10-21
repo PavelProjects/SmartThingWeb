@@ -1,10 +1,10 @@
 <script>
-    import DeviceInfoView from './view/DeviceInfoView.vue'
-    import DeviceActionsView from './view/DeviceActionsView.vue'
-    import SensorsView from './view/SensorsView.vue'
-    import StatesView from './view/StatesView.vue'
-    import ConfigView from './view/ConfigView.vue'
-    import TabsView from './tabs/TabsView.vue'
+    import DeviceInfoView from './DeviceInfoView.vue'
+    import DeviceActionsView from './DeviceActionsView.vue'
+    import SensorsView from './SensorsView.vue'
+    import StatesView from './StatesView.vue'
+    import ConfigView from './ConfigView.vue'
+    import TabsView from '../../tabs/TabsView.vue'
     import { h } from 'vue'
 
     export default {

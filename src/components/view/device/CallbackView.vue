@@ -1,8 +1,8 @@
 <script>
-    import { systemNameToNormal } from "../../utils/StringUtils.js"
-    import InputWithLabel from "../fields/InputWithLabel.vue"
-    import Combobox from "../fields/Combobox.vue"
-    import { DeviceApi } from "../../api.js"
+    import { systemNameToNormal } from "../../../utils/StringUtils.js"
+    import InputWithLabel from "../../fields/InputWithLabel.vue"
+    import Combobox from "../../fields/Combobox.vue"
+    import { DeviceApi } from "../../../api/DeviceApi.js"
     import { NEW_CALLBACK_ID } from "./CallbacksView.vue"
     import { h } from "vue"
     

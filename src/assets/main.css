@@ -1,13 +1,24 @@
 @import './base.css';
 
 #app {
-  width: 1500px;
-  padding: 2rem;
   font-weight: normal;
 }
 
 a,
 .green {
+  text-decoration: none;
+  color: hsla(160, 100%, 37%, 1);
+  transition: 0.4s;
+}
+
+.red {
+  text-decoration: none;
+  color: rgb(189, 0, 0);
+  transition: 0.4s;
+}
+
+.title {
+  text-align: center;
   text-decoration: none;
   color: hsla(160, 100%, 37%, 1);
   transition: 0.4s;
@@ -46,20 +57,19 @@ button {
   transform: translateX(-200px);
   opacity: 0;
 }
-
-.input-field-container {
+.field-container {
   display: grid;
   grid-template-columns: 1fr 1fr;
   border-radius: var(--border-radius);
 }
-.input-field-container input, select {
+.field-container input, select {
   background-color: var(--color-background);
   color: var(--color-text);
   outline: none;
   border: 1px solid var(--color-border);
   border-radius: var(--border-radius);
 }
-.input-field-container .input-with-slot {
+.field-container .input-with-slot {
   display:flex;
   flex-direction:row;
   border: 1px solid var(--color-border);
@@ -69,7 +79,7 @@ button {
   flex-grow:2;
   border: none
 }
-.input-field-label {
+.field-label {
   text-align: center;
 }
 .list {

@@ -1,7 +1,7 @@
 <script>
     import SyncLoader from 'vue-spinner/src/SyncLoader.vue'
-    import { DeviceApi } from "../../api.js"
-    import InputWithLabel from "../fields/InputWithLabel.vue"
+    import { DeviceApi } from "../../../api/DeviceApi.js"
+    import InputWithLabel from "../../fields/InputWithLabel.vue"
 
     const NAME_ERROR = "Name can't be empty!"
 
@@ -50,7 +50,7 @@
 </script>
 
 <template>
-    <h1>Device information</h1>
+    <h1 class="title">Device information</h1>
     <sync-loader class="spinner" :loading="loading"></sync-loader>
     <div v-if="!loading && info" class="list">
         <!-- todo add change name implementation -->
@@ -87,10 +87,7 @@
 </template>
 
 <style scoped>
-    h1, h2 {
-        text-align: center;
-    }
-    .spinner {
+    h2 {
         text-align: center;
     }
 </style>

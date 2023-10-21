@@ -52,10 +52,10 @@
 </script>
 
 <template>
-    <div class="input-field-container">
+    <div class="field-container">
         <h2 
             :class="{legit: !validationFailed, required: validationFailed}"
-            class="input-field-label"
+            class="field-label"
         >{{ label || "Select:" }}</h2>
         <select 
             :value="value" 

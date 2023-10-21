@@ -1,7 +1,19 @@
 <script setup>
-  import DevicesTable from './components/DevicesTable.vue'
+  import Doc from "./components/view/doc/Doc.vue"
+  import DevicesTable from './components/view/device/DevicesTable.vue'
 </script>
 
 <template>
-  <DevicesTable/>
+  <Doc class="doc"/>
+  <DevicesTable class="content"/>
 </template>
+
+<style scoped>
+  .doc {
+    position: sticky;
+  }
+  .content {
+    margin: 0 auto;
+    margin-top: var(--list-item-gap);
+  }
+</style>

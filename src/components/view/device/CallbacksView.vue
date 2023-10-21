@@ -1,8 +1,8 @@
 <script>
-    import { systemNameToNormal } from "../../utils/StringUtils.js"
-    import CallbackView from './CallbackView.vue'
-    import { DeviceApi } from "../../api.js"
-    import Combobox from "../fields/Combobox.vue"
+    import { systemNameToNormal } from "../../../utils/StringUtils.js"
+    import CallbackView from '../device/CallbackView.vue'
+    import { DeviceApi } from "../../../api/DeviceApi.js"
+    import Combobox from "../../fields/Combobox.vue"
 
     export const NEW_CALLBACK_ID = "New"
 
@@ -77,7 +77,7 @@
 </script>
 
 <template>
-    <h1>Callbacks</h1>
+    <h1 class="title">Callbacks</h1>
     <Combobox
         label="Add callback of type "
         :items="callbackTypes"
@@ -101,9 +101,6 @@
 </template>
 
 <style scoped>
-    h1 {
-        text-align: center;
-    }
     .callbacks-list-view {
         max-height: 80vh;
         overflow-y: auto;

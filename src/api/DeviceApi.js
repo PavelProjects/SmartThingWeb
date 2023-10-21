@@ -30,7 +30,10 @@ export const DeviceApi = {
                 `http://${ip}/info`,
                 {
                     method: 'PUT',
-                    body
+                    body,
+                    headers: { 
+                      "Content-Type": "application/json"
+                    }
                 }
             )
             return response.status == 200
@@ -49,7 +52,10 @@ export const DeviceApi = {
                 `http://${ip}/config/save`,
                 {
                     method: 'POST',
-                    body
+                    body,
+                    headers: { 
+                      "Content-Type": "application/json"
+                    }
                 }
             )
             return response.status == 200
@@ -125,7 +131,10 @@ export const DeviceApi = {
                 `http://${ip}/callbacks/create`,
                 {
                     method: 'POST',
-                    body
+                    body,
+                    headers: { 
+                      "Content-Type": "application/json"
+                    }
                 }
             )
             return response.status == 201
@@ -144,7 +153,10 @@ export const DeviceApi = {
                 `http://${ip}/callbacks/update`,
                 {
                     method: 'PUT',
-                    body
+                    body,
+                    headers: { 
+                      "Content-Type": "application/json"
+                    }
                 }
             )
             return response.status == 200
