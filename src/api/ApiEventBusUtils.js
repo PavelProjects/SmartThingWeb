@@ -1,4 +1,4 @@
-import {EventBus, NOTIFY} from '../EventBus.js'
+import {EventBus, NOTIFY, REQUEST} from '../EventBus.js'
 
 export function notifyDescByStatus(status) {
     switch (status) {
@@ -33,4 +33,17 @@ export function notifyRequestFailed(path) {
         description: path ? `Request to ${path} failed` : '',
         type: "error"
     })
+}
+
+export function sendRequestState(requestId, loading) {
+    if (!requestId) {
+        return
+    }
+    EventBus.emit(
+        REQUEST,
+        {
+            id: requestId,
+            loading
+        }
+    )
 }

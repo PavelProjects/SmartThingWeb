@@ -1,6 +1,6 @@
 <script>
     import DeviceInfoView from './DeviceInfoView.vue'
-    import DeviceActionsView from './DeviceActionsView.vue'
+    import ActionsView from './ActionsView.vue'
     import SensorsView from './SensorsView.vue'
     import StatesView from './StatesView.vue'
     import ConfigView from './ConfigView.vue'
@@ -11,7 +11,7 @@
         name: 'DeviceControlPanel',
         components: {
             DeviceInfoView,
-            DeviceActionsView,
+            ActionsView,
             SensorsView,
             StatesView,
             ConfigView,
@@ -30,7 +30,7 @@
                         props: {ip: this.ip}
                     },
                     "actions": {
-                        class: DeviceActionsView,
+                        class: ActionsView,
                         caption: "Actions",
                         props: {ip: this.ip}
                     },

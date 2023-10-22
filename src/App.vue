@@ -1,12 +1,12 @@
 <script setup>
   import Doc from "./components/view/doc/Doc.vue"
-  import DevicesTable from './components/view/device/DevicesTable.vue'
+  import DevicesMainView from "./components/view/device/DevicesMainView.vue";
   import NotificationsView from "./components/notifications/NotificationsView.vue"
 </script>
 
 <template>
   <Doc class="doc"/>
-  <DevicesTable class="content"/>
+  <DevicesMainView class="content"/>
   <NotificationsView class="notifications"/>
 </template>
 

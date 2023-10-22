@@ -1,14 +1,16 @@
 <script>
     import { DeviceApi } from "../../../api/DeviceApi.js"
     import InputWithLabel from "../../fields/InputWithLabel.vue"
-   
+    import RequestButton from "../../controls/RequestButton.vue";
+
     export default {
         name: "ConfigView",
         props: {
             ip: String
         },
         components: { 
-            InputWithLabel 
+            InputWithLabel,
+            RequestButton
         },
         data() {
             return {
@@ -39,13 +41,13 @@
                 this.values = await DeviceApi.getConfig(this.ip);
             },
             async saveConfig() {
-                if (await DeviceApi.saveConfigValues(this.ip, this.values)) {
+                if (await DeviceApi.saveConfigValues(this.ip, this.values, "saveConfig")) {
                     this.loadConfigValues()
                 }
             },
             async deleteAllValues() {
                 if (confirm("Are you sure you want to delete all configuration values?")) {
-                    if (await DeviceApi.deleteAllConfigValues(this.ip)) {
+                    if (await DeviceApi.deleteAllConfigValues(this.ip, "deleteConfig")) {
                         this.loadConfigValues()
                     }
                 }
@@ -82,8 +84,16 @@
 <template>
     <h1 class="title">Configuration</h1>
     <div class="controls-holder"> 
-        <button class="delete" @click="deleteAllValues"><h2>Delete all values</h2></button>
-        <button @click="saveConfig"><h2>Save</h2></button>
+        <RequestButton 
+            requestId="deleteConfig"
+            class="delete"
+            @click="deleteAllValues"
+        >
+            <h2>Delete all values</h2>
+        </RequestButton>
+        <RequestButton requestId="saveConfig" @click="saveConfig">
+            <h2>Save</h2>
+        </RequestButton>
     </div>
     <InputWithLabel
         v-for="{key, caption, value, type} in inputs"

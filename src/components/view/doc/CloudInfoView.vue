@@ -1,11 +1,13 @@
 <script>
     import { GatewayApi } from '../../../api/GatewayApi.js';
     import InputWithLabel from '../../fields/InputWithLabel.vue';
+    import RequestButton from '../../controls/RequestButton.vue';
 
     export default {
         name: "CloudInfoView",
         components: {
-            InputWithLabel
+            InputWithLabel,
+            RequestButton
         },
         data() {
             return {
@@ -47,7 +49,7 @@
                 this.status = await GatewayApi.getStatus()
             },
             async saveCloudInfo() {
-                await GatewayApi.updateCloudInfo(this.cloudInfo)
+                await GatewayApi.updateCloudInfo("saveCloudInfo", this.cloudInfo)
             },
             openCloudInfoEditor() {
                 this.cloudPopupVisible = !this.cloudPopupVisible
@@ -93,11 +95,12 @@
                 :value="cloudInfo.brokerIp || 'Failed to load'"
                 @input="cloudInfo.brokerIp = $event.target.value"
             />
-            <button
+            <RequestButton
+                requestId="saveCloudInfo"
                 @click="saveCloudInfo"
             >
                 <h2>save</h2>
-            </button>
+            </RequestButton>
         </div>
     </div>
 </template>

@@ -6,7 +6,8 @@
     import { NEW_CALLBACK_ID } from "./CallbacksView.vue"
     import { h } from "vue"
     import {EventBus, NOTIFY} from '../../../EventBus.js'
-    
+    import RequestButton from "../../controls/RequestButton.vue"
+
     const SYSTEM_FIELDS = ["id", "type", "readonly"]
 
     export default {
@@ -19,7 +20,8 @@
         },
         components: {
             InputWithLabel,
-            Combobox
+            Combobox,
+            RequestButton
         },
         data() {
             return {
@@ -84,10 +86,10 @@
                 let res = false
                 let emitAction = ""
                 if (this.callback.id !== NEW_CALLBACK_ID) {
-                    res = await DeviceApi.updateCallback(this.ip, this.observable, this.callback)
+                    res = await DeviceApi.updateCallback(this.ip, this.observable, this.callback, "saveCallback")
                     emitAction = "reloadCallback"
                 } else { 
-                    res = await DeviceApi.createCallback(this.ip, this.observable, this.callback)
+                    res = await DeviceApi.createCallback(this.ip, this.observable, this.callback, "saveCallback")
                     emitAction = "update"
                 }
 
@@ -104,7 +106,7 @@
                     return
                 }
                 if (confirm("Are you sure you wan to delete callback " + this.callback.id + "?")) {
-                    if (await DeviceApi.deleteCallback(this.ip, this.observable, this.callback.id)) {
+                    if (await DeviceApi.deleteCallback(this.ip, this.observable, this.callback.id, "deleteCallback")) {
                         this.$emit("update")
                     }
                 }
@@ -161,11 +163,23 @@
         <div class="callback-header">
             <h3>[{{callback.id}}] {{ callback.caption || systemNameToNormal(callback.type) }}</h3>
             <div v-if="!callback.readonly" class="callback-view-controls">
-                <button v-if="!editing" v-on:click="deleteCallback">Delete</button>
-                <button v-if="editing" v-on:click="cancel">Cancel</button>
+                <RequestButton 
+                    v-if="!editing" 
+                    v-on:click="deleteCallback"
+                    requestId="deleteCallback"
+                >
+                    <h3>Delete</h3>
+                </RequestButton>
+                <RequestButton v-if="editing" v-on:click="cancel"><h3>Cancel</h3></RequestButton>
 
-                <button v-if="!editing" v-on:click="editing = true">Edit</button>
-                <button v-if="editing" v-on:click="saveCallback">Save</button>
+                <RequestButton v-if="!editing" v-on:click="editing = true"><h3>Edit</h3></RequestButton>
+                <RequestButton 
+                    v-if="editing" 
+                    v-on:click="saveCallback"
+                    requestId="saveCallback"
+                >
+                    <h3>Save</h3>
+                </RequestButton>
             </div>
             <div v-else>
                 <h3 style="text-align: center;">Readonly</h3>

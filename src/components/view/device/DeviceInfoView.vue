@@ -2,6 +2,7 @@
     import SyncLoader from 'vue-spinner/src/SyncLoader.vue'
     import { DeviceApi } from "../../../api/DeviceApi.js"
     import InputWithLabel from "../../fields/InputWithLabel.vue"
+    import RequestButton from '../../controls/RequestButton.vue'
 
     const NAME_ERROR = "Name can't be empty!"
 
@@ -9,7 +10,8 @@
         name: "DeviceInfoView",
         components: {
             SyncLoader,
-            InputWithLabel
+            InputWithLabel,
+            RequestButton
         },
         props: {
             ip: String
@@ -34,14 +36,14 @@
         methods: {
             async loadInfo() {
                 this.info = await DeviceApi.getDeviceInfo(this.ip)
-                this.deviceName = this.info.name
+                this.deviceName = this.info["name"] || ""
             },
             async saveName() {
                 if (!this.validName) {
                     console.error("Not valid name")
                     return
                 }
-                if (await DeviceApi.saveName(this.ip, this.deviceName)) {
+                if (await DeviceApi.saveName(this.ip, this.deviceName, "saveName")) {
                     this.loadInfo()
                 }
             },
@@ -60,7 +62,12 @@
             :validationFailed="!validName"
             @input="deviceName = $event.target.value.trim()"
         >
-            <button @click="saveName"><h3>save</h3></button>
+            <RequestButton
+                requestId="saveName"
+                @click="saveName"
+            >
+                <h3>save</h3>
+            </RequestButton>
         </InputWithLabel>
         <InputWithLabel
             label="Device type"
@@ -84,9 +91,3 @@
         />
     </div>
 </template>
-
-<style scoped>
-    h2 {
-        text-align: center;
-    }
-</style>

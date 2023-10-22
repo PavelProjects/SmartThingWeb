@@ -1,21 +1,18 @@
 <script>    
-    import SyncLoader from 'vue-spinner/src/SyncLoader.vue'
     import { DeviceApi } from "../../../api/DeviceApi.js"
-    import {EventBus, NOTIFY} from '../../../EventBus.js'
+    import RequestButton from '../../controls/RequestButton.vue'
 
     export default {
-        name: "DeviceActionsView",
+        name: "ActionsView",
         components: {
-            SyncLoader
+            RequestButton
         },
         props: {
             ip: String
         },
         data() {
             return {
-                loading: false,
-                actions: null,
-                baseUrl: "http://" + this.ip
+                actions: null
             }
         },
         created() {
@@ -26,7 +23,7 @@
                 this.actions = await DeviceApi.getDeviceActionsInfo(this.ip)
             },
             async sendAction(action) {
-                await DeviceApi.executeDeviceAcion(this.ip, action)
+                await DeviceApi.executeDeviceAcion(this.ip, action, "execute_" + action)
             }
         }
     }
@@ -34,12 +31,14 @@
 
 <template>
     <h1 class="title">Device actions</h1>
-    <sync-loader :loading="loading"></sync-loader>
     <div class="buttons-panel" v-if="actions">
         <div v-for="(caption, name) in actions" :key="name">
-            <button @click="sendAction(name)">
+            <RequestButton 
+                :requestId="'execute_' + name"
+                @click="sendAction(name)"
+            >
                 <h1>{{ caption }}</h1>
-            </button>
+            </RequestButton>
         </div>
     </div>
     <div v-else-if="!loading">

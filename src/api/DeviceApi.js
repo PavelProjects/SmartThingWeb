@@ -1,253 +1,157 @@
-import {notifyDescByStatus, sendNotification, notifyRequestFailed} from "./ApiNotifyUtils.js"
-
-async function defaultGet(path, expectedStatus = 200, errorMessage = "Failed to load data from " + path) {
-    try {
-        const response = await fetch(path)
-        if (response.status !== expectedStatus) {
-            console.error(errorMessage)
-            EventBus.emit(NOTIFY, {
-                caption: "Request failed",
-                description: errorMessage,
-                type: "error"
-            })
-            return null
-        }
-        return await response.json()
-    } catch (error) {
-        console.log(`Request to ${path} failed: ${error}`)
-        notifyRequestFailed(path)
-        return null
-    }
-}
+import { defaultGet, fetchCustom } from "./ApiFetchUtils"
 
 export const DeviceApi = {
-    async getDeviceInfo(ip) {
-        return defaultGet(`http://${ip}/info/system`)
+    async getDeviceInfo(ip, requestId) {
+        return defaultGet(requestId, `http://${ip}/info/system`)
     },
-    async getDeviceActionsInfo(ip) {
-        return defaultGet(`http://${ip}/info/actions`)
+    async getDeviceActionsInfo(ip, requestId) {
+        return defaultGet(requestId, `http://${ip}/info/actions`)
     },
-    async getDeviceConfigInfo(ip) {
-        return defaultGet(`http://${ip}/info/config`)
+    async getDeviceConfigInfo(ip, requestId) {
+        return defaultGet(requestId, `http://${ip}/info/config`)
     },
-    async saveName(ip, name) {
-        const body = JSON.stringify({name})
-        try {
-            const response = await fetch(
-                `http://${ip}/info`,
-                {
-                    method: 'PUT',
-                    body,
-                    headers: { 
-                      "Content-Type": "application/json"
-                    }
-                }
-            )
-            const res = response.status == 200
-            sendNotification({
-                result: res,
+    async saveName(ip, name, requestId) {
+        const result = await fetchCustom({
+            requestId,
+            path: `http://${ip}/info`,
+            method: 'PUT',
+            payload: {name},
+            expectedStatus: 200,
+            notification: {
                 info: "Name changed",
-                error: "Failed to change name",
-                errorDescription: notifyDescByStatus(response.status)
-            })
-            return res
-        } catch (error) {
-            console.log(`Failed to save new device name: ${error}`)
-            notifyRequestFailed()
-            return false
-        }
+                error: "Failed to change name"
+            }
+        })
+        return result && result.status == 200
     },
-    async getConfig(ip) {
-        return defaultGet(`http://${ip}/config`)
+    async getConfig(ip, requestId) {
+        return defaultGet(requestId, `http://${ip}/config`)
     },
-    async saveConfigValues(ip, values) {
-        const body = JSON.stringify(values)
-        try {
-            const response = await fetch(
-                `http://${ip}/config/save`,
-                {
-                    method: 'POST',
-                    body,
-                    headers: { 
-                      "Content-Type": "application/json"
-                    }
-                }
-            )
-            const res = response.status == 200
-            sendNotification({
-                result: res,
+    async saveConfigValues(ip, values, requestId) {
+        const result = await fetchCustom({
+            requestId,
+            path: `http://${ip}/config/save`,
+            method: 'POST',
+            payload: values,
+            expectedStatus: 200,
+            notification: {
                 info: "Configuration updated",
-                error: "Failed to update configuration",
-                errorDescription: notifyDescByStatus(response.status)
-            })
-            return res
-        } catch (error) {
-            console.log(`Failed to add config values: ${error}`)
-            notifyRequestFailed()
-            return false
-        }
+                error: "Failed to update configuration"
+            }
+        })
+        return result && result.status == 200
     },
-    async deleteConfigValue(ip, key) {
-        try {
-            const response = await fetch(
-                `http://${ip}/config/delete?name=${key}`,
-                {
-                    method: 'DELETE'
-                }
-            )
-            const res = response.status == 200
-            sendNotification({
-                result: res,
+    async deleteConfigValue(ip, key, requestId) {
+        const result = await fetchCustom({
+            requestId,
+            path: `http://${ip}/config/delete?name=${key}`,
+            method: 'POST',
+            expectedStatus: 200,
+            notification: {
                 info: "The configuration value has been removed",
-                error: "Failed to remove configuration value",
-                errorDescription: notifyDescByStatus(response.status)
-            })
-            return res
-        } catch (error) {
-            console.log(`Failed to delete config values: ${error}`)
-            notifyRequestFailed()
-            return false
-        }
+                error: "Failed to remove configuration value"
+            }
+        })
+        return result && result.status == 200
     },
-    async deleteAllConfigValues(ip) {
-        try {
-            const response = await fetch(
-                `http://${ip}/config/delete/all`,
-                {
-                    method: 'DELETE'
-                }
-            )
-            const res = response.status == 200
-            sendNotification({
-                result: res,
+    async deleteAllConfigValues(ip, requestId) {
+        const result = await fetchCustom({
+            requestId,
+            path: `http://${ip}/config/delete/all`,
+            method: 'DELETE',
+            expectedStatus: 200,
+            notification: {
                 info: "Configuration removed",
-                error: "Failed to update configuration",
-                errorDescription: notifyDescByStatus(response.status)
-            })
-            return res
-        } catch (error) {
-            console.log(`Failed to delete config values: ${error}`)
-            notifyRequestFailed()
-            return false
-        }
+                error: "Failed to remove configuration"
+            }
+        })
+        return result && result.status == 200
     },
-    async executeDeviceAcion(ip, action) {
-        try {
-            const response = await fetch(`http://${ip}/action?action=${action}`, {
-                method: 'PUT'
-            })
-            const res = response.status == 200
-            sendNotification({
-                result: res,
+    async executeDeviceAcion(ip, action, requestId) {
+        const result = await fetchCustom({
+            requestId,
+            path: `http://${ip}/action?action=${action}`,
+            method: 'PUT',
+            expectedStatus: 200,
+            notification: {
                 info: "Action completed",
-                error: "Failed to complete device action",
-                errorDescription: notifyDescByStatus(response.status)
-            })
-            return res
-        } catch (error) {
-            console.log(`Failed to execute device action: ${error}`)
-            notifyRequestFailed()
-            return false
-        }
+                error: "Failed to complete device action"
+            }
+        })
+        return result && result.status == 200
     },
-    async getDeviceSensors(ip) {
-        return defaultGet(`http://${ip}/sensors`)
+    async getDeviceSensors(ip, requestId) {
+        return defaultGet(requestId, `http://${ip}/sensors`)
     },
-    async getDeviceStates(ip) {
-        return defaultGet(`http://${ip}/states`)
+    async getDeviceStates(ip, requestId) {
+        return defaultGet(requestId, `http://${ip}/states`)
     },
-    async getAllCallbacks(ip) {
-        return defaultGet(`http://${ip}/callbacks`)
+    async getAllCallbacks(ip, requestId) {
+        return defaultGet(requestId, `http://${ip}/callbacks`)
     },
-    async getCallbacks(ip, observable) {
-        return defaultGet(`http://${ip}/callbacks/by/observable?observableType=${observable.type}&name=${observable.name}`)
+    async getCallbacks(ip, observable, requestId) {
+        return defaultGet(
+            "getCallbacks", 
+            `http://${ip}/callbacks/by/observable?observableType=${observable.type}&name=${observable.name}`
+        )
     },
-    async getCallbackById(ip, observable, id) {
-        return defaultGet(`http://${ip}/callbacks/by/id?observableType=${observable.type}&name=${observable.name}&id=${id}`)
+    async getCallbackById(ip, observable, id, requestId) {
+        return defaultGet(
+            requestId, 
+            `http://${ip}/callbacks/by/id?observableType=${observable.type}&name=${observable.name}&id=${id}`
+            )
     },
-    async getCallbacksTemplates(ip) {
-        return defaultGet(`http://${ip}/callbacks/template`)
+    async getCallbacksTemplates(ip, requestId) {
+        return defaultGet(
+            requestId, 
+            `http://${ip}/callbacks/template`
+        )
     },
-    async createCallback(ip, observable, callback) {
-        try {
-            const body = JSON.stringify({
+    async createCallback(ip, observable, callback, requestId) {
+        const result = await fetchCustom({
+            requestId,
+            path: `http://${ip}/callbacks/create`,
+            method: 'POST',
+            payload: {
                 observable,
                 callback
-            })
-            const response = await fetch (
-                `http://${ip}/callbacks/create`,
-                {
-                    method: 'POST',
-                    body,
-                    headers: { 
-                      "Content-Type": "application/json"
-                    }
-                }
-            )
-            const res = response.status == 201
-            sendNotification({
-                result: res,
+            },
+            expectedStatus: 201,
+            notification: {
                 info: "Callback created",
-                error: "Failed to create callback",
-                errorDescription: notifyDescByStatus(response.status)
-            })
-            return res
-        } catch (error) {
-            console.log(`Failed to create callback: ${error}`)
-            notifyRequestFailed()
-            return false
-        }
+                error: "Failed to create callback"
+            }
+        })
+        return result && result.status == 201
     },
-    async updateCallback(ip, observable, callback) {
-        try {
-            const body = JSON.stringify({
+    async updateCallback(ip, observable, callback, requestId) {
+        const result = await fetchCustom({
+            requestId,
+            path: `http://${ip}/callbacks/update`,
+            method: 'POST',
+            payload: {
                 observable,
                 callback
-            })
-            const response = await fetch (
-                `http://${ip}/callbacks/update`,
-                {
-                    method: 'PUT',
-                    body,
-                    headers: { 
-                      "Content-Type": "application/json"
-                    }
-                }
-            )
-            const res = response.status == 200
-            sendNotification({
-                result: res,
+            },
+            expectedStatus: 200,
+            notification: {
                 info: "Callback updated",
-                error: "Failed to update callback",
-                errorDescription: notifyDescByStatus(response.status)
-            })
-            return res
-        } catch (error) {
-            console.log(`Failed to update callback: ${error}`)
-            notifyRequestFailed()
-            return false
-        }
+                error: "Failed to update callback"
+            }
+        })
+        return result && result.status == 200
     },
-    async deleteCallback(ip, observable, id) {
-        try {
-            const response = await fetch (
-                `http://${ip}/callbacks/delete?observableType=${observable.type}&name=${observable.name}&id=${id}`,
-                {
-                    method: 'DELETE',
-                }
-            )
-            const res = response.status == 200
-            sendNotification({
-                result: res,
+    async deleteCallback(ip, observable, id, requestId) {
+        const result = await fetchCustom({
+            requestId,
+            path: `http://${ip}/callbacks/delete?observableType=${observable.type}&name=${observable.name}&id=${id}`,
+            method: 'DELETE',
+            expectedStatus: 200,
+            notification: {
                 info: "The callback has been removed",
-                error: "Failed to remove callback",
-                errorDescription: notifyDescByStatus(response.status)
-            })
-            return res
-        } catch (error) {
-            console.log(`Failed to delete callback: ${error}`)
-            notifyRequestFailed()
-            return false
-        }
+                error: "Failed to remove callback"
+            }
+        })
+        return result && result.status == 200
     },
 }

@@ -2,9 +2,10 @@
     import SearchDeviceInfo from './SearchDeviceInfo.vue'
     import DeviceControlPanel from './DeviceControlPanel.vue'
     import TabItem from '../../tabs/TabItem.vue'
-    import SyncLoader from 'vue-spinner/src/SyncLoader.vue'
     import { Client } from '@stomp/stompjs';
     import { h } from 'vue'
+    import RequestButton from '../../controls/RequestButton.vue';
+    import { EventBus, REQUEST } from '../../../EventBus';
 
     const gatewayPath = import.meta.env.VITE_GATEWAY_PATH
     const gatewayPort = import.meta.env.VITE_GATEWAY_PORT
@@ -18,7 +19,7 @@
         components: {
             SearchDeviceInfo,
             DeviceControlPanel,
-            SyncLoader,
+            RequestButton,
             TabItem
         },
         data() {
@@ -26,8 +27,7 @@
                 tabs: {},
                 devices: {},
                 selectedIp: null,
-                client: null,
-                loading: true
+                client: null
             }
         },
         created() {
@@ -37,7 +37,7 @@
             async connectToBroker() {
                 this.client = new Client({brokerURL: BROKER_URL});
                 this.client.onConnect = () => {
-                    this.loading = true
+                    EventBus.emit(REQUEST, {id: "search", loading: true})
                     this.devices = {}
                     this.selectedIp = null
                     console.log("Subscribing to search topic " + SEARCH_TOPIC)
@@ -59,7 +59,7 @@
             async disconnectFromBroker() {
                 if (this.client) {
                     this.client.unsubscribe("search")
-                    this.loading = false
+                    EventBus.emit(REQUEST, {id: "search", loading: false})
                     console.log("Unsubscribed from search topic")
                 } else {
                     console.error("Can't disconnect from broker - client is null")
@@ -93,10 +93,9 @@
                 </TabItem>
             </Transition>
         </div>
-        <sync-loader :loading="loading"></sync-loader>
-        <button class="clickable" v-if="!loading" v-on:click="connectToBroker">
+        <RequestButton requestId="search" v-on:click="connectToBroker">
             <h1>Refresh</h1>
-        </button>
+        </RequestButton>
     </div>
     <div class="main-tab" v-if="selectedIp">
         <KeepAlive>
