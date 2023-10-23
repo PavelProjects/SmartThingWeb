@@ -42,7 +42,7 @@
                 this.loadCallbacks()
             },
             async loadCallbacks() {                
-                this.callbacks = await DeviceApi.getCallbacks(this.ip, this.observable)
+                this.callbacks = await DeviceApi.getCallbacks(this.ip, this.observable) || []
             },
             async loadTemplates() {
                 this.templates = await DeviceApi.getCallbacksTemplates(this.ip)
@@ -58,7 +58,7 @@
                 }
             },
             addCallback(type) {
-                if (this.callbacks[0].id == NEW_CALLBACK_ID) {
+                if (this.callbacks && this.callbacks.length > 0 && this.callbacks[0].id == NEW_CALLBACK_ID) {
                     this.callbacks.shift()
                 }
                 if (!type) {

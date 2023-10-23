@@ -82,22 +82,25 @@
   <div class="devices-table">
     <div class="side-search">
         <h1 class="title">Found devices</h1>
-        <div v-for="[ip, deviceInfo] in Object.entries(devices)" v-bind:key="ip">
-            <Transition name="slide-left">
-                <TabItem v-if="deviceInfo && deviceInfo.name" v-bind:selected="selectedIp == ip">
-                    <SearchDeviceInfo
-                        v-bind:ip="ip" 
-                        v-bind:deviceInfo="deviceInfo"
-                        v-on:click="switchTab(ip)"
-                    />
-                </TabItem>
-            </Transition>
+        <div class="search-results">
+            <div v-for="[ip, deviceInfo] in Object.entries(devices)" v-bind:key="ip">
+                <Transition name="slide-left">
+                    <TabItem v-if="deviceInfo && deviceInfo.name" v-bind:selected="selectedIp == ip">
+                        <SearchDeviceInfo
+                            v-bind:ip="ip" 
+                            v-bind:deviceInfo="deviceInfo"
+                            v-on:click="switchTab(ip)"
+                        />
+                    </TabItem>
+                </Transition>
+            </div>
+            <RequestButton requestId="search" v-on:click="connectToBroker">
+                <h1>Refresh</h1>
+            </RequestButton>
         </div>
-        <RequestButton requestId="search" v-on:click="connectToBroker">
-            <h1>Refresh</h1>
-        </RequestButton>
     </div>
     <div class="main-tab" v-if="selectedIp">
+        <h1 class="title">Control panel</h1>
         <KeepAlive>
             <component v-bind:is="tabs[selectedIp]"></component>
         </KeepAlive>
@@ -112,10 +115,12 @@
         width: 1500px;
     }
     .side-search{
-        display: grid;
-        row-gap: var(--list-item-gap);
         width: 400px;
         margin-right: 5px;
+    }
+    .search-results {
+        display: grid;
+        row-gap: var(--list-item-gap);
         height: fit-content;
     }
     .main-tab {

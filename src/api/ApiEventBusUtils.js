@@ -27,10 +27,10 @@ export function sendNotification({result, info, infoDescription, error, errorDes
     }
 }
 
-export function notifyRequestFailed(path) {
+export function notifyRequestFailed({caption = "Request failed", description}) {
     EventBus.emit(NOTIFY, {
-        caption: "Request failed",
-        description: path ? `Request to ${path} failed` : '',
+        caption,
+        description,
         type: "error"
     })
 }

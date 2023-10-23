@@ -63,6 +63,9 @@
         outline: none;
         user-select: none;
     }
+    .notification h2 {
+        text-align: center;
+    }
     .error {
       background-color: rgb(171, 12, 12);
       transition: 0.4s;

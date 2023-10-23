@@ -34,12 +34,14 @@
         },
         created() {
             this.loadCloudInfo()
-            this.loadStatus()
-            
-            this.statusIntervalId = setInterval(
-                this.loadStatus,
-                10000
-            )
+            this.loadStatus().then(_ => {
+                if (this.status && Object.keys(this.status).length > 0) {
+                    this.statusIntervalId = setInterval(
+                    this.loadStatus,
+                    10000
+                )
+                }
+            })
         },
         methods: {
             async loadCloudInfo() {

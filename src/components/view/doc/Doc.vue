@@ -18,7 +18,7 @@
 
 <style scoped>
     .doc {
-        width: 100%;
+        width: auto;
         height: var(--doc-height);
         background-color: var(--color-background-mute);
         display: flex;
