@@ -13,45 +13,35 @@
             return {
                 cloudPopupVisible: false,
                 statusIntervalId: null,
-                status: {},
+                gateway: {},
+                user: {},
                 cloudInfo: {}
-            }
-        },
-        computed: {
-            cloudConnected() {
-                const { gatewayInfoLoaded, connectedToBroker, subscribedToQueue } = this.status || {}
-                return  gatewayInfoLoaded && connectedToBroker && subscribedToQueue
-            },
-            gatewayInfoLoaded() {
-                return this.status.gatewayInfoLoaded || false
-            },
-            connectedToBroker() {
-                return this.status.connectedToBroker || false
-            },
-            subscribedToQueue() {
-                return this.status.subscribedToQueue || false
             }
         },
         created() {
             this.loadCloudInfo()
-            this.loadStatus().then(_ => {
-                if (this.status && Object.keys(this.status).length > 0) {
-                    this.statusIntervalId = setInterval(
-                    this.loadStatus,
-                    10000
-                )
+            this.loadAuthorization()
+        },
+        computed: {
+            authorizedShortInfo() {
+                if (!this.gateway || !this.user || Object.keys(this.gateway) == 0 || Object.keys(this.user) == 0) {
+                    return null;
                 }
-            })
+                return `${this.user.login}@${this.gateway.name}`
+            }
         },
         methods: {
             async loadCloudInfo() {
                 this.cloudInfo = await GatewayApi.getCloudInfo()
             },
-            async loadStatus() {
-                this.status = await GatewayApi.getStatus()
+            async loadAuthorization() {
+                const {gateway, user} = await GatewayApi.getAuthorization() || {}
+                this.gateway = gateway
+                this.user = user
             },
             async saveCloudInfo() {
                 await GatewayApi.updateCloudInfo("saveCloudInfo", this.cloudInfo)
+                setTimeout(this.loadAuthorization, 5000)
             },
             openCloudInfoEditor() {
                 this.cloudPopupVisible = !this.cloudPopupVisible
@@ -62,24 +52,30 @@
 
 <template>
     <div>
-        <h2 class="status" 
-            :class="{green: cloudConnected, red: !cloudConnected}"
+        <h2 class="status title"
             @click="openCloudInfoEditor"
         >
-            {{ cloudConnected ? 'Connected' : 'Not connected' }} to the cloud
+            {{ authorizedShortInfo ? authorizedShortInfo : "Log in" }}
         </h2>
         <div v-if="cloudPopupVisible" class="overlay" @click="cloudPopupVisible = false"></div>
         <div v-if="cloudPopupVisible" class="cloud-popup">
-            <h2 class="title">Cloud connection status</h2>
-            <h3 :class="{green: gatewayInfoLoaded, red: !gatewayInfoLoaded}">
-                Gateway info {{ gatewayInfoLoaded ? 'loaded' : 'not loaded' }} 
-            </h3>
-            <h3 :class="{green: connectedToBroker, red: !connectedToBroker}">
-                {{ connectedToBroker ? 'Connected' : 'Not connected' }} to the message broker
-            </h3>
-            <h3 :class="{green: subscribedToQueue, red: !subscribedToQueue}">
-               {{ subscribedToQueue ? 'Subscribed' : 'Not subscribed' }} to the message queue
-            </h3>
+            <div v-if="authorizedShortInfo">
+                <InputWithLabel
+                    label="User login"
+                    :value="user.login"
+                    :disabled="true"
+                />
+                <InputWithLabel
+                    label="Gateway name"
+                    :value="gateway.name"
+                    :disabled="true"
+                />
+                <InputWithLabel
+                    label="Gateway description"
+                    :value="gateway.description"
+                    :disabled="true"
+                />
+            </div>
 
             <h2 class="title">Cloud connection configuration</h2>
             <InputWithLabel
@@ -88,14 +84,14 @@
                 @input="cloudInfo.token = $event.target.value"
             />
             <InputWithLabel
-                label="Cloud url"
-                :value="cloudInfo.cloudUrl || 'Failed to load'"
-                @input="cloudInfo.cloudUrl = $event.target.value"
+                label="Cloud ip"
+                :value="cloudInfo.cloudIp || 'Failed to load'"
+                @input="cloudInfo.cloudIp = $event.target.value"
             />
             <InputWithLabel
-                label="Broker ip"
-                :value="cloudInfo.brokerIp || 'Failed to load'"
-                @input="cloudInfo.brokerIp = $event.target.value"
+                label="Cloud port"
+                :value="cloudInfo.cloudPort || 'Failed to load'"
+                @input="cloudInfo.cloudPort = $event.target.value"
             />
             <RequestButton
                 requestId="saveCloudInfo"

@@ -7,19 +7,19 @@
 a,
 .green {
   text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
+  color: var(--color-postive);
   transition: 0.4s;
 }
 .red {
   text-decoration: none;
-  color: rgb(189, 0, 0);
+  color: var(--color-danger);
   transition: 0.4s;
 }
 
 .title {
   text-align: center;
   text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
+  color: var(--color-postive);
   transition: 0.4s;
 }
 

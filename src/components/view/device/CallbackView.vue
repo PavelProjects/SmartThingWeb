@@ -121,7 +121,7 @@
                 Object.entries(this.template).forEach(([key, {required}]) => {
                     if (required) {
                         const value = this.callback[key]
-                        if (!value && value !== 0) {
+                        if (value == null || value == undefined || value === "") {
                             this.validationFailed.push(key)
                         }
                     }
@@ -167,6 +167,7 @@
                     v-if="!editing" 
                     v-on:click="deleteCallback"
                     requestId="deleteCallback"
+                    style="background-color: var(--color-danger);"
                 >
                     <h3>Delete</h3>
                 </RequestButton>

@@ -3,15 +3,15 @@ import { defaultGet, fetchCustom } from "./ApiFetchUtils"
 const GATEWAY_PATH = import.meta.env.VITE_GATEWAY_PATH
 const GATEWAY_PORT = import.meta.env.VITE_GATEWAY_PORT
 
-const URL_CLOUD_STATUS_GET = "info/status"
+const URL_GET_AUTHORIZATION = "info/authorization"
 const URL_CLOUD_INFO_GET = "configuration/cloud-info"
 const URL_CLOUD_INFO_UPDATE = "configuration/cloud-info/update"
 
 export const GatewayApi = {
-    async getStatus(requestId) {
+    async getAuthorization(requestId) {
         return await defaultGet(
             requestId,
-            `http://${GATEWAY_PATH}:${GATEWAY_PORT}/${URL_CLOUD_STATUS_GET}`
+            `http://${GATEWAY_PATH}:${GATEWAY_PORT}/${URL_GET_AUTHORIZATION}`
         )
     },
     async getCloudInfo(requestId) {

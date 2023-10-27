@@ -61,5 +61,10 @@ export async function defaultGet(requestId, path) {
         method: 'GET',
         expectedStatus: 200
     })
-    return await result.json()
+    try {
+        return await result.json()
+    } catch (error) {
+        console.error(error)
+        return null
+    }
 }
