@@ -6,6 +6,8 @@ export function notifyDescByStatus(status) {
             return "Check device logs for the additional info"
         case 404:
             return "Endpoint not found"
+        case 403:
+            return "Failed to authorize"    
         default:
             return ""
     }

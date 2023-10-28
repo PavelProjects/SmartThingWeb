@@ -24,7 +24,7 @@
         },
         computed: {
             authorizedShortInfo() {
-                if (!this.gateway || !this.user || Object.keys(this.gateway) == 0 || Object.keys(this.user) == 0) {
+                if (!this.gateway || !this.user) {
                     return null;
                 }
                 return `${this.user.login}@${this.gateway.name}`
@@ -35,16 +35,21 @@
                 this.cloudInfo = await GatewayApi.getCloudInfo()
             },
             async loadAuthorization() {
-                const {gateway, user} = await GatewayApi.getAuthorization() || {}
-                this.gateway = gateway
-                this.user = user
+                this.parseAuthorizedUser(await GatewayApi.getCloudAuthorization())
             },
-            async saveCloudInfo() {
-                await GatewayApi.updateCloudInfo("saveCloudInfo", this.cloudInfo)
-                setTimeout(this.loadAuthorization, 5000)
+            async saveAuthorization() {
+                this.parseAuthorizedUser(await GatewayApi.updateCloudAuthorization("saveAuthorization", this.cloudInfo))
             },
             openCloudInfoEditor() {
                 this.cloudPopupVisible = !this.cloudPopupVisible
+            },
+            parseAuthorizedUser(authorizedUser) {
+                if (!authorizedUser || Object.keys(authorizedUser) === 0) {
+                    this.gateway = null
+                    this.user = null
+                }
+                this.gateway = authorizedUser["gateway"]
+                this.user = authorizedUser["user"]
             }
         }
     }
@@ -80,22 +85,22 @@
             <h2 class="title">Cloud connection configuration</h2>
             <InputWithLabel
                 label="Token"
-                :value="cloudInfo.token || 'Failed to load'"
+                :value="cloudInfo.token"
                 @input="cloudInfo.token = $event.target.value"
             />
             <InputWithLabel
                 label="Cloud ip"
-                :value="cloudInfo.cloudIp || 'Failed to load'"
+                :value="cloudInfo.cloudIp"
                 @input="cloudInfo.cloudIp = $event.target.value"
             />
             <InputWithLabel
                 label="Cloud port"
-                :value="cloudInfo.cloudPort || 'Failed to load'"
+                :value="cloudInfo.cloudPort"
                 @input="cloudInfo.cloudPort = $event.target.value"
             />
             <RequestButton
-                requestId="saveCloudInfo"
-                @click="saveCloudInfo"
+                requestId="saveAuthorization"
+                @click="saveAuthorization"
             >
                 <h2>save</h2>
             </RequestButton>

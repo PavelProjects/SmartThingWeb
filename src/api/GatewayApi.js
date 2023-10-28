@@ -3,15 +3,14 @@ import { defaultGet, fetchCustom } from "./ApiFetchUtils"
 const GATEWAY_PATH = import.meta.env.VITE_GATEWAY_PATH
 const GATEWAY_PORT = import.meta.env.VITE_GATEWAY_PORT
 
-const URL_GET_AUTHORIZATION = "info/authorization"
-const URL_CLOUD_INFO_GET = "configuration/cloud-info"
-const URL_CLOUD_INFO_UPDATE = "configuration/cloud-info/update"
+const URL_AUTHORIZATION = "info/authorization"
+const URL_CLOUD_INFO_GET = "info/cloud-info"
 
 export const GatewayApi = {
-    async getAuthorization(requestId) {
+    async getCloudAuthorization(requestId) {
         return await defaultGet(
             requestId,
-            `http://${GATEWAY_PATH}:${GATEWAY_PORT}/${URL_GET_AUTHORIZATION}`
+            `http://${GATEWAY_PATH}:${GATEWAY_PORT}/${URL_AUTHORIZATION}`
         )
     },
     async getCloudInfo(requestId) {
@@ -20,18 +19,18 @@ export const GatewayApi = {
             `http://${GATEWAY_PATH}:${GATEWAY_PORT}/${URL_CLOUD_INFO_GET}`,
         )
     },
-    async updateCloudInfo(requestId, payload) {
+    async updateCloudAuthorization(requestId, payload) {
         const response = await fetchCustom({
             requestId,
-            path: `http://${GATEWAY_PATH}:${GATEWAY_PORT}/${URL_CLOUD_INFO_UPDATE}`,
+            path: `http://${GATEWAY_PATH}:${GATEWAY_PORT}/${URL_AUTHORIZATION}`,
             payload,
             method: 'PUT',
             notification: {
                 info: "Updated",
-                infoDescription: "Cloud connection configration was updated",
-                error: "Failed to update cloud configuration"
+                infoDescription: "Cloud authorization info was updated",
+                error: "Failed to update cloud authorization info"
             }
         })
-        return response.status == 200
+        return response.status == 200 ? await response.json() : {}
     }
 }
