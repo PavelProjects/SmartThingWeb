@@ -19,16 +19,15 @@ export const GatewayApi = {
             `http://${GATEWAY_PATH}:${GATEWAY_PORT}/${URL_CLOUD_INFO_GET}`,
         )
     },
-    async updateCloudAuthorization(requestId, payload) {
+    async cloudAuthorize(requestId, payload) {
         const response = await fetchCustom({
             requestId,
             path: `http://${GATEWAY_PATH}:${GATEWAY_PORT}/${URL_AUTHORIZATION}`,
             payload,
             method: 'PUT',
             notification: {
-                info: "Updated",
-                infoDescription: "Cloud authorization info was updated",
-                error: "Failed to update cloud authorization info"
+                info: "Successfuly authorized in cloud",
+                error: "Failed to authorize in cloud"
             }
         })
         return response.status == 200 ? await response.json() : {}

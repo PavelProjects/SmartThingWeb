@@ -38,7 +38,7 @@
                 this.parseAuthorizedUser(await GatewayApi.getCloudAuthorization())
             },
             async saveAuthorization() {
-                this.parseAuthorizedUser(await GatewayApi.updateCloudAuthorization("saveAuthorization", this.cloudInfo))
+                this.parseAuthorizedUser(await GatewayApi.cloudAuthorize("saveAuthorization", this.cloudInfo))
             },
             openCloudInfoEditor() {
                 this.cloudPopupVisible = !this.cloudPopupVisible
@@ -47,6 +47,7 @@
                 if (!authorizedUser || Object.keys(authorizedUser) === 0) {
                     this.gateway = null
                     this.user = null
+                    return;
                 }
                 this.gateway = authorizedUser["gateway"]
                 this.user = authorizedUser["user"]
@@ -82,7 +83,7 @@
                 />
             </div>
 
-            <h2 class="title">Cloud connection configuration</h2>
+            <h2 class="title">Cloud authorization info</h2>
             <InputWithLabel
                 label="Token"
                 :value="cloudInfo.token"
@@ -102,7 +103,7 @@
                 requestId="saveAuthorization"
                 @click="saveAuthorization"
             >
-                <h2>save</h2>
+                <h2>Authorize</h2>
             </RequestButton>
         </div>
     </div>
