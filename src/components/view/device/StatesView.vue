@@ -50,8 +50,8 @@
             async loadStates() {
                 this.states = await DeviceApi.getDeviceStates(this.ip)
             },
-            update() {
-                this.loadStates()
+            async update() {
+                await this.loadStates()
             }
         }
     }

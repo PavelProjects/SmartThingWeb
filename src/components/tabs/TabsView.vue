@@ -1,12 +1,15 @@
 <script>
+    import RequestButton from '../controls/RequestButton.vue'
     import TabItem from './TabItem.vue'
     import { h } from 'vue'
+    import { EventBus, REQUEST } from "../../EventBus";
 
     export default {
         name: "TabsView",
         components: {
-            TabItem
-        },
+    TabItem,
+    RequestButton
+},
         props: {
             tabs: Object,
             defaultTab: String,
@@ -34,9 +37,11 @@
                     this.currentTab = name
                 }
             },
-            updateContent() {
+            async updateContent() {
                 if (this.$refs.content && this.$refs.content.update) {
-                    this.$refs.content.update()
+                    EventBus.emit(REQUEST, {id: "update", loading: true})
+                    await this.$refs.content.update()
+                    EventBus.emit(REQUEST, {id: "update", loading: false})
                 } else {
                     console.error("Content don't have update method")
                 }
@@ -60,13 +65,14 @@
             </TabItem>
         </div>
         <div v-if="currentTab && tabs[currentTab]['render']" class="tab-content">
-            <button 
+            <RequestButton 
                 class="update-button"
                 v-if="haveUpdateButton"
                 v-on:click.prevent="updateContent()"
+                requestId="update"
             >
                 <h3>Update</h3>
-            </button>
+            </RequestButton>
             <KeepAlive>
                 <component ref="content" :is="tabs[currentTab]['render']"></component>
             </KeepAlive>

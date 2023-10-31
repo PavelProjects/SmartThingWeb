@@ -3,6 +3,7 @@
     import { DeviceApi } from "../../../api/DeviceApi.js"
     import InputWithLabel from "../../fields/InputWithLabel.vue"
     import RequestButton from '../../controls/RequestButton.vue'
+import { EventBus, NOTIFY } from '../../../EventBus'
 
     const NAME_ERROR = "Name can't be empty!"
 
@@ -36,6 +37,13 @@
         methods: {
             async loadInfo() {
                 this.info = await DeviceApi.getDeviceInfo(this.ip)
+                if (!this.info) {
+                    EventBus.emit(NOTIFY, {
+                        caption: "Failed to load device information",
+                        type: "error"
+                    })
+                    this.info = {}
+                }
                 this.deviceName = this.info["name"] || ""
             },
             async saveName() {

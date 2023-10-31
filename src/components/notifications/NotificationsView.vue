@@ -14,9 +14,7 @@
             }
         },
         mounted() {
-            EventBus.on(NOTIFY, (notification) => {
-                this.addNotification(notification)
-            })
+            EventBus.on(NOTIFY, this.addNotification)
         },
         methods: {
             getId() {

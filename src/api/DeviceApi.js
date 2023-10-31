@@ -128,7 +128,7 @@ export const DeviceApi = {
         const result = await fetchCustom({
             requestId,
             path: `http://${ip}/callbacks/update`,
-            method: 'POST',
+            method: 'PUT',
             payload: {
                 observable,
                 callback

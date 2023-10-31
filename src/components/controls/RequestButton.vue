@@ -23,6 +23,7 @@
         methods: {
             onEvent(payload) {
                 const {id, loading} = payload || {}
+                console.debug(`RequestButton event :: id=${id} loading=${loading}`)
                 if (id === this.requestId) {
                     this.loading = loading
                 }

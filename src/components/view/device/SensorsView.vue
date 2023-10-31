@@ -50,8 +50,8 @@
             async loadSensors() {
                 this.sensors = await DeviceApi.getDeviceSensors(this.ip)
             },
-            update() {
-                this.loadSensors()
+            async update() {
+                await this.loadSensors()
             }
         }
     }

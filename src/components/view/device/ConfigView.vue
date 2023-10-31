@@ -32,7 +32,7 @@
         methods: {
             async update() {
                 await this.loadConfigInfo();
-                this.loadConfigValues();
+                await this.loadConfigValues();
             },
             async loadConfigInfo() {
                 this.configInfo = await DeviceApi.getDeviceConfigInfo(this.ip);

@@ -20,7 +20,8 @@
             return {
                 selectedTemplate: null,
                 callbacks: [],
-                templates: {}
+                templates: {},
+                selectedType: null
             }
         },
         computed: {
