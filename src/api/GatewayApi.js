@@ -3,8 +3,10 @@ import { defaultGet, fetchCustom } from "./ApiFetchUtils"
 const GATEWAY_PATH = import.meta.env.VITE_GATEWAY_PATH
 const GATEWAY_PORT = import.meta.env.VITE_GATEWAY_PORT
 
-const URL_AUTHORIZATION = "info/authorization"
-const URL_CLOUD_INFO_GET = "info/cloud-info"
+const URL_AUTHORIZATION = "auth"
+const URL_CLOUD_INFO = "auth/configuration"
+const URL_CLOUD_CONNECTED = "connection/connected"
+const URL_CLOUD_CONNECT = "connection/connect"
 
 export const GatewayApi = {
     async getCloudAuthorization(requestId) {
@@ -16,7 +18,7 @@ export const GatewayApi = {
     async getCloudInfo(requestId) {
         return await defaultGet(
             requestId,
-            `http://${GATEWAY_PATH}:${GATEWAY_PORT}/${URL_CLOUD_INFO_GET}`,
+            `http://${GATEWAY_PATH}:${GATEWAY_PORT}/${URL_CLOUD_INFO}`,
         )
     },
     async cloudAuthorize(requestId, payload) {
@@ -31,5 +33,23 @@ export const GatewayApi = {
             }
         })
         return response.status == 200 ? await response.json() : {}
+    },
+    async getConnectionStatus(requestId) {
+        return await defaultGet(
+            requestId,
+            `http://${GATEWAY_PATH}:${GATEWAY_PORT}/${URL_CLOUD_CONNECTED}`
+        )
+    },
+    async cloudConnect(requestId) {
+        const response = await fetchCustom({
+            requestId,
+            path: `http://${GATEWAY_PATH}:${GATEWAY_PORT}/${URL_CLOUD_CONNECT}`,
+            method: 'PUT',
+            notification: {
+                info: "Connected",
+                error: "Failed to connect"
+            }
+        })
+        return response.status == 200 && await response.json();
     }
 }

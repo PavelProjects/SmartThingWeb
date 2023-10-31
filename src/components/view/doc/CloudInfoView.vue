@@ -15,7 +15,8 @@
                 statusIntervalId: null,
                 gateway: {},
                 user: {},
-                cloudInfo: {}
+                cloudInfo: {},
+                isConnected: false,
             }
         },
         created() {
@@ -33,12 +34,19 @@
         methods: {
             async loadCloudInfo() {
                 this.cloudInfo = await GatewayApi.getCloudInfo()
+                this.isConnected = await GatewayApi.getConnectionStatus();
             },
             async loadAuthorization() {
                 this.parseAuthorizedUser(await GatewayApi.getCloudAuthorization())
             },
             async saveAuthorization() {
                 this.parseAuthorizedUser(await GatewayApi.cloudAuthorize("saveAuthorization", this.cloudInfo))
+            },
+            async connectToCloud() {
+                if (this.isConnected) {
+                    return;
+                }
+                this.isConnected = await GatewayApi.cloudConnect("cloudConnect");
             },
             openCloudInfoEditor() {
                 this.cloudPopupVisible = !this.cloudPopupVisible
@@ -67,17 +75,31 @@
         <div v-if="cloudPopupVisible" class="cloud-popup">
             <div v-if="authorizedShortInfo">
                 <InputWithLabel
+                    label="Connection status"
+                    :value="isConnected ? 'Connected' : 'Connection lost'"
+                    :disabled="true"
+                >
+                    <RequestButton
+                        v-if="!isConnected"
+                        requestId="cloudConnect"
+                        @click="connectToCloud"
+                    >
+                        <h3>reconnect</h3>
+                    </RequestButton>
+                </InputWithLabel>
+                <InputWithLabel
                     label="User login"
                     :value="user.login"
                     :disabled="true"
                 />
+                <h2 class="title">Gateway</h2>
                 <InputWithLabel
-                    label="Gateway name"
+                    label="Name"
                     :value="gateway.name"
                     :disabled="true"
                 />
                 <InputWithLabel
-                    label="Gateway description"
+                    label="Description"
                     :value="gateway.description"
                     :disabled="true"
                 />

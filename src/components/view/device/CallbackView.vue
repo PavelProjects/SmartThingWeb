@@ -89,6 +89,7 @@
                     res = await DeviceApi.updateCallback(this.ip, this.observable, this.callback, "saveCallback")
                     emitAction = "reloadCallback"
                 } else { 
+                    delete this.callback.id;
                     res = await DeviceApi.createCallback(this.ip, this.observable, this.callback, "saveCallback")
                     emitAction = "update"
                 }
