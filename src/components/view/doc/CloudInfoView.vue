@@ -1,5 +1,6 @@
 <script>
     import { GatewayApi } from '../../../api/GatewayApi.js';
+    import { AuthorizationApi } from '../../../api/AuthorizationApi';
     import InputWithLabel from '../../fields/InputWithLabel.vue';
     import RequestButton from '../../controls/RequestButton.vue';
 
@@ -23,6 +24,9 @@
             this.loadCloudInfo()
             this.loadAuthorization()
         },
+        async mounted() {
+            this.isConnected = await GatewayApi.getConnectionStatus();
+        },
         computed: {
             authorizedShortInfo() {
                 if (!this.gateway || !this.user) {
@@ -37,10 +41,10 @@
                 this.isConnected = await GatewayApi.getConnectionStatus();
             },
             async loadAuthorization() {
-                this.parseAuthorizedUser(await GatewayApi.getCloudAuthorization())
+                this.parseAuthorizedUser(await AuthorizationApi.getCloudAuthorization())
             },
             async saveAuthorization() {
-                this.parseAuthorizedUser(await GatewayApi.cloudAuthorize("saveAuthorization", this.cloudInfo))
+                this.parseAuthorizedUser(await AuthorizationApi.cloudAuthorize("saveAuthorization", this.cloudInfo))
             },
             async connectToCloud() {
                 if (this.isConnected) {

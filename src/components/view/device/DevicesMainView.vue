@@ -6,6 +6,7 @@
     import { h } from 'vue'
     import RequestButton from '../../controls/RequestButton.vue';
     import { EventBus, REQUEST } from '../../../utils/EventBus';
+    import { GatewayApi } from '../../../api/GatewayApi'
 
     const gatewayPath = import.meta.env.VITE_GATEWAY_PATH
     const gatewayPort = import.meta.env.VITE_GATEWAY_PORT
@@ -30,40 +31,16 @@
                 client: null
             }
         },
-        created() {
-            this.connectToBroker()
+        mounted() {
+            this.search();
         },
         methods: {
-            async connectToBroker() {
-                this.client = new Client({brokerURL: BROKER_URL});
-                this.client.onConnect = () => {
-                    EventBus.emit(REQUEST, {id: "search", loading: true})
-                    this.devices = {}
-                    this.selectedIp = null
-                    console.log("Subscribing to search topic " + SEARCH_TOPIC)
-                    this.client.subscribe(SEARCH_TOPIC, (message) => {
-                        if (message && message.body) {
-                            const deviceInfo = JSON.parse(message.body)
-                            if (!this.devices[deviceInfo.ip]) {
-                                this.devices[deviceInfo.ip] = deviceInfo
-                            }
-                        } else {
-                            console.warn("Empty topic message")
-                        }
-                    }, {id: "search"})
-                }
-                console.log("Connecting to ws broker " + BROKER_URL)
-                this.client.activate()
-                setTimeout(this.disconnectFromBroker, SEARCH_TIME)
-            },
-            async disconnectFromBroker() {
-                if (this.client) {
-                    this.client.unsubscribe("search")
-                    EventBus.emit(REQUEST, {id: "search", loading: false})
-                    console.log("Unsubscribed from search topic")
-                } else {
-                    console.error("Can't disconnect from broker - client is null")
-                }
+            search() {
+                GatewayApi.searchDevices((deviceInfo) => {
+                    if (!this.devices[deviceInfo.ip]) {
+                        this.devices[deviceInfo.ip] = deviceInfo
+                    }
+                });
             },
             switchTab(ip) {
                 if (!this.tabs[ip]) {
@@ -94,7 +71,7 @@
                     </TabItem>
                 </Transition>
             </div>
-            <RequestButton requestId="search" v-on:click="connectToBroker">
+            <RequestButton requestId="search" v-on:click="search">
                 <h1>Refresh</h1>
             </RequestButton>
         </div>
