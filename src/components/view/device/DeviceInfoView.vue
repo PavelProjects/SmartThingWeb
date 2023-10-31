@@ -3,7 +3,7 @@
     import { DeviceApi } from "../../../api/DeviceApi.js"
     import InputWithLabel from "../../fields/InputWithLabel.vue"
     import RequestButton from '../../controls/RequestButton.vue'
-import { EventBus, NOTIFY } from '../../../EventBus'
+import { EventBus, NOTIFY } from '../../../utils/EventBus'
 
     const NAME_ERROR = "Name can't be empty!"
 

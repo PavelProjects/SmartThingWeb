@@ -2,7 +2,7 @@
     import RequestButton from '../controls/RequestButton.vue'
     import TabItem from './TabItem.vue'
     import { h } from 'vue'
-    import { EventBus, REQUEST } from "../../EventBus";
+    import { EventBus, REQUEST } from "../../utils/EventBus";
 
     export default {
         name: "TabsView",

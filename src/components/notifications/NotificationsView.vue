@@ -1,5 +1,5 @@
 <script>
-    import {EventBus, NOTIFY} from "../../EventBus.js"
+    import {EventBus, NOTIFY} from "../../utils/EventBus.js"
     import Notifification from "./Notifification.vue"
 
     export default {

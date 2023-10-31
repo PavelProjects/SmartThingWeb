@@ -5,7 +5,7 @@
     import { DeviceApi } from "../../../api/DeviceApi.js"
     import { NEW_CALLBACK_ID } from "./CallbacksView.vue"
     import { h } from "vue"
-    import {EventBus, NOTIFY} from '../../../EventBus.js'
+    import {EventBus, NOTIFY} from '../../../utils/EventBus.js'
     import RequestButton from "../../controls/RequestButton.vue"
 
     const SYSTEM_FIELDS = ["id", "type", "readonly"]

@@ -53,17 +53,17 @@
         border-radius: var(--border-radius);
         width: var(--notification-width);
         min-height: var(--notification-min-height);
-        padding: 5px;
+        padding: 10px 5px 5px 5px;
     }
     .notification button {
         background-color: transparent;
         position: absolute;
         top: 0px;
-        right: 1px;
+        right: 0px;
         outline: none;
         user-select: none;
     }
-    .notification h2 {
+    .notification h2, h3 {
         text-align: center;
     }
     .error {

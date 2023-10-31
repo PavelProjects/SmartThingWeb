@@ -1,4 +1,4 @@
-import {EventBus, NOTIFY, REQUEST} from '../EventBus.js'
+import {EventBus, NOTIFY, REQUEST} from '../utils/EventBus.js'
 
 export function notifyDescByStatus(status) {
     switch (status) {

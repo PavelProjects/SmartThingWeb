@@ -5,7 +5,7 @@
     import { Client } from '@stomp/stompjs';
     import { h } from 'vue'
     import RequestButton from '../../controls/RequestButton.vue';
-    import { EventBus, REQUEST } from '../../../EventBus';
+    import { EventBus, REQUEST } from '../../../utils/EventBus';
 
     const gatewayPath = import.meta.env.VITE_GATEWAY_PATH
     const gatewayPort = import.meta.env.VITE_GATEWAY_PORT
