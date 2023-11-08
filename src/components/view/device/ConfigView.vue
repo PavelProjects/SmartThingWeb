@@ -1,12 +1,13 @@
 <script>
-    import { DeviceApi } from "../../../api/DeviceApi.js"
+    import { DeviceApi } from "../../../api/device/DeviceApi.js"
     import InputWithLabel from "../../fields/InputWithLabel.vue"
     import RequestButton from "../../controls/RequestButton.vue";
 
     export default {
         name: "ConfigView",
         props: {
-            ip: String
+            ip: String,
+            gateway: Object
         },
         components: { 
             InputWithLabel,
@@ -35,19 +36,19 @@
                 await this.loadConfigValues();
             },
             async loadConfigInfo() {
-                this.configInfo = await DeviceApi.getDeviceConfigInfo(this.ip);
+                this.configInfo = await DeviceApi.getDeviceConfigInfo(this.ip, this.gateway);
             },
             async loadConfigValues() {
-                this.values = await DeviceApi.getConfig(this.ip);
+                this.values = await DeviceApi.getConfig(this.ip, this.gateway);
             },
             async saveConfig() {
-                if (await DeviceApi.saveConfigValues(this.ip, this.values, "saveConfig")) {
+                if (await DeviceApi.saveConfigValues(this.ip, this.values, this.gateway)) {
                     this.loadConfigValues()
                 }
             },
             async deleteAllValues() {
                 if (confirm("Are you sure you want to delete all configuration values?")) {
-                    if (await DeviceApi.deleteAllConfigValues(this.ip, "deleteConfig")) {
+                    if (await DeviceApi.deleteAllConfigValues(this.ip, this.gateway)) {
                         this.loadConfigValues()
                     }
                 }
@@ -113,9 +114,9 @@
     .controls-holder {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        column-gap: var(--list-item-gap);
+        column-gap: var(--default-gap);
         width: 100%;
-        margin-bottom: var(--list-item-gap);
+        margin-bottom: var(--default-gap);
     }
     .controls-holder button {
         width: 100%;
@@ -124,6 +125,6 @@
         background-color: hsla(0, 100%, 37%, 0.2);
     }
     .labeled-input {
-        margin-bottom: var(--list-item-gap)
+        margin-bottom: var(--default-gap)
     }
 </style>

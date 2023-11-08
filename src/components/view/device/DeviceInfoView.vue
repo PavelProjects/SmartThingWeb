@@ -1,9 +1,9 @@
 <script>
     import SyncLoader from 'vue-spinner/src/SyncLoader.vue'
-    import { DeviceApi } from "../../../api/DeviceApi.js"
+    import { DeviceApi } from "../../../api/device/DeviceApi.js"
     import InputWithLabel from "../../fields/InputWithLabel.vue"
     import RequestButton from '../../controls/RequestButton.vue'
-import { EventBus, NOTIFY } from '../../../utils/EventBus'
+    import { EventBus, NOTIFY } from '../../../utils/EventBus'
 
     const NAME_ERROR = "Name can't be empty!"
 
@@ -15,7 +15,8 @@ import { EventBus, NOTIFY } from '../../../utils/EventBus'
             RequestButton
         },
         props: {
-            ip: String
+            ip: String,
+            gateway: Object
         },
         data() {
             return {
@@ -36,7 +37,7 @@ import { EventBus, NOTIFY } from '../../../utils/EventBus'
         },
         methods: {
             async loadInfo() {
-                this.info = await DeviceApi.getDeviceInfo(this.ip)
+                this.info = await DeviceApi.getDeviceInfo(this.ip, this.gateway)
                 if (!this.info) {
                     EventBus.emit(NOTIFY, {
                         caption: "Failed to load device information",
@@ -51,7 +52,7 @@ import { EventBus, NOTIFY } from '../../../utils/EventBus'
                     console.error("Not valid name")
                     return
                 }
-                if (await DeviceApi.saveName(this.ip, this.deviceName, "saveName")) {
+                if (await DeviceApi.saveName(this.ip, this.deviceName, this.gateway)) {
                     this.loadInfo()
                 }
             },

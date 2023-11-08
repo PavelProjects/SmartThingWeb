@@ -1,7 +1,7 @@
 <script>
     import { systemNameToNormal } from "../../../utils/StringUtils.js"
     import CallbackView from '../device/CallbackView.vue'
-    import { DeviceApi } from "../../../api/DeviceApi.js"
+    import { DeviceApi } from "../../../api/device/DeviceApi.js"
     import Combobox from "../../fields/Combobox.vue"
 
     export const NEW_CALLBACK_ID = "New"
@@ -14,7 +14,8 @@
         },
         props: {
             ip: String,
-            observable: Object
+            observable: Object,
+            gateway: Object
         },
         data() {
             return {
@@ -43,10 +44,10 @@
                 this.loadCallbacks()
             },
             async loadCallbacks() {                
-                this.callbacks = await DeviceApi.getCallbacks(this.ip, this.observable) || []
+                this.callbacks = await DeviceApi.getCallbacks(this.ip, this.observable, this.gateway) || []
             },
             async loadTemplates() {
-                this.templates = await DeviceApi.getCallbacksTemplates(this.ip)
+                this.templates = await DeviceApi.getCallbacksTemplates(this.ip, this.gateway)
             },
             async reloadCallback(callback) {
                 if (callback.id === NEW_CALLBACK_ID) {
@@ -54,7 +55,7 @@
                 } else {
                     const index = this.callbacks.indexOf(callback)
                     if (index >= 0) {
-                        this.callbacks[index] = await DeviceApi.getCallbackById(this.ip, this.observable, callback.id)
+                        this.callbacks[index] = await DeviceApi.getCallbackById(this.ip, this.observable, callback.id, this.gateway)
                     }
                 }
             },
@@ -95,6 +96,7 @@
             :observable="observable"
             :callback="callback"
             :template="{...templates[callback.type], ...templates['default']}"
+            :gateway="gateway"
             @update="update"
             @reload-callback="reloadCallback"
         />
@@ -105,6 +107,6 @@
     .callbacks-list-view {
         max-height: 80vh;
         overflow-y: auto;
-        margin-top: var(--list-item-gap);
+        margin-top: var(--default-gap);
     }
 </style>

@@ -18,36 +18,41 @@
             TabsView
         },
         props: {
-            ip: String
+            ip: String,
+            gateway: Object
         },
         data() {
+            const props = {
+                ip: this.ip,
+                gateway: this.gateway
+            }
             return {
                 currentTab: null,
                 tabs: {
                     "info": {
                         class: DeviceInfoView,
                         caption: "Information",
-                        props: {ip: this.ip}
+                        props
                     },
                     "actions": {
                         class: ActionsView,
                         caption: "Actions",
-                        props: {ip: this.ip}
+                        props
                     },
                     "sensors": {
                         class: SensorsView,
                         caption: "Sensors",
-                        props: {ip: this.ip}
+                        props
                     },
                     "states": {
                         class: StatesView,
                         caption: "States",
-                        props: {ip: this.ip}
+                        props
                     },
                     "config": {
                         class: ConfigView,
                         caption: "Configuration",
-                        props: {ip: this.ip}
+                        props
                     }
                 }
             }

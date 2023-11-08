@@ -2,7 +2,7 @@
     import SyncLoader from 'vue-spinner/src/SyncLoader.vue'
     import TabsView from '../../tabs/TabsView.vue'
     import CallbacksView from './CallbacksView.vue'
-    import { DeviceApi } from "../../../api/DeviceApi.js"
+    import { DeviceApi } from "../../../api/device/DeviceApi.js"
    
     export default {
         name: "StatesView",
@@ -12,7 +12,8 @@
             CallbacksView
         },
         props: {
-            ip: String
+            ip: String,
+            gateway: Object
         },
         data() {
             return {
@@ -39,7 +40,8 @@
                                 observable: {
                                     name,
                                     type: "state"
-                                }
+                                },
+                                gateway: this.gateway
                             }
                         };
                         return acc;
@@ -48,7 +50,7 @@
         },
         methods: {
             async loadStates() {
-                this.states = await DeviceApi.getDeviceStates(this.ip)
+                this.states = await DeviceApi.getDeviceStates(this.ip, this.gateway)
             },
             async update() {
                 await this.loadStates()

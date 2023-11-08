@@ -1,13 +1,66 @@
-<script setup>
+<script>
   import Doc from "./components/view/doc/Doc.vue"
   import DevicesMainView from "./components/view/device/DevicesMainView.vue";
   import NotificationsView from "./components/notifications/NotificationsView.vue"
+  import GatewaysList from "./components/view/gateway/GatewaysList.vue";
+  import CloudAuthDialog from './components/dialogs/CloudAuthDialog.vue';
+import { CloudApi } from './api/CloudApi';
+
+  export default {
+    name: "App",
+    components: {
+      Doc,
+      DevicesMainView,
+      NotificationsView, 
+      GatewaysList,
+      CloudAuthDialog
+    },
+    data() {
+      const mode = import.meta.env.VITE_MODE
+      return {
+        mode,
+        authorization: null,
+        selectedGateway: null
+      }
+    },
+    computed: {
+      isAuthorized() {
+        return !!this.authorization;
+      }
+    },
+    methods: {
+      handleAuthorization(auth) {
+        this.authorization = auth
+        if (this.isAuthorized) {
+          CloudApi.connectToResponseTopic(this.authorization.user)
+        }
+      },
+      handleGatewaySelect(gateway) {
+        this.selectedGateway = gateway
+      }
+    }
+  }
 </script>
 
 <template>
-  <Doc class="doc"/>
-  <DevicesMainView class="content"/>
-  <NotificationsView class="notifications"/>
+  <CloudAuthDialog
+    :visible="!isAuthorized"
+    @authorized="handleAuthorization"
+  />
+  <div v-if="isAuthorized">
+    <Doc class="doc"/>
+    <NotificationsView class="notifications"/>
+    <div class="content">
+      <GatewaysList 
+        v-if="mode == 'cloud'"
+        @select="handleGatewaySelect"
+      />
+      <DevicesMainView 
+        v-if="selectedGateway"
+        :gateway="selectedGateway"
+      />
+    </div>
+  </div>
 </template>
 
 <style scoped>
@@ -15,12 +68,14 @@
     position: sticky;
   }
   .content {
-    margin: 0 auto;
-    margin-top: var(--list-item-gap);
+    display: flex;
+    flex-direction: row;
+    column-gap: var(--default-gap);
+    margin: var(--default-gap);
   }
   .notifications {
     position: absolute;
-    bottom: var(--list-item-gap);
-    right: var(--list-item-gap);
+    top: var(--doc-height);
+    right: var(--default-gap);
   }
 </style>

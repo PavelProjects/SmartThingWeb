@@ -7,9 +7,9 @@
     export default {
         name: "TabsView",
         components: {
-    TabItem,
-    RequestButton
-},
+            TabItem,
+            RequestButton
+        },
         props: {
             tabs: Object,
             defaultTab: String,

@@ -2,7 +2,7 @@
     import { systemNameToNormal } from "../../../utils/StringUtils.js"
     import InputWithLabel from "../../fields/InputWithLabel.vue"
     import Combobox from "../../fields/Combobox.vue"
-    import { DeviceApi } from "../../../api/DeviceApi.js"
+    import { DeviceApi } from "../../../api/device/DeviceApi.js"
     import { NEW_CALLBACK_ID } from "./CallbacksView.vue"
     import { h } from "vue"
     import {EventBus, NOTIFY} from '../../../utils/EventBus.js'
@@ -16,7 +16,8 @@
             ip: String,
             callback: Object,
             observable: Object,
-            template: Array
+            template: Array,
+            gateway: Object
         },
         components: {
             InputWithLabel,
@@ -86,11 +87,11 @@
                 let res = false
                 let emitAction = ""
                 if (this.callback.id !== NEW_CALLBACK_ID) {
-                    res = await DeviceApi.updateCallback(this.ip, this.observable, this.callback, "saveCallback")
+                    res = await DeviceApi.updateCallback(this.ip, this.observable, this.callback, this.gateway)
                     emitAction = "reloadCallback"
                 } else { 
                     delete this.callback.id;
-                    res = await DeviceApi.createCallback(this.ip, this.observable, this.callback, "saveCallback")
+                    res = await DeviceApi.createCallback(this.ip, this.observable, this.callback, this.gateway)
                     emitAction = "update"
                 }
 
@@ -107,7 +108,7 @@
                     return
                 }
                 if (confirm("Are you sure you wan to delete callback " + this.callback.id + "?")) {
-                    if (await DeviceApi.deleteCallback(this.ip, this.observable, this.callback.id, "deleteCallback")) {
+                    if (await DeviceApi.deleteCallback(this.ip, this.observable, this.callback.id, this.gateway)) {
                         this.$emit("update")
                     }
                 }
@@ -161,8 +162,26 @@
 
 <template>
     <div class="bordered">
-        <div class="callback-header">
-            <h3>[{{callback.id}}] {{ callback.caption || systemNameToNormal(callback.type) }}</h3>
+        <h3 class="title">[{{callback.id}}] {{ callback.caption || systemNameToNormal(callback.type) }}</h3>
+        <div>
+            <InputWithLabel
+                label="type"
+                :value="callback.type"
+                disabled=true
+            />
+            <component
+                v-for="{key, label, value, render, required} in fieldsComponents"
+                :is="render"
+                :key="key"
+                :label="label"
+                :value="value"
+                :notBlank="required"
+                @input="setValue(key, $event.target.value)"
+                :disabled="isFieldDisabled(key)"
+                :validationFailed="validationFailed.includes(key)"
+            />
+        </div>
+        <div class="controls">
             <div v-if="!callback.readonly" class="callback-view-controls">
                 <RequestButton 
                     v-if="!editing" 
@@ -186,37 +205,23 @@
             <div v-else>
                 <h3 style="text-align: center;">Readonly</h3>
             </div>
-        </div>  
-        <div>
-            <InputWithLabel
-                label="type"
-                :value="callback.type"
-                disabled=true
-            />
-            <component
-                v-for="{key, label, value, render, required} in fieldsComponents"
-                :is="render"
-                :key="key"
-                :label="label"
-                :value="value"
-                :notBlank="required"
-                @input="setValue(key, $event.target.value)"
-                :disabled="isFieldDisabled(key)"
-                :validationFailed="validationFailed.includes(key)"
-            />
         </div>
     </div>
 </template>
 
 <style scoped>
-    .callback-header {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
+    .controls {
+        display: flex;
+        flex-direction: row;
+        gap: var(--default-gap)
+    }
+    .controls * {
+        flex: 1 1 auto;
     }
     .callback-view-controls {
         display: flex;
         flex-direction: row-reverse;
-        column-gap: var(--list-item-gap);
+        column-gap: var(--default-gap);
         margin-bottom: 5px;
     }
 </style>

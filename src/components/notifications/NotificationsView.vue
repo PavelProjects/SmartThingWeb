@@ -35,12 +35,13 @@
 <template scoped>
     <div class="list panel">
         <Notifification
-            v-for="[id, {caption, description, type}] in Object.entries(notifications)"
+            v-for="[id, {caption, description, type, autoClose}] in Object.entries(notifications)"
             :key="id"
             :id="id"
             :caption="caption"
             :description="description"
             :type="type"
+            :autoClose="autoClose"
             @close="closeNotification"
         />
     </div>

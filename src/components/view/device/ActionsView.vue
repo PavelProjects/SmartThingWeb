@@ -1,5 +1,5 @@
 <script>    
-    import { DeviceApi } from "../../../api/DeviceApi.js"
+    import { DeviceApi } from "../../../api/device/DeviceApi.js"
     import RequestButton from '../../controls/RequestButton.vue'
 
     export default {
@@ -8,7 +8,8 @@
             RequestButton
         },
         props: {
-            ip: String
+            ip: String,
+            gateway: Object
         },
         data() {
             return {
@@ -20,10 +21,10 @@
         },
         methods: {
             async loadActions() {
-                this.actions = await DeviceApi.getDeviceActionsInfo(this.ip)
+                this.actions = await DeviceApi.getDeviceActionsInfo(this.ip, this.gateway)
             },
             async sendAction(action) {
-                await DeviceApi.executeDeviceAcion(this.ip, action, "execute_" + action)
+                await DeviceApi.executeDeviceAcion(this.ip, action, this.gateway)
             }
         }
     }

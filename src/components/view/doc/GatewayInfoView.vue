@@ -1,11 +1,10 @@
 <script>
     import { GatewayApi } from '../../../api/GatewayApi.js';
-    import { AuthorizationApi } from '../../../api/AuthorizationApi';
     import InputWithLabel from '../../fields/InputWithLabel.vue';
     import RequestButton from '../../controls/RequestButton.vue';
 
     export default {
-        name: "CloudInfoView",
+        name: "GatewayInfoView",
         components: {
             InputWithLabel,
             RequestButton
@@ -41,10 +40,10 @@
                 this.isConnected = await GatewayApi.getConnectionStatus();
             },
             async loadAuthorization() {
-                this.parseAuthorizedUser(await AuthorizationApi.getCloudAuthorization())
+                this.parseAuthorizedUser(await GatewayApi.getCloudAuthorization())
             },
             async saveAuthorization() {
-                this.parseAuthorizedUser(await AuthorizationApi.cloudAuthorize("saveAuthorization", this.cloudInfo))
+                this.parseAuthorizedUser(await GatewayApi.cloudAuthorize("saveAuthorization", this.cloudInfo))
             },
             async connectToCloud() {
                 if (this.isConnected) {
@@ -75,62 +74,64 @@
         >
             {{ authorizedShortInfo ? authorizedShortInfo : "Log in" }}
         </h2>
-        <div v-if="cloudPopupVisible" class="overlay" @click="cloudPopupVisible = false"></div>
-        <div v-if="cloudPopupVisible" class="cloud-popup">
-            <div v-if="authorizedShortInfo">
-                <InputWithLabel
-                    label="Connection status"
-                    :value="isConnected ? 'Connected' : 'Connection lost'"
-                    :disabled="true"
-                >
-                    <RequestButton
-                        v-if="!isConnected"
-                        requestId="cloudConnect"
-                        @click="connectToCloud"
+        <div v-if="cloudPopupVisible">
+            <div class="overlay" @click="cloudPopupVisible = false"></div>
+            <div class="cloud-popup">
+                <div v-if="authorizedShortInfo">
+                    <InputWithLabel
+                        label="Connection status"
+                        :value="isConnected ? 'Connected' : 'Connection lost'"
+                        :disabled="true"
                     >
-                        <h3>reconnect</h3>
-                    </RequestButton>
-                </InputWithLabel>
-                <InputWithLabel
-                    label="User login"
-                    :value="user.login"
-                    :disabled="true"
-                />
-                <h2 class="title">Gateway</h2>
-                <InputWithLabel
-                    label="Name"
-                    :value="gateway.name"
-                    :disabled="true"
-                />
-                <InputWithLabel
-                    label="Description"
-                    :value="gateway.description"
-                    :disabled="true"
-                />
-            </div>
+                        <RequestButton
+                            v-if="!isConnected"
+                            requestId="cloudConnect"
+                            @click="connectToCloud"
+                        >
+                            <h3>reconnect</h3>
+                        </RequestButton>
+                    </InputWithLabel>
+                    <InputWithLabel
+                        label="User login"
+                        :value="user.login"
+                        :disabled="true"
+                    />
+                    <h2 class="title">Gateway</h2>
+                    <InputWithLabel
+                        label="Name"
+                        :value="gateway.name"
+                        :disabled="true"
+                    />
+                    <InputWithLabel
+                        label="Description"
+                        :value="gateway.description"
+                        :disabled="true"
+                    />
+                </div>
 
-            <h2 class="title">Cloud authorization info</h2>
-            <InputWithLabel
-                label="Token"
-                :value="cloudInfo.token"
-                @input="cloudInfo.token = $event.target.value"
-            />
-            <InputWithLabel
-                label="Cloud ip"
-                :value="cloudInfo.cloudIp"
-                @input="cloudInfo.cloudIp = $event.target.value"
-            />
-            <InputWithLabel
-                label="Cloud port"
-                :value="cloudInfo.cloudPort"
-                @input="cloudInfo.cloudPort = $event.target.value"
-            />
-            <RequestButton
-                requestId="saveAuthorization"
-                @click="saveAuthorization"
-            >
-                <h2>Authorize</h2>
-            </RequestButton>
+                <h2 class="title">Cloud authorization info</h2>
+                <InputWithLabel
+                    label="Token"
+                    :value="cloudInfo.token"
+                    @input="cloudInfo.token = $event.target.value"
+                />
+                <InputWithLabel
+                    label="Cloud ip"
+                    :value="cloudInfo.cloudIp"
+                    @input="cloudInfo.cloudIp = $event.target.value"
+                />
+                <InputWithLabel
+                    label="Cloud port"
+                    :value="cloudInfo.cloudPort"
+                    @input="cloudInfo.cloudPort = $event.target.value"
+                />
+                <RequestButton
+                    requestId="saveAuthorization"
+                    @click="saveAuthorization"
+                >
+                    <h2>Authorize</h2>
+                </RequestButton>
+            </div>
         </div>
     </div>
 </template>
@@ -142,18 +143,20 @@
     }
     .overlay {
         position: absolute;
+        top: 0px;
         left: 0px;
         width: 100vw;
         height: calc(100vh - var(--doc-height));
+        background-color: var(--background-tilt);
     }
     .cloud-popup {
         position: absolute;
-        top: calc(var(--doc-height) + var(--list-item-gap));
-        right: var(--list-item-gap);
+        top: calc(var(--doc-height) + var(--default-gap));
+        right: var(--default-gap);
         width: 400px;
         display: flex;
         flex-direction: column;
-        row-gap: var(--list-item-gap);
+        row-gap: var(--default-gap);
         text-align: center;
         background-color: var(--color-background-soft);
         border-radius: var(--border-radius);

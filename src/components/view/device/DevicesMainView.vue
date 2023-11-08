@@ -2,19 +2,10 @@
     import SearchDeviceInfo from './SearchDeviceInfo.vue'
     import DeviceControlPanel from './DeviceControlPanel.vue'
     import TabItem from '../../tabs/TabItem.vue'
-    import { Client } from '@stomp/stompjs';
     import { h } from 'vue'
     import RequestButton from '../../controls/RequestButton.vue';
-    import { EventBus, REQUEST } from '../../../utils/EventBus';
     import { GatewayApi } from '../../../api/GatewayApi'
-
-    const gatewayPath = import.meta.env.VITE_GATEWAY_PATH
-    const gatewayPort = import.meta.env.VITE_GATEWAY_PORT
-    const gatwayWs = import.meta.env.VITE_GATEWAY_WS
-
-    const SEARCH_TOPIC = import.meta.env.VITE_GATEWAY_SEARCH_TOPIC
-    const BROKER_URL = `ws://${gatewayPath}:${gatewayPort}/${gatwayWs}`
-    const SEARCH_TIME = 10000
+    import { SearchApi } from '../../../api/SearchDevicesApi';
 
     export default {
         components: {
@@ -22,6 +13,9 @@
             DeviceControlPanel,
             RequestButton,
             TabItem
+        },
+        props: {
+            gateway: Object
         },
         data() {
             return {
@@ -31,22 +25,32 @@
                 client: null
             }
         },
+        watch: {
+            gateway() {
+                this.devices = {}
+                this.search();
+            }
+        },
         mounted() {
             this.search();
         },
         methods: {
             search() {
-                GatewayApi.searchDevices((deviceInfo) => {
+                SearchApi.searchDevices((deviceInfo) => {
                     if (!this.devices[deviceInfo.ip]) {
                         this.devices[deviceInfo.ip] = deviceInfo
                     }
-                });
+                }, this.gateway);
             },
             switchTab(ip) {
                 if (!this.tabs[ip]) {
                     this.tabs[ip] = h(
                         DeviceControlPanel,
-                        {key: ip, ip}
+                        {
+                            key: ip, 
+                            ip,
+                            gateway: this.gateway
+                        }
                     );
                 }
                 this.selectedIp = ip;
@@ -97,7 +101,7 @@
     }
     .search-results {
         display: grid;
-        row-gap: var(--list-item-gap);
+        row-gap: var(--default-gap);
         height: fit-content;
     }
     .main-tab {
