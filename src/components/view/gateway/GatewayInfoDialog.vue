@@ -6,9 +6,9 @@ import InputWithLabel from '../../fields/InputWithLabel.vue';
 export default {
     name: 'GatewayInfoDialog',
     components: {
-    Dialog,
-    InputWithLabel,
-    LoadingButton,
+        Dialog,
+        InputWithLabel,
+        LoadingButton,
     },
     props: {
         gateway: Object,

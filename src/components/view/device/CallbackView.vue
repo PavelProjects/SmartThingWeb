@@ -28,7 +28,8 @@
             return {
                 editing: this.callback.id == NEW_CALLBACK_ID,
                 haveChanges: this.callback.id == NEW_CALLBACK_ID,
-                validationFailed: []
+                validationFailed: [],
+                loading: false
             }
         },
         computed: {
@@ -86,13 +87,18 @@
                 }
                 let res = false
                 let emitAction = ""
-                if (this.callback.id !== NEW_CALLBACK_ID) {
-                    res = await DeviceApi.updateCallback(this.ip, this.observable, this.callback, this.gateway)
-                    emitAction = "reloadCallback"
-                } else { 
-                    delete this.callback.id;
-                    res = await DeviceApi.createCallback(this.ip, this.observable, this.callback, this.gateway)
-                    emitAction = "update"
+                this.loading = true
+                try {
+                    if (this.callback.id !== NEW_CALLBACK_ID) {
+                        res = await DeviceApi.updateCallback(this.ip, this.observable, this.callback, this.gateway)
+                        emitAction = "reloadCallback"
+                    } else { 
+                        delete this.callback.id;
+                        res = await DeviceApi.createCallback(this.ip, this.observable, this.callback, this.gateway)
+                        emitAction = "update"
+                    }
+                } finally {
+                    this.loading = false
                 }
 
                 if (res) {
@@ -108,8 +114,13 @@
                     return
                 }
                 if (confirm("Are you sure you wan to delete callback " + this.callback.id + "?")) {
-                    if (await DeviceApi.deleteCallback(this.ip, this.observable, this.callback.id, this.gateway)) {
-                        this.$emit("update")
+                    this.loading = true
+                    try {
+                        if (await DeviceApi.deleteCallback(this.ip, this.observable, this.callback.id, this.gateway)) {
+                            this.$emit("update")
+                        }
+                    } finally {
+                        this.loading = false
                     }
                 }
             },
@@ -186,7 +197,7 @@
                 <LoadingButton 
                     v-if="!editing" 
                     v-on:click="deleteCallback"
-                    requestId="deleteCallback"
+                    :loading="loading"
                     style="background-color: var(--color-danger);"
                 >
                     <h3>Delete</h3>
@@ -197,7 +208,7 @@
                 <LoadingButton 
                     v-if="editing" 
                     v-on:click="saveCallback"
-                    requestId="saveCallback"
+                    :loading="loading"
                 >
                     <h3>Save</h3>
                 </LoadingButton>

@@ -17,6 +17,7 @@
                 user: {},
                 cloudInfo: {},
                 isConnected: false,
+                loading: false,
             }
         },
         created() {
@@ -40,16 +41,31 @@
                 this.isConnected = await GatewayApi.getConnectionStatus();
             },
             async loadAuthorization() {
-                this.parseAuthorizedUser(await GatewayApi.getCloudAuthorization())
+                this.loading = true
+                try {
+                    this.parseAuthorizedUser(await GatewayApi.getCloudAuthorization())
+                } finally {
+                    this.loading = false
+                }
             },
             async saveAuthorization() {
-                this.parseAuthorizedUser(await GatewayApi.cloudAuthorize("saveAuthorization", this.cloudInfo))
+                this.loading = true
+                try {
+                    this.parseAuthorizedUser(await GatewayApi.cloudAuthorize("saveAuthorization", this.cloudInfo))
+                } finally {
+                    this.loading = false
+                }
             },
             async connectToCloud() {
                 if (this.isConnected) {
                     return;
                 }
-                this.isConnected = await GatewayApi.cloudConnect("cloudConnect");
+                this.loading = true
+                try {
+                    this.isConnected = await GatewayApi.cloudConnect("cloudConnect");
+                } finally {
+                    this.loading = false
+                }
             },
             openCloudInfoEditor() {
                 this.cloudPopupVisible = !this.cloudPopupVisible
@@ -85,7 +101,7 @@
                     >
                         <LoadingButton
                             v-if="!isConnected"
-                            requestId="cloudConnect"
+                            :loading="loading"
                             @click="connectToCloud"
                         >
                             <h3>reconnect</h3>
@@ -126,7 +142,7 @@
                     @input="cloudInfo.cloudPort = $event.target.value"
                 />
                 <LoadingButton
-                    requestId="saveAuthorization"
+                    :loading="loading"
                     @click="saveAuthorization"
                 >
                     <h2>Authorize</h2>

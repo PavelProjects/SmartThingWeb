@@ -4,7 +4,6 @@
     import TabItem from '../../tabs/TabItem.vue'
     import { h } from 'vue'
     import LoadingButton from '../../controls/LoadingButton.vue';
-    import { GatewayApi } from '../../../api/GatewayApi'
     import { SearchApi } from '../../../api/SearchDevicesApi';
 
     export default {
@@ -22,7 +21,8 @@
                 tabs: {},
                 devices: {},
                 selectedIp: null,
-                client: null
+                client: null,
+                loading: false
             }
         },
         watch: {
@@ -75,7 +75,10 @@
                     </TabItem>
                 </Transition>
             </div>
-            <LoadingButton requestId="search" v-on:click="search">
+            <LoadingButton
+                :loading="loading"
+                v-on:click="search"
+            >
                 <h1>Refresh</h1>
             </LoadingButton>
         </div>

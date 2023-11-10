@@ -16,7 +16,8 @@
         data() {
             return {
                 values: {},
-                configInfo: {}
+                configInfo: {},
+                loading: false
             };
         },
         created() {
@@ -32,8 +33,13 @@
         },
         methods: {
             async update() {
-                await this.loadConfigInfo();
-                await this.loadConfigValues();
+                this.loading = true
+                try {
+                    await this.loadConfigInfo();
+                    await this.loadConfigValues();
+                } finally {
+                    this.loading = false
+                }
             },
             async loadConfigInfo() {
                 this.configInfo = await DeviceApi.getDeviceConfigInfo(this.ip, this.gateway);
@@ -42,14 +48,24 @@
                 this.values = await DeviceApi.getConfig(this.ip, this.gateway);
             },
             async saveConfig() {
-                if (await DeviceApi.saveConfigValues(this.ip, this.values, this.gateway)) {
-                    this.loadConfigValues()
+                this.loading = true
+                try {
+                    if (await DeviceApi.saveConfigValues(this.ip, this.values, this.gateway)) {
+                        this.loadConfigValues()
+                    }
+                } finally {
+                    this.loading = false
                 }
             },
             async deleteAllValues() {
                 if (confirm("Are you sure you want to delete all configuration values?")) {
-                    if (await DeviceApi.deleteAllConfigValues(this.ip, this.gateway)) {
-                        this.loadConfigValues()
+                    this.loading = true
+                    try {
+                        if (await DeviceApi.deleteAllConfigValues(this.ip, this.gateway)) {
+                            this.loadConfigValues()
+                        }
+                    } finally {
+                        this.loading = false
                     }
                 }
             },
@@ -85,14 +101,17 @@
 <template>
     <h1 class="title">Configuration</h1>
     <div class="controls-holder"> 
-        <LoadingButton 
-            requestId="deleteConfig"
+        <LoadingButton
             class="delete"
+            :loading="loading"
             @click="deleteAllValues"
         >
             <h2>Delete all values</h2>
         </LoadingButton>
-        <LoadingButton requestId="saveConfig" @click="saveConfig">
+        <LoadingButton
+            :loading="loading"
+            @click="saveConfig"
+        >
             <h2>Save</h2>
         </LoadingButton>
     </div>

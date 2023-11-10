@@ -19,7 +19,8 @@
         data() {
             return {
                 currentTab: this.defaultTab,
-                haveUpdateButton: false
+                haveUpdateButton: false,
+                loading: false
             }
         },
         methods: {
@@ -39,9 +40,12 @@
             },
             async updateContent() {
                 if (this.$refs.content && this.$refs.content.update) {
-                    EventBus.emit(REQUEST, {id: "update", loading: true})
-                    await this.$refs.content.update()
-                    EventBus.emit(REQUEST, {id: "update", loading: false})
+                    this.loading = true
+                    try {
+                        await this.$refs.content.update()
+                    } finally {
+                        this.loading = false
+                    }
                 } else {
                     console.error("Content don't have update method")
                 }
@@ -69,7 +73,7 @@
                 class="update-button"
                 v-if="haveUpdateButton"
                 v-on:click.prevent="updateContent()"
-                requestId="update"
+                :loading="loading"
             >
                 <h3>Update</h3>
             </LoadingButton>

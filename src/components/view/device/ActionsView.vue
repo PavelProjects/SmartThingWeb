@@ -13,7 +13,8 @@
         },
         data() {
             return {
-                actions: null
+                actions: null,
+                loading: false
             }
         },
         created() {
@@ -24,7 +25,12 @@
                 this.actions = await DeviceApi.getDeviceActionsInfo(this.ip, this.gateway)
             },
             async sendAction(action) {
-                await DeviceApi.executeDeviceAcion(this.ip, action, this.gateway)
+                this.loading = true
+                try {
+                    await DeviceApi.executeDeviceAcion(this.ip, action, this.gateway)
+                } finally {
+                    this.loading = false
+                }
             }
         }
     }
@@ -35,7 +41,7 @@
     <div class="buttons-panel" v-if="actions">
         <div v-for="(caption, name) in actions" :key="name">
             <LoadingButton 
-                :requestId="'execute_' + name"
+                :loading="loading"
                 @click="sendAction(name)"
             >
                 <h1>{{ caption }}</h1>

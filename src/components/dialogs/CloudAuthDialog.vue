@@ -1,5 +1,4 @@
 <script>
-import RingLoader from 'vue-spinner/src/RingLoader.vue';
 import { CloudApi } from '../../api/CloudApi';
 import { notify } from '../../utils/EventBus';
 import LoadingButton from '../controls/LoadingButton.vue';

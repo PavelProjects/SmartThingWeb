@@ -14,7 +14,10 @@
 </script>
 
 <template>
-    <button>
+    <button
+        :disabled="loading"
+        @click="handle"
+    >
         <slot v-if="!loading"></slot>
         <pulse-loader :loading="loading"></pulse-loader>
     </button>

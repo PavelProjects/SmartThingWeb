@@ -22,7 +22,8 @@ export default {
             gateways: [],
             selectedGateway: {},
             gatewayToEdit: {},
-            showDialog: false
+            showDialog: false,
+            loading: false,
         }
     },
     mounted() {
@@ -30,7 +31,12 @@ export default {
     },
     methods: {
         async loadGateways() {
-            this.gateways = await CloudApi.getGatewaysList() || []
+            this.loading = true
+            try {
+                this.gateways = await CloudApi.getGatewaysList() || []
+            } finally {
+                this.loading = false
+            }
         },
         showControlPanel(gateway) {
             if (gateway.online) {
@@ -141,6 +147,7 @@ export default {
         </div>
         <LoadingButton
             style="width: 100%; margin-top: 5px;"
+            :loading="loading"
             @click="loadGateways"
         >
             <h1>Refresh</h1>

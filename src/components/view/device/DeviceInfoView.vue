@@ -37,14 +37,7 @@
         },
         methods: {
             async loadInfo() {
-                this.info = await DeviceApi.getDeviceInfo(this.ip, this.gateway)
-                if (!this.info) {
-                    EventBus.emit(NOTIFY, {
-                        caption: "Failed to load device information",
-                        type: "error"
-                    })
-                    this.info = {}
-                }
+                this.info = await DeviceApi.getDeviceInfo(this.ip, this.gateway) || {}
                 this.deviceName = this.info["name"] || ""
             },
             async saveName() {
@@ -52,8 +45,13 @@
                     console.error("Not valid name")
                     return
                 }
-                if (await DeviceApi.saveName(this.ip, this.deviceName, this.gateway)) {
-                    this.loadInfo()
+                this.loading = true
+                try {
+                    if (await DeviceApi.saveName(this.ip, this.deviceName, this.gateway)) {
+                        this.loadInfo()
+                    }
+                } finally {
+                    this.loading = false
                 }
             },
         }
@@ -62,8 +60,7 @@
 
 <template>
     <h1 class="title">Device information</h1>
-    <sync-loader class="spinner" :loading="loading"></sync-loader>
-    <div v-if="!loading && info" class="list">
+    <div v-if="info" class="list">
         <InputWithLabel
             label="Device name"
             :title="validName ? '' : NAME_ERROR"
@@ -72,7 +69,7 @@
             @input="deviceName = $event.target.value.trim()"
         >
             <LoadingButton
-                requestId="saveName"
+                :loading="loading"
                 @click="saveName"
             >
                 <h3>save</h3>
@@ -99,4 +96,5 @@
             :disabled="true"
         />
     </div>
+    <sync-loader v-else class="spinner" :loading="true"></sync-loader>
 </template>
