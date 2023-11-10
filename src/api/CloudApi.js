@@ -1,5 +1,5 @@
 import { Client } from '@stomp/stompjs';
-import axios from "axios";
+import axios, { HttpStatusCode } from "axios";
 import { EventBus, notify } from "../utils/EventBus";
 
 const CLOUD_IP = import.meta.env.VITE_CLOUD_IP
@@ -24,6 +24,12 @@ const axiosInstance = axios.create({
     timeout: 5000,
     withCredentials: true
 })
+// axiosInstance.interceptors.response.use(null, (error) => {
+//     if (error.response.status == HttpStatusCode.Forbidden) {
+
+//     }
+// })
+
 const client = new Client({brokerURL: BROKER_URL});
 
 const CloudApi = {

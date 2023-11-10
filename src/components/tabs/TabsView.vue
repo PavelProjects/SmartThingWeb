@@ -1,5 +1,5 @@
 <script>
-    import RequestButton from '../controls/RequestButton.vue'
+    import LoadingButton from '../controls/LoadingButton.vue'
     import TabItem from './TabItem.vue'
     import { h } from 'vue'
     import { EventBus, REQUEST } from "../../utils/EventBus";
@@ -8,7 +8,7 @@
         name: "TabsView",
         components: {
             TabItem,
-            RequestButton
+            LoadingButton
         },
         props: {
             tabs: Object,
@@ -65,14 +65,14 @@
             </TabItem>
         </div>
         <div v-if="currentTab && tabs[currentTab]['render']" class="tab-content">
-            <RequestButton 
+            <LoadingButton 
                 class="update-button"
                 v-if="haveUpdateButton"
                 v-on:click.prevent="updateContent()"
                 requestId="update"
             >
                 <h3>Update</h3>
-            </RequestButton>
+            </LoadingButton>
             <KeepAlive>
                 <component ref="content" :is="tabs[currentTab]['render']"></component>
             </KeepAlive>

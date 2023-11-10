@@ -1,6 +1,8 @@
 <script>
+import RingLoader from 'vue-spinner/src/RingLoader.vue';
 import { CloudApi } from '../../api/CloudApi';
-import RequestButton from '../controls/RequestButton.vue';
+import { notify } from '../../utils/EventBus';
+import LoadingButton from '../controls/LoadingButton.vue';
 import InputWithLabel from '../fields/InputWithLabel.vue';
 import Dialog from './Dialog.vue';
 
@@ -8,13 +10,14 @@ export default {
     name: "CloudAuthDialog",
     components: {
         InputWithLabel,
-        RequestButton,
+        LoadingButton,
         Dialog
     },
     data() {
         return {
-            login: "test_user",
-            password: "1",
+            login: "",
+            password: "",
+            loading: false
         };
     },
     mounted() {
@@ -25,7 +28,20 @@ export default {
             this.emitAuthorization(await CloudApi.getAuthorization());
         },
         async auth() {
-            this.emitAuthorization(await CloudApi.authUser(this.login, this.password));
+            if (!this.login || !this.password) {
+                notify({
+                    type: "error",
+                    caption: "Login and password are required!"
+                })
+                return
+            }
+            this.loading = true;
+            try {
+                const auth = await CloudApi.authUser(this.login, this.password);
+                this.emitAuthorization(auth);
+            } finally {
+                this.loading = false
+            }
         },
         emitAuthorization(authorization) {
             this.$emit("authorized", authorization)
@@ -48,10 +64,11 @@ export default {
             @input="password = $event.target.value.trim()"
             type="password"
         />
-        <RequestButton
+        <LoadingButton
+            :loading="loading"
             @click="auth"
         >
             Log in
-        </RequestButton>
+        </LoadingButton>
     </Dialog>
 </template>

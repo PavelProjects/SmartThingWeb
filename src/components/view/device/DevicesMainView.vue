@@ -3,7 +3,7 @@
     import DeviceControlPanel from './DeviceControlPanel.vue'
     import TabItem from '../../tabs/TabItem.vue'
     import { h } from 'vue'
-    import RequestButton from '../../controls/RequestButton.vue';
+    import LoadingButton from '../../controls/LoadingButton.vue';
     import { GatewayApi } from '../../../api/GatewayApi'
     import { SearchApi } from '../../../api/SearchDevicesApi';
 
@@ -11,7 +11,7 @@
         components: {
             SearchDeviceInfo,
             DeviceControlPanel,
-            RequestButton,
+            LoadingButton,
             TabItem
         },
         props: {
@@ -75,9 +75,9 @@
                     </TabItem>
                 </Transition>
             </div>
-            <RequestButton requestId="search" v-on:click="search">
+            <LoadingButton requestId="search" v-on:click="search">
                 <h1>Refresh</h1>
-            </RequestButton>
+            </LoadingButton>
         </div>
     </div>
     <div class="main-tab" v-if="selectedIp">

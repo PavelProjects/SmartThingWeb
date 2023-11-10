@@ -2,7 +2,7 @@
     import SyncLoader from 'vue-spinner/src/SyncLoader.vue'
     import { DeviceApi } from "../../../api/device/DeviceApi.js"
     import InputWithLabel from "../../fields/InputWithLabel.vue"
-    import RequestButton from '../../controls/RequestButton.vue'
+    import LoadingButton from '../../controls/LoadingButton.vue'
     import { EventBus, NOTIFY } from '../../../utils/EventBus'
 
     const NAME_ERROR = "Name can't be empty!"
@@ -12,7 +12,7 @@
         components: {
             SyncLoader,
             InputWithLabel,
-            RequestButton
+            LoadingButton
         },
         props: {
             ip: String,
@@ -71,12 +71,12 @@
             :validationFailed="!validName"
             @input="deviceName = $event.target.value.trim()"
         >
-            <RequestButton
+            <LoadingButton
                 requestId="saveName"
                 @click="saveName"
             >
                 <h3>save</h3>
-            </RequestButton>
+            </LoadingButton>
         </InputWithLabel>
         <InputWithLabel
             label="Device type"

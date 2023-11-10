@@ -1,7 +1,7 @@
 <script>
 import { CloudApi } from '../../../api/CloudApi';
 import { notify } from '../../../utils/EventBus';
-import RequestButton from '../../controls/RequestButton.vue';
+import LoadingButton from '../../controls/LoadingButton.vue';
 import TabItem from '../../tabs/TabItem.vue';
 import TabsView from '../../tabs/TabsView.vue';
 import GatewayItem from './GatewayItem.vue';
@@ -14,7 +14,7 @@ export default {
         GatewayItem,
         TabsView,
         TabItem,
-        RequestButton,
+        LoadingButton,
         GatewayInfoDialog,
     },
     data() {
@@ -139,12 +139,12 @@ export default {
                 />
             </TabItem>
         </div>
-        <RequestButton
+        <LoadingButton
             style="width: 100%; margin-top: 5px;"
             @click="loadGateways"
         >
             <h1>Refresh</h1>
-        </RequestButton>
+        </LoadingButton>
         <GatewayInfoDialog
             :visible="showDialog"
             :gateway="gatewayToEdit"

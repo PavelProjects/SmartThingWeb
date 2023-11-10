@@ -6,7 +6,7 @@
     import { NEW_CALLBACK_ID } from "./CallbacksView.vue"
     import { h } from "vue"
     import {EventBus, NOTIFY} from '../../../utils/EventBus.js'
-    import RequestButton from "../../controls/RequestButton.vue"
+    import LoadingButton from "../../controls/LoadingButton.vue"
 
     const SYSTEM_FIELDS = ["id", "type", "readonly"]
 
@@ -22,7 +22,7 @@
         components: {
             InputWithLabel,
             Combobox,
-            RequestButton
+            LoadingButton
         },
         data() {
             return {
@@ -183,24 +183,24 @@
         </div>
         <div class="controls">
             <div v-if="!callback.readonly" class="callback-view-controls">
-                <RequestButton 
+                <LoadingButton 
                     v-if="!editing" 
                     v-on:click="deleteCallback"
                     requestId="deleteCallback"
                     style="background-color: var(--color-danger);"
                 >
                     <h3>Delete</h3>
-                </RequestButton>
-                <RequestButton v-if="editing" v-on:click="cancel"><h3>Cancel</h3></RequestButton>
+                </LoadingButton>
+                <LoadingButton v-if="editing" v-on:click="cancel"><h3>Cancel</h3></LoadingButton>
 
-                <RequestButton v-if="!editing" v-on:click="editing = true"><h3>Edit</h3></RequestButton>
-                <RequestButton 
+                <LoadingButton v-if="!editing" v-on:click="editing = true"><h3>Edit</h3></LoadingButton>
+                <LoadingButton 
                     v-if="editing" 
                     v-on:click="saveCallback"
                     requestId="saveCallback"
                 >
                     <h3>Save</h3>
-                </RequestButton>
+                </LoadingButton>
             </div>
             <div v-else>
                 <h3 style="text-align: center;">Readonly</h3>

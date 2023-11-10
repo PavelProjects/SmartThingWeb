@@ -1,13 +1,13 @@
 <script>
     import { GatewayApi } from '../../../api/GatewayApi.js';
     import InputWithLabel from '../../fields/InputWithLabel.vue';
-    import RequestButton from '../../controls/RequestButton.vue';
+    import LoadingButton from '../../controls/LoadingButton.vue';
 
     export default {
         name: "GatewayInfoView",
         components: {
             InputWithLabel,
-            RequestButton
+            LoadingButton
         },
         data() {
             return {
@@ -83,13 +83,13 @@
                         :value="isConnected ? 'Connected' : 'Connection lost'"
                         :disabled="true"
                     >
-                        <RequestButton
+                        <LoadingButton
                             v-if="!isConnected"
                             requestId="cloudConnect"
                             @click="connectToCloud"
                         >
                             <h3>reconnect</h3>
-                        </RequestButton>
+                        </LoadingButton>
                     </InputWithLabel>
                     <InputWithLabel
                         label="User login"
@@ -125,12 +125,12 @@
                     :value="cloudInfo.cloudPort"
                     @input="cloudInfo.cloudPort = $event.target.value"
                 />
-                <RequestButton
+                <LoadingButton
                     requestId="saveAuthorization"
                     @click="saveAuthorization"
                 >
                     <h2>Authorize</h2>
-                </RequestButton>
+                </LoadingButton>
             </div>
         </div>
     </div>

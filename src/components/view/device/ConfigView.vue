@@ -1,7 +1,7 @@
 <script>
     import { DeviceApi } from "../../../api/device/DeviceApi.js"
     import InputWithLabel from "../../fields/InputWithLabel.vue"
-    import RequestButton from "../../controls/RequestButton.vue";
+    import LoadingButton from "../../controls/LoadingButton.vue";
 
     export default {
         name: "ConfigView",
@@ -11,7 +11,7 @@
         },
         components: { 
             InputWithLabel,
-            RequestButton
+            LoadingButton
         },
         data() {
             return {
@@ -85,16 +85,16 @@
 <template>
     <h1 class="title">Configuration</h1>
     <div class="controls-holder"> 
-        <RequestButton 
+        <LoadingButton 
             requestId="deleteConfig"
             class="delete"
             @click="deleteAllValues"
         >
             <h2>Delete all values</h2>
-        </RequestButton>
-        <RequestButton requestId="saveConfig" @click="saveConfig">
+        </LoadingButton>
+        <LoadingButton requestId="saveConfig" @click="saveConfig">
             <h2>Save</h2>
-        </RequestButton>
+        </LoadingButton>
     </div>
     <InputWithLabel
         v-for="{key, caption, value, type} in inputs"

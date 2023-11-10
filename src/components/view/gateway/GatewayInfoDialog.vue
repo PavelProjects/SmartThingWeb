@@ -1,5 +1,5 @@
 <script>
-import RequestButton from '../../controls/RequestButton.vue';
+import LoadingButton from '../../controls/LoadingButton.vue';
 import Dialog from '../../dialogs/Dialog.vue'
 import InputWithLabel from '../../fields/InputWithLabel.vue';
 
@@ -8,7 +8,7 @@ export default {
     components: {
     Dialog,
     InputWithLabel,
-    RequestButton,
+    LoadingButton,
     },
     props: {
         gateway: Object,
@@ -42,8 +42,8 @@ export default {
             :value="this.gateway.description"
             @input="(event) => description = event.target.value.trim()"
         />
-        <RequestButton @click="handleSave">
+        <LoadingButton @click="handleSave">
             {{ buttonTitle }}
-        </RequestButton>
+        </LoadingButton>
     </Dialog>
 </template>

@@ -43,23 +43,29 @@ import { CloudApi } from './api/CloudApi';
 </script>
 
 <template>
-  <CloudAuthDialog
-    :visible="!isAuthorized"
-    @authorized="handleAuthorization"
-  />
-  <div v-if="isAuthorized">
-    <Doc class="doc"/>
-    <NotificationsView class="notifications"/>
-    <div class="content">
-      <GatewaysList 
-        v-if="mode == 'cloud'"
-        @select="handleGatewaySelect"
-      />
-      <DevicesMainView 
-        v-if="selectedGateway"
-        :gateway="selectedGateway"
-      />
+  <Doc class="doc" :mode="mode"/>
+  <NotificationsView class="notifications"/>
+
+  <div v-if="mode == 'cloud'">
+    <CloudAuthDialog
+      :visible="!isAuthorized"
+      @authorized="handleAuthorization"
+    />
+    <div v-if="isAuthorized">
+      <div class="content">
+        <GatewaysList 
+          v-if="mode == 'cloud'"
+          @select="handleGatewaySelect"
+        />
+        <DevicesMainView 
+          v-if="selectedGateway"
+          :gateway="selectedGateway"
+        />
+      </div>
     </div>
+  </div>
+  <div v-if="mode == 'gateway'">
+    <DevicesMainView/>
   </div>
 </template>
 

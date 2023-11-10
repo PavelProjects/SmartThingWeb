@@ -1,11 +1,11 @@
 <script>    
     import { DeviceApi } from "../../../api/device/DeviceApi.js"
-    import RequestButton from '../../controls/RequestButton.vue'
+    import LoadingButton from '../../controls/LoadingButton.vue'
 
     export default {
         name: "ActionsView",
         components: {
-            RequestButton
+            LoadingButton
         },
         props: {
             ip: String,
@@ -34,12 +34,12 @@
     <h1 class="title">Device actions</h1>
     <div class="buttons-panel" v-if="actions">
         <div v-for="(caption, name) in actions" :key="name">
-            <RequestButton 
+            <LoadingButton 
                 :requestId="'execute_' + name"
                 @click="sendAction(name)"
             >
                 <h1>{{ caption }}</h1>
-            </RequestButton>
+            </LoadingButton>
         </div>
     </div>
     <div v-else-if="!loading">
