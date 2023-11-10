@@ -64,7 +64,7 @@ import { CloudApi } from './api/CloudApi';
       </div>
     </div>
   </div>
-  <div v-if="mode == 'gateway'">
+  <div v-if="mode == 'gateway'" class="content">
     <DevicesMainView/>
   </div>
 </template>
@@ -74,10 +74,11 @@ import { CloudApi } from './api/CloudApi';
     position: sticky;
   }
   .content {
+    width: fit-content;
     display: flex;
     flex-direction: row;
     column-gap: var(--default-gap);
-    margin: var(--default-gap);
+    margin: 0 auto;
   }
   .notifications {
     position: absolute;
