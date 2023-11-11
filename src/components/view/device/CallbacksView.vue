@@ -1,8 +1,9 @@
 <script>
     import { systemNameToNormal } from "../../../utils/StringUtils.js"
     import CallbackView from '../device/CallbackView.vue'
-    import { DeviceApi } from "../../../api/DeviceApi.js"
+    import { DeviceApi } from "../../../api/device/DeviceApi.js"
     import Combobox from "../../fields/Combobox.vue"
+    import SyncLoader from 'vue-spinner/src/SyncLoader.vue'
 
     export const NEW_CALLBACK_ID = "New"
 
@@ -10,18 +11,21 @@
         name: "CallbacksView",
         components: {
             CallbackView,
-            Combobox
+            Combobox,
+            SyncLoader,
         },
         props: {
             ip: String,
-            observable: Object
+            observable: Object,
+            gateway: Object
         },
         data() {
             return {
                 selectedTemplate: null,
                 callbacks: [],
                 templates: {},
-                selectedType: null
+                selectedType: null,
+                loading: false
             }
         },
         computed: {
@@ -34,19 +38,21 @@
                     }, {})
             }
         },
-        async created() {
+        async mounted() {
+            this.loading = true
             await this.loadTemplates()
-            this.loadCallbacks()
+            await this.loadCallbacks()
+            this.loading = false
         },
         methods: {
-            update() {
-                this.loadCallbacks()
+            async update() {
+                await this.loadCallbacks()
             },
-            async loadCallbacks() {                
-                this.callbacks = await DeviceApi.getCallbacks(this.ip, this.observable) || []
+            async loadCallbacks() {
+                this.callbacks = await DeviceApi.getCallbacks(this.ip, this.observable, this.gateway) || []
             },
             async loadTemplates() {
-                this.templates = await DeviceApi.getCallbacksTemplates(this.ip)
+                this.templates = await DeviceApi.getCallbacksTemplates(this.ip, this.gateway)
             },
             async reloadCallback(callback) {
                 if (callback.id === NEW_CALLBACK_ID) {
@@ -54,7 +60,7 @@
                 } else {
                     const index = this.callbacks.indexOf(callback)
                     if (index >= 0) {
-                        this.callbacks[index] = await DeviceApi.getCallbackById(this.ip, this.observable, callback.id)
+                        this.callbacks[index] = await DeviceApi.getCallbackById(this.ip, this.observable, callback.id, this.gateway)
                     }
                 }
             },
@@ -79,25 +85,29 @@
 
 <template>
     <h1 class="title">Callbacks</h1>
-    <Combobox
-        label="Add callback of type "
-        :items="callbackTypes"
-        @input="addCallback($event.target.value)"
-    />
-    <div 
-        v-if="callbacks"
-        class="callbacks-list-view list"
-    >
-        <CallbackView
-            v-for="callback in callbacks"
-            :ip="ip"
-            :key="callback.id"
-            :observable="observable"
-            :callback="callback"
-            :template="{...templates[callback.type], ...templates['default']}"
-            @update="update"
-            @reload-callback="reloadCallback"
+    <sync-loader class="loading-spinner" :loading="loading"></sync-loader>
+    <div v-if="!loading">
+        <Combobox
+            label="Add callback of type "
+            :items="callbackTypes"
+            @input="addCallback($event.target.value)"
         />
+        <div
+            v-if="callbacks"
+            class="callbacks-list-view list"
+        >
+            <CallbackView
+                v-for="callback in callbacks"
+                :ip="ip"
+                :key="callback.id"
+                :observable="observable"
+                :callback="callback"
+                :template="{...templates[callback.type], ...templates['default']}"
+                :gateway="gateway"
+                @update="update"
+                @reload-callback="reloadCallback"
+            />
+        </div>
     </div>
 </template>
 
@@ -105,6 +115,6 @@
     .callbacks-list-view {
         max-height: 80vh;
         overflow-y: auto;
-        margin-top: var(--list-item-gap);
+        margin-top: var(--default-gap);
     }
 </style>

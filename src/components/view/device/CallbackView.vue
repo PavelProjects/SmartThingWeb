@@ -2,11 +2,11 @@
     import { systemNameToNormal } from "../../../utils/StringUtils.js"
     import InputWithLabel from "../../fields/InputWithLabel.vue"
     import Combobox from "../../fields/Combobox.vue"
-    import { DeviceApi } from "../../../api/DeviceApi.js"
+    import { DeviceApi } from "../../../api/device/DeviceApi.js"
     import { NEW_CALLBACK_ID } from "./CallbacksView.vue"
     import { h } from "vue"
     import {EventBus, NOTIFY} from '../../../utils/EventBus.js'
-    import RequestButton from "../../controls/RequestButton.vue"
+    import LoadingButton from "../../controls/LoadingButton.vue"
 
     const SYSTEM_FIELDS = ["id", "type", "readonly"]
 
@@ -16,18 +16,20 @@
             ip: String,
             callback: Object,
             observable: Object,
-            template: Array
+            template: Object,
+            gateway: Object
         },
         components: {
             InputWithLabel,
             Combobox,
-            RequestButton
+            LoadingButton
         },
         data() {
             return {
                 editing: this.callback.id == NEW_CALLBACK_ID,
                 haveChanges: this.callback.id == NEW_CALLBACK_ID,
-                validationFailed: []
+                validationFailed: [],
+                loading: false
             }
         },
         computed: {
@@ -85,13 +87,18 @@
                 }
                 let res = false
                 let emitAction = ""
-                if (this.callback.id !== NEW_CALLBACK_ID) {
-                    res = await DeviceApi.updateCallback(this.ip, this.observable, this.callback, "saveCallback")
-                    emitAction = "reloadCallback"
-                } else { 
-                    delete this.callback.id;
-                    res = await DeviceApi.createCallback(this.ip, this.observable, this.callback, "saveCallback")
-                    emitAction = "update"
+                this.loading = true
+                try {
+                    if (this.callback.id !== NEW_CALLBACK_ID) {
+                        res = await DeviceApi.updateCallback(this.ip, this.observable, this.callback, this.gateway)
+                        emitAction = "reloadCallback"
+                    } else { 
+                        delete this.callback.id;
+                        res = await DeviceApi.createCallback(this.ip, this.observable, this.callback, this.gateway)
+                        emitAction = "update"
+                    }
+                } finally {
+                    this.loading = false
                 }
 
                 if (res) {
@@ -107,8 +114,13 @@
                     return
                 }
                 if (confirm("Are you sure you wan to delete callback " + this.callback.id + "?")) {
-                    if (await DeviceApi.deleteCallback(this.ip, this.observable, this.callback.id, "deleteCallback")) {
-                        this.$emit("update")
+                    this.loading = true
+                    try {
+                        if (await DeviceApi.deleteCallback(this.ip, this.observable, this.callback.id, this.gateway)) {
+                            this.$emit("update")
+                        }
+                    } finally {
+                        this.loading = false
                     }
                 }
             },
@@ -161,37 +173,12 @@
 
 <template>
     <div class="bordered">
-        <div class="callback-header">
-            <h3>[{{callback.id}}] {{ callback.caption || systemNameToNormal(callback.type) }}</h3>
-            <div v-if="!callback.readonly" class="callback-view-controls">
-                <RequestButton 
-                    v-if="!editing" 
-                    v-on:click="deleteCallback"
-                    requestId="deleteCallback"
-                    style="background-color: var(--color-danger);"
-                >
-                    <h3>Delete</h3>
-                </RequestButton>
-                <RequestButton v-if="editing" v-on:click="cancel"><h3>Cancel</h3></RequestButton>
-
-                <RequestButton v-if="!editing" v-on:click="editing = true"><h3>Edit</h3></RequestButton>
-                <RequestButton 
-                    v-if="editing" 
-                    v-on:click="saveCallback"
-                    requestId="saveCallback"
-                >
-                    <h3>Save</h3>
-                </RequestButton>
-            </div>
-            <div v-else>
-                <h3 style="text-align: center;">Readonly</h3>
-            </div>
-        </div>  
-        <div>
+        <h3 class="title">[{{callback.id}}] {{ callback.caption || systemNameToNormal(callback.type) }}</h3>
+        <div class="list">
             <InputWithLabel
                 label="type"
                 :value="callback.type"
-                disabled=true
+                :disabled="true"
             />
             <component
                 v-for="{key, label, value, render, required} in fieldsComponents"
@@ -200,23 +187,53 @@
                 :label="label"
                 :value="value"
                 :notBlank="required"
-                @input="setValue(key, $event.target.value)"
                 :disabled="isFieldDisabled(key)"
                 :validationFailed="validationFailed.includes(key)"
+                @input="setValue(key, $event.target.value)"
             />
+        </div>
+        <div class="controls">
+            <div v-if="!callback.readonly" class="callback-view-controls">
+                <LoadingButton 
+                    v-if="!editing" 
+                    v-on:click="deleteCallback"
+                    :loading="loading"
+                    style="background-color: var(--color-danger);"
+                >
+                    <h3>Delete</h3>
+                </LoadingButton>
+                <LoadingButton v-if="editing" v-on:click="cancel"><h3>Cancel</h3></LoadingButton>
+
+                <LoadingButton v-if="!editing" v-on:click="editing = true"><h3>Edit</h3></LoadingButton>
+                <LoadingButton 
+                    v-if="editing" 
+                    v-on:click="saveCallback"
+                    :loading="loading"
+                >
+                    <h3>Save</h3>
+                </LoadingButton>
+            </div>
+            <div v-else>
+                <h3 style="text-align: center;">Readonly</h3>
+            </div>
         </div>
     </div>
 </template>
 
 <style scoped>
-    .callback-header {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
+    .controls {
+        display: flex;
+        flex-direction: row;
+        padding-top: var(--default-gap);
+        gap: var(--default-gap)
+    }
+    .controls * {
+        flex: 1 1 auto;
     }
     .callback-view-controls {
         display: flex;
         flex-direction: row-reverse;
-        column-gap: var(--list-item-gap);
+        column-gap: var(--default-gap);
         margin-bottom: 5px;
     }
 </style>

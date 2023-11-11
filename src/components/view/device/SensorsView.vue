@@ -1,6 +1,6 @@
 <script>
     import SyncLoader from 'vue-spinner/src/SyncLoader.vue'
-    import { DeviceApi } from "../../../api/DeviceApi.js"
+    import { DeviceApi } from "../../../api/device/DeviceApi.js"
     import CallbacksView from './CallbacksView.vue'
     import TabsView from '../../tabs/TabsView.vue'
     
@@ -12,7 +12,8 @@
             TabsView
         },
         props: {
-            ip: String
+            ip: String,
+            gateway: Object
         },
         data() {
             return {
@@ -39,7 +40,8 @@
                                 observable: {
                                     name,
                                     type: "sensor"
-                                }
+                                },
+                                gateway: this.gateway
                             }
                         };
                         return acc;
@@ -48,7 +50,9 @@
         },
         methods: {
             async loadSensors() {
-                this.sensors = await DeviceApi.getDeviceSensors(this.ip)
+                this.loading = true
+                this.sensors = await DeviceApi.getDeviceSensors(this.ip, this.gateway)
+                this.loading = false
             },
             async update() {
                 await this.loadSensors()
@@ -59,15 +63,9 @@
 
 <template>
     <h1 class="title">Sensors values</h1>
-    <sync-loader class="spinner" :loading="loading"></sync-loader>
+    <sync-loader class="loading-spinner" :loading="loading"></sync-loader>
     <TabsView
         :tabs="tabs"
         tabTitle="Click to open callbacks"
     />
 </template>
-
-<style scoped>
-    .spinner {
-        text-align: center;
-    }
-</style>

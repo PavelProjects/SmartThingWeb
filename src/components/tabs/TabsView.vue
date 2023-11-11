@@ -1,5 +1,5 @@
 <script>
-    import RequestButton from '../controls/RequestButton.vue'
+    import LoadingButton from '../controls/LoadingButton.vue'
     import TabItem from './TabItem.vue'
     import { h } from 'vue'
     import { EventBus, REQUEST } from "../../utils/EventBus";
@@ -7,9 +7,9 @@
     export default {
         name: "TabsView",
         components: {
-    TabItem,
-    RequestButton
-},
+            TabItem,
+            LoadingButton
+        },
         props: {
             tabs: Object,
             defaultTab: String,
@@ -19,7 +19,8 @@
         data() {
             return {
                 currentTab: this.defaultTab,
-                haveUpdateButton: false
+                haveUpdateButton: this.haveUpdateMethod(this.defaultTab),
+                loading: false
             }
         },
         methods: {
@@ -33,15 +34,24 @@
                             this.tabs[name].props
                         )
                     }
-                    this.haveUpdateButton = this.tabs[name].class.methods.update ? true : false
+                    this.haveUpdateButton = this.haveUpdateMethod(name)
                     this.currentTab = name
                 }
             },
+            haveUpdateMethod(name) {
+                if (!this.tabs[name]) {
+                    return false
+                }
+                return !!this.tabs[name].class.methods.update
+            },
             async updateContent() {
                 if (this.$refs.content && this.$refs.content.update) {
-                    EventBus.emit(REQUEST, {id: "update", loading: true})
-                    await this.$refs.content.update()
-                    EventBus.emit(REQUEST, {id: "update", loading: false})
+                    this.loading = true
+                    try {
+                        await this.$refs.content.update()
+                    } finally {
+                        this.loading = false
+                    }
                 } else {
                     console.error("Content don't have update method")
                 }
@@ -58,23 +68,26 @@
                 v-for="[name, { caption }] in Object.entries(tabs)"
                 :key="name"
                 :selected="currentTab == name"
-                v-on:click="switchTab(name)" 
                 :title="tabTitle"
+                v-on:click="switchTab(name)" 
             >
                 <h2 class="tab-label">{{ caption }}</h2>
             </TabItem>
         </div>
         <div v-if="currentTab && tabs[currentTab]['render']" class="tab-content">
-            <RequestButton 
+            <LoadingButton 
                 class="update-button"
                 v-if="haveUpdateButton"
                 v-on:click.prevent="updateContent()"
-                requestId="update"
+                :loading="loading"
             >
                 <h3>Update</h3>
-            </RequestButton>
+            </LoadingButton>
             <KeepAlive>
-                <component ref="content" :is="tabs[currentTab]['render']"></component>
+                <component 
+                    ref="content" 
+                    :is="tabs[currentTab]['render']"
+                ></component>
             </KeepAlive>
         </div>
     </div>
@@ -90,12 +103,15 @@
         width: 250px;
     }
     .tab-content {
+        position: relative;
         width: calc(100% - 250px);
         margin-left: 5px;
         display: flex;
         flex-direction: column;
     }
     .update-button {
-        margin-left: auto;
+        position: absolute;
+        top: 0px;
+        right: 0px;
     }
 </style>

@@ -1,9 +1,9 @@
 <script>
     import SyncLoader from 'vue-spinner/src/SyncLoader.vue'
-    import { DeviceApi } from "../../../api/DeviceApi.js"
+    import { DeviceApi } from "../../../api/device/DeviceApi.js"
     import InputWithLabel from "../../fields/InputWithLabel.vue"
-    import RequestButton from '../../controls/RequestButton.vue'
-import { EventBus, NOTIFY } from '../../../utils/EventBus'
+    import LoadingButton from '../../controls/LoadingButton.vue'
+    import { EventBus, NOTIFY } from '../../../utils/EventBus'
 
     const NAME_ERROR = "Name can't be empty!"
 
@@ -12,10 +12,11 @@ import { EventBus, NOTIFY } from '../../../utils/EventBus'
         components: {
             SyncLoader,
             InputWithLabel,
-            RequestButton
+            LoadingButton
         },
         props: {
-            ip: String
+            ip: String,
+            gateway: Object
         },
         data() {
             return {
@@ -35,15 +36,11 @@ import { EventBus, NOTIFY } from '../../../utils/EventBus'
             }
         },
         methods: {
+            async update() {
+                await this.loadInfo()
+            },
             async loadInfo() {
-                this.info = await DeviceApi.getDeviceInfo(this.ip)
-                if (!this.info) {
-                    EventBus.emit(NOTIFY, {
-                        caption: "Failed to load device information",
-                        type: "error"
-                    })
-                    this.info = {}
-                }
+                this.info = await DeviceApi.getDeviceInfo(this.ip, this.gateway) || {}
                 this.deviceName = this.info["name"] || ""
             },
             async saveName() {
@@ -51,8 +48,13 @@ import { EventBus, NOTIFY } from '../../../utils/EventBus'
                     console.error("Not valid name")
                     return
                 }
-                if (await DeviceApi.saveName(this.ip, this.deviceName, "saveName")) {
-                    this.loadInfo()
+                this.loading = true
+                try {
+                    if (await DeviceApi.saveName(this.ip, this.deviceName, this.gateway)) {
+                        this.loadInfo()
+                    }
+                } finally {
+                    this.loading = false
                 }
             },
         }
@@ -61,8 +63,7 @@ import { EventBus, NOTIFY } from '../../../utils/EventBus'
 
 <template>
     <h1 class="title">Device information</h1>
-    <sync-loader class="spinner" :loading="loading"></sync-loader>
-    <div v-if="!loading && info" class="list">
+    <div v-if="info" class="list">
         <InputWithLabel
             label="Device name"
             :title="validName ? '' : NAME_ERROR"
@@ -70,12 +71,12 @@ import { EventBus, NOTIFY } from '../../../utils/EventBus'
             :validationFailed="!validName"
             @input="deviceName = $event.target.value.trim()"
         >
-            <RequestButton
-                requestId="saveName"
+            <LoadingButton
+                :loading="loading"
                 @click="saveName"
             >
                 <h3>save</h3>
-            </RequestButton>
+            </LoadingButton>
         </InputWithLabel>
         <InputWithLabel
             label="Device type"
@@ -98,4 +99,5 @@ import { EventBus, NOTIFY } from '../../../utils/EventBus'
             :disabled="true"
         />
     </div>
+    <sync-loader v-else class="loading-spinner" :loading="true"></sync-loader>
 </template>

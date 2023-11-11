@@ -14,6 +14,10 @@
             type: {
                 type: String,
                 default: INFO_TYPE
+            },
+            autoClose: {
+                type: Boolean,
+                default: true
             }
         },
         computed: {
@@ -28,7 +32,9 @@
             }
         },
         mounted() {
-            setTimeout(this.close, LIFE_TIME)
+            if (this.autoClose) {
+                setTimeout(this.close, LIFE_TIME)
+            }
         },
         methods: {
             close() {
@@ -41,7 +47,7 @@
 <template>
     <div class="notification" :class="{info: isInfo, error: isError, success: isSuccess}">
         <h2>{{ caption }}</h2>
-        <h3>{{ description }}</h3>
+        <div style="word-wrap: break-word;">{{ description }}</div>
         <button @click="close">X</button>
     </div>
 </template>
@@ -54,6 +60,7 @@
         width: var(--notification-width);
         min-height: var(--notification-min-height);
         padding: 10px 5px 5px 5px;
+        z-index: 999;
     }
     .notification button {
         background-color: transparent;

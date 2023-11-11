@@ -24,12 +24,14 @@
 
   --color-postive: hsla(160, 100%, 37%, 1);
   --color-accent: ;
-  --color-danger: rgba(189, 0, 0, 0.453);
+  --color-danger: rgba(147, 4, 4, 0.453);
+
+  --background-tilt: #141313cd;
 
   --doc-height: 50px;
   --border-radius: 10px;
   --section-gap: 160px;
-  --list-item-gap: 5px;
+  --default-gap: 5px;
   
   --notification-width: 300px;
   --notification-min-height: 50px;

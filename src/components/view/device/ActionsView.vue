@@ -1,18 +1,20 @@
 <script>    
-    import { DeviceApi } from "../../../api/DeviceApi.js"
-    import RequestButton from '../../controls/RequestButton.vue'
+    import { DeviceApi } from "../../../api/device/DeviceApi.js"
+    import LoadingButton from '../../controls/LoadingButton.vue'
 
     export default {
         name: "ActionsView",
         components: {
-            RequestButton
+            LoadingButton
         },
         props: {
-            ip: String
+            ip: String,
+            gateway: Object
         },
         data() {
             return {
-                actions: null
+                actions: null,
+                loading: false
             }
         },
         created() {
@@ -20,10 +22,15 @@
         },
         methods: {
             async loadActions() {
-                this.actions = await DeviceApi.getDeviceActionsInfo(this.ip)
+                this.actions = await DeviceApi.getDeviceActionsInfo(this.ip, this.gateway)
             },
             async sendAction(action) {
-                await DeviceApi.executeDeviceAcion(this.ip, action, "execute_" + action)
+                this.loading = true
+                try {
+                    await DeviceApi.executeDeviceAcion(this.ip, action, this.gateway)
+                } finally {
+                    this.loading = false
+                }
             }
         }
     }
@@ -33,12 +40,12 @@
     <h1 class="title">Device actions</h1>
     <div class="buttons-panel" v-if="actions">
         <div v-for="(caption, name) in actions" :key="name">
-            <RequestButton 
-                :requestId="'execute_' + name"
+            <LoadingButton 
+                :loading="loading"
                 @click="sendAction(name)"
             >
                 <h1>{{ caption }}</h1>
-            </RequestButton>
+            </LoadingButton>
         </div>
     </div>
     <div v-else-if="!loading">

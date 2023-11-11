@@ -2,33 +2,34 @@
     import SearchDeviceInfo from './SearchDeviceInfo.vue'
     import DeviceControlPanel from './DeviceControlPanel.vue'
     import TabItem from '../../tabs/TabItem.vue'
-    import { Client } from '@stomp/stompjs';
     import { h } from 'vue'
-    import RequestButton from '../../controls/RequestButton.vue';
-    import { EventBus, REQUEST } from '../../../utils/EventBus';
-    import { GatewayApi } from '../../../api/GatewayApi'
-
-    const gatewayPath = import.meta.env.VITE_GATEWAY_PATH
-    const gatewayPort = import.meta.env.VITE_GATEWAY_PORT
-    const gatwayWs = import.meta.env.VITE_GATEWAY_WS
-
-    const SEARCH_TOPIC = import.meta.env.VITE_GATEWAY_SEARCH_TOPIC
-    const BROKER_URL = `ws://${gatewayPath}:${gatewayPort}/${gatwayWs}`
-    const SEARCH_TIME = 10000
+    import LoadingButton from '../../controls/LoadingButton.vue';
+    import { SearchApi } from '../../../api/SearchDevicesApi';
+import { EventBus, REQUEST } from '../../../utils/EventBus'
 
     export default {
         components: {
             SearchDeviceInfo,
             DeviceControlPanel,
-            RequestButton,
+            LoadingButton,
             TabItem
+        },
+        props: {
+            gateway: Object
         },
         data() {
             return {
                 tabs: {},
                 devices: {},
                 selectedIp: null,
-                client: null
+                client: null,
+                loading: false
+            }
+        },
+        watch: {
+            gateway() {
+                this.devices = {}
+                this.search();
             }
         },
         mounted() {
@@ -36,17 +37,35 @@
         },
         methods: {
             search() {
-                GatewayApi.searchDevices((deviceInfo) => {
+                this.loading = true;
+                const foundDevices = []
+                SearchApi.searchDevices((deviceInfo) => {
                     if (!this.devices[deviceInfo.ip]) {
                         this.devices[deviceInfo.ip] = deviceInfo
+                        foundDevices.push(deviceInfo.ip)
+                        console.debug(`Found new device: ${deviceInfo.name}`)
                     }
-                });
+                }, this.gateway);
+                EventBus.on(REQUEST, ({id, loading}) => {
+                    if (id == 'search') {
+                        this.loading = loading;
+                        if (!this.loading) {
+                            Object.keys(this.devices).forEach((key) => {
+                                if (!key in foundDevices) {
+                                    delete this.devices[key]
+                                    if (this.selectedIp == key) {
+                                        this.selectedIp = undefined
+                                    }
+                                }
+                            })
+                        }
+                    }
+                })
             },
             switchTab(ip) {
                 if (!this.tabs[ip]) {
                     this.tabs[ip] = h(
-                        DeviceControlPanel,
-                        {key: ip, ip}
+                        DeviceControlPanel, { key: ip, ip }
                     );
                 }
                 this.selectedIp = ip;
@@ -71,9 +90,12 @@
                     </TabItem>
                 </Transition>
             </div>
-            <RequestButton requestId="search" v-on:click="search">
+            <LoadingButton
+                :loading="loading"
+                v-on:click="search"
+            >
                 <h1>Refresh</h1>
-            </RequestButton>
+            </LoadingButton>
         </div>
     </div>
     <div class="main-tab" v-if="selectedIp">
@@ -89,7 +111,6 @@
     .devices-table {
         display: flex;
         flex-direction: row;
-        width: 1500px;
     }
     .side-search{
         width: 400px;
@@ -97,7 +118,7 @@
     }
     .search-results {
         display: grid;
-        row-gap: var(--list-item-gap);
+        row-gap: var(--default-gap);
         height: fit-content;
     }
     .main-tab {

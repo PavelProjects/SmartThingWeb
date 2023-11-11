@@ -1,21 +1,27 @@
 <script>
-    import { DeviceApi } from "../../../api/DeviceApi.js"
+    import { DeviceApi } from "../../../api/device/DeviceApi.js"
     import InputWithLabel from "../../fields/InputWithLabel.vue"
-    import RequestButton from "../../controls/RequestButton.vue";
+    import LoadingButton from "../../controls/LoadingButton.vue";
+    import SyncLoader from 'vue-spinner/src/SyncLoader.vue'
 
     export default {
         name: "ConfigView",
         props: {
-            ip: String
+            ip: String,
+            gateway: Object
         },
         components: { 
             InputWithLabel,
-            RequestButton
+            LoadingButton,
+            SyncLoader,
         },
         data() {
             return {
                 values: {},
-                configInfo: {}
+                configInfo: {},
+                loading: false,
+                saveLoading: false,
+                deleteLoading: false
             };
         },
         created() {
@@ -31,24 +37,39 @@
         },
         methods: {
             async update() {
-                await this.loadConfigInfo();
-                await this.loadConfigValues();
+                this.loading = true
+                try {
+                    await this.loadConfigInfo();
+                    await this.loadConfigValues();
+                } finally {
+                    this.loading = false
+                }
             },
             async loadConfigInfo() {
-                this.configInfo = await DeviceApi.getDeviceConfigInfo(this.ip);
+                this.configInfo = await DeviceApi.getDeviceConfigInfo(this.ip, this.gateway);
             },
             async loadConfigValues() {
-                this.values = await DeviceApi.getConfig(this.ip);
+                this.values = await DeviceApi.getConfig(this.ip, this.gateway);
             },
             async saveConfig() {
-                if (await DeviceApi.saveConfigValues(this.ip, this.values, "saveConfig")) {
-                    this.loadConfigValues()
+                this.saveLoading = true
+                try {
+                    if (await DeviceApi.saveConfigValues(this.ip, this.values, this.gateway)) {
+                        this.loadConfigValues()
+                    }
+                } finally {
+                    this.saveLoading = false
                 }
             },
             async deleteAllValues() {
                 if (confirm("Are you sure you want to delete all configuration values?")) {
-                    if (await DeviceApi.deleteAllConfigValues(this.ip, "deleteConfig")) {
-                        this.loadConfigValues()
+                    this.deleteLoading = true
+                    try {
+                        if (await DeviceApi.deleteAllConfigValues(this.ip, this.gateway)) {
+                            this.loadConfigValues()
+                        }
+                    } finally {
+                        this.deleteLoading = false
                     }
                 }
             },
@@ -83,27 +104,32 @@
 
 <template>
     <h1 class="title">Configuration</h1>
-    <div class="controls-holder"> 
-        <RequestButton 
-            requestId="deleteConfig"
-            class="delete"
-            @click="deleteAllValues"
-        >
-            <h2>Delete all values</h2>
-        </RequestButton>
-        <RequestButton requestId="saveConfig" @click="saveConfig">
-            <h2>Save</h2>
-        </RequestButton>
+    <sync-loader class="loading-spinner" :loading="loading"></sync-loader>
+    <div class="config-inputs list">
+        <InputWithLabel
+            v-for="{key, caption, value, type} in inputs"
+            :key="key"
+            :label="caption"
+            :value="value"
+            :type="type"
+            @input="setValue(key, $event.target.value)"
+        />
+        <div class="controls-holder">
+            <LoadingButton
+                class="delete"
+                :loading="deleteLoading"
+                @click="deleteAllValues"
+            >
+                <h2>Delete all values</h2>
+            </LoadingButton>
+            <LoadingButton
+                :loading="saveLoading"
+                @click="saveConfig"
+            >
+                <h2>Save</h2>
+            </LoadingButton>
+        </div>
     </div>
-    <InputWithLabel
-        v-for="{key, caption, value, type} in inputs"
-        :key="key"
-        :label="caption"
-        :value="value"
-        :type="type"
-        @input="setValue(key, $event.target.value)"
-        class="labeled-input"
-    />
 </template>
 
 <style scoped>
@@ -111,19 +137,20 @@
         text-align: center;
     }
     .controls-holder {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        column-gap: var(--list-item-gap);
+        position: absolute;
+        bottom: 0px;
         width: 100%;
-        margin-bottom: var(--list-item-gap);
+        display: flex;
+        flex-direction: row;
+        gap: var(--default-gap);
     }
     .controls-holder button {
-        width: 100%;
+        width: 50%;
+    }
+    .config-inputs {
+        padding-bottom: calc(40px + var(--default-gap));
     }
     .delete {
-        background-color: hsla(0, 100%, 37%, 0.2);
-    }
-    .labeled-input {
-        margin-bottom: var(--list-item-gap)
+        background-color: var(--color-danger);
     }
 </style>
