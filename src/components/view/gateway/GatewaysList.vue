@@ -37,6 +37,13 @@ export default {
             } finally {
                 this.loading = false
             }
+
+            if (this.selectedGateway) {
+                const gateway = this.gateways.find((gateway) => gateway.id == this.selectedGateway.id)
+                if (!gateway || !gateway.online) {
+                    this.selectedGateway = null
+                }
+            }
         },
         showControlPanel(gateway) {
             if (gateway.online) {

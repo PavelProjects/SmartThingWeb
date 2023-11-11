@@ -5,6 +5,7 @@
     import { h } from 'vue'
     import LoadingButton from '../../controls/LoadingButton.vue';
     import { SearchApi } from '../../../api/SearchDevicesApi';
+import { EventBus, REQUEST } from '../../../utils/EventBus'
 
     export default {
         components: {
@@ -36,11 +37,17 @@
         },
         methods: {
             search() {
+                this.loading = true;
                 SearchApi.searchDevices((deviceInfo) => {
                     if (!this.devices[deviceInfo.ip]) {
                         this.devices[deviceInfo.ip] = deviceInfo
                     }
                 }, this.gateway);
+                EventBus.on(REQUEST, ({id, loading}) => {
+                    if (id == 'search') {
+                        this.loading = loading;
+                    }
+                })
             },
             switchTab(ip) {
                 if (!this.tabs[ip]) {

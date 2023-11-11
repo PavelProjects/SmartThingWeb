@@ -1,6 +1,6 @@
 <script>
   import Doc from "./components/view/doc/Doc.vue"
-  import DevicesMainView from "./components/view/device/DevicesMainView.vue";
+  import DevicesSearchView from "./components/view/device/DevicesSearchView.vue";
   import NotificationsView from "./components/notifications/NotificationsView.vue"
   import GatewaysList from "./components/view/gateway/GatewaysList.vue";
   import CloudAuthDialog from './components/dialogs/CloudAuthDialog.vue';
@@ -10,7 +10,7 @@ import { CloudApi } from './api/CloudApi';
     name: "App",
     components: {
       Doc,
-      DevicesMainView,
+      DevicesSearchView,
       NotificationsView, 
       GatewaysList,
       CloudAuthDialog
@@ -57,7 +57,7 @@ import { CloudApi } from './api/CloudApi';
           v-if="mode == 'cloud'"
           @select="handleGatewaySelect"
         />
-        <DevicesMainView 
+        <DevicesSearchView 
           v-if="selectedGateway"
           :gateway="selectedGateway"
         />
@@ -65,7 +65,7 @@ import { CloudApi } from './api/CloudApi';
     </div>
   </div>
   <div v-if="mode == 'gateway'" class="content">
-    <DevicesMainView/>
+    <DevicesSearchView/>
   </div>
 </template>
 

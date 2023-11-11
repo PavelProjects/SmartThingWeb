@@ -1,5 +1,4 @@
 <script>
-    import {EventBus, REQUEST} from "../../utils/EventBus.js"
     import PulseLoader from 'vue-spinner/src/PulseLoader.vue'
     
     export default {
