@@ -140,7 +140,7 @@ export default {
             <TabItem
                 v-for="gateway in gateways"
                 :key="gateway.id"
-                :selected="selectedGateway.id == gateway.id"
+                :selected="selectedGateway && selectedGateway.id == gateway.id"
             >
                 <GatewayItem 
                     :gateway="gateway"
