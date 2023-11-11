@@ -2,6 +2,7 @@
     import { DeviceApi } from "../../../api/device/DeviceApi.js"
     import InputWithLabel from "../../fields/InputWithLabel.vue"
     import LoadingButton from "../../controls/LoadingButton.vue";
+    import SyncLoader from 'vue-spinner/src/SyncLoader.vue'
 
     export default {
         name: "ConfigView",
@@ -11,13 +12,16 @@
         },
         components: { 
             InputWithLabel,
-            LoadingButton
+            LoadingButton,
+            SyncLoader,
         },
         data() {
             return {
                 values: {},
                 configInfo: {},
-                loading: false
+                loading: false,
+                saveLoading: false,
+                deleteLoading: false
             };
         },
         created() {
@@ -48,24 +52,24 @@
                 this.values = await DeviceApi.getConfig(this.ip, this.gateway);
             },
             async saveConfig() {
-                this.loading = true
+                this.saveLoading = true
                 try {
                     if (await DeviceApi.saveConfigValues(this.ip, this.values, this.gateway)) {
                         this.loadConfigValues()
                     }
                 } finally {
-                    this.loading = false
+                    this.saveLoading = false
                 }
             },
             async deleteAllValues() {
                 if (confirm("Are you sure you want to delete all configuration values?")) {
-                    this.loading = true
+                    this.deleteLoading = true
                     try {
                         if (await DeviceApi.deleteAllConfigValues(this.ip, this.gateway)) {
                             this.loadConfigValues()
                         }
                     } finally {
-                        this.loading = false
+                        this.deleteLoading = false
                     }
                 }
             },
@@ -100,30 +104,32 @@
 
 <template>
     <h1 class="title">Configuration</h1>
-    <div class="controls-holder"> 
-        <LoadingButton
-            class="delete"
-            :loading="loading"
-            @click="deleteAllValues"
-        >
-            <h2>Delete all values</h2>
-        </LoadingButton>
-        <LoadingButton
-            :loading="loading"
-            @click="saveConfig"
-        >
-            <h2>Save</h2>
-        </LoadingButton>
+    <sync-loader class="loading-spinner" :loading="loading"></sync-loader>
+    <div class="config-inputs list">
+        <InputWithLabel
+            v-for="{key, caption, value, type} in inputs"
+            :key="key"
+            :label="caption"
+            :value="value"
+            :type="type"
+            @input="setValue(key, $event.target.value)"
+        />
+        <div class="controls-holder">
+            <LoadingButton
+                class="delete"
+                :loading="deleteLoading"
+                @click="deleteAllValues"
+            >
+                <h2>Delete all values</h2>
+            </LoadingButton>
+            <LoadingButton
+                :loading="saveLoading"
+                @click="saveConfig"
+            >
+                <h2>Save</h2>
+            </LoadingButton>
+        </div>
     </div>
-    <InputWithLabel
-        v-for="{key, caption, value, type} in inputs"
-        :key="key"
-        :label="caption"
-        :value="value"
-        :type="type"
-        @input="setValue(key, $event.target.value)"
-        class="labeled-input"
-    />
 </template>
 
 <style scoped>
@@ -131,19 +137,20 @@
         text-align: center;
     }
     .controls-holder {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        column-gap: var(--default-gap);
+        position: absolute;
+        bottom: 0px;
         width: 100%;
-        margin-bottom: var(--default-gap);
+        display: flex;
+        flex-direction: row;
+        gap: var(--default-gap);
     }
     .controls-holder button {
-        width: 100%;
+        width: 50%;
+    }
+    .config-inputs {
+        padding-bottom: calc(40px + var(--default-gap));
     }
     .delete {
-        background-color: hsla(0, 100%, 37%, 0.2);
-    }
-    .labeled-input {
-        margin-bottom: var(--default-gap)
+        background-color: var(--color-danger);
     }
 </style>

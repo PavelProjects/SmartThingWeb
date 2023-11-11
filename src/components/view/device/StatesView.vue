@@ -45,12 +45,15 @@
                             }
                         };
                         return acc;
-                    }, {})
+                    }, {}
+                )
             }
         },
         methods: {
             async loadStates() {
+                this.loading = true
                 this.states = await DeviceApi.getDeviceStates(this.ip, this.gateway)
+                this.loading = false
             },
             async update() {
                 await this.loadStates()
@@ -61,15 +64,9 @@
 
 <template>
     <h1 class="title">Device states</h1>
-    <sync-loader class="spinner" :loading="loading"></sync-loader>
+    <sync-loader class="loading-spinner" :loading="loading"></sync-loader>
     <TabsView
         :tabs="tabs"
         tabTitle="Click to open callbacks"
     />
 </template>
-
-<style scoped>
-    .spinner {
-        text-align: center;
-    }
-</style>

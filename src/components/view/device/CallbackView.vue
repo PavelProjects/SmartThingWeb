@@ -16,7 +16,7 @@
             ip: String,
             callback: Object,
             observable: Object,
-            template: Array,
+            template: Object,
             gateway: Object
         },
         components: {
@@ -174,11 +174,11 @@
 <template>
     <div class="bordered">
         <h3 class="title">[{{callback.id}}] {{ callback.caption || systemNameToNormal(callback.type) }}</h3>
-        <div>
+        <div class="list">
             <InputWithLabel
                 label="type"
                 :value="callback.type"
-                disabled=true
+                :disabled="true"
             />
             <component
                 v-for="{key, label, value, render, required} in fieldsComponents"
@@ -187,9 +187,9 @@
                 :label="label"
                 :value="value"
                 :notBlank="required"
-                @input="setValue(key, $event.target.value)"
                 :disabled="isFieldDisabled(key)"
                 :validationFailed="validationFailed.includes(key)"
+                @input="setValue(key, $event.target.value)"
             />
         </div>
         <div class="controls">
@@ -224,6 +224,7 @@
     .controls {
         display: flex;
         flex-direction: row;
+        padding-top: var(--default-gap);
         gap: var(--default-gap)
     }
     .controls * {

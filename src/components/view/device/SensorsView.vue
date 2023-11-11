@@ -50,7 +50,9 @@
         },
         methods: {
             async loadSensors() {
+                this.loading = true
                 this.sensors = await DeviceApi.getDeviceSensors(this.ip, this.gateway)
+                this.loading = false
             },
             async update() {
                 await this.loadSensors()
@@ -61,15 +63,9 @@
 
 <template>
     <h1 class="title">Sensors values</h1>
-    <sync-loader class="spinner" :loading="loading"></sync-loader>
+    <sync-loader class="loading-spinner" :loading="loading"></sync-loader>
     <TabsView
         :tabs="tabs"
         tabTitle="Click to open callbacks"
     />
 </template>
-
-<style scoped>
-    .spinner {
-        text-align: center;
-    }
-</style>

@@ -94,3 +94,6 @@ input, select {
   background-color: hsla(3, 100%, 37%, 0.2);
   color: black;
 }
+.loading-spinner {
+  text-align: center;
+}

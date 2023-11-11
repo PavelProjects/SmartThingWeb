@@ -3,6 +3,7 @@
     import CallbackView from '../device/CallbackView.vue'
     import { DeviceApi } from "../../../api/device/DeviceApi.js"
     import Combobox from "../../fields/Combobox.vue"
+    import SyncLoader from 'vue-spinner/src/SyncLoader.vue'
 
     export const NEW_CALLBACK_ID = "New"
 
@@ -10,7 +11,8 @@
         name: "CallbacksView",
         components: {
             CallbackView,
-            Combobox
+            Combobox,
+            SyncLoader,
         },
         props: {
             ip: String,
@@ -22,7 +24,8 @@
                 selectedTemplate: null,
                 callbacks: [],
                 templates: {},
-                selectedType: null
+                selectedType: null,
+                loading: false
             }
         },
         computed: {
@@ -35,15 +38,17 @@
                     }, {})
             }
         },
-        async created() {
+        async mounted() {
+            this.loading = true
             await this.loadTemplates()
-            this.loadCallbacks()
+            await this.loadCallbacks()
+            this.loading = false
         },
         methods: {
-            update() {
-                this.loadCallbacks()
+            async update() {
+                await this.loadCallbacks()
             },
-            async loadCallbacks() {                
+            async loadCallbacks() {
                 this.callbacks = await DeviceApi.getCallbacks(this.ip, this.observable, this.gateway) || []
             },
             async loadTemplates() {
@@ -80,26 +85,29 @@
 
 <template>
     <h1 class="title">Callbacks</h1>
-    <Combobox
-        label="Add callback of type "
-        :items="callbackTypes"
-        @input="addCallback($event.target.value)"
-    />
-    <div 
-        v-if="callbacks"
-        class="callbacks-list-view list"
-    >
-        <CallbackView
-            v-for="callback in callbacks"
-            :ip="ip"
-            :key="callback.id"
-            :observable="observable"
-            :callback="callback"
-            :template="{...templates[callback.type], ...templates['default']}"
-            :gateway="gateway"
-            @update="update"
-            @reload-callback="reloadCallback"
+    <sync-loader class="loading-spinner" :loading="loading"></sync-loader>
+    <div v-if="!loading">
+        <Combobox
+            label="Add callback of type "
+            :items="callbackTypes"
+            @input="addCallback($event.target.value)"
         />
+        <div
+            v-if="callbacks"
+            class="callbacks-list-view list"
+        >
+            <CallbackView
+                v-for="callback in callbacks"
+                :ip="ip"
+                :key="callback.id"
+                :observable="observable"
+                :callback="callback"
+                :template="{...templates[callback.type], ...templates['default']}"
+                :gateway="gateway"
+                @update="update"
+                @reload-callback="reloadCallback"
+            />
+        </div>
     </div>
 </template>
 

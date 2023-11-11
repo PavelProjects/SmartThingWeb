@@ -86,7 +86,6 @@
 
 <style>
     .control-panel {
-        height: auto;
-        width: auto;
+        width: 1000px;
     }
 </style>

@@ -36,6 +36,9 @@
             }
         },
         methods: {
+            async update() {
+                await this.loadInfo()
+            },
             async loadInfo() {
                 this.info = await DeviceApi.getDeviceInfo(this.ip, this.gateway) || {}
                 this.deviceName = this.info["name"] || ""
@@ -96,5 +99,5 @@
             :disabled="true"
         />
     </div>
-    <sync-loader v-else class="spinner" :loading="true"></sync-loader>
+    <sync-loader v-else class="loading-spinner" :loading="true"></sync-loader>
 </template>

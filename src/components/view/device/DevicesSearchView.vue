@@ -38,26 +38,34 @@ import { EventBus, REQUEST } from '../../../utils/EventBus'
         methods: {
             search() {
                 this.loading = true;
+                const foundDevices = []
                 SearchApi.searchDevices((deviceInfo) => {
                     if (!this.devices[deviceInfo.ip]) {
                         this.devices[deviceInfo.ip] = deviceInfo
+                        foundDevices.push(deviceInfo.ip)
+                        console.debug(`Found new device: ${deviceInfo.name}`)
                     }
                 }, this.gateway);
                 EventBus.on(REQUEST, ({id, loading}) => {
                     if (id == 'search') {
                         this.loading = loading;
+                        if (!this.loading) {
+                            Object.keys(this.devices).forEach((key) => {
+                                if (!key in foundDevices) {
+                                    delete this.devices[key]
+                                    if (this.selectedIp == key) {
+                                        this.selectedIp = undefined
+                                    }
+                                }
+                            })
+                        }
                     }
                 })
             },
             switchTab(ip) {
                 if (!this.tabs[ip]) {
                     this.tabs[ip] = h(
-                        DeviceControlPanel,
-                        {
-                            key: ip, 
-                            ip,
-                            gateway: this.gateway
-                        }
+                        DeviceControlPanel, { key: ip, ip }
                     );
                 }
                 this.selectedIp = ip;
@@ -103,7 +111,6 @@ import { EventBus, REQUEST } from '../../../utils/EventBus'
     .devices-table {
         display: flex;
         flex-direction: row;
-        width: 1500px;
     }
     .side-search{
         width: 400px;

@@ -25,6 +25,6 @@
 <style scoped>
     button {
         min-width: 90px;
-        min-height: 30px;
+        min-height: 40px;
     }
 </style>
