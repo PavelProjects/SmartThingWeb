@@ -65,7 +65,11 @@ import { EventBus, REQUEST } from '../../../utils/EventBus'
             switchTab(ip) {
                 if (!this.tabs[ip]) {
                     this.tabs[ip] = h(
-                        DeviceControlPanel, { key: ip, ip }
+                        DeviceControlPanel, { 
+                            key: ip,
+                            ip,
+                            gateway: this.gateway
+                        }
                     );
                 }
                 this.selectedIp = ip;
