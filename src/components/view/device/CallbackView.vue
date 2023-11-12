@@ -73,7 +73,8 @@
             },
             async saveCallback() {
                 if (!this.haveChanges) {
-                    console.error("No changes were made")
+                    console.warn("No changes were made")
+                    this.editing = false
                     return
                 }
                 if (!this.validate()) {

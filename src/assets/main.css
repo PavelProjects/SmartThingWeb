@@ -7,7 +7,7 @@
 a,
 .green {
   text-decoration: none;
-  color: var(--color-postive);
+  color: var(--color-positive);
   transition: 0.4s;
 }
 .red {
@@ -19,7 +19,7 @@ a,
 .title {
   text-align: center;
   text-decoration: none;
-  color: var(--color-postive);
+  color: var(--color-positive);
   transition: 0.4s;
 }
 
@@ -30,7 +30,11 @@ button {
 }
 
 button:hover {
-  background-color: hsla(160, 100%, 26%, 0.2);
+  opacity: 0.50;
+  cursor: pointer;
+}
+
+.svg-button:hover {
   cursor: pointer;
 }
 

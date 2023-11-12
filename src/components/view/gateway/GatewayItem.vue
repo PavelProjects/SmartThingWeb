@@ -1,11 +1,7 @@
 <script>
-import TrashIcon from '../../icons/IconTrash.vue'
 
 export default {
     name: 'GatewayItem',
-    components: {
-        TrashIcon
-    },
     props: {
         gateway: Object,
         updateGateway: Function,

@@ -22,7 +22,7 @@
   
   --overlay-background-color: rgba(235, 235, 235, 0.153);
 
-  --color-postive: hsla(160, 100%, 37%, 1);
+  --color-positive: hsla(160, 100%, 37%, 1);
   --color-accent: ;
   --color-danger: rgba(147, 4, 4, 0.453);
 
@@ -35,6 +35,8 @@
   
   --notification-width: 300px;
   --notification-min-height: 50px;
+
+  --icon-size: 35px;
 }
 
 /* semantic color variables for this project */

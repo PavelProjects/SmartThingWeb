@@ -18,42 +18,40 @@
         data() {
             return {
                 states: null,
-                loading: false
+                loading: false,
+                tabs: {}
             }
         },
         created() {
             this.loadStates()
         },
-        computed: {
-            tabs() {
-                if (!this.states) {
-                    return {}
-                }
-                return Object.entries(this.states).reduce(
-                    (acc, [name, value]) => {
-                        acc[name] = {
-                            class: CallbacksView,
-                            caption:`${name}: ${value}`,
-                            props: {
-                                key: "state_" + name,
-                                ip: this.ip,
-                                observable: {
-                                    name,
-                                    type: "state"
-                                },
-                                gateway: this.gateway
-                            }
-                        };
-                        return acc;
-                    }, {}
-                )
-            }
-        },
         methods: {
             async loadStates() {
                 this.loading = true
-                this.states = await DeviceApi.getDeviceStates(this.ip, this.gateway)
-                this.loading = false
+                try {
+                    this.states = await DeviceApi.getDeviceStates(this.ip, this.gateway) || {}
+                    Object.entries(this.states).forEach(([name, value]) => {
+                        if (this.tabs[name]) {
+                            this.tabs[name].caption = `${name}: ${value}`
+                        } else {
+                            this.tabs[name] = {
+                                class: CallbacksView,
+                                caption:`${name}: ${value}`,
+                                props: {
+                                    key: "state_" + name,
+                                    ip: this.ip,
+                                    observable: {
+                                        name,
+                                        type: "state"
+                                    },
+                                    gateway: this.gateway
+                                }
+                            };
+                        }
+                    });
+                } finally {
+                    this.loading = false
+                }
             },
             async update() {
                 await this.loadStates()

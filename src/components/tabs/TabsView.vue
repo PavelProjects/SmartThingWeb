@@ -1,14 +1,14 @@
 <script>
-    import LoadingButton from '../controls/LoadingButton.vue'
     import TabItem from './TabItem.vue'
     import { h } from 'vue'
-    import { EventBus, REQUEST } from "../../utils/EventBus";
+    import UpdateButton from '../controls/UpdateButton.vue'
+
 
     export default {
         name: "TabsView",
         components: {
             TabItem,
-            LoadingButton
+            UpdateButton
         },
         props: {
             tabs: Object,
@@ -75,14 +75,12 @@
             </TabItem>
         </div>
         <div v-if="currentTab && tabs[currentTab]['render']" class="tab-content">
-            <LoadingButton 
+            <UpdateButton 
                 class="update-button"
                 v-if="haveUpdateButton"
-                v-on:click.prevent="updateContent()"
                 :loading="loading"
-            >
-                <h3>Update</h3>
-            </LoadingButton>
+                :onClick="updateContent"
+            />
             <KeepAlive>
                 <component 
                     ref="content" 

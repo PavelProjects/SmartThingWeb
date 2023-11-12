@@ -288,7 +288,6 @@ export const DeviceApi = {
                 },
                 gateway
             })
-            r
             if (!result || result.status !== 201) {
                 throw new Error({result});
             }
