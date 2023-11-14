@@ -69,9 +69,10 @@ import { CloudApi } from './api/CloudApi';
   </div>
 </template>
 
-<style scoped>
+<style>
   .doc {
     position: sticky;
+    z-index: 999;
   }
   .content {
     width: fit-content;
@@ -79,10 +80,12 @@ import { CloudApi } from './api/CloudApi';
     flex-direction: row;
     column-gap: var(--default-gap);
     margin: 0 auto;
+    z-index: 1;
   }
   .notifications {
     position: absolute;
     top: var(--doc-height);
     right: var(--default-gap);
+    z-index: 999;
   }
 </style>

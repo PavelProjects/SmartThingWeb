@@ -18,41 +18,41 @@
         data() {
             return {
                 sensors: null,
-                loading: false
+                loading: false,
+                tabs: {}
             }
         },
         created() {
             this.loadSensors()
         },
-        computed: {
-            tabs() {
-                if (!this.sensors) {
-                    return {}
-                }
-                return Object.entries(this.sensors).reduce(
-                    (acc, [name, { type, value }]) => {
-                        acc[name] = {
-                            class: CallbacksView,
-                            caption:`${name} (${type}): ${value}`,
-                            props: {
-                                key: "sensor_" + name,
-                                ip: this.ip,
-                                observable: {
-                                    name,
-                                    type: "sensor"
-                                },
-                                gateway: this.gateway
-                            }
-                        };
-                        return acc;
-                    }, {})
-            }
-        },
         methods: {
             async loadSensors() {
                 this.loading = true
-                this.sensors = await DeviceApi.getDeviceSensors(this.ip, this.gateway)
-                this.loading = false
+                try {
+                    this.sensors = await DeviceApi.getDeviceSensors(this.ip, this.gateway)
+                    Object.entries(this.sensors).forEach(([name, { type, value }]) => {
+                        const caption = `${name} (${type}): ${value}`
+                        if (this.tabs[name]) {
+                            this.tabs[name].caption = caption
+                        } else {
+                            this.tabs[name] = {
+                                class: CallbacksView,
+                                caption,
+                                props: {
+                                    key: "sensor_" + name,
+                                    ip: this.ip,
+                                    observable: {
+                                        name,
+                                        type: "sensor"
+                                    },
+                                    gateway: this.gateway
+                                }
+                            };
+                        }
+                    });
+                } finally {
+                    this.loading = false
+                }
             },
             async update() {
                 await this.loadSensors()

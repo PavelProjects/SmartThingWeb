@@ -60,7 +60,7 @@
         width: var(--notification-width);
         min-height: var(--notification-min-height);
         padding: 10px 5px 5px 5px;
-        z-index: 999;
+        z-index: 1000;
     }
     .notification button {
         background-color: transparent;

@@ -3,15 +3,15 @@
     import DeviceControlPanel from './DeviceControlPanel.vue'
     import TabItem from '../../tabs/TabItem.vue'
     import { h } from 'vue'
-    import LoadingButton from '../../controls/LoadingButton.vue';
     import { SearchApi } from '../../../api/SearchDevicesApi';
-import { EventBus, REQUEST } from '../../../utils/EventBus'
+    import { EventBus, REQUEST } from '../../../utils/EventBus';
+    import UpdateButton from '../../controls/UpdateButton.vue';
 
     export default {
         components: {
             SearchDeviceInfo,
             DeviceControlPanel,
-            LoadingButton,
+            UpdateButton,
             TabItem
         },
         props: {
@@ -80,26 +80,29 @@ import { EventBus, REQUEST } from '../../../utils/EventBus'
 
 <template>
   <div class="devices-table">
-    <div class="side-search">
-        <h1 class="title">Found devices</h1>
+    <div style="width: 400px;">
+        <div style="position: relative;">
+            <h1 class="title">Found devices</h1>
+            <UpdateButton
+                class="update"
+                :loading="loading"
+                :onClick="search"
+            >
+                <h1>Refresh</h1>
+            </UpdateButton>
+        </div>
         <div class="search-results">
             <div v-for="[ip, deviceInfo] in Object.entries(devices)" v-bind:key="ip">
                 <Transition name="slide-left">
                     <TabItem v-if="deviceInfo && deviceInfo.name" v-bind:selected="selectedIp == ip">
                         <SearchDeviceInfo
-                            v-bind:ip="ip" 
-                            v-bind:deviceInfo="deviceInfo"
-                            v-on:click="switchTab(ip)"
+                            :ip="ip" 
+                            :deviceInfo="deviceInfo"
+                            @click="switchTab(ip)"
                         />
                     </TabItem>
                 </Transition>
             </div>
-            <LoadingButton
-                :loading="loading"
-                v-on:click="search"
-            >
-                <h1>Refresh</h1>
-            </LoadingButton>
         </div>
     </div>
     <div class="main-tab" v-if="selectedIp">
@@ -112,13 +115,15 @@ import { EventBus, REQUEST } from '../../../utils/EventBus'
 </template>
 
 <style scoped>
+    .update {
+        position: absolute;
+        right: 0px;
+        top: 5px;
+    }
     .devices-table {
         display: flex;
         flex-direction: row;
-    }
-    .side-search{
-        width: 400px;
-        margin-right: 5px;
+        gap: var(--default-gap);
     }
     .search-results {
         display: grid;

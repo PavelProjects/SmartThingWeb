@@ -174,7 +174,7 @@
         flex-direction: column;
         row-gap: var(--default-gap);
         text-align: center;
-        background-color: var(--color-background-soft);
+        background-color: var(--color-background-mute);
         border-radius: var(--border-radius);
         padding: 5px;
     }

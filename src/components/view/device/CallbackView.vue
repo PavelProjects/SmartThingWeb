@@ -7,6 +7,10 @@
     import { h } from "vue"
     import {EventBus, NOTIFY} from '../../../utils/EventBus.js'
     import LoadingButton from "../../controls/LoadingButton.vue"
+    import DeleteButton from "../../controls/DeleteButton.vue"
+    import EditButton from '../../controls/EditButton.vue'
+    import CancelButton from "../../controls/CancelButton.vue"
+    import SaveButton from "../../controls/SaveButton.vue"
 
     const SYSTEM_FIELDS = ["id", "type", "readonly"]
 
@@ -22,7 +26,11 @@
         components: {
             InputWithLabel,
             Combobox,
-            LoadingButton
+            LoadingButton,
+            DeleteButton,
+            EditButton,
+            CancelButton,
+            SaveButton,
         },
         data() {
             return {
@@ -73,7 +81,8 @@
             },
             async saveCallback() {
                 if (!this.haveChanges) {
-                    console.error("No changes were made")
+                    console.warn("No changes were made")
+                    this.editing = false
                     return
                 }
                 if (!this.validate()) {
@@ -173,7 +182,36 @@
 
 <template>
     <div class="bordered">
-        <h3 class="title">[{{callback.id}}] {{ callback.caption || systemNameToNormal(callback.type) }}</h3>
+        <div class="header">
+            <h3 class="title" style="flex: 1 1 auto; text-align: start;">
+                [{{callback.id}}] {{ callback.caption || systemNameToNormal(callback.type) }}
+            </h3>
+            <div class="controls">
+                <div v-if="!callback.readonly" class="callback-view-controls">
+                    <DeleteButton 
+                        v-if="!editing" 
+                        :onClick="deleteCallback"
+                        :loading="loading"
+                    />
+                    <CancelButton 
+                        v-if="editing" 
+                        :onClick="cancel"
+                    />
+                    <EditButton 
+                        v-if="!editing" 
+                        :onClick="() => editing = true"
+                    />
+                    <SaveButton 
+                        v-if="editing" 
+                        :onClick="saveCallback"
+                        :loading="loading"
+                    />
+                </div>
+                <div v-else>
+                    <h3 style="text-align: center;">Readonly</h3>
+                </div>
+            </div>
+        </div>
         <div class="list">
             <InputWithLabel
                 label="type"
@@ -192,35 +230,16 @@
                 @input="setValue(key, $event.target.value)"
             />
         </div>
-        <div class="controls">
-            <div v-if="!callback.readonly" class="callback-view-controls">
-                <LoadingButton 
-                    v-if="!editing" 
-                    v-on:click="deleteCallback"
-                    :loading="loading"
-                    style="background-color: var(--color-danger);"
-                >
-                    <h3>Delete</h3>
-                </LoadingButton>
-                <LoadingButton v-if="editing" v-on:click="cancel"><h3>Cancel</h3></LoadingButton>
-
-                <LoadingButton v-if="!editing" v-on:click="editing = true"><h3>Edit</h3></LoadingButton>
-                <LoadingButton 
-                    v-if="editing" 
-                    v-on:click="saveCallback"
-                    :loading="loading"
-                >
-                    <h3>Save</h3>
-                </LoadingButton>
-            </div>
-            <div v-else>
-                <h3 style="text-align: center;">Readonly</h3>
-            </div>
-        </div>
     </div>
 </template>
 
 <style scoped>
+    .header {
+        display: flex;
+        flex-direction: row;
+        gap: var(--default-gap);
+        position: relative;
+    }
     .controls {
         display: flex;
         flex-direction: row;

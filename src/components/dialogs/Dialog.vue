@@ -21,10 +21,10 @@ export default {
 
 <template>
     <div v-if="visible">
-        <div class="overlay" @click="clickOutside"></div>
-        <div class="dialog" @click="clickDialog">
+        <div class="overlay" @click="clickOutside">
+            <div class="dialog" @click="clickDialog">
             <slot></slot>
-        </div>
+        </div></div>
     </div>
 </template>
 
@@ -36,7 +36,7 @@ export default {
         width: 100%;
         height: 100%;
         background-color: var(--background-tilt);
-        z-index: 997;
+        z-index: 999;
     }
     .dialog {
         position: fixed;
@@ -44,7 +44,6 @@ export default {
         height: fit-content;
         left: calc(50% - 200px);
         top: calc(50% - 50px);
-        z-index: 998;
         display: flex;
         flex-direction: column;
         border: solid 1px var(--color-border);
