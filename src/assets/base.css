@@ -20,11 +20,11 @@
   --vt-c-text-dark-1: var(--vt-c-white);
   --vt-c-text-dark-2: rgba(235, 235, 235, 0.64);
   
-  --overlay-background-color: rgba(235, 235, 235, 0.153);
-
   --color-positive: hsla(160, 100%, 37%, 1);
-  --color-accent: ;
+  --color-accent: #2c3e50;
   --color-danger: rgba(147, 4, 4, 0.453);
+
+  --vt-c-svg-fill: #666666;
 
   --background-tilt: #141313cd;
 
@@ -36,7 +36,7 @@
   --notification-width: 300px;
   --notification-min-height: 50px;
 
-  --icon-size: 35px;
+  --icon-size: 25px;
 }
 
 /* semantic color variables for this project */
@@ -50,6 +50,8 @@
 
   --color-heading: var(--vt-c-text-light-1);
   --color-text: var(--vt-c-text-light-1);
+
+  --color-svg-fill: var()
 }
 
 @media (prefers-color-scheme: dark) {

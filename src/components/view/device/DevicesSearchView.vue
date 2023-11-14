@@ -3,9 +3,9 @@
     import DeviceControlPanel from './DeviceControlPanel.vue'
     import TabItem from '../../tabs/TabItem.vue'
     import { h } from 'vue'
-    import UpdateButton from '../../controls/UpdateButton.vue'
     import { SearchApi } from '../../../api/SearchDevicesApi';
     import { EventBus, REQUEST } from '../../../utils/EventBus';
+    import UpdateButton from '../../controls/UpdateButton.vue';
 
     export default {
         components: {
