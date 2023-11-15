@@ -1,7 +1,7 @@
 <script>    
     import SyncLoader from 'vue-spinner/src/SyncLoader.vue'
-    import { DeviceApi } from "../../../api/device/DeviceApi.js"
-    import LoadingButton from '../../controls/LoadingButton.vue'
+    import { DeviceApi } from "../../../../api/device/DeviceApi.js"
+    import LoadingButton from '../../../controls/LoadingButton.vue'
 
     export default {
         name: "ActionsView",

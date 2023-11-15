@@ -1,7 +1,7 @@
 <script>
-    import { DeviceApi } from "../../../api/device/DeviceApi.js"
-    import InputWithLabel from "../../fields/InputWithLabel.vue"
-    import LoadingButton from "../../controls/LoadingButton.vue";
+    import { DeviceApi } from "../../../../api/device/DeviceApi.js"
+    import InputWithLabel from "../../../fields/InputWithLabel.vue"
+    import LoadingButton from "../../../controls/LoadingButton.vue";
     import SyncLoader from 'vue-spinner/src/SyncLoader.vue'
 
     export default {

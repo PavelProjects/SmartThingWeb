@@ -1,11 +1,12 @@
 <script>
-    import DeviceInfoView from './DeviceInfoView.vue'
-    import ActionsView from './ActionsView.vue'
-    import SensorsView from './SensorsView.vue'
-    import StatesView from './StatesView.vue'
-    import ConfigView from './ConfigView.vue'
+    import DeviceInfoView from './tabs/DeviceInfoView.vue'
+    import ActionsView from './tabs/ActionsView.vue'
+    import SensorsView from './tabs/SensorsView.vue'
+    import StatesView from './tabs/StatesView.vue'
+    import ConfigView from './tabs/ConfigView.vue'
     import TabsView from '../../tabs/TabsView.vue'
     import { h } from 'vue'
+    import MetricsViewVue from './tabs/MetricsView.vue'
 
     export default {
         name: 'DeviceControlPanel',
@@ -52,6 +53,11 @@
                     "config": {
                         class: ConfigView,
                         caption: "Configuration",
+                        props
+                    },
+                    "metrics": {
+                        class: MetricsViewVue,
+                        caption: "Metrics",
                         props
                     }
                 }

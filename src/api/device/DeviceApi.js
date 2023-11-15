@@ -339,7 +339,6 @@ export const DeviceApi = {
         try {
             const result = await deviceFetch({
                 ip,
-                gateway,
                 path: '/callbacks/delete',
                 method: 'DELETE',
                 requestParams: {
@@ -366,4 +365,24 @@ export const DeviceApi = {
             })
         }
     },
+    async metrics(ip, gateway) {
+        try {
+            const result = await deviceFetch({
+                ip,
+                gateway,
+                path: '/metrics',
+                method: 'GET'
+            })
+            if (!result || result.status !== 200) {
+                throw new Error({result});
+            }
+            return result.data
+        } catch (error) {
+            console.error(error)
+            notify({
+                type: "error",
+                caption: 'Failed to load device metrics'
+            })
+        }
+    }
 }

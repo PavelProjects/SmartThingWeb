@@ -1,16 +1,16 @@
 <script>
-    import { systemNameToNormal } from "../../../utils/StringUtils.js"
-    import InputWithLabel from "../../fields/InputWithLabel.vue"
-    import Combobox from "../../fields/Combobox.vue"
-    import { DeviceApi } from "../../../api/device/DeviceApi.js"
+    import { systemNameToNormal } from "../../../../utils/StringUtils.js"
+    import InputWithLabel from "../../../fields/InputWithLabel.vue"
+    import Combobox from "../../../fields/Combobox.vue"
+    import { DeviceApi } from "../../../../api/device/DeviceApi.js"
     import { NEW_CALLBACK_ID } from "./CallbacksView.vue"
     import { h } from "vue"
-    import {EventBus, NOTIFY} from '../../../utils/EventBus.js'
-    import LoadingButton from "../../controls/LoadingButton.vue"
-    import DeleteButton from "../../controls/DeleteButton.vue"
-    import EditButton from '../../controls/EditButton.vue'
-    import CancelButton from "../../controls/CancelButton.vue"
-    import SaveButton from "../../controls/SaveButton.vue"
+    import {EventBus, NOTIFY} from '../../../../utils/EventBus.js'
+    import LoadingButton from "../../../controls/LoadingButton.vue"
+    import DeleteButton from "../../../controls/DeleteButton.vue"
+    import EditButton from '../../../controls/EditButton.vue'
+    import CancelButton from "../../../controls/CancelButton.vue"
+    import SaveButton from "../../../controls/SaveButton.vue"
 
     const SYSTEM_FIELDS = ["id", "type", "readonly"]
 
