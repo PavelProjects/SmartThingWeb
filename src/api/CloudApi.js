@@ -11,6 +11,7 @@ const BROKER_URL = `ws://${CLOUD_IP}:${CLOUD_PORT}/${CLOUD_BROKER_URL}`
 const URL_AUTH = '/auth'
 const URL_AUTH_USER = '/auth/user'
 const URL_AUTH_GATEWAY = '/auth/gateway'
+const URL_LOGOUT_GATEWAY = '/auth/gateway/logout'
 const URL_GATEWAYS_LIST = '/gateway/management/list'
 const URL_GATEWAY_REQUEST = '/gateway/request'
 const URL_GATEWAY_CREATE = '/gateway/management/create'
@@ -92,6 +93,16 @@ const CloudApi = {
                 days: 0
             })
             return response.data
+        } catch (error) {
+            console.error(error)
+        }
+    },
+    async logoutGateway(gateway) {
+        try {
+            const response = await axiosInstance.post(
+                `${URL_LOGOUT_GATEWAY}/${gateway.id}`
+            )
+            return response.status == 200
         } catch (error) {
             console.error(error)
         }

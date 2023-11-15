@@ -7,6 +7,8 @@ import TabsView from '../../tabs/TabsView.vue';
 import GatewayItem from './GatewayItem.vue';
 import { ERROR_TYPE, SUCCESS_TYPE } from '../../notifications/Notifification.vue';
 import GatewayInfoDialog from './GatewayInfoDialog.vue';
+import UpdateButton from '../../controls/UpdateButton.vue';
+import AddButton from '../../controls/AddButton.vue'
 
 export default {
     name: 'GatewaysList',
@@ -16,6 +18,8 @@ export default {
         TabItem,
         LoadingButton,
         GatewayInfoDialog,
+        UpdateButton,
+        AddButton,
     },
     data() {
         return {
@@ -112,6 +116,19 @@ export default {
                 })
             }
         },
+        async logoutGateway(gateway) {
+            if (await CloudApi.logoutGateway(gateway)) {
+                notify({
+                    caption: "Done"
+                })
+                this.loadGateways()
+            } else {
+                notify({
+                    caption: "Failed to logout gateway",
+                    type: ERROR_TYPE
+                })
+            }
+        },
         handleCreateGateway() {
             this.gatewayToEdit = {}
             this.showDialog = true
@@ -128,13 +145,17 @@ export default {
     <div style="width: 300px;">
         <div class="header">
             <h1 class="title">Gateways</h1>
-            <button 
+            <UpdateButton
+                class="update"
+                title="Update gateways"
+                :loading="loading"
+                :onClick="loadGateways"
+            />
+            <AddButton 
                 class="add-icon" 
                 title="Add new gateway"
-                @click="handleCreateGateway"
-            >
-                Add
-            </button>
+                :onClick="handleCreateGateway"
+            />
         </div>
         <div class="list">
             <TabItem
@@ -144,21 +165,14 @@ export default {
             >
                 <GatewayItem 
                     :gateway="gateway"
-                    :updateGateway="handleUpdategateway"
-                    :deleteGateway="deleteGateway"
-                    :generateToken="generateToken"
-                    :showControlPanel="showControlPanel"
-                    @reload="loadGateways()"
+                    @updateGateway="handleUpdategateway(gateway)"
+                    @deleteGateway="deleteGateway(gateway)"
+                    @generateToken="generateToken(gateway)"
+                    @showControlPanel="showControlPanel(gateway)"
+                    @logout="logoutGateway(gateway)"
                 />
             </TabItem>
         </div>
-        <LoadingButton
-            style="width: 100%; margin-top: 5px;"
-            :loading="loading"
-            @click="loadGateways"
-        >
-            <h1>Refresh</h1>
-        </LoadingButton>
         <GatewayInfoDialog
             :visible="showDialog"
             :gateway="gatewayToEdit"
@@ -175,6 +189,11 @@ export default {
     .add-icon {
         position: absolute;
         top: 0px;
+        left: 0px;
+    }
+    .update {
+        position: absolute;
         right: 0px;
+        top: 5px;
     }
 </style>
