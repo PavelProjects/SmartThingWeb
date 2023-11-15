@@ -87,9 +87,7 @@
                 class="update"
                 :loading="loading"
                 :onClick="search"
-            >
-                <h1>Refresh</h1>
-            </UpdateButton>
+            />
         </div>
         <div class="search-results">
             <div v-for="[ip, deviceInfo] in Object.entries(devices)" v-bind:key="ip">
