@@ -1,15 +1,15 @@
 <script>
     import SyncLoader from 'vue-spinner/src/SyncLoader.vue'
-    import { DeviceApi } from "../../../api/device/DeviceApi.js"
+    import TabsView from '../../../tabs/TabsView.vue'
     import CallbacksView from './CallbacksView.vue'
-    import TabsView from '../../tabs/TabsView.vue'
-    
+    import { DeviceApi } from "../../../../api/device/DeviceApi.js"
+   
     export default {
-        name: "SensorsView",
+        name: "StatesView",
         components: {
             SyncLoader,
-            CallbacksView,
-            TabsView
+            TabsView,
+            CallbacksView
         },
         props: {
             ip: String,
@@ -17,33 +17,32 @@
         },
         data() {
             return {
-                sensors: null,
+                states: null,
                 loading: false,
                 tabs: {}
             }
         },
         created() {
-            this.loadSensors()
+            this.loadStates()
         },
         methods: {
-            async loadSensors() {
+            async loadStates() {
                 this.loading = true
                 try {
-                    this.sensors = await DeviceApi.getDeviceSensors(this.ip, this.gateway)
-                    Object.entries(this.sensors).forEach(([name, { type, value }]) => {
-                        const caption = `${name} (${type}): ${value}`
+                    this.states = await DeviceApi.getDeviceStates(this.ip, this.gateway) || {}
+                    Object.entries(this.states).forEach(([name, value]) => {
                         if (this.tabs[name]) {
-                            this.tabs[name].caption = caption
+                            this.tabs[name].caption = `${name}: ${value}`
                         } else {
                             this.tabs[name] = {
                                 class: CallbacksView,
-                                caption,
+                                caption:`${name}: ${value}`,
                                 props: {
-                                    key: "sensor_" + name,
+                                    key: "state_" + name,
                                     ip: this.ip,
                                     observable: {
                                         name,
-                                        type: "sensor"
+                                        type: "state"
                                     },
                                     gateway: this.gateway
                                 }
@@ -55,14 +54,14 @@
                 }
             },
             async update() {
-                await this.loadSensors()
+                await this.loadStates()
             }
         }
     }
 </script>
 
 <template>
-    <h1 class="title">Sensors values</h1>
+    <h1 class="title">Device states</h1>
     <sync-loader class="loading-spinner" :loading="loading"></sync-loader>
     <TabsView
         :tabs="tabs"

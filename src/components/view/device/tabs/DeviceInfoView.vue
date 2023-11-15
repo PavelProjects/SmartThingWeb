@@ -1,9 +1,8 @@
 <script>
     import SyncLoader from 'vue-spinner/src/SyncLoader.vue'
-    import { DeviceApi } from "../../../api/device/DeviceApi.js"
-    import InputWithLabel from "../../fields/InputWithLabel.vue"
-    import LoadingButton from '../../controls/LoadingButton.vue'
-    import { EventBus, NOTIFY } from '../../../utils/EventBus'
+    import { DeviceApi } from "../../../../api/device/DeviceApi.js"
+    import InputWithLabel from "../../../fields/InputWithLabel.vue"
+    import LoadingButton from '../../../controls/LoadingButton.vue'
 
     const NAME_ERROR = "Name can't be empty!"
 

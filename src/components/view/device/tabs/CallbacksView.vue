@@ -1,8 +1,8 @@
 <script>
-    import { systemNameToNormal } from "../../../utils/StringUtils.js"
-    import CallbackView from '../device/CallbackView.vue'
-    import { DeviceApi } from "../../../api/device/DeviceApi.js"
-    import Combobox from "../../fields/Combobox.vue"
+    import { systemNameToNormal } from "../../../../utils/StringUtils.js"
+    import CallbackView from './CallbackView.vue'
+    import { DeviceApi } from "../../../../api/device/DeviceApi.js"
+    import Combobox from "../../../fields/Combobox.vue"
     import SyncLoader from 'vue-spinner/src/SyncLoader.vue'
 
     export const NEW_CALLBACK_ID = "New"
