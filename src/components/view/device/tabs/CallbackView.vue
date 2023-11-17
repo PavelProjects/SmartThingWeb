@@ -95,16 +95,13 @@
                     return
                 }
                 let res = false
-                let emitAction = ""
                 this.loading = true
                 try {
                     if (this.callback.id !== NEW_CALLBACK_ID) {
                         res = await DeviceApi.updateCallback(this.ip, this.observable, this.callback, this.gateway)
-                        emitAction = "reloadCallback"
                     } else { 
                         delete this.callback.id;
                         res = await DeviceApi.createCallback(this.ip, this.observable, this.callback, this.gateway)
-                        emitAction = "update"
                     }
                 } finally {
                     this.loading = false
@@ -112,7 +109,7 @@
 
                 if (res) {
                     console.info("Callback was saved")
-                    this.$emit(emitAction, this.callback)
+                    this.$emit("reloadCallback", this.callback)
                     this.editing = false
                     this.haveChanges = false
                 }

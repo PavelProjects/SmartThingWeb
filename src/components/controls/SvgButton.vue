@@ -28,25 +28,20 @@ export default {
 </script>
 
 <template>
-    <div class="svg-button" @click.prevent="handleClick">
-        <moon-loader :loading="loading" size="25px"/>
-        <slot v-if="!loading"></slot>
+    <div
+        class="container"
+        @click.prevent="handleClick" 
+    >
+        <moon-loader :loading="loading" size="35px"/>
+        <slot
+            v-if="!loading"
+            :size="35"
+        ></slot>
     </div>
 </template>
 
-<style>
-    .svg-button {
-        width: var(--icon-size);
-        height: var(--icon-size);
-    }
-    .svg-button:hover {
+<style scoped>
+    .container:hover {
         cursor: pointer;
-    }
-    .svg-button svg {
-        width: var(--icon-size);
-        height: var(--icon-size);
-    }
-    .svg-button path {
-        fill: var(--vt-c-svg-fill);
     }
 </style>
