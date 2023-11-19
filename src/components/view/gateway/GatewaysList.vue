@@ -38,6 +38,7 @@ export default {
             this.loading = true
             try {
                 this.gateways = await CloudApi.getGatewaysList() || []
+                await this.checkGatewaysOnline()
             } finally {
                 this.loading = false
             }
@@ -48,6 +49,14 @@ export default {
                     this.selectedGateway = null
                 }
             }
+        },
+        async checkGatewaysOnline() {
+            if (!this.gateways) {
+                return;
+            }
+            this.gateways.forEach(async (gateway) => {
+                gateway.online = await CloudApi.isOnline(gateway) || false
+            })
         },
         showControlPanel(gateway) {
             if (gateway.online) {

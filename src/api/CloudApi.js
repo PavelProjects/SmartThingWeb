@@ -17,6 +17,7 @@ const URL_GATEWAY_REQUEST = '/gateway/request'
 const URL_GATEWAY_CREATE = '/gateway/management/create'
 const URL_GATEWAY_UPDATE = '/gateway/management/update'
 const URL_GATEWAY_DELETE = '/gateway/management/delete'
+const URL_GATEWAY_ONLINE = '/gateway/management/online'
 
 // axios.defaults.withCredentials = true
 
@@ -191,6 +192,14 @@ const CloudApi = {
                 type: "error"
             })
         }
-    }
+    },
+    async isOnline(gateway) {
+        try {
+            const response = await axiosInstance.get(`${URL_GATEWAY_ONLINE}/${gateway.id}`);
+            return response.data
+        } catch (error) {
+            console.log(error)
+        }
+    },
 }
 export { CloudApi };
