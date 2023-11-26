@@ -63,7 +63,7 @@
 <style scoped>
     .notification {
         position: relative;
-        background-color: var(--color-background-mute);
+        border: 1px solid var(--color-border);
         border-radius: var(--border-radius);
         width: var(--notification-width);
         min-height: var(--notification-min-height);

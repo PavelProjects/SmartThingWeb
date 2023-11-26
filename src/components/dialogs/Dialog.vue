@@ -46,7 +46,7 @@ export default {
         top: calc(50% - 50px);
         display: flex;
         flex-direction: column;
-        border: solid 1px var(--color-border);
+        border: 1px solid var(--color-border);
         border-radius: var(--border-radius);
         row-gap: var(--default-gap);
         background-color: var(--vt-c-black-mute);
