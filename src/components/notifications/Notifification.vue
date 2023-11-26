@@ -1,4 +1,5 @@
 <script>
+    export const WARNING_TYPE = "warning"
     export const ERROR_TYPE = "error"
     export const INFO_TYPE = "info"
     export const SUCCESS_TYPE = "success"
@@ -9,30 +10,36 @@
         name: "Notification",
         props: {
             id: String,
-            caption: String,
-            description: String,
-            type: {
-                type: String,
-                default: INFO_TYPE
-            },
-            autoClose: {
-                type: Boolean,
-                default: true
-            }
+            notification: Object,
+            device: Object,
+            gateway: Object
         },
         computed: {
-            isInfo() {
-                return this.type === INFO_TYPE
+            color() {
+                switch(this.notification.type) {
+                    case ERROR_TYPE:
+                        return "rgb(171, 12, 12)"
+                    case SUCCESS_TYPE:
+                        return "rgb(2, 147, 74)"
+                    case WARNING_TYPE:
+                        return "rgb(147, 106, 2)"
+                    default:
+                        return "rgb(0, 112, 122)"
+                }
             },
-            isError() {
-                return this.type === ERROR_TYPE
-            },
-            isSuccess() {
-                return this.type === SUCCESS_TYPE
+            from() {
+                let txt = '';
+                if (this.gateway) {
+                    txt = this.gateway.name + "@"
+                }
+                if (this.device) {
+                    txt += this.device.name
+                }
+                return txt
             }
         },
-        mounted() {
-            if (this.autoClose) {
+        created() {
+            if (this.notification.autoClose) {
                 setTimeout(this.close, LIFE_TIME)
             }
         },
@@ -45,9 +52,10 @@
 </script>
 
 <template>
-    <div class="notification" :class="{info: isInfo, error: isError, success: isSuccess}">
-        <h2>{{ caption }}</h2>
-        <div style="word-wrap: break-word;">{{ description }}</div>
+    <div class="notification" :style="{backgroundColor: color}">
+        <div v-if="from">From: {{ from }}</div>
+        <h2>{{ notification.caption }}</h2>
+        <div style="word-wrap: break-word;">{{ notification.description }}</div>
         <button @click="close">X</button>
     </div>
 </template>
@@ -61,6 +69,7 @@
         min-height: var(--notification-min-height);
         padding: 10px 5px 5px 5px;
         z-index: 1000;
+        transition: 0.4s;
     }
     .notification button {
         background-color: transparent;
@@ -72,17 +81,5 @@
     }
     .notification h2, h3 {
         text-align: center;
-    }
-    .error {
-      background-color: rgb(171, 12, 12);
-      transition: 0.4s;
-    }
-    .info {
-      background-color: rgb(0, 112, 122);
-      transition: 0.4s;
-    }
-    .success {
-      background-color: rgb(2, 147, 74);
-      transition: 0.4s;
     }
 </style>

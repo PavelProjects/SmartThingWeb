@@ -21,15 +21,9 @@
                 this.idSequence++
                 return this.idSequence
             },
-            addNotification(notification) {
+            addNotification(payload) {
                 const id = this.getId()
-                this.notifications[id] = notification
-                /**
-                 * todo
-                 * refactore Notification view just pass notification object
-                 * add device and gateway info display
-                 * all device notifications - autoClosed = false
-                 */
+                this.notifications[id] = payload
             },
             closeNotification(id) {
                 delete this.notifications[id]
@@ -41,12 +35,12 @@
 <template scoped>
     <div class="list panel">
         <Notifification
-            v-for="[id, {caption, description, type, autoClose}] in Object.entries(notifications)"
+            v-for="[id, {gateway, device, notification}] in Object.entries(notifications)"
             :key="id"
             :id="id"
-            :caption="caption"
-            :description="description"
-            :type="type"
+            :gateway="gateway"
+            :device="device"
+            :notification="notification"
             :autoClose="autoClose"
             @close="closeNotification"
         />

@@ -16,13 +16,13 @@ const GatewaySearhApi = {
         EventBus.emit(REQUEST, {id: "search", loading: true})
         
         console.debug("Subscribing to search topic " + GATEWAY_SEARCH_TOPIC)
-        // GATEWAY_STOMP_CLIENT.subscribe(GATEWAY_SEARCH_TOPIC, (message) => {
-        //     if (message && message.body) {
-        //         onDeviceFound(JSON.parse(message.body));
-        //     } else {
-        //         console.warn("Empty topic message")
-        //     }
-        // }, {id: "search"})
+        GATEWAY_STOMP_CLIENT.subscribe(GATEWAY_SEARCH_TOPIC, (message) => {
+            if (message && message.body) {
+                onDeviceFound(JSON.parse(message.body));
+            } else {
+                console.warn("Empty topic message")
+            }
+        }, {id: "search"})
 
         setTimeout(() => {
             GATEWAY_STOMP_CLIENT.unsubscribe("search")
