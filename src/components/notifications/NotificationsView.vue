@@ -6,7 +6,7 @@
         name: "NotificationsView",
         components: {
             Notifification
-        },  
+        },
         data() {
             return {
                 notifications: {},
@@ -24,6 +24,12 @@
             addNotification(notification) {
                 const id = this.getId()
                 this.notifications[id] = notification
+                /**
+                 * todo
+                 * refactore Notification view just pass notification object
+                 * add device and gateway info display
+                 * all device notifications - autoClosed = false
+                 */
             },
             closeNotification(id) {
                 delete this.notifications[id]

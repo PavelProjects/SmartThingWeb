@@ -4,7 +4,7 @@
   import NotificationsView from "./components/notifications/NotificationsView.vue"
   import GatewaysList from "./components/view/gateway/GatewaysList.vue";
   import CloudAuthDialog from './components/dialogs/CloudAuthDialog.vue';
-import { CloudApi } from './api/CloudApi';
+  import { CloudApi } from './api/CloudApi';
 
   export default {
     name: "App",
@@ -32,7 +32,7 @@ import { CloudApi } from './api/CloudApi';
       handleAuthorization(auth) {
         this.authorization = auth
         if (this.isAuthorized) {
-          CloudApi.connectToResponseTopic(this.authorization.user)
+          CloudApi.connectToWs(this.authorization.user)
         }
       },
       handleGatewaySelect(gateway) {
