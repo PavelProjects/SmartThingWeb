@@ -81,7 +81,7 @@ export const DeviceApi = {
         try {
             const result = await deviceFetch({
                 ip,
-                path: '/config/save',
+                path: '/config',
                 method: 'POST',
                 payload: values,
                 gateway
@@ -107,8 +107,8 @@ export const DeviceApi = {
         try {
             const result = await deviceFetch({
                 ip,
-                path: '/config/delete',
-                method: 'POST',
+                path: '/config',
+                method: 'DELETE',
                 requestParams: {
                     name: key
                 },
@@ -211,7 +211,7 @@ export const DeviceApi = {
     },
     async getAllCallbacks(ip, gateway) {
         try {
-            const response = await deviceFetch({ip, path: '/callbacks', gateway})
+            const response = await deviceFetch({ip, path: '/callback', gateway})
             return response.data
         } catch (error) {
             console.error(error)
@@ -225,7 +225,7 @@ export const DeviceApi = {
         try {
             const response = await deviceFetch({
                 ip,
-                path: '/callbacks/by/observable',
+                path: '/callback/by/observable',
                 requestParams: {
                     observableType: observable.type,
                     name: observable.name,
@@ -245,7 +245,7 @@ export const DeviceApi = {
         try {
             const response = await deviceFetch({
                 ip,
-                path: '/callbacks/by/id',
+                path: '/callback/by/id',
                 requestParams: {
                     observableType: observable.type,
                     name: observable.name,
@@ -265,7 +265,7 @@ export const DeviceApi = {
     },
     async getCallbacksTemplates(ip, gateway) {
         try {
-            const response = await deviceFetch({ip, path: '/callbacks/template', gateway})
+            const response = await deviceFetch({ip, path: '/callback/template', gateway})
             return response.data
         } catch (error) {
             console.error(error)
@@ -280,7 +280,7 @@ export const DeviceApi = {
         try {
             const result = await deviceFetch({
                 ip,
-                path: '/callbacks/create',
+                path: '/callback',
                 method: 'POST',
                 payload: {
                     observable,
@@ -309,7 +309,7 @@ export const DeviceApi = {
         try {
             const result = await deviceFetch({
                 ip,
-                path: '/callbacks/update',
+                path: '/callback',
                 method: 'PUT',
                 payload: {
                     observable,
@@ -339,7 +339,7 @@ export const DeviceApi = {
         try {
             const result = await deviceFetch({
                 ip,
-                path: '/callbacks/delete',
+                path: '/callback',
                 method: 'DELETE',
                 requestParams: {
                     observableType: observable.type,
