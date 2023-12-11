@@ -5,7 +5,7 @@
     import { DeviceApi } from "../../../../api/device/DeviceApi.js"
     import { NEW_CALLBACK_ID } from "./CallbacksView.vue"
     import { h } from "vue"
-    import { notify } from '../../../../utils/EventBus.js'
+    import { toast } from '../../../../utils/EventBus.js'
     import LoadingButton from "../../../controls/LoadingButton.vue"
     import DeleteButton from "../../../controls/DeleteButton.vue"
     import EditButton from '../../../controls/EditButton.vue'
@@ -87,10 +87,9 @@
                 }
                 if (!this.validate()) {
                     console.error("Validation failed: " + this.validationFailed)
-                    notify({
+                    toast.error({
                         caption: "Validation failed",
                         description: `This fields cannot be empty: ${this.validationFailed}`,
-                        type: "error"
                     })
                     return
                 }

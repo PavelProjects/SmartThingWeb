@@ -1,6 +1,6 @@
 <script>
 import { CloudApi } from '../../../api/CloudApi';
-import { notify } from '../../../utils/EventBus';
+import { toast } from '../../../utils/EventBus';
 import LoadingButton from '../../controls/LoadingButton.vue';
 import TabItem from '../../tabs/TabItem.vue';
 import TabsView from '../../tabs/TabsView.vue';
@@ -63,7 +63,7 @@ export default {
                 this.selectedGateway = gateway
                 this.$emit('select', gateway)
             } else {
-                notify({
+                toast.info({
                     caption: "Gateway is offline",
                     description: "Can't open offline gateway control panel"
                 })
@@ -79,15 +79,13 @@ export default {
             }
             
             if (result) {
-                notify({
-                    type: SUCCESS_TYPE,
+                toast.success({
                     caption: "Gateway saved"
                 })
                 this.showDialog = false
                 this.loadGateways()
             } else {
-                notify({
-                    type: ERROR_TYPE,
+                toast.error({
                     caption: "Failed to save gateway"
                 })
             }
@@ -96,14 +94,12 @@ export default {
             if (confirm("Are you sure ypu want to delete gateway " + gateway.name + "?")) {
                 const res = await CloudApi.deleteGateway(gateway);
                 if (res) {
-                    notify({
-                        type: SUCCESS_TYPE,
+                    toast.success({
                         caption: "Gateway was deleted"
                     })
                     this.loadGateways()
                 } else {
-                    notify({
-                        type: ERROR_TYPE,
+                    toast.error({
                         caption: "Failed to delete gateway"
                     })
                 }
@@ -112,29 +108,27 @@ export default {
         async generateToken(gateway) {
             const { token } = await CloudApi.authGateway(gateway) || {}
             if (token) {
-                notify({
+                toast.info({
                     caption: "Token generated",
                     description: token,
                     autoClose: false
                 })
                 this.loadGateways()
             } else {
-                notify({
+                toast.error({
                     caption: "Failed to generate gateway token",
-                    type: ERROR_TYPE
                 })
             }
         },
         async logoutGateway(gateway) {
             if (await CloudApi.logoutGateway(gateway)) {
-                notify({
+                toast.info({
                     caption: "Done"
                 })
                 this.loadGateways()
             } else {
-                notify({
+                toast.error({
                     caption: "Failed to logout gateway",
-                    type: ERROR_TYPE
                 })
             }
         },

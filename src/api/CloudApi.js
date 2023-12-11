@@ -1,6 +1,6 @@
 import { Client } from '@stomp/stompjs';
 import axios from "axios";
-import { EventBus, notify, STOMP_CONNECTED } from "../utils/EventBus";
+import { EventBus, toast, STOMP_CONNECTED } from "../utils/EventBus";
 
 const CLOUD_IP = import.meta.env.VITE_CLOUD_IP
 const CLOUD_PORT = import.meta.env.VITE_CLOUD_PORT
@@ -63,14 +63,13 @@ const CloudApi = {
     async authUser(login, password) {
         try {
             const response = await axiosInstance.post(URL_AUTH_USER, {login, password})
-            notify({caption: "Successfully authorized", type: "success"})
+            toast.success({caption: "Successfully authorized"})
             return response.data
         } catch (error) {
             console.log(error)
-            notify({
+            toast.error({
                 caption: "Failed to authorize!",
                 description: error.response.status == 403 ? "Wrong login/passwor" : "Service error",
-                type: "error"
             })
         }
     },
@@ -110,8 +109,7 @@ const CloudApi = {
         } catch (error) {
             console.error(error)
             if (error.response.status == 400) {
-                notify({
-                    type: "error",
+                toast.error({
                     caption: error.response.data
                 })
             }
@@ -124,8 +122,7 @@ const CloudApi = {
         } catch (error) {
             console.log(error)
             if (error.response.status == 400) {
-                notify({
-                    type: "error",
+                toast.error({
                     caption: error.response.data
                 })
             }
@@ -153,9 +150,8 @@ const CloudApi = {
             return response.data
         } catch (error) {
             console.error(error)
-            notify({
+            toast.error({
                 caption: "Failed to send gateway command",
-                type: "error"
             })
         }
     },
@@ -174,9 +170,8 @@ const CloudApi = {
             return response.data
         } catch (error) {
             console.error(error)
-            notify({
+            toast.error({
                 caption: "Failed to send device request",
-                type: "error"
             })
         }
     },

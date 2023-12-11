@@ -15,6 +15,14 @@ export const notifyFromDevice = ({gateway, device, toast: {caption, description,
     })
 }
 
-export const notify = ({caption, description, type = "info", autoClose = true}) => {
-    EventBus.emit(TOAST, {toast: {caption, description, type, autoClose}});
+export const toast = {
+    info: ({caption, description, autoClose = true}) => {
+        EventBus.emit(TOAST, {toast: {caption, description, type: "info", autoClose}})
+    },
+    error: ({caption, description, autoClose = true}) => {
+        EventBus.emit(TOAST, {toast: {caption, description, type: "error", autoClose}})
+    },
+    success: ({caption, description, autoClose = true}) => {
+        EventBus.emit(TOAST, {toast: {caption, description, type: "success", autoClose}})
+    },
 }
