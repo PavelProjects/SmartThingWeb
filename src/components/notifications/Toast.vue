@@ -7,16 +7,16 @@
     const LIFE_TIME = 5000
 
     export default {
-        name: "Notification",
+        name: "Toast",
         props: {
             id: String,
-            notification: Object,
+            toast: Object,
             device: Object,
             gateway: Object
         },
         computed: {
             color() {
-                switch(this.notification.type) {
+                switch(this.toast.type) {
                     case ERROR_TYPE:
                         return "rgb(171, 12, 12)"
                     case SUCCESS_TYPE:
@@ -39,7 +39,7 @@
             }
         },
         created() {
-            if (this.notification.autoClose) {
+            if (this.toast.autoClose) {
                 setTimeout(this.close, LIFE_TIME)
             }
         },
@@ -52,26 +52,26 @@
 </script>
 
 <template>
-    <div class="notification" :style="{backgroundColor: color}">
+    <div class="toast" :style="{backgroundColor: color}">
         <div v-if="from">From: {{ from }}</div>
-        <h2>{{ notification.caption }}</h2>
-        <div style="word-wrap: break-word;">{{ notification.description }}</div>
+        <h2>{{ toast.caption }}</h2>
+        <div style="word-wrap: break-word;">{{ toast.description }}</div>
         <button @click="close">X</button>
     </div>
 </template>
 
 <style scoped>
-    .notification {
+    .toast {
         position: relative;
         border: 1px solid var(--color-border);
         border-radius: var(--border-radius);
-        width: var(--notification-width);
-        min-height: var(--notification-min-height);
+        width: var(--toast-width);
+        min-height: var(--toast-min-height);
         padding: 10px 5px 5px 5px;
         z-index: 1000;
         transition: 0.4s;
     }
-    .notification button {
+    .toast button {
         background-color: transparent;
         position: absolute;
         top: 0px;
@@ -79,7 +79,7 @@
         outline: none;
         user-select: none;
     }
-    .notification h2, h3 {
+    .toast h2, h3 {
         text-align: center;
     }
 </style>

@@ -35,7 +35,7 @@ const GatewayApi = {
             path: `http://${GATEWAY_PATH}:${GATEWAY_PORT}/${URL_AUTHORIZATION}`,
             payload,
             method: 'PUT',
-            notification: {
+            toast: {
                 info: "Successfuly authorized in cloud",
                 error: "Failed to authorize in cloud"
             }
@@ -59,7 +59,7 @@ const GatewayApi = {
             requestId,
             path: `http://${GATEWAY_PATH}:${GATEWAY_PORT}/${URL_CLOUD_CONNECT}`,
             method: 'PUT',
-            notification: {
+            toast: {
                 info: "Connected",
                 error: "Failed to connect"
             }

@@ -5,7 +5,7 @@ import LoadingButton from '../../controls/LoadingButton.vue';
 import TabItem from '../../tabs/TabItem.vue';
 import TabsView from '../../tabs/TabsView.vue';
 import GatewayItem from './GatewayItem.vue';
-import { ERROR_TYPE, SUCCESS_TYPE } from '../../notifications/Notifification.vue';
+import { ERROR_TYPE, SUCCESS_TYPE } from '../../notifications/Toast.vue';
 import GatewayInfoDialog from './GatewayInfoDialog.vue';
 import UpdateButton from '../../controls/UpdateButton.vue';
 import AddButton from '../../controls/AddButton.vue'

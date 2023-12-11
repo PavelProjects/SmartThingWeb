@@ -1,32 +1,32 @@
 <script>
-    import {EventBus, NOTIFY} from "../../utils/EventBus.js"
-    import Notifification from "./Notifification.vue"
+    import {EventBus, TOAST} from "../../utils/EventBus.js"
+    import Toast from "./Toast.vue"
 
     export default {
-        name: "NotificationsView",
+        name: "ToatsView",
         components: {
-            Notifification
+            Toast
         },
         data() {
             return {
-                notifications: {},
+                toasts: {},
                 idSequence: 0
             }
         },
         mounted() {
-            EventBus.on(NOTIFY, this.addNotification)
+            EventBus.on(TOAST, this.addToast)
         },
         methods: {
             getId() {
                 this.idSequence++
                 return this.idSequence
             },
-            addNotification(payload) {
+            addToast(payload) {
                 const id = this.getId()
-                this.notifications[id] = payload
+                this.toasts[id] = payload
             },
-            closeNotification(id) {
-                delete this.notifications[id]
+            close(id) {
+                delete this.toasts[id]
             }
         }
     }
@@ -34,15 +34,15 @@
 
 <template scoped>
     <div class="list panel">
-        <Notifification
-            v-for="[id, {gateway, device, notification}] in Object.entries(notifications)"
+        <Toast
+            v-for="[id, {gateway, device, toast}] in Object.entries(toasts)"
             :key="id"
             :id="id"
             :gateway="gateway"
             :device="device"
-            :notification="notification"
+            :toast="toast"
             :autoClose="autoClose"
-            @close="closeNotification"
+            @close="close"
         />
     </div>
 </template>
