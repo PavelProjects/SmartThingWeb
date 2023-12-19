@@ -39,13 +39,6 @@
             search() {
                 this.loading = true;
                 const foundDevices = []
-                SearchApi.searchDevices((deviceInfo) => {
-                    if (!this.devices[deviceInfo.ip]) {
-                        this.devices[deviceInfo.ip] = deviceInfo
-                        foundDevices.push(deviceInfo.ip)
-                        console.debug(`Found new device: ${deviceInfo.name}`)
-                    }
-                }, this.gateway);
                 EventBus.on(REQUEST, ({id, loading}) => {
                     if (id == 'search') {
                         this.loading = loading;
@@ -61,6 +54,13 @@
                         }
                     }
                 })
+                SearchApi.searchDevices((deviceInfo) => {
+                    if (!this.devices[deviceInfo.ip]) {
+                        this.devices[deviceInfo.ip] = deviceInfo
+                        foundDevices.push(deviceInfo.ip)
+                        console.debug(`Found new device: ${deviceInfo.name}`)
+                    }
+                }, this.gateway);
             },
             switchTab(ip) {
                 if (!this.tabs[ip]) {

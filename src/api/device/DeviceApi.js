@@ -1,4 +1,4 @@
-import { notify } from "../../utils/EventBus"
+import { toast } from "../../utils/EventBus"
 import { deviceFetch } from "./DeviceFetch"
 
 export const DeviceApi = {
@@ -8,8 +8,7 @@ export const DeviceApi = {
             return response.data
         } catch (error) {
             console.error(error)
-            notify({
-                type: "error",
+            toast.error({
                 caption: "Failed to fetch device info"
             })
         }
@@ -20,8 +19,7 @@ export const DeviceApi = {
             return response.data
         } catch (error) {
             console.error(error)
-            notify({
-                type: "error",
+            toast.error({
                 caption: "Failed to fetch device actions"
             })
         }
@@ -32,8 +30,7 @@ export const DeviceApi = {
             return response.data
         } catch (error) {
             console.error(error)
-            notify({
-                type: "error",
+            toast.error({
                 caption: "Failed to fetch device configuration information"
             })
         }
@@ -52,15 +49,13 @@ export const DeviceApi = {
             if (!result || result.status !== 200) {
                 throw new Error({result});
             }
-            notify({
-                type: "success",
+            toast.success({
                 caption: "Device name updated!"
             })
             return true
         } catch (error) {
             console.error(error)
-            notify({
-                type: "error",
+            toast.error({
                 caption: "Failed to save device name"
             })
         }
@@ -71,8 +66,7 @@ export const DeviceApi = {
             return response.data
         } catch (error) {
             console.error(error)
-            notify({
-                type: "error",
+            toast.error({
                 caption: "Failed to fetch device configuration"
             })
         }
@@ -81,7 +75,7 @@ export const DeviceApi = {
         try {
             const result = await deviceFetch({
                 ip,
-                path: '/config/save',
+                path: '/config',
                 method: 'POST',
                 payload: values,
                 gateway
@@ -90,15 +84,13 @@ export const DeviceApi = {
             if (!result || result.status !== 200) {
                 throw new Error({result});
             }
-            notify({
-                type: "success",
+            toast.success({
                 caption: "Config updated"
             })
             return true
         } catch (error) {
             console.error(error)
-            notify({
-                type: "error",
+            toast.error({
                 caption: "Failed to save configuration values"
             })
         }
@@ -107,8 +99,8 @@ export const DeviceApi = {
         try {
             const result = await deviceFetch({
                 ip,
-                path: '/config/delete',
-                method: 'POST',
+                path: '/config',
+                method: 'DELETE',
                 requestParams: {
                     name: key
                 },
@@ -118,15 +110,13 @@ export const DeviceApi = {
             if (!result || result.status !== 200) {
                 throw new Error({result});
             }
-            notify({
-                type: "success",
+            toast.success({
                 caption: "Config value deleted"
             })
             return true
         } catch (error) {
             console.error(error)
-            notify({
-                type: "error",
+            toast.error({
                 caption: "Failed to delete device config value"
             })
         }
@@ -144,15 +134,13 @@ export const DeviceApi = {
             if (!result || result.status !== 200) {
                 throw new Error({result});
             }
-            notify({
-                type: "success",
+            toast.success({
                 caption: "Config deleted"
             })
             return true
         } catch (error) {
             console.error(error)
-            notify({
-                type: "error",
+            toast.error({
                 caption: "Failed to delete all confi values"
             })
         }
@@ -171,15 +159,13 @@ export const DeviceApi = {
             if (!result || result.status !== 200) {
                 throw new Error({result});
             }
-            notify({
-                type: "success",
+            toast.success({
                 caption: "Done"
             })
             return true
         } catch (error) {
             console.error(error)
-            notify({
-                type: "error",
+            toast.error({
                 caption: "Failed to execute action " + action
             })
         }
@@ -191,8 +177,7 @@ export const DeviceApi = {
             return response.data
         } catch (error) {
             console.error(error)
-            notify({
-                type: "error",
+            toast.error({
                 caption: "Failed to fetch sensors values"
             })
         }
@@ -203,7 +188,7 @@ export const DeviceApi = {
             return response.data
         } catch (error) {
             console.error(error)
-            notify({
+            toast.error({
                 type: "error",
                 caption: "Failed to fetch device states"
             })
@@ -211,12 +196,11 @@ export const DeviceApi = {
     },
     async getAllCallbacks(ip, gateway) {
         try {
-            const response = await deviceFetch({ip, path: '/callbacks', gateway})
+            const response = await deviceFetch({ip, path: '/callback', gateway})
             return response.data
         } catch (error) {
             console.error(error)
-            notify({
-                type: "error",
+            toast.error({
                 caption: "Failed to fetch callbacks"
             })
         }
@@ -225,7 +209,7 @@ export const DeviceApi = {
         try {
             const response = await deviceFetch({
                 ip,
-                path: '/callbacks/by/observable',
+                path: '/callback/by/observable',
                 requestParams: {
                     observableType: observable.type,
                     name: observable.name,
@@ -235,8 +219,7 @@ export const DeviceApi = {
             return response.data
         } catch (error) {
             console.error(error)
-            notify({
-                type: "error",
+            toast.error({
                 caption: `Failed to fetch callbacks for [${observable.type}]${observable.name}`
             })
         }
@@ -245,7 +228,7 @@ export const DeviceApi = {
         try {
             const response = await deviceFetch({
                 ip,
-                path: '/callbacks/by/id',
+                path: '/callback/by/id',
                 requestParams: {
                     observableType: observable.type,
                     name: observable.name,
@@ -256,8 +239,7 @@ export const DeviceApi = {
             return response.data
         } catch (error) {
             console.error(error)
-            notify({
-                type: "error",
+            toast.error({
                 caption: `Failed to fetch callback by id=${id}`
             })
         }
@@ -265,12 +247,11 @@ export const DeviceApi = {
     },
     async getCallbacksTemplates(ip, gateway) {
         try {
-            const response = await deviceFetch({ip, path: '/callbacks/template', gateway})
+            const response = await deviceFetch({ip, path: '/callback/template', gateway})
             return response.data
         } catch (error) {
             console.error(error)
-            notify({
-                type: "error",
+            toast.error({
                 caption: "Failed to fetch callbacks templates"
             })
         }
@@ -280,7 +261,7 @@ export const DeviceApi = {
         try {
             const result = await deviceFetch({
                 ip,
-                path: '/callbacks/create',
+                path: '/callback',
                 method: 'POST',
                 payload: {
                     observable,
@@ -291,15 +272,13 @@ export const DeviceApi = {
             if (!result || result.status !== 201) {
                 throw new Error({result});
             }
-            notify({
-                type: "success",
+            toast.success({
                 caption: "Callback created"
             })
             return true
         } catch (error) {
             console.error(error)
-            notify({
-                type: "error",
+            toast.error({
                 caption: "Failed to create callback"
             })
         }
@@ -309,7 +288,7 @@ export const DeviceApi = {
         try {
             const result = await deviceFetch({
                 ip,
-                path: '/callbacks/update',
+                path: '/callback',
                 method: 'PUT',
                 payload: {
                     observable,
@@ -321,14 +300,13 @@ export const DeviceApi = {
             if (!result || result.status !== 200) {
                 throw new Error({result});
             }
-            notify({
-                type: "success",
+            toast.success({
                 caption: "Callback updated"
             })
             return true
         } catch (error) {
             console.error(error)
-            notify({
+            toast.error({
                 type: "error",
                 caption: `Failed to update callback id=${callback.id}`
             })
@@ -339,7 +317,7 @@ export const DeviceApi = {
         try {
             const result = await deviceFetch({
                 ip,
-                path: '/callbacks/delete',
+                path: '/callback',
                 method: 'DELETE',
                 requestParams: {
                     observableType: observable.type,
@@ -352,15 +330,13 @@ export const DeviceApi = {
             if (!result || result.status !== 200) {
                 throw new Error({result});
             }
-            notify({
-                type: "success",
+            toast.success({
                 caption: "Callback deleted"
             })
             return true
         } catch (error) {
             console.error(error)
-            notify({
-                type: "error",
+            toast.error({
                 caption: `Failed to delete callback by id=${id}`
             })
         }
@@ -379,8 +355,7 @@ export const DeviceApi = {
             return result.data
         } catch (error) {
             console.error(error)
-            notify({
-                type: "error",
+            toast.error({
                 caption: 'Failed to load device metrics'
             })
         }

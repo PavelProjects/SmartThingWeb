@@ -1,9 +1,28 @@
 import mitt from 'mitt'
 
 export const EventBus = mitt()
-export const NOTIFY = "notify"
+export const TOAST = "toast"
 export const REQUEST = "request"
+export const STOMP_CONNECTED = "STOMP_CONNECTED"
 
-export const notify = ({caption, description, type="info"}) => {
-    EventBus.emit(NOTIFY, {caption, description, type});
+export const notifyFromDevice = ({gateway, device, toast: {caption, description, type="info", autoClose = false}}) => {
+    EventBus.emit(TOAST, {
+        gateway,
+        device,
+        toast: {
+            caption, description, type, autoClose
+        }
+    })
+}
+
+export const toast = {
+    info: ({caption, description, autoClose = true}) => {
+        EventBus.emit(TOAST, {toast: {caption, description, type: "info", autoClose}})
+    },
+    error: ({caption, description, autoClose = true}) => {
+        EventBus.emit(TOAST, {toast: {caption, description, type: "error", autoClose}})
+    },
+    success: ({caption, description, autoClose = true}) => {
+        EventBus.emit(TOAST, {toast: {caption, description, type: "success", autoClose}})
+    },
 }

@@ -1,6 +1,6 @@
 <script>
 import { CloudApi } from '../../api/CloudApi';
-import { notify } from '../../utils/EventBus';
+import { toast } from '../../utils/EventBus';
 import LoadingButton from '../controls/LoadingButton.vue';
 import InputWithLabel from '../fields/InputWithLabel.vue';
 import Dialog from './Dialog.vue';
@@ -28,8 +28,7 @@ export default {
         },
         async auth() {
             if (!this.login || !this.password) {
-                notify({
-                    type: "error",
+                toast.error({
                     caption: "Login and password are required!"
                 })
                 return

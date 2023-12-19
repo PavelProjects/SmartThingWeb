@@ -1,4 +1,4 @@
-import {EventBus, NOTIFY, REQUEST} from '../utils/EventBus.js'
+import {EventBus, toast, REQUEST} from '../utils/EventBus.js'
 
 export function notifyDescByStatus(status) {
     switch (status) {
@@ -15,25 +15,22 @@ export function notifyDescByStatus(status) {
 
 export function sendNotification({result, info, infoDescription, error, errorDescription}) {
     if (result) {
-        EventBus.emit(NOTIFY, {
+        toast.success({
             caption: info,
-            description: infoDescription,
-            type: "success"
+            description: infoDescription
         })
     } else {
-        EventBus.emit(NOTIFY, {
+        toast.error({
             caption: error,
             description: errorDescription,
-            type: "error"
         })
     }
 }
 
 export function notifyRequestFailed({caption = "Request failed", description}) {
-    EventBus.emit(NOTIFY, {
+    toast.error({
         caption,
         description,
-        type: "error"
     })
 }
 

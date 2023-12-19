@@ -1,12 +1,12 @@
 import { Client } from '@stomp/stompjs';
-import axios, { HttpStatusCode } from "axios";
-import { EventBus, notify } from "../utils/EventBus";
+import axios from "axios";
+import { EventBus, toast, STOMP_CONNECTED } from "../utils/EventBus";
 
 const CLOUD_IP = import.meta.env.VITE_CLOUD_IP
 const CLOUD_PORT = import.meta.env.VITE_CLOUD_PORT
-const CLOUD_BROKER_URL = import.meta.env.VITE_CLOUD_WS
+const CLOUD_BROKER_PATH = import.meta.env.VITE_CLOUD_WS
 
-const BROKER_URL = `ws://${CLOUD_IP}:${CLOUD_PORT}/${CLOUD_BROKER_URL}`
+const CLOUD_BROKER_URL = `ws://${CLOUD_IP}:${CLOUD_PORT}/${CLOUD_BROKER_PATH}`
 
 const URL_AUTH = '/auth'
 const URL_AUTH_USER = '/auth/user'
@@ -19,39 +19,27 @@ const URL_GATEWAY_UPDATE = '/gateway/management/update'
 const URL_GATEWAY_DELETE = '/gateway/management/delete'
 const URL_GATEWAY_ONLINE = '/gateway/management/online'
 
-// axios.defaults.withCredentials = true
-
 const axiosInstance = axios.create({
     baseURL: `http://${CLOUD_IP}:${CLOUD_PORT}`,
     timeout: 5000,
     withCredentials: true
 })
-// axiosInstance.interceptors.response.use(null, (error) => {
-//     if (error.response.status == HttpStatusCode.Forbidden) {
 
-//     }
-// })
-
-const client = new Client({brokerURL: BROKER_URL});
+const CLOUD_STOMP_CLIENT = new Client({brokerURL: CLOUD_BROKER_URL});
 
 const CloudApi = {
-    connectToResponseTopic(user) {
+    connectToWs(user) {
         if (!user || !user.login) {
             console.error("Can't subscribe to response topic - user is missing!")
             return;
         }
-
-        try {
-            console.debug("Trying to close topic listener")
-            client.deactivate()
-        } catch (error) {
-            console.error(error)
-        }
-
         const topic = '/response/' + user.login
-        client.onConnect = () => {
+        CLOUD_STOMP_CLIENT.onConnect = () => {
+            console.debug("Connected to message broker")
+            EventBus.emit(STOMP_CONNECTED, GATEWAY_STOMP_CLIENT)
+            
             console.debug("Subscribing to search topic " + topic)
-            client.subscribe(topic, (message) => {
+            CLOUD_STOMP_CLIENT.subscribe(topic, (message) => {
                 if (message && message.body) {
                     console.debug("God response: " + message.body)
                     const response = JSON.parse(message.body)
@@ -61,9 +49,8 @@ const CloudApi = {
                 }
             }, {id: "responses"})
         }
-
-        console.debug("Connecting to ws broker " + BROKER_URL)
-        client.activate()
+        console.debug("Connecting to ws broker " + CLOUD_BROKER_URL)
+        CLOUD_STOMP_CLIENT.activate()
     },
     async getAuthorization() {
         try {
@@ -76,14 +63,13 @@ const CloudApi = {
     async authUser(login, password) {
         try {
             const response = await axiosInstance.post(URL_AUTH_USER, {login, password})
-            notify({caption: "Successfully authorized", type: "success"})
+            toast.success({caption: "Successfully authorized"})
             return response.data
         } catch (error) {
             console.log(error)
-            notify({
+            toast.error({
                 caption: "Failed to authorize!",
                 description: error.response.status == 403 ? "Wrong login/passwor" : "Service error",
-                type: "error"
             })
         }
     },
@@ -123,8 +109,7 @@ const CloudApi = {
         } catch (error) {
             console.error(error)
             if (error.response.status == 400) {
-                notify({
-                    type: "error",
+                toast.error({
                     caption: error.response.data
                 })
             }
@@ -137,8 +122,7 @@ const CloudApi = {
         } catch (error) {
             console.log(error)
             if (error.response.status == 400) {
-                notify({
-                    type: "error",
+                toast.error({
                     caption: error.response.data
                 })
             }
@@ -166,9 +150,8 @@ const CloudApi = {
             return response.data
         } catch (error) {
             console.error(error)
-            notify({
+            toast.error({
                 caption: "Failed to send gateway command",
-                type: "error"
             })
         }
     },
@@ -187,9 +170,8 @@ const CloudApi = {
             return response.data
         } catch (error) {
             console.error(error)
-            notify({
+            toast.error({
                 caption: "Failed to send device request",
-                type: "error"
             })
         }
     },
@@ -202,4 +184,4 @@ const CloudApi = {
         }
     },
 }
-export { CloudApi };
+export { CloudApi, CLOUD_STOMP_CLIENT };

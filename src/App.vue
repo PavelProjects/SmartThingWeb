@@ -1,17 +1,17 @@
 <script>
   import Doc from "./components/view/doc/Doc.vue"
   import DevicesSearchView from "./components/view/device/DevicesSearchView.vue";
-  import NotificationsView from "./components/notifications/NotificationsView.vue"
+  import ToatsView from "./components/notifications/ToastsView.vue"
   import GatewaysList from "./components/view/gateway/GatewaysList.vue";
   import CloudAuthDialog from './components/dialogs/CloudAuthDialog.vue';
-import { CloudApi } from './api/CloudApi';
+  import { CloudApi } from './api/CloudApi';
 
   export default {
     name: "App",
     components: {
       Doc,
       DevicesSearchView,
-      NotificationsView, 
+      ToatsView, 
       GatewaysList,
       CloudAuthDialog
     },
@@ -32,7 +32,7 @@ import { CloudApi } from './api/CloudApi';
       handleAuthorization(auth) {
         this.authorization = auth
         if (this.isAuthorized) {
-          CloudApi.connectToResponseTopic(this.authorization.user)
+          CloudApi.connectToWs(this.authorization.user)
         }
       },
       handleGatewaySelect(gateway) {
@@ -44,7 +44,7 @@ import { CloudApi } from './api/CloudApi';
 
 <template>
   <Doc class="doc" :mode="mode"/>
-  <NotificationsView class="notifications"/>
+  <ToatsView class="toasts"/>
 
   <div v-if="mode == 'cloud'">
     <CloudAuthDialog
@@ -82,7 +82,7 @@ import { CloudApi } from './api/CloudApi';
     margin: 0 auto;
     z-index: 1;
   }
-  .notifications {
+  .toasts {
     position: absolute;
     top: var(--doc-height);
     right: var(--default-gap);
