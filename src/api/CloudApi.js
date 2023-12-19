@@ -36,7 +36,7 @@ const CloudApi = {
         const topic = '/response/' + user.login
         CLOUD_STOMP_CLIENT.onConnect = () => {
             console.debug("Connected to message broker")
-            EventBus.emit(STOMP_CONNECTED, GATEWAY_STOMP_CLIENT)
+            EventBus.emit(STOMP_CONNECTED, CLOUD_STOMP_CLIENT)
             
             console.debug("Subscribing to search topic " + topic)
             CLOUD_STOMP_CLIENT.subscribe(topic, (message) => {
