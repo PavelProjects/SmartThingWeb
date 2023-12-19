@@ -15,12 +15,15 @@ const URL_CLOUD_CONNECTED = "connection/connected"
 const URL_CLOUD_CONNECT = "connection/connect"
 
 const GATEWAY_STOMP_CLIENT = new Client({brokerURL: GATEWAY_BROKER_URL});
-console.debug("Connecting to message broker " + GATEWAY_BROKER_URL)
-GATEWAY_STOMP_CLIENT.onConnect = async () => {
-    console.debug("Connected to message broker " + GATEWAY_STOMP_CLIENT.brokerURL)
-    EventBus.emit(STOMP_CONNECTED, GATEWAY_STOMP_CLIENT)
+//todo rework bruhhh
+if (import.meta.env.VITE_MODE == 'gateway') {
+    console.debug("Connecting to message broker " + GATEWAY_BROKER_URL)
+    GATEWAY_STOMP_CLIENT.onConnect = async () => {
+        console.debug("Connected to message broker " + GATEWAY_STOMP_CLIENT.brokerURL)
+        EventBus.emit(STOMP_CONNECTED, GATEWAY_STOMP_CLIENT)
+    }
+    GATEWAY_STOMP_CLIENT.activate()
 }
-GATEWAY_STOMP_CLIENT.activate()
 
 const GatewayApi = {
     async getCloudAuthorization(requestId) {

@@ -37,10 +37,10 @@ export default {
         <h2>{{ gateway.name }}</h2>
         <h2>{{ gateway.description }}</h2>
         <div class="footer-actions" @click="(event) => event.stopPropagation()">
-            <button @click="() => $emit('generateToken')">Token</button>
-            <button @click="() => $emit('logout')">Logout</button>
+            <button class="btn" @click="() => $emit('generateToken')">Token</button>
+            <button class="btn" @click="() => $emit('logout')">Logout</button>
         </div>
-        <button @click="() => $emit('showControlPanel')">Control panel</button>
+        <button class="btn" @click="() => $emit('showControlPanel')">Control panel</button>
     </div>
 </template>
 
