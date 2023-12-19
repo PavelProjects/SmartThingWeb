@@ -2,6 +2,7 @@
     export default {
         name: "Combobox",
         props: {
+            testId: String,
             label: String,
             items: [Array, Object],
             value: [String, Boolean],
@@ -23,7 +24,7 @@
                 if (Array.isArray(this.items)) {
                     return this.mapDefault() 
                 }
-                if (typeof this.items == 'object') {
+                if (this.items instanceof Object) {
                     return this.mapObject()
                 }
                 console.error("Can't map type " + typeof this.items)
@@ -53,13 +54,12 @@
 
 <template>
     <div class="field-container">
-        <h2 
-            :class="{legit: !validationFailed, required: validationFailed}"
-            class="field-label"
-        >{{ label || "Select:" }}</h2>
-        <select 
+        <h2 class="field-label">{{ label || "Select:" }}</h2>
+        <select
+            :id="testId"
             :value="value" 
             :disabled="disabled"
+            :class="{legit: !validationFailed, required: validationFailed}"
         >
             <option v-if="!notBlank"></option>
             <option

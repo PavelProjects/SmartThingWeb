@@ -1,7 +1,7 @@
 <script>
-import LoadingButton from '../../controls/LoadingButton.vue';
-import Dialog from '../../dialogs/Dialog.vue'
-import InputWithLabel from '../../fields/InputWithLabel.vue';
+import LoadingButton from '../controls/LoadingButton.vue';
+import Dialog from '../dialogs/Dialog.vue'
+import InputWithLabel from '../fields/InputWithLabel.vue';
 
 export default {
     name: 'GatewayInfoDialog',

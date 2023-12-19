@@ -2,6 +2,7 @@
     export default {
         name: "InputWithLabel",
         props: {
+            testId: String,
             label: String,
             value: [String, Number, Boolean],
             type: {
@@ -21,17 +22,17 @@
 </script>
 
 <template>
-    <div :class="{legit: !validationFailed, required: validationFailed}"
-        class="field-container"
-    >
+    <div class="field-container">
         <h2 
             class="field-label"
         >{{label }}</h2>
         <div class="input-with-slot">
-            <input 
+            <input
+                :id="testId"
                 :value="value"
                 :disabled="disabled"
                 :type="type"
+                :class="{legit: !validationFailed, required: validationFailed}"
             />
             <slot></slot>
         </div>

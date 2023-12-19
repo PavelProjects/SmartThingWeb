@@ -1,15 +1,15 @@
 <script>
     import SyncLoader from 'vue-spinner/src/SyncLoader.vue'
-    import { DeviceApi } from "../../../../api/device/DeviceApi.js"
+    import { DeviceApi } from "../../../api/device/DeviceApi.js"
     import CallbacksView from './CallbacksView.vue'
-    import TabsView from '../../../tabs/TabsView.vue'
+    import MenuView from '../../menu/MenuView.vue'
     
     export default {
         name: "SensorsView",
         components: {
             SyncLoader,
             CallbacksView,
-            TabsView
+            MenuView
         },
         props: {
             ip: String,
@@ -64,7 +64,7 @@
 <template>
     <h1 class="title">Sensors values</h1>
     <sync-loader class="loading-spinner" :loading="loading"></sync-loader>
-    <TabsView
+    <MenuView
         :tabs="tabs"
         tabTitle="Click to open callbacks"
     />

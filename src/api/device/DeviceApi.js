@@ -211,7 +211,7 @@ export const DeviceApi = {
                 ip,
                 path: '/callback/by/observable',
                 requestParams: {
-                    observableType: observable.type,
+                    type: observable.type,
                     name: observable.name,
                 },
                 gateway
@@ -230,7 +230,7 @@ export const DeviceApi = {
                 ip,
                 path: '/callback/by/id',
                 requestParams: {
-                    observableType: observable.type,
+                    type: observable.type,
                     name: observable.name,
                     id
                 },
@@ -320,7 +320,7 @@ export const DeviceApi = {
                 path: '/callback',
                 method: 'DELETE',
                 requestParams: {
-                    observableType: observable.type,
+                    type: observable.type,
                     name: observable.name,
                     id
                 },

@@ -4,9 +4,9 @@
     import SensorsView from './tabs/SensorsView.vue'
     import StatesView from './tabs/StatesView.vue'
     import ConfigView from './tabs/ConfigView.vue'
-    import TabsView from '../../tabs/TabsView.vue'
     import { h } from 'vue'
     import MetricsViewVue from './tabs/MetricsView.vue'
+    import MenuView from '../menu/MenuView.vue'
 
     export default {
         name: 'DeviceControlPanel',
@@ -16,7 +16,7 @@
             SensorsView,
             StatesView,
             ConfigView,
-            TabsView
+            MenuView
         },
         props: {
             ip: String,
@@ -82,16 +82,10 @@
 </script>
 
 <template>
-    <div class="control-panel bordered">
-        <TabsView
+    <div id="control-panel" class="bordered">
+        <MenuView
             :tabs="tabs"
             default-tab="info"
         />
     </div>
 </template>
-
-<style>
-    .control-panel {
-        width: 1000px;
-    }
-</style>

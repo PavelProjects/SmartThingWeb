@@ -1,7 +1,7 @@
 <script>
-import { DeviceApi } from '../../../../api/device/DeviceApi'
-import InputWithLabel from '../../../fields/InputWithLabel.vue'
-import TreeList from '../../../fields/TreeList.vue'
+import { DeviceApi } from '../../../api/device/DeviceApi'
+import InputWithLabel from '../../fields/InputWithLabel.vue'
+import TreeList from '../../fields/TreeList.vue'
 import SyncLoader from 'vue-spinner/src/SyncLoader.vue'
 
 export default {

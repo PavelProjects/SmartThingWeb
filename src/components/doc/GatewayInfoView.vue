@@ -1,7 +1,7 @@
 <script>
-    import { GatewayApi } from '../../../api/GatewayApi.js';
-    import InputWithLabel from '../../fields/InputWithLabel.vue';
-    import LoadingButton from '../../controls/LoadingButton.vue';
+    import { GatewayApi } from '../../api/GatewayApi.js';
+    import InputWithLabel from '../fields/InputWithLabel.vue';
+    import LoadingButton from '../controls/LoadingButton.vue';
 
     export default {
         name: "GatewayInfoView",

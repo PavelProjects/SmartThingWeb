@@ -4,6 +4,7 @@
     export default {
         name: "LoadingButton",
         props: {
+            testId: String,
             loading: Boolean
         },
         components: {
@@ -14,17 +15,12 @@
 
 <template>
     <button
+        :id="testId"
         :disabled="loading"
         @click="handle"
+        class="btn"
     >
         <slot v-if="!loading"></slot>
         <pulse-loader :loading="loading"></pulse-loader>
     </button>
 </template>
-
-<style scoped>
-    button {
-        min-width: 90px;
-        min-height: 40px;
-    }
-</style>

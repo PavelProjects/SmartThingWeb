@@ -1,13 +1,12 @@
 <script>
-    import TabItem from './TabItem.vue'
+    import MenuItem from './MenuItem.vue'
     import { h } from 'vue'
     import UpdateButton from '../controls/UpdateButton.vue'
 
-
     export default {
-        name: "TabsView",
+        name: "MenuView",
         components: {
-            TabItem,
+            MenuItem,
             UpdateButton
         },
         props: {
@@ -61,20 +60,21 @@
 </script>
 
 <template>
-    <div v-if="tabs" class="tabs-panel">
-        <div class="tabs-view list">
+    <div v-if="tabs" class="menu-panel">
+        <div class="menu-items list">
             <h1 v-if="label" class="tabs-view-label">{{ label }}</h1>
-            <TabItem
+            <h2 
                 v-for="[name, { caption }] in Object.entries(tabs)"
                 :key="name"
-                :selected="currentTab == name"
+                :id="name"
                 :title="tabTitle"
-                v-on:click="switchTab(name)" 
+                :class="{'menu-selected': currentTab == name}"
+                @click="switchTab(name)" 
             >
-                <h2 class="tab-label">{{ caption }}</h2>
-            </TabItem>
+                {{ caption }}
+            </h2>
         </div>
-        <div v-if="currentTab && tabs[currentTab]['render']" class="tab-content">
+        <div v-if="currentTab && tabs[currentTab]['render']" class="menu-item-content">
             <UpdateButton 
                 class="update-button"
                 v-if="haveUpdateButton"
@@ -82,34 +82,11 @@
                 :onClick="updateContent"
             />
             <KeepAlive>
-                <component 
-                    ref="content" 
+                <component
+                    ref="content"
                     :is="tabs[currentTab]['render']"
                 ></component>
             </KeepAlive>
         </div>
     </div>
 </template>
-
-<style scoped>
-    .tabs-panel {
-        display: flex;
-        flex-direction: row;
-        width: 100%;
-    }
-    .tabs-view {
-        width: 250px;
-    }
-    .tab-content {
-        position: relative;
-        width: calc(100% - 250px);
-        margin-left: 5px;
-        display: flex;
-        flex-direction: column;
-    }
-    .update-button {
-        position: absolute;
-        top: 0px;
-        right: 0px;
-    }
-</style>

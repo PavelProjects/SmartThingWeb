@@ -1,6 +1,6 @@
 <script>
     import GatewayInfoView from './GatewayInfoView.vue';
-    import CloudAuthDialog from "../../dialogs/CloudAuthDialog.vue";
+    import CloudAuthDialog from "../dialogs/CloudAuthDialog.vue";
 
     export default {
         name: "Doc",

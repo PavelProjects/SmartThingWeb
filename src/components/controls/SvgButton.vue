@@ -4,6 +4,7 @@ import MoonLoader from 'vue-spinner/src/MoonLoader.vue';
 export default {
     name: "SvgButton",
     props: {
+        testId: String,
         loading: {
             type: Boolean,
             default: false
@@ -30,6 +31,7 @@ export default {
 <template>
     <div
         class="container"
+        :id="testId"
         @click.prevent="handleClick" 
     >
         <moon-loader :loading="loading" size="35px"/>

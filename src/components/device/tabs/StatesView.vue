@@ -1,14 +1,14 @@
 <script>
     import SyncLoader from 'vue-spinner/src/SyncLoader.vue'
-    import TabsView from '../../../tabs/TabsView.vue'
     import CallbacksView from './CallbacksView.vue'
-    import { DeviceApi } from "../../../../api/device/DeviceApi.js"
+    import { DeviceApi } from "../../../api/device/DeviceApi.js"
+    import MenuView from "../../menu/MenuView.vue"
    
     export default {
         name: "StatesView",
         components: {
             SyncLoader,
-            TabsView,
+            MenuView,
             CallbacksView
         },
         props: {
@@ -63,7 +63,7 @@
 <template>
     <h1 class="title">Device states</h1>
     <sync-loader class="loading-spinner" :loading="loading"></sync-loader>
-    <TabsView
+    <MenuView
         :tabs="tabs"
         tabTitle="Click to open callbacks"
     />

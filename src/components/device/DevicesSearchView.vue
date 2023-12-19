@@ -1,18 +1,16 @@
 <script>  
-    import SearchDeviceInfo from './SearchDeviceInfo.vue'
     import DeviceControlPanel from './DeviceControlPanel.vue'
-    import TabItem from '../../tabs/TabItem.vue'
+    import MenuItem from '../menu/MenuItem.vue'
     import { h } from 'vue'
-    import { SearchApi } from '../../../api/SearchDevicesApi';
-    import { EventBus, REQUEST } from '../../../utils/EventBus';
-    import UpdateButton from '../../controls/UpdateButton.vue';
+    import { SearchApi } from '../../api/SearchDevicesApi';
+    import { EventBus, REQUEST } from '../../utils/EventBus';
+    import UpdateButton from '../controls/UpdateButton.vue';
 
     export default {
         components: {
-            SearchDeviceInfo,
             DeviceControlPanel,
             UpdateButton,
-            TabItem
+            MenuItem
         },
         props: {
             gateway: Object
@@ -90,23 +88,21 @@
             />
         </div>
         <div class="search-results">
-            <div v-for="[ip, deviceInfo] in Object.entries(devices)" v-bind:key="ip">
-                <Transition name="slide-left">
-                    <TabItem v-if="deviceInfo && deviceInfo.name" v-bind:selected="selectedIp == ip">
-                        <SearchDeviceInfo
-                            :ip="ip" 
-                            :deviceInfo="deviceInfo"
-                            @click="switchTab(ip)"
-                        />
-                    </TabItem>
-                </Transition>
-            </div>
+            <MenuItem 
+                v-for="[ip, deviceInfo] in Object.entries(devices)"
+                :key="ip"
+                :selected="selectedIp == ip"
+                @click="switchTab(ip)"
+            >
+                <h1>{{ deviceInfo.name }} {{ deviceInfo.type ? "(" + deviceInfo.type + ")" : '' }}</h1>
+                <h2>Ip <a :href="'http://' + ip" target=”_blank”>{{ ip }}</a></h2>
+            </MenuItem>
         </div>
     </div>
-    <div class="main-tab" v-if="selectedIp">
+    <div v-if="selectedIp">
         <h1 class="title">Control panel</h1>
         <KeepAlive>
-            <component v-bind:is="tabs[selectedIp]"></component>
+            <component :is="tabs[selectedIp]"></component>
         </KeepAlive>
     </div>
   </div>
@@ -127,10 +123,5 @@
         display: grid;
         row-gap: var(--default-gap);
         height: fit-content;
-    }
-    .main-tab {
-        width: calc(100% - 400px);
-        height: 70%;
-    }
-    
+    }    
 </style>

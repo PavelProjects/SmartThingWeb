@@ -1,21 +1,20 @@
 <script>
-import { CloudApi } from '../../../api/CloudApi';
-import { toast } from '../../../utils/EventBus';
-import LoadingButton from '../../controls/LoadingButton.vue';
-import TabItem from '../../tabs/TabItem.vue';
-import TabsView from '../../tabs/TabsView.vue';
+import { CloudApi } from '../../api/CloudApi';
+import { toast } from '../../utils/EventBus';
+import LoadingButton from '../controls/LoadingButton.vue';
 import GatewayItem from './GatewayItem.vue';
-import { ERROR_TYPE, SUCCESS_TYPE } from '../../notifications/Toast.vue';
 import GatewayInfoDialog from './GatewayInfoDialog.vue';
-import UpdateButton from '../../controls/UpdateButton.vue';
-import AddButton from '../../controls/AddButton.vue'
+import UpdateButton from '../controls/UpdateButton.vue';
+import AddButton from '../controls/AddButton.vue'
+import MenuItem from '../menu/MenuItem.vue';
+import MenuView from '../menu/MenuView.vue';
 
 export default {
     name: 'GatewaysList',
     components: {
         GatewayItem,
-        TabsView,
-        TabItem,
+        MenuView,
+        MenuItem,
         LoadingButton,
         GatewayInfoDialog,
         UpdateButton,
@@ -161,7 +160,7 @@ export default {
             />
         </div>
         <div class="list">
-            <TabItem
+            <MenuItem
                 v-for="gateway in gateways"
                 :key="gateway.id"
                 :selected="selectedGateway && selectedGateway.id == gateway.id"
@@ -174,7 +173,7 @@ export default {
                     @showControlPanel="showControlPanel(gateway)"
                     @logout="logoutGateway(gateway)"
                 />
-            </TabItem>
+            </MenuItem>
         </div>
         <GatewayInfoDialog
             :visible="showDialog"

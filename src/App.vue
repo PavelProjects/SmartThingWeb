@@ -1,8 +1,8 @@
 <script>
-  import Doc from "./components/view/doc/Doc.vue"
-  import DevicesSearchView from "./components/view/device/DevicesSearchView.vue";
-  import ToatsView from "./components/notifications/ToastsView.vue"
-  import GatewaysList from "./components/view/gateway/GatewaysList.vue";
+  import Doc from "./components/doc/Doc.vue"
+  import DevicesSearchView from "./components/device/DevicesSearchView.vue";
+  import ToatsView from "./components/toasts/ToastsView.vue"
+  import GatewaysList from "./components/gateway/GatewaysList.vue";
   import CloudAuthDialog from './components/dialogs/CloudAuthDialog.vue';
   import { CloudApi } from './api/CloudApi';
 
@@ -44,7 +44,7 @@
 
 <template>
   <Doc class="doc" :mode="mode"/>
-  <ToatsView class="toasts"/>
+  <ToatsView id="toasts-list"/>
 
   <div v-if="mode == 'cloud'">
     <CloudAuthDialog
@@ -81,11 +81,5 @@
     column-gap: var(--default-gap);
     margin: 0 auto;
     z-index: 1;
-  }
-  .toasts {
-    position: absolute;
-    top: var(--doc-height);
-    right: var(--default-gap);
-    z-index: 999;
   }
 </style>

@@ -6,6 +6,7 @@ export const REQUEST = "request"
 export const STOMP_CONNECTED = "STOMP_CONNECTED"
 
 export const notifyFromDevice = ({gateway, device, toast: {caption, description, type="info", autoClose = false}}) => {
+    // todo add from with gateway and device
     EventBus.emit(TOAST, {
         gateway,
         device,

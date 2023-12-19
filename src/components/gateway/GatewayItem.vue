@@ -1,6 +1,6 @@
 <script>
-import DeleteButton from '../../controls/DeleteButton.vue'
-import EditButton from '../../controls/EditButton.vue'
+import DeleteButton from '../controls/DeleteButton.vue'
+import EditButton from '../controls/EditButton.vue'
 
 export default {
     name: 'GatewayItem',
