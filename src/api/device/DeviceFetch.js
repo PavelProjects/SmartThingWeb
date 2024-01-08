@@ -26,25 +26,17 @@ async function deviceFetchCloud({gateway, method = 'GET', ip, path, requestParam
         console.error("Gateway is required in cloud device fetch! Path: " + path)
         return
     }
-    const requestInfo = await CloudApi.sendDeviceRequest(gateway, {
+    const { result } = await CloudApi.sendDeviceRequest(gateway, {
         target: ip,
         method,
         path: `${path[0] != '/' ? '/' : ''}${path}${joinRequestParams(requestParams)}`,
         payload
     })
-    if (!requestInfo || !requestInfo.id) {
-        console.error("Device fetch failed - requestInfo is undefinded")
-    }
-    let promiseResolver;
-    const requestPromise = new Promise((resolve) => promiseResolver = resolve)
-    EventBus.on(requestInfo.id, (response) => {
-        console.debug("Device fetch finished: " + JSON.stringify(response));
-        promiseResolver({
-            status: response.code,
-            data: JSON.parse(response.body)
-        });
-    });
-    return await requestPromise;
+    const response = JSON.parse(result)
+    return {
+        status: response.code,
+        data: JSON.parse(response.body)
+    };
 }
 
 const deviceFetch = mode == "cloud" ? deviceFetchCloud : deviceFetchLocal;

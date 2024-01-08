@@ -37,15 +37,16 @@ const CloudSearchApi = {
         EventBus.emit(REQUEST, {id: "search", loading: true})
 
         const requestInfo = await CloudApi.sendGatewayCommand(gateway, "search")
-        
-        EventBus.on(requestInfo.id, (result) => {
-            if (Array.isArray(result)) {
-                result.forEach(onDeviceFound)
-            } else {
-                console.error("Search result is not array: " + result)
-            }
-            EventBus.emit(REQUEST, {id: "search", loading: false})
-        })
+        if (!requestInfo || !requestInfo.finished) {
+            
+        }
+        const result = JSON.parse(requestInfo.result);
+        if (Array.isArray(result)) {
+            result.forEach(onDeviceFound)
+        } else {
+            console.error("Search result is not array: " + result)
+        }
+        EventBus.emit(REQUEST, {id: "search", loading: false})
     }
 }
 

@@ -33,21 +33,9 @@ const CloudApi = {
             console.error("Can't subscribe to response topic - user is missing!")
             return;
         }
-        const topic = '/response/' + user.login
         CLOUD_STOMP_CLIENT.onConnect = () => {
             console.debug("Connected to message broker")
             EventBus.emit(STOMP_CONNECTED, CLOUD_STOMP_CLIENT)
-            
-            console.debug("Subscribing to search topic " + topic)
-            CLOUD_STOMP_CLIENT.subscribe(topic, (message) => {
-                if (message && message.body) {
-                    console.debug("God response: " + message.body)
-                    const response = JSON.parse(message.body)
-                    EventBus.emit(response.id, JSON.parse(response.result))
-                } else {
-                    console.warn("Empty topic message")
-                }
-            }, {id: "responses"})
         }
         console.debug("Connecting to ws broker " + CLOUD_BROKER_URL)
         CLOUD_STOMP_CLIENT.activate()
@@ -147,18 +135,15 @@ const CloudApi = {
                     command
                 }
             )
-            return response.data
+            return response.data || {}
         } catch (error) {
             console.error(error)
-            toast.error({
-                caption: "Failed to send gateway command",
-            })
         }
     },
     async sendDeviceRequest(gateway, {target, path, method, payload}) {
         try {
             const response = await axiosInstance.post(
-                URL_GATEWAY_REQUEST + "/send",
+                URL_GATEWAY_REQUEST + "/device",
                 {
                     gatewayId: gateway.id,
                     target,
@@ -173,14 +158,6 @@ const CloudApi = {
             toast.error({
                 caption: "Failed to send device request",
             })
-        }
-    },
-    async isOnline(gateway) {
-        try {
-            const response = await axiosInstance.get(`${URL_GATEWAY_ONLINE}/${gateway.id}`);
-            return response.data
-        } catch (error) {
-            console.log(error)
         }
     },
 }

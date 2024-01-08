@@ -54,7 +54,8 @@ export default {
                 return;
             }
             this.gateways.forEach(async (gateway) => {
-                gateway.online = await CloudApi.isOnline(gateway) || false
+                const { finished } = await CloudApi.sendGatewayCommand(gateway, "ping");
+                gateway.online = finished || false
             })
         },
         showControlPanel(gateway) {
