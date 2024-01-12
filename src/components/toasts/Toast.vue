@@ -28,14 +28,15 @@ export default {
       }
     },
     from() {
-      let txt = '';
+      if (this.gateway && this.device) {
+        return `${this.gateway.name}@${this.device.name}`
+      }
       if (this.gateway) {
-        txt = this.gateway.name + "@"
+        return this.gateway.name + "[gateway]"
       }
       if (this.device) {
-        txt += this.device.name
+        return this.device.name + "[device]"
       }
-      return txt
     },
     fromTitle() {
       if (this.device) {

@@ -6,7 +6,7 @@ EventBus.on(STOMP_CONNECTED, (client) => {
     //todo move to env
     client.subscribe("/secured/queue/notification", (message) => {
         if (message && message.body) {
-            console.debug("Got notifcation message! " + message.body)
+            console.debug("Got notification message! " + message.body)
             const notification = JSON.parse(message.body)
             notifyFromDevice(notification)
         } else {

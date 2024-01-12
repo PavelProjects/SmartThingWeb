@@ -5,8 +5,9 @@ export const TOAST = "toast"
 export const REQUEST = "request"
 export const STOMP_CONNECTED = "STOMP_CONNECTED"
 
-export const notifyFromDevice = ({ device, notification: { message, type } }) => {
+export const notifyFromDevice = ({ gateway, device, notification: { message, type } }) => {
   EventBus.emit(TOAST, {
+    gateway,
     device,
     toast: {
       description: message,
