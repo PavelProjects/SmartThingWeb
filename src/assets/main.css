@@ -43,7 +43,6 @@ a, .green {
 
 .btn:hover {
   opacity: 0.50;
-  cursor: pointer;
 }
 
 input, select {

@@ -111,9 +111,12 @@ export default {
             }
         },
         async logoutGateway(gateway) {
+            if(!confirm("Are you sure? THis action will delete token and disconnect gateway from cloud!")) {
+                return;
+            }
             if (await CloudApi.logoutGateway(gateway)) {
                 toast.info({
-                    caption: "Done"
+                    caption: "Token deleted"
                 })
                 this.loadGateways()
             } else {

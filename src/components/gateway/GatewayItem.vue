@@ -35,12 +35,11 @@ export default {
             />
         </div>
         <h2>{{ gateway.name }}</h2>
-        <h2>{{ gateway.description }}</h2>
-        <div class="footer-actions" @click="(event) => event.stopPropagation()">
-            <button class="btn" @click="() => $emit('generateToken')">Token</button>
-            <button class="btn" @click="() => $emit('logout')">Logout</button>
-        </div>
-        <button class="btn" @click="() => $emit('showControlPanel')">Control panel</button>
+        <h3>{{ gateway.description }}</h3>
+
+        <button v-if="gateway.haveToken" class="btn controls" @click="() => $emit('logout')">Logout</button>
+        <button v-else class="btn controls" @click="() => $emit('generateToken')">Generate token</button>
+        <button class="btn controls" @click="() => $emit('showControlPanel')">Control panel</button>
     </div>
 </template>
 
@@ -74,5 +73,9 @@ export default {
         width: 20px;
         height: 20px;
         border-radius: 50%;
+    }
+    .controls {
+        min-width: fit-content;
+        min-height: fit-content;
     }
 </style>

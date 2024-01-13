@@ -44,7 +44,7 @@ export default {
       }
     }
   },
-  created() {
+  mounted() {
     if (this.toast.autoClose) {
       setTimeout(this.close, LIFE_TIME)
     }

@@ -41,7 +41,6 @@
             :gateway="gateway"
             :device="device"
             :toast="toast"
-            :autoClose="autoClose"
             @close="close"
         />
     </div>

@@ -74,9 +74,9 @@ const CloudApi = {
     },
     async logoutGateway(gateway) {
         try {
-            const response = await axiosInstance.post(
-                `${URL_LOGOUT_GATEWAY}/${gateway.id}`
-            )
+            const response = await axiosInstance.post(URL_LOGOUT_GATEWAY, {
+                gatewayId: gateway.id
+            })
             return response.status == 200
         } catch (error) {
             console.error(error)
@@ -88,6 +88,9 @@ const CloudApi = {
             return response.data
         } catch (error) {
             console.error(error)
+            toast.error({
+                caption: "Failed to load gateways"
+            })
         }
     },
     async createGateway({name, description}) {
