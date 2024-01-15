@@ -5,12 +5,14 @@
     import { SearchApi } from '../../api/SearchDevicesApi';
     import { EventBus, REQUEST } from '../../utils/EventBus';
     import UpdateButton from '../controls/UpdateButton.vue';
+    import DeviceItem from './DeviceItem.vue'
 
     export default {
         components: {
             DeviceControlPanel,
             UpdateButton,
-            MenuItem
+            MenuItem,
+            DeviceItem
         },
         props: {
             gateway: Object
@@ -32,6 +34,9 @@
         },
         mounted() {
             this.search();
+            EventBus.on("deviceUpdate", ({device, name}) => {
+                this.devices[device.ip]["name"] = name
+            })
         },
         methods: {
             search() {
@@ -94,8 +99,7 @@
                 :selected="selectedIp == ip"
                 @click="switchTab(ip)"
             >
-                <h1>{{ deviceInfo.name }} {{ deviceInfo.type ? "(" + deviceInfo.type + ")" : '' }}</h1>
-                <h2>Ip <a :href="'http://' + ip" target=”_blank”>{{ ip }}</a></h2>
+                <DeviceItem :device="deviceInfo"/>
             </MenuItem>
         </div>
     </div>
@@ -123,5 +127,5 @@
         display: grid;
         row-gap: var(--default-gap);
         height: fit-content;
-    }    
+    }
 </style>

@@ -3,6 +3,7 @@
     import { DeviceApi } from "../../../api/device/DeviceApi.js"
     import InputWithLabel from "../../fields/InputWithLabel.vue"
     import LoadingButton from "../../controls/LoadingButton.vue"
+    import { EventBus } from '../../../utils/EventBus.js'
 
     const NAME_ERROR = "Name can't be empty!"
 
@@ -50,7 +51,11 @@
                 this.loading = true
                 try {
                     if (await DeviceApi.saveName(this.device, this.deviceName, this.gateway)) {
-                        this.loadInfo()
+                        await this.loadInfo()
+                        EventBus.emit("deviceUpdate", {
+                            device: this.device,
+                            name: this.deviceName
+                        })
                     }
                 } finally {
                     this.loading = false

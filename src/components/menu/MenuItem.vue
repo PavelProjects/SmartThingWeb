@@ -8,7 +8,7 @@
 </script>
 
 <template>
-    <div :class="{bordered: true, 'menu-selected': selected}">
+    <div style="position: relative;" :class="{bordered: true, 'menu-selected': selected}">
         <slot></slot>
     </div>
 </template>
