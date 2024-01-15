@@ -1,10 +1,35 @@
 import { toast } from "../../utils/EventBus"
 import { deviceFetch } from "./DeviceFetch"
 
+const GET_INFO = 'getInfo'
+const GET_CALLBACKS = 'getCallbacks'
+const GET_ACTIONS = 'getActions'
+const SAVE_NAME = 'saveName'
+const CALL_ACTION = 'callAction'
+const GET_CONFIG_INFO = 'getConfigInfo'
+const GET_CONFIG_VALUES = 'getConfigValues'
+const SAVE_CONFIG_VALUES = 'saveConfigValues'
+const DELETE_CONFIG_VALUE = 'deleteConfigValue'
+const DELETE_ALL_CONFIG_VALUES = 'deleteAllConfigValues'
+const GET_SENSORS = 'getSensors'
+const GET_STATES = 'getStates'
+const GET_ALL_CALLBACKS = 'getAllCallbacks'
+const GET_CALLBACK_BY_ID = 'getCallbackById'
+const GET_CALLBACKS_TEMPLATES = 'getCallbacksTemplates'
+const CREATE_CALLBACK = 'createCallback'
+const UPDATE_CALLBACK = 'updateCallback'
+const DELETE_CALLBACK = 'deleteCallback'
+const GET_METRICS = 'getMetrics'
+
+async function extractDataFromError(error) {
+  const { response } = error || {}
+  return await response.data || {}
+}
+
 export const DeviceApi = {
-  async getDeviceInfo(ip, gateway) {
+  async getDeviceInfo(device, gateway) {
     try {
-      const response = await deviceFetch({ ip, path: '/info/system', gateway })
+      const response = await deviceFetch({ device, method: GET_INFO, gateway })
       return response.data
     } catch (error) {
       console.error(error)
@@ -13,9 +38,9 @@ export const DeviceApi = {
       })
     }
   },
-  async getDeviceActionsInfo(ip, gateway) {
+  async getDeviceActionsInfo(device, gateway) {
     try {
-      const response = await deviceFetch({ ip, path: '/info/actions', gateway })
+      const response = await deviceFetch({ device, method: GET_ACTIONS, gateway })
       return response.data
     } catch (error) {
       console.error(error)
@@ -24,9 +49,9 @@ export const DeviceApi = {
       })
     }
   },
-  async getDeviceConfigInfo(ip, gateway) {
+  async getDeviceConfigInfo(device, gateway) {
     try {
-      const response = await deviceFetch({ ip, path: '/info/config', gateway })
+      const response = await deviceFetch({ device, method: GET_CONFIG_INFO, gateway })
       return response.data
     } catch (error) {
       console.error(error)
@@ -35,16 +60,13 @@ export const DeviceApi = {
       })
     }
   },
-  async saveName(ip, name, gateway) {
+  async saveName(device, name, gateway) {
     try {
-      const result = await deviceFetch({
-        ip,
-        path: '/info',
-        method: 'PUT',
-        payload: {
+      const result = await deviceFetch({ device, gateway, 
+        method: SAVE_NAME,
+        params: {
           name
         },
-        gateway
       })
       if (!result || result.status !== 200) {
         throw new Error({ result });
@@ -55,29 +77,30 @@ export const DeviceApi = {
       return true
     } catch (error) {
       console.error(error)
+      const { error: description } = await extractDataFromError(error)
       toast.error({
-        caption: "Failed to save device name"
+        caption: "Failed to save device name",
+        description
       })
     }
   },
-  async getConfig(ip, gateway) {
+  async getConfig(device, gateway) {
     try {
-      const response = await deviceFetch({ ip, path: '/config', gateway })
+      const response = await deviceFetch({ device, method: GET_CONFIG_VALUES, gateway })
       return response.data
     } catch (error) {
       console.error(error)
       toast.error({
-        caption: "Failed to fetch device configuration"
+        caption: "Failed to fetch device configuration values"
       })
     }
   },
-  async saveConfigValues(ip, values, gateway) {
+  async saveConfigValues(device, values, gateway) {
     try {
       const result = await deviceFetch({
-        ip,
-        path: '/config',
-        method: 'POST',
-        payload: values,
+        device,
+        method: SAVE_CONFIG_VALUES,
+        params: { values },
         gateway
       })
 
@@ -90,18 +113,19 @@ export const DeviceApi = {
       return true
     } catch (error) {
       console.error(error)
+      const { error: description } = await extractDataFromError(error)
       toast.error({
-        caption: "Failed to save configuration values"
+        caption: "Failed to save configuration values",
+        description
       })
     }
   },
-  async deleteConfigValue(ip, key, gateway) {
+  async deleteConfigValue(device, key, gateway) {
     try {
       const result = await deviceFetch({
-        ip,
-        path: '/config',
-        method: 'DELETE',
-        requestParams: {
+        device,
+        method: DELETE_CONFIG_VALUE,
+        params: {
           name: key
         },
         gateway
@@ -116,18 +140,19 @@ export const DeviceApi = {
       return true
     } catch (error) {
       console.error(error)
+      const { error: description } = await extractDataFromError(error)
       toast.error({
-        caption: "Failed to delete device config value"
+        caption: "Failed to delete device config value",
+        description
       })
     }
 
   },
-  async deleteAllConfigValues(ip, gateway) {
+  async deleteAllConfigValues(device, gateway) {
     try {
       const result = await deviceFetch({
-        ip,
-        path: '/config/delete/all',
-        method: 'DELETE',
+        device,
+        method: DELETE_ALL_CONFIG_VALUES,
         gateway
       })
 
@@ -140,18 +165,19 @@ export const DeviceApi = {
       return true
     } catch (error) {
       console.error(error)
+      const { error: description } = await extractDataFromError(error)
       toast.error({
-        caption: "Failed to delete all confi values"
+        caption: "Failed to delete all config values",
+        description
       })
     }
   },
-  async executeDeviceAcion(ip, action, gateway) {
+  async executeDeviceAcion(device, action, gateway) {
     try {
       const result = await deviceFetch({
-        ip,
-        path: '/action',
-        method: 'PUT',
-        requestParams: {
+        device,
+        method: CALL_ACTION,
+        params: {
           action
         },
         gateway
@@ -165,15 +191,17 @@ export const DeviceApi = {
       return true
     } catch (error) {
       console.error(error)
+      const { error: description } = await extractDataFromError(error)
       toast.error({
-        caption: "Failed to execute action " + action
+        caption: "Failed to execute action " + action,
+        description
       })
     }
 
   },
-  async getDeviceSensors(ip, gateway) {
+  async getDeviceSensors(device, gateway) {
     try {
-      const response = await deviceFetch({ ip, path: '/sensors', gateway })
+      const response = await deviceFetch({ device, method: GET_SENSORS, gateway })
       return response.data
     } catch (error) {
       console.error(error)
@@ -182,9 +210,9 @@ export const DeviceApi = {
       })
     }
   },
-  async getDeviceStates(ip, gateway) {
+  async getDeviceStates(device, gateway) {
     try {
-      const response = await deviceFetch({ ip, path: '/states', gateway })
+      const response = await deviceFetch({ device, method: GET_STATES, gateway })
       return response.data
     } catch (error) {
       console.error(error)
@@ -194,9 +222,9 @@ export const DeviceApi = {
       })
     }
   },
-  async getAllCallbacks(ip, gateway) {
+  async getAllCallbacks(device, gateway) {
     try {
-      const response = await deviceFetch({ ip, path: '/callback', gateway })
+      const response = await deviceFetch({ device, method: GET_ALL_CALLBACKS, gateway })
       return response.data
     } catch (error) {
       console.error(error)
@@ -205,49 +233,48 @@ export const DeviceApi = {
       })
     }
   },
-  async getCallbacks(ip, observable, gateway) {
+  async getCallbacks(device, observable, gateway) {
     try {
       const response = await deviceFetch({
-        ip,
-        path: '/callback/by/observable',
-        requestParams: {
-          type: observable.type,
-          name: observable.name,
+        device,
+        method: GET_CALLBACKS,
+        params: {
+          observable
         },
         gateway
       })
       return response.data
     } catch (error) {
       console.error(error)
+      const { error: description } = await extractDataFromError(error)
       toast.error({
-        caption: `Failed to fetch callbacks for [${observable.type}]${observable.name}`
+        caption: `Failed to fetch callbacks for [${observable.type}]${observable.name}`,
+        description
       })
     }
   },
-  async getCallbackById(ip, observable, id, gateway) {
+  async getCallbackById(device, observable, id, gateway) {
     try {
       const response = await deviceFetch({
-        ip,
-        path: '/callback/by/id',
-        requestParams: {
-          type: observable.type,
-          name: observable.name,
-          id
-        },
+        device,
+        method: GET_CALLBACK_BY_ID,
+        params: { observable, id },
         gateway
       })
       return response.data
     } catch (error) {
       console.error(error)
+      const { error: description } = await extractDataFromError(error)
       toast.error({
-        caption: `Failed to fetch callback by id=${id}`
+        caption: `Failed to fetch callback by id=${id}`,
+        description
       })
     }
 
   },
-  async getCallbacksTemplates(ip, gateway) {
+  async getCallbacksTemplates(device, gateway) {
     try {
-      const response = await deviceFetch({ ip, path: '/callback/template', gateway })
+      const response = await deviceFetch({ device, method: GET_CALLBACKS_TEMPLATES, gateway })
       return response.data
     } catch (error) {
       console.error(error)
@@ -257,13 +284,12 @@ export const DeviceApi = {
     }
 
   },
-  async createCallback(ip, observable, callback, gateway) {
+  async createCallback(device, observable, callback, gateway) {
     try {
       const result = await deviceFetch({
-        ip,
-        path: '/callback',
-        method: 'POST',
-        payload: {
+        device,
+        method: CREATE_CALLBACK,
+        params: {
           observable,
           callback
         },
@@ -278,19 +304,20 @@ export const DeviceApi = {
       return true
     } catch (error) {
       console.error(error)
+      const { error: description } = await extractDataFromError(error)
       toast.error({
-        caption: "Failed to create callback"
+        caption: "Failed to create callback",
+        description
       })
     }
 
   },
-  async updateCallback(ip, observable, callback, gateway) {
+  async updateCallback(device, observable, callback, gateway) {
     try {
       const result = await deviceFetch({
-        ip,
-        path: '/callback',
-        method: 'PUT',
-        payload: {
+        device,
+        method: UPDATE_CALLBACK,
+        params: {
           observable,
           callback
         },
@@ -306,24 +333,21 @@ export const DeviceApi = {
       return true
     } catch (error) {
       console.error(error)
+      const { error: description } = await extractDataFromError(error)
       toast.error({
         type: "error",
-        caption: `Failed to update callback id=${callback.id}`
+        caption: `Failed to update callback id=${callback.id}`,
+        description
       })
     }
 
   },
-  async deleteCallback(ip, observable, id, gateway) {
+  async deleteCallback(device, observable, id, gateway) {
     try {
       const result = await deviceFetch({
-        ip,
-        path: '/callback',
-        method: 'DELETE',
-        requestParams: {
-          type: observable.type,
-          name: observable.name,
-          id
-        },
+        device,
+        method: DELETE_CALLBACK,
+        params: { observable, id },
         gateway
       })
 
@@ -336,18 +360,19 @@ export const DeviceApi = {
       return true
     } catch (error) {
       console.error(error)
+      const { error: description } = await extractDataFromError(error)
       toast.error({
-        caption: `Failed to delete callback by id=${id}`
+        caption: `Failed to delete callback by id=${id}`,
+        description
       })
     }
   },
-  async metrics(ip, gateway) {
+  async metrics(device, gateway) {
     try {
       const result = await deviceFetch({
-        ip,
+        device,
         gateway,
-        path: '/metrics',
-        method: 'GET'
+        method: GET_METRICS
       })
       if (!result || result.status !== 200) {
         throw new Error({ result });

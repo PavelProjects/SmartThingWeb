@@ -51,7 +51,7 @@
             async saveAuthorization() {
                 this.loading = true
                 try {
-                    this.parseAuthorizedUser(await GatewayApi.cloudAuthorize("saveAuthorization", this.cloudInfo))
+                    this.parseAuthorizedUser(await GatewayApi.cloudAuthorize(this.cloudInfo))
                 } finally {
                     this.loading = false
                 }

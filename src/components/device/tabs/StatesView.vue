@@ -12,7 +12,7 @@
             CallbacksView
         },
         props: {
-            ip: String,
+            device: Object,
             gateway: Object
         },
         data() {
@@ -29,7 +29,7 @@
             async loadStates() {
                 this.loading = true
                 try {
-                    this.states = await DeviceApi.getDeviceStates(this.ip, this.gateway) || {}
+                    this.states = await DeviceApi.getDeviceStates(this.device, this.gateway) || {}
                     Object.entries(this.states).forEach(([name, value]) => {
                         if (this.tabs[name]) {
                             this.tabs[name].caption = `${name}: ${value}`
@@ -39,7 +39,7 @@
                                 caption:`${name}: ${value}`,
                                 props: {
                                     key: "state_" + name,
-                                    ip: this.ip,
+                                    device: this.device,
                                     observable: {
                                         name,
                                         type: "state"

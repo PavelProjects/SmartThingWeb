@@ -17,7 +17,7 @@ const SYSTEM_FIELDS = ["id", "type", "readonly"]
 export default {
 	name: "CallbackView",
 	props: {
-		ip: String,
+		device: Object,
 		callback: Object,
 		observable: Object,
 		template: Object,
@@ -102,7 +102,7 @@ export default {
 					delete this.callback.id;
 					saveFunc = DeviceApi.createCallback
 				}
-				if (await saveFunc(this.ip, this.observable, this.callback, this.gateway)) {
+				if (await saveFunc(this.device, this.observable, this.callback, this.gateway)) {
 					console.info("Callback was saved")
 					this.$emit("update")
 					this.editing = false
@@ -120,7 +120,7 @@ export default {
 			if (confirm("Are you sure you wan to delete callback " + this.callback.id + "?")) {
 				this.loading = true
 				try {
-					if (await DeviceApi.deleteCallback(this.ip, this.observable, this.callback.id, this.gateway)) {
+					if (await DeviceApi.deleteCallback(this.device, this.observable, this.callback.id, this.gateway)) {
 						this.$emit("update")
 					}
 				} finally {

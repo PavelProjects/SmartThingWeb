@@ -14,7 +14,7 @@
             LoadingButton
         },
         props: {
-            ip: String,
+            device: Object,
             gateway: Object
         },
         data() {
@@ -39,7 +39,7 @@
                 await this.loadInfo()
             },
             async loadInfo() {
-                this.info = await DeviceApi.getDeviceInfo(this.ip, this.gateway) || {}
+                this.info = await DeviceApi.getDeviceInfo(this.device, this.gateway) || {}
                 this.deviceName = this.info["name"] || ""
             },
             async saveName() {
@@ -49,7 +49,7 @@
                 }
                 this.loading = true
                 try {
-                    if (await DeviceApi.saveName(this.ip, this.deviceName, this.gateway)) {
+                    if (await DeviceApi.saveName(this.device, this.deviceName, this.gateway)) {
                         this.loadInfo()
                     }
                 } finally {

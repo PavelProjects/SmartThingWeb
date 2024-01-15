@@ -15,7 +15,7 @@ export default {
     SyncLoader,
   },
   props: {
-    ip: String,
+    device: Object,
     observable: Object,
     gateway: Object
   },
@@ -49,10 +49,10 @@ export default {
       await this.loadCallbacks()
     },
     async loadCallbacks() {
-      this.callbacks = await DeviceApi.getCallbacks(this.ip, this.observable, this.gateway) || []
+      this.callbacks = await DeviceApi.getCallbacks(this.device, this.observable, this.gateway) || []
     },
     async loadTemplates() {
-      this.templates = await DeviceApi.getCallbacksTemplates(this.ip, this.gateway)
+      this.templates = await DeviceApi.getCallbacksTemplates(this.device, this.gateway)
     },
     addCallback(type) {
       if (this.callbacks && this.callbacks.length > 0 && this.callbacks[0].id == NEW_CALLBACK_ID) {
@@ -79,7 +79,7 @@ export default {
   <div v-if="!loading">
     <Combobox label="Add callback of type " :items="callbackTypes" @input="addCallback($event.target.value)" />
     <div v-if="callbacks" class="callbacks-list-view list">
-      <CallbackView v-for="callback in callbacks" :ip="ip" :key="callback.id" :observable="observable"
+      <CallbackView v-for="callback in callbacks" :device="device" :key="callback.id" :observable="observable"
         :callback="callback" :template="{ ...templates[callback.type], ...templates['default'] }" :gateway="gateway"
         @update="update" />
     </div>

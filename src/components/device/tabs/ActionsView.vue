@@ -10,7 +10,7 @@
             SyncLoader
         },
         props: {
-            ip: String,
+            device: Object,
             gateway: Object
         },
         data() {
@@ -27,7 +27,7 @@
             async loadActions() {
                 this.loading = true
                 try {
-                    this.actions = await DeviceApi.getDeviceActionsInfo(this.ip, this.gateway) || []
+                    this.actions = await DeviceApi.getDeviceActionsInfo(this.device, this.gateway) || []
                 } finally {
                     this.loading = false
                 }
@@ -35,7 +35,7 @@
             async sendAction(action) {
                 this.loadingAction = true
                 try {
-                    await DeviceApi.executeDeviceAcion(this.ip, action, this.gateway)
+                    await DeviceApi.executeDeviceAcion(this.device, action, this.gateway)
                 } finally {
                     this.loadingAction = false
                 }

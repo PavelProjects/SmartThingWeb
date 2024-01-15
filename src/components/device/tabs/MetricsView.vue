@@ -7,7 +7,7 @@ import SyncLoader from 'vue-spinner/src/SyncLoader.vue'
 export default {
     name: "MetricsView",
     props: {
-        ip: String,
+        device: Object,
         gateway: Object
     },
     components: {
@@ -28,7 +28,7 @@ export default {
         async update() {
             this.loading = true
             try {
-                this.metrics = await DeviceApi.metrics(this.ip, this.gateway)
+                this.metrics = await DeviceApi.metrics(this.device, this.gateway)
             } finally {
                 this.loading = false
             }

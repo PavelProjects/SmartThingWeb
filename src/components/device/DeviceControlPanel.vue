@@ -19,12 +19,12 @@
             MenuView
         },
         props: {
-            ip: String,
+            device: Object,
             gateway: Object
         },
         data() {
             const props = {
-                ip: this.ip,
+                device: this.device,
                 gateway: this.gateway
             }
             return {

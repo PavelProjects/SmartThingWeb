@@ -1,18 +1,19 @@
-import { defaultGet, fetchCustom } from "./ApiFetchUtils"
+import axios from "axios";
 import { Client } from '@stomp/stompjs';
-import { EventBus, STOMP_CONNECTED } from "../utils/EventBus";
+import { EventBus, STOMP_CONNECTED, toast } from "../utils/EventBus";
 
 const GATEWAY_PATH = import.meta.env.VITE_GATEWAY_PATH
 const GATEWAY_PORT = import.meta.env.VITE_GATEWAY_PORT
 
 const GATEWAY_WS = import.meta.env.VITE_GATEWAY_WS
 const GATEWAY_SEARCH_TOPIC = import.meta.env.VITE_GATEWAY_SEARCH_TOPIC
-const GATEWAY_BROKER_URL = `ws://${GATEWAY_PATH}:${GATEWAY_PORT}/${GATEWAY_WS}`
+const GATEWAY_BROKER_URL = `ws://${GATEWAY_PATH}${GATEWAY_PORT ? ":" + GATEWAY_PORT : ""}/${GATEWAY_WS}`
 
-const URL_AUTHORIZATION = "auth"
-const URL_CLOUD_INFO = "auth/configuration"
-const URL_CLOUD_CONNECTED = "connection/connected"
-const URL_CLOUD_CONNECT = "connection/connect"
+const PATH_AUTHORIZATION = "/auth"
+const PATH_CLOUD_INFO = "/auth/configuration"
+const PATH_CLOUD_CONNECTED = "/connection/status"
+const PATH_CLOUD_CONNECT = "/connection/connect"
+const PATH_DEVICE_API = "/device/api"
 
 const GATEWAY_STOMP_CLIENT = new Client({brokerURL: GATEWAY_BROKER_URL});
 //todo rework bruhhh
@@ -25,49 +26,91 @@ if (import.meta.env.VITE_MODE == 'gateway') {
     GATEWAY_STOMP_CLIENT.activate()
 }
 
+const axiosInstance = axios.create({
+    baseURL: `http://${GATEWAY_PATH}${GATEWAY_PORT ? ":" + GATEWAY_PORT : ""}`,
+    timeout: 5000,
+})
+
 const GatewayApi = {
-    async getCloudAuthorization(requestId) {
-        return await defaultGet(
-            requestId,
-            `http://${GATEWAY_PATH}:${GATEWAY_PORT}/${URL_AUTHORIZATION}`
-        )
-    },
-    async cloudAuthorize(requestId, payload) {
-        const response = await fetchCustom({
-            requestId,
-            path: `http://${GATEWAY_PATH}:${GATEWAY_PORT}/${URL_AUTHORIZATION}`,
-            payload,
-            method: 'PUT',
-            toast: {
-                info: "Successfuly authorized in cloud",
-                error: "Failed to authorize in cloud"
-            }
+    async callDeviceApi({device, method, params}) {
+        return await axiosInstance.post(PATH_DEVICE_API, {
+            method,
+            device,
+            params
         })
-        return response.status == 200 ? await response.json() : {}
     },
-    async getCloudInfo(requestId) {
-        return await defaultGet(
-            requestId,
-            `http://${GATEWAY_PATH}:${GATEWAY_PORT}/${URL_CLOUD_INFO}`,
-        )
+    async getCloudAuthorization() {
+        try {
+            const response = axiosInstance.get(PATH_AUTHORIZATION)
+            return response.data
+        } catch (error) {
+            console.error(error)
+            toast.error({
+                caption: "Failed to fetch cloud authorization info"
+            })
+        }
     },
-    async getConnectionStatus(requestId) {
-        return await defaultGet(
-            requestId,
-            `http://${GATEWAY_PATH}:${GATEWAY_PORT}/${URL_CLOUD_CONNECTED}`
-        )
-    },
-    async cloudConnect(requestId) {
-        const response = await fetchCustom({
-            requestId,
-            path: `http://${GATEWAY_PATH}:${GATEWAY_PORT}/${URL_CLOUD_CONNECT}`,
-            method: 'PUT',
-            toast: {
-                info: "Connected",
-                error: "Failed to connect"
+    async cloudAuthorize(payload) {
+        try {
+            const response = await axiosInstance.put(PATH_AUTHORIZATION, payload)
+            if (response.status != 200) {
+                throw new Error("Failed to auth in cloud")
             }
-        })
-        return response.status == 200 && await response.json();
+            toast.success({
+                caption: "Successfuly authorized in cloud"
+            })
+            return response.data
+        } catch (error) {
+            console.error(error)
+            const { response } = error || {}
+            const { status } = response
+            let description = ""
+            if (status == 403) {
+                description = "Access denied. Wrong token?"
+            } else if (status == 503) {
+                description = "Cloud is unavailable"
+            }
+            toast.error({
+                caption: "Failed to authorize in cloud",
+                description
+            })
+        }
+    },
+    async getCloudInfo() {
+        try {
+            const response = await axiosInstance.get(PATH_CLOUD_INFO)
+            return response.data
+        } catch (error) {
+            console.error(error)
+            toast.error({
+                caption: "Failed to fetch cloud info"
+            })
+        }
+    },
+    async getConnectionStatus() {
+        try {
+            const response = await axiosInstance.get(PATH_CLOUD_CONNECTED)
+            return response.data
+        } catch (error) {
+            console.error(error)
+        }
+    },
+    async cloudConnect() {
+        try {
+            const response = await axiosInstance.put(PATH_CLOUD_CONNECT)
+            if (response.status != 200) {
+                throw new Error("Failed to auth in cloud")
+            }
+            toast.success({
+                caption: "Connected"
+            })
+            return response.data
+        } catch (error) {
+            console.error(error)
+            toast.error({
+                caption: "Failed to connect"
+            })
+        }
     }
 }
 

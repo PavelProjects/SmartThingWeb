@@ -7,7 +7,7 @@
     export default {
         name: "ConfigView",
         props: {
-            ip: String,
+            device: Object,
             gateway: Object
         },
         components: { 
@@ -46,15 +46,15 @@
                 }
             },
             async loadConfigInfo() {
-                this.configInfo = await DeviceApi.getDeviceConfigInfo(this.ip, this.gateway);
+                this.configInfo = await DeviceApi.getDeviceConfigInfo(this.device, this.gateway);
             },
             async loadConfigValues() {
-                this.values = await DeviceApi.getConfig(this.ip, this.gateway);
+                this.values = await DeviceApi.getConfig(this.device, this.gateway);
             },
             async saveConfig() {
                 this.saveLoading = true
                 try {
-                    if (await DeviceApi.saveConfigValues(this.ip, this.values, this.gateway)) {
+                    if (await DeviceApi.saveConfigValues(this.device, this.values, this.gateway)) {
                         this.loadConfigValues()
                     }
                 } finally {
@@ -65,7 +65,7 @@
                 if (confirm("Are you sure you want to delete all configuration values?")) {
                     this.deleteLoading = true
                     try {
-                        if (await DeviceApi.deleteAllConfigValues(this.ip, this.gateway)) {
+                        if (await DeviceApi.deleteAllConfigValues(this.device, this.gateway)) {
                             this.loadConfigValues()
                         }
                     } finally {

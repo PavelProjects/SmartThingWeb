@@ -12,7 +12,7 @@
             MenuView
         },
         props: {
-            ip: String,
+            device: Object,
             gateway: Object
         },
         data() {
@@ -29,7 +29,7 @@
             async loadSensors() {
                 this.loading = true
                 try {
-                    this.sensors = await DeviceApi.getDeviceSensors(this.ip, this.gateway)
+                    this.sensors = await DeviceApi.getDeviceSensors(this.device, this.gateway)
                     Object.entries(this.sensors).forEach(([name, { type, value }]) => {
                         const caption = `${name} (${type}): ${value}`
                         if (this.tabs[name]) {
@@ -40,7 +40,7 @@
                                 caption,
                                 props: {
                                     key: "sensor_" + name,
-                                    ip: this.ip,
+                                    device: this.device,
                                     observable: {
                                         name,
                                         type: "sensor"

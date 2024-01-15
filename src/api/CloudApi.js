@@ -17,7 +17,6 @@ const URL_GATEWAY_REQUEST = '/gateway/requests'
 const URL_GATEWAY_CREATE = '/gateway/management/create'
 const URL_GATEWAY_UPDATE = '/gateway/management/update'
 const URL_GATEWAY_DELETE = '/gateway/management/delete'
-const URL_GATEWAY_ONLINE = '/gateway/management/online'
 
 const axiosInstance = axios.create({
     baseURL: `http://${CLOUD_IP}:${CLOUD_PORT}`,
@@ -143,16 +142,13 @@ const CloudApi = {
             console.error(error)
         }
     },
-    async sendDeviceRequest(gateway, {target, path, method, payload}) {
+    async sendDeviceRequest({gateway, device, method, params}) {
         try {
             const response = await axiosInstance.post(
                 URL_GATEWAY_REQUEST + "/device",
                 {
                     gatewayId: gateway.id,
-                    target,
-                    path,
-                    method,
-                    payload: JSON.stringify(payload)
+                    request: { device, method, params }
                 }
             )
             return response.data

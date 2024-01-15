@@ -65,7 +65,7 @@
                     this.tabs[ip] = h(
                         DeviceControlPanel, { 
                             key: ip,
-                            ip,
+                            device: this.devices[ip],
                             gateway: this.gateway
                         }
                     );
