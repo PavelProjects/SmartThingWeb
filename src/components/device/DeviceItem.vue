@@ -1,5 +1,5 @@
 <script>
-const IMG_PATH = "/src/assets/img/"
+const IMG_PATH = "/img/"
 
 export default {
   name: "DeviceItem",
