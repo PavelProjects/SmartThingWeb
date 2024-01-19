@@ -5,7 +5,7 @@
   import { CloudApi } from '../api/CloudApi';
 
   export default {
-    name: "Home",
+    name: "ControlPanel",
     components: {
       DevicesSearchView,
       GatewaysList,

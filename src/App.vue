@@ -8,7 +8,11 @@
   <ToatsView id="toasts-list"/>
 
   <div class="content">
-    <router-view></router-view>
+    <router-view v-slot="{ Component }">
+      <keep-alive>
+        <component :is="Component" :key="$route.fullPath"/>
+      </keep-alive>
+    </router-view>
   </div>
 </template>
 

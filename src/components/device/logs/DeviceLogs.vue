@@ -31,6 +31,7 @@ export default {
             this.messages.unshift(parsed)
         }
     }, {id: "logs"})
+    console.debug("Subscribed to the logs topic")
   },
   unmounted() {
     GATEWAY_STOMP_CLIENT.unsubscribe("logs")

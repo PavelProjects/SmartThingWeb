@@ -1,4 +1,4 @@
-import Home from "./components/Home.vue"
+import ControlPanel from "./components/ControlPanel.vue"
 import DeviceLogs from "./components/device/logs/DeviceLogs.vue"
 import { createRouter, createWebHashHistory } from 'vue-router'
 
@@ -7,14 +7,21 @@ const NotFound = {
 }
 
 const routes = [
-  { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFound },
   {
     path: "/",
-    component: Home
-  },
-  {
-    path: "/logs",
-    component: DeviceLogs
+    redirect: to => {
+      return 'panel'
+    },
+    children: [
+      {
+        path: "/panel",
+        component: ControlPanel
+      },
+      {
+        path: "/logs",
+        component: DeviceLogs
+      },
+    ]
   },
 ]
 
