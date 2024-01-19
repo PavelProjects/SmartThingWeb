@@ -1,5 +1,5 @@
 import Home from "./components/Home.vue"
-import DeviceLogs from "./components/DeviceLogs.vue"
+import DeviceLogs from "./components/device/logs/DeviceLogs.vue"
 import { createRouter, createWebHashHistory } from 'vue-router'
 
 const NotFound = {

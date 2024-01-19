@@ -92,7 +92,7 @@
         </h2>
         <div v-if="cloudPopupVisible">
             <div class="overlay" @click="cloudPopupVisible = false"></div>
-            <div class="cloud-popup">
+            <div class="cloud-popup bordered">
                 <div v-if="authorizedShortInfo">
                     <InputWithLabel
                         label="Connection status"

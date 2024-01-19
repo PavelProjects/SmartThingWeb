@@ -17,12 +17,6 @@ EventBus.on(STOMP_CONNECTED, (client) => {
         }, {id: "notification"})
         console.debug("Subscribed to notification topic: " + NOTIFCATION_TOPIC)
     }
-
-    client.subscribe("/devices/logs", (message) => {
-        if (message && message.body) {
-            console.debug("LOG:" + message.body)
-        }
-    }, {id: "notification"})
 })
 
 const app = createApp(App)
