@@ -6,17 +6,26 @@
         name: "Doc",
         components: {
             GatewayInfoView,
-            CloudAuthDialog
+            CloudAuthDialog,
         },
-        props: {
-            mode: String
-        }
+        data() {
+            const mode = import.meta.env.VITE_MODE
+            return {
+                mode,
+                openMenu: false,
+            }
+        },
     }
 </script>
 
 <template>
     <div class="doc">
-        <h1 class="green" style="flex: 1 1 auto;">SmartThing</h1>
+        <router-link to="/">
+            <h1 class="green">SmartThing</h1>
+        </router-link>
+        <router-link to="/logs">
+            <h2>Devices logs</h2>
+        </router-link>
         <GatewayInfoView v-if="mode == 'gateway'" class="log-in-info"/>
     </div>
 </template>
@@ -30,6 +39,7 @@
         flex-direction: row;
         padding-left: 15px;
         padding-right: 15px;
+        align-items: center;
     }
     .log-in-info {
         margin-left: auto;
