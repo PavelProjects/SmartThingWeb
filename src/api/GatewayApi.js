@@ -14,6 +14,7 @@ const PATH_CLOUD_INFO = "/auth/configuration"
 const PATH_CLOUD_CONNECTED = "/connection/status"
 const PATH_CLOUD_CONNECT = "/connection/connect"
 const PATH_DEVICE_API = "/device/api"
+const URL_DEVICE_LOGS = '/device/logs'
 
 const GATEWAY_STOMP_CLIENT = new Client({brokerURL: GATEWAY_BROKER_URL});
 //todo rework bruhhh
@@ -111,7 +112,15 @@ const GatewayApi = {
                 caption: "Failed to connect"
             })
         }
-    }
+    },
+    async getLogs() {
+        try {
+            const response = await axiosInstance.get(URL_DEVICE_LOGS)
+            return response.data
+        } catch (error) {
+            console.error(error)
+        }
+    },
 }
 
 export { GatewayApi, GATEWAY_SEARCH_TOPIC, GATEWAY_STOMP_CLIENT }

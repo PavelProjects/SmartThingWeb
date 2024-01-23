@@ -1,5 +1,5 @@
 <script>
-import { GATEWAY_STOMP_CLIENT } from '../../../api/GatewayApi';
+import { GatewayApi, GATEWAY_STOMP_CLIENT } from '../../../api/GatewayApi';
 import { EventBus, STOMP_CONNECTED } from '../../../utils/EventBus';
 import LogMessage from './LogMessage.vue';
 
@@ -22,6 +22,10 @@ export default {
       EventBus.on(STOMP_CONNECTED, () => promiseResolver())
       await promise
     }
+
+    this.messages = await GatewayApi.getLogs()
+    this.messages.reverse()
+
     GATEWAY_STOMP_CLIENT.unsubscribe("logs")
     GATEWAY_STOMP_CLIENT.subscribe("/devices/logs", (message) => {
         if (message && message.body) {

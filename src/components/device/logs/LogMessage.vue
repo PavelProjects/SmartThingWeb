@@ -20,6 +20,7 @@ export default {
         case "ERROR":
           return "rgb(142, 63, 43)"
         case "WARNING":
+        case "WARN":
           return "rgb(188, 106, 34)"
         case "INFO":
           return "rgba(103, 198, 136, 0.8)"
