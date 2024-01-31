@@ -1,8 +1,9 @@
 <script>
-import { GatewayApi } from '../../../api/GatewayApi';
+  import { GatewayApi } from '../../../api/GatewayApi';
   import { toast } from '../../../utils/EventBus';
-import LoadingButton from '../../controls/LoadingButton.vue';
-import InputWithLabel from '../../fields/InputWithLabel.vue'
+  import LoadingButton from '../../controls/LoadingButton.vue';
+  import InputWithLabel from '../../fields/InputWithLabel.vue'
+
   export default {
     name: "SettingsEditor",
     components: { InputWithLabel, LoadingButton },
@@ -81,7 +82,7 @@ import InputWithLabel from '../../fields/InputWithLabel.vue'
       @input="settingsName = $event.target.value"
     />
     <h2 class="title">Settings</h2>
-    <textarea v-model="deviceSettings"></textarea>
+    <textarea class="editor" v-model="deviceSettings"></textarea>
     <div class="controls">
       <LoadingButton @click="save" :loading="loading">
         <h2>{{ name ? "Update" : "Create" }}</h2>
@@ -94,7 +95,7 @@ import InputWithLabel from '../../fields/InputWithLabel.vue'
 </template>
 
 <style scoped>
-  textarea {
+  .editor {
     font-size: 20px;
     min-width: 500px;
     min-height: 200px;
