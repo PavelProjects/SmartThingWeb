@@ -4,7 +4,6 @@
     import SensorsView from './tabs/SensorsView.vue'
     import StatesView from './tabs/StatesView.vue'
     import ConfigView from './tabs/ConfigView.vue'
-    import { h } from 'vue'
     import MetricsViewVue from './tabs/MetricsView.vue'
     import MenuView from '../menu/MenuView.vue'
 
@@ -28,7 +27,6 @@
                 gateway: this.gateway
             }
             return {
-                currentTab: null,
                 tabs: {
                     "info": {
                         class: DeviceInfoView,
@@ -63,29 +61,14 @@
                 }
             }
         },
-        created() {
-            this.switchTab("info")
-        },
-        methods: {
-            switchTab(name) {
-                if (!this.tabs[name]["render"]) {
-                    const tabInfo = this.tabs[name]
-                    this.tabs[name]["render"] = h(
-                        tabInfo.class,
-                        tabInfo.props
-                    )
-                }
-                this.currentTab = name
-            }
-        }
     }
 </script>
 
 <template>
-    <div id="control-panel" class="bordered">
-        <MenuView
-            :tabs="tabs"
-            default-tab="info"
-        />
-    </div>
+    <MenuView
+        id="control-panel"
+        class="bordered"
+        :tabs="tabs"
+        default-tab="info"
+    />
 </template>

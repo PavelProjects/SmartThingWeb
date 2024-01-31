@@ -31,7 +31,10 @@
             <router-link to="/">
                 <h2>Home</h2>
             </router-link>
-            <router-link v-if="mode === 'gateway'" to="/logs">
+            <router-link v-if="mode === 'gateway'" to="/devices/settings">
+                <h2>Devices settings</h2>
+            </router-link>
+            <router-link v-if="mode === 'gateway'" to="/devices/logs">
                 <h2>Devices logs</h2>
             </router-link>
         </div>
@@ -61,6 +64,7 @@
         left: var(--default-gap);
         background-color: var(--color-background-mute);
         border-radius: var(--border-radius);
+        text-align: center;
     }
     .log-in-info {
         margin-left: auto;

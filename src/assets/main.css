@@ -81,7 +81,7 @@ input, select {
   grid-template-columns: 1fr 1fr;
   border-radius: var(--border-radius);
 }
-input, select {
+input, select, textarea {
   background-color: var(--color-background);
   color: var(--color-text);
   outline: none;
@@ -112,31 +112,6 @@ input, select {
 }
 .loading-spinner {
   text-align: center;
-}
-.menu-panel {
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-}
-.menu-items {
-  width: var(--menu-item-widht);
-}
-.menu-items h2 {
-  transition: 0.5s;
-  cursor: pointer;
-  border: solid;
-  border-color: var(--color-border);
-  border-radius: var(--border-radius);;
-  padding: 5px;
-  text-align: center;
-}
-.menu-item-content {
-  position: relative;
-  width: calc(100% - var(--menu-item-widht));
-  margin-left: 5px;
-}
-.menu-selected {
-  background-color: var(--vt-c-black-mute);
 }
 .update-button {
   position: absolute;
