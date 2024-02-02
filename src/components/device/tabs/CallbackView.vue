@@ -176,7 +176,7 @@ export default {
 </script>
 
 <template>
-	<div class="bordered">
+	<div class="bordered" style="padding: 2px;">
 		<div class="header">
 			<h3 class="title" style="flex: 1 1 auto; text-align: start;">
 				[{{ callback.id }}] {{ callback.caption || systemNameToNormal(callback.type) }}

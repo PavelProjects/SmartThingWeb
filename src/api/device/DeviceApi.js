@@ -20,6 +20,8 @@ const CREATE_CALLBACK = 'createCallback'
 const UPDATE_CALLBACK = 'updateCallback'
 const DELETE_CALLBACK = 'deleteCallback'
 const GET_METRICS = 'getMetrics'
+const EXPORT_SETTINGS = 'exportSettings'
+const IMPORT_SETTINGS = 'importSettings'
 
 async function extractDataFromError(error) {
   const { response } = error || {}
@@ -382,6 +384,46 @@ export const DeviceApi = {
       console.error(error)
       toast.error({
         caption: 'Failed to load device metrics'
+      })
+    }
+  },
+  async exportSettings(device, gateway) {
+    try {
+      const result = await deviceFetch({
+        device,
+        gateway,
+        method: EXPORT_SETTINGS
+      })
+      if (!result || result.status !== 200) {
+        throw new Error({ result });
+      }
+      return result.data
+    } catch (error) {
+      console.error(error)
+      const { error: description } = await extractDataFromError(error)
+      toast.error({
+        caption: 'Failed to export device settings',
+        description
+      })
+    }
+  },
+  async importSettings(device, gateway, settings) {
+    try {
+      const result = await deviceFetch({
+        device,
+        gateway,
+        method: IMPORT_SETTINGS,
+        params: {
+          settings
+        },
+      })
+      return result.status === 200
+    } catch (error) {
+      console.error(error)
+      const { error: description } = await extractDataFromError(error)
+      toast.error({
+        caption: 'Failed to import settings',
+        description
       })
     }
   }

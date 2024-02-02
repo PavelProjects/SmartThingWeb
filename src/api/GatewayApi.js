@@ -2,7 +2,7 @@ import axios from "axios";
 import { Client } from '@stomp/stompjs';
 import { EventBus, STOMP_CONNECTED, toast } from "../utils/EventBus";
 
-const GATEWAY_PATH = import.meta.env.VITE_GATEWAY_PATH
+const GATEWAY_PATH = import.meta.env.VITE_GATEWAY_PATH || document.location.hostname
 const GATEWAY_PORT = import.meta.env.VITE_GATEWAY_PORT
 
 const GATEWAY_WS = import.meta.env.VITE_GATEWAY_WS
@@ -13,6 +13,7 @@ const PATH_AUTHORIZATION = "/auth"
 const PATH_CLOUD_INFO = "/auth/configuration"
 const PATH_CLOUD_CONNECTED = "/connection/status"
 const PATH_CLOUD_CONNECT = "/connection/connect"
+const PATH_DEVICES_FOUND = "/device/found"
 const PATH_DEVICE_API = "/device/api"
 const PATH_DEVICE_LOGS = '/device/logs'
 const PATH_DEVICE_SETTINGS = '/device/settings'
@@ -141,9 +142,9 @@ const GatewayApi = {
       })
     }
   },
-  async updateDeviceSettings({ oldName, name, settings }) {
+  async updateDeviceSettings({ oldName, name, value }) {
     try {
-      const response = await axiosInstance.put(PATH_DEVICE_SETTINGS, { oldName, name, settings })
+      const response = await axiosInstance.put(PATH_DEVICE_SETTINGS, { oldName, name, value })
       return response.status == 200
     } catch (error) {
       console.error(error);
@@ -154,9 +155,9 @@ const GatewayApi = {
       })
     }
   },
-  async createDeviceSettings({ name, settings }) {
+  async createDeviceSettings({ name, value }) {
     try {
-      const response = await axiosInstance.post(PATH_DEVICE_SETTINGS, { name, settings })
+      const response = await axiosInstance.post(PATH_DEVICE_SETTINGS, { name, value })
       return response.status == 200
     } catch (error) {
       console.error(error);
@@ -177,6 +178,17 @@ const GatewayApi = {
       toast.error({
         caption: "Failed to delete device settings",
         description
+      })
+    }
+  },
+  async getFoundDevices() {
+    try {
+      const response = await axiosInstance.get(PATH_DEVICES_FOUND)
+      return response.data
+    } catch (error) {
+      console.error(error);
+      toast.error({
+        caption: "Failed to load recent found devices"
       })
     }
   }

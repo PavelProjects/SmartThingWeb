@@ -1,12 +1,5 @@
 @import './base.css';
 
-#control-panel {
-  display: flex;
-  flex-direction: row;
-  column-gap: var(--default-gap);
-  margin: 0 auto;
-  width: 1000px;
-}
 #toasts-list {
   position: absolute;
   bottom: 5px;
@@ -56,9 +49,8 @@ input, select {
 }
 
 .bordered {
-  border: 3px solid var(--color-border);
+  border: 2px solid var(--color-border);
   border-radius: var(--border-radius);;
-  padding: 5px;
 }
 
 @media (hover: hover) {
@@ -112,11 +104,6 @@ input, select, textarea {
 }
 .loading-spinner {
   text-align: center;
-}
-.update-button {
-  position: absolute;
-  top: 0px;
-  right: 0px;
 }
 
 .controls-holder {
@@ -172,7 +159,7 @@ input, select, textarea {
   outline: none;
   user-select: none;
 }
-.toast h2, h3 {
+.toast h2 h3 {
   text-align: center;
 }
 
@@ -181,6 +168,7 @@ input, select, textarea {
   column-gap: calc(var(--default-gap) / 2);
   grid-template-columns: 200px 150px 120px auto;
   text-align: center;
+  padding: 2px;
 }
 .log-message-container * {
   border-right: 2px solid var(--color-border);
@@ -188,4 +176,9 @@ input, select, textarea {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.menu-selected {
+  background-color: var(--vt-c-black-mute);
+  border-radius: var(--border-radius);
 }

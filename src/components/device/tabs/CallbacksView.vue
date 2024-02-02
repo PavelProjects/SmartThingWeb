@@ -46,13 +46,15 @@ export default {
   },
   methods: {
     async update() {
+      this.loading = true
       await this.loadCallbacks()
+      this.loading = false
     },
     async loadCallbacks() {
       this.callbacks = await DeviceApi.getCallbacks(this.device, this.observable, this.gateway) || []
     },
     async loadTemplates() {
-      this.templates = await DeviceApi.getCallbacksTemplates(this.device, this.gateway)
+      this.templates = await DeviceApi.getCallbacksTemplates(this.device, this.gateway) || {}
     },
     addCallback(type) {
       if (this.callbacks && this.callbacks.length > 0 && this.callbacks[0].id == NEW_CALLBACK_ID) {
@@ -68,6 +70,9 @@ export default {
           return acc
         }, { id: NEW_CALLBACK_ID, type })
       this.callbacks.unshift(callbackFromTemplate)
+    },
+    templateForType(type) {
+      return {...this.templates[type], ...this.templates.default}
     }
   }
 }
@@ -78,10 +83,19 @@ export default {
   <sync-loader class="loading-spinner" :loading="loading"></sync-loader>
   <div v-if="!loading">
     <Combobox label="Add callback of type " :items="callbackTypes" @input="addCallback($event.target.value)" />
-    <div v-if="callbacks" class="callbacks-list-view list">
-      <CallbackView v-for="callback in callbacks" :device="device" :key="callback.id" :observable="observable"
-        :callback="callback" :template="{ ...templates[callback.type], ...templates['default'] }" :gateway="gateway"
-        @update="update" />
+    <div v-if="callbacks.length > 0" class="callbacks-list-view list">
+      <CallbackView 
+        v-for="callback in callbacks" 
+        :device="device"
+        :key="callback.id"
+        :observable="observable"
+        :callback="callback"
+        :template="templateForType(callback.type)"
+        :gateway="gateway"
+        @update="update"/>
+    </div>
+    <div v-else class="title">
+      <h3>No callbacks added yet</h3>
     </div>
   </div>
 </template>

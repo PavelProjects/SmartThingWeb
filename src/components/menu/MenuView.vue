@@ -1,38 +1,45 @@
 <script>
-import MenuItem from './MenuItem.vue'
 import { h } from 'vue'
 import UpdateButton from '../controls/UpdateButton.vue'
 
 export default {
   name: "MenuView",
   components: {
-    MenuItem,
     UpdateButton
   },
   props: {
     tabs: Object,
-    defaultTab: String,
+    tab: String,
     header: String,
     tabTitle: String,
-    updateTabs: Function,
   },
   data() {
     return {
       currentTab: undefined,
-      haveUpdateButton: this.haveUpdateMethod(this.defaultTab),
+      haveUpdateButton: this.haveUpdateMethod(this.tab),
       loading: false
     }
+  },
+  mounted() {
+    this.switchTab(this.currentTab || this.getDefaultTab());
   },
   watch: {
     tabs() {
       if (this.tabs[this.currentTab]) {
         this.switchTab(this.currentTab, true)
       } else {
-        this.switchTab(this.defaultTab || Object.keys(this.tabs)[0], true)
+        this.switchTab(this.getDefaultTab(), true)
       }
+    },
+    tab() {
+      this.currentTab = this.tab
+      this.switchTab(this.currentTab, true)
     }
   },
   methods: {
+    getDefaultTab() {
+      return this.tab || Object.keys(this.tabs)[0];
+    },
     switchTab(name, forceRender=false) {
       if (this.currentTab == name && !forceRender) {
         this.updateContent()
@@ -72,14 +79,8 @@ export default {
 </script>
 
 <template>
-  <div class="list">
+  <div class="list" style="position: relative">
     <h1 v-if="header" class="title">{{ header }}</h1>
-    <UpdateButton 
-      class="update-button"
-      v-if="updateTabs"
-      :loading="loading"
-      :onClick="updateTabs"
-    />
     <div v-if="tabs" class="menu-panel">
       <div class="menu-items list bordered">
         <h2 v-for="[name, { caption }] in Object.entries(tabs)" 
@@ -91,14 +92,14 @@ export default {
           {{ caption }}
         </h2>
       </div>
-      <div v-if="currentTab && tabs[currentTab]['render']" class="menu-item-content">
+      <div v-if="tabs[currentTab] && tabs[currentTab]['render']" class="menu-item-content">
         <UpdateButton class="update-button" v-if="haveUpdateButton" :loading="loading" :onClick="updateContent" />
         <KeepAlive>
           <component 
-            :key="currentTab"
             ref="content"
+            :key="currentTab"
             :is="tabs[currentTab]['render']"
-            @updateTabs="updateTabs"
+            v-bind="$attrs"
           />
         </KeepAlive>
       </div>
@@ -107,6 +108,11 @@ export default {
 </template>
 
 <style scoped>
+.update-button {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+}
 .menu-panel {
   display: flex;
   flex-direction: row;
@@ -114,26 +120,23 @@ export default {
 }
 
 .menu-items {
-  width: var(--menu-item-widht);
+  width: var(--menu-item-width);
   height: fit-content;
+  padding: 2px;
 }
 
 .menu-items h2 {
   transition: 0.5s;
   cursor: pointer;
   border-radius: var(--border-radius);
-  ;
   padding: 5px;
   text-align: center;
+  word-wrap: break-word;
 }
 
 .menu-item-content {
   position: relative;
-  width: calc(100% - var(--menu-item-widht));
+  width: calc(100% - var(--menu-item-width));
   margin-left: 5px;
-}
-
-.menu-selected {
-  background-color: var(--vt-c-black-mute);
 }
 </style>

@@ -13,9 +13,9 @@ export default {
   data() {
     return {
       loading: false,
-      settings: [],
       selected: undefined,
       tabs: {},
+      openTab: undefined,
     }
   },
   mounted() {
@@ -24,14 +24,13 @@ export default {
   methods: {
     async loadSettings() {
       this.loading = true
-      this.devicesSettings = await GatewayApi.getDevicesSettings()
-      if (this.devicesSettings) {
-        this.tabs = this.devicesSettings.reduce((acc, {name, settings}) => {
-          acc[name] = {
+      const settings = await GatewayApi.getDevicesSettings()
+      if (settings) {
+        this.tabs = settings.reduce((acc, settings) => {
+          acc[settings.name] = {
             class: SettingsEditor,
-            caption: name,
+            caption: settings.name,
             props: {
-              name,
               settings
             }
           }
@@ -41,27 +40,25 @@ export default {
       this.tabs["new"] = {
         class: SettingsEditor,
         caption: "Add new",
+        props: {
+          settings: {}
+        }
       }
       this.loading = false
-    }
+    },
+    async handleChange(name) {
+      await this.loadSettings();
+      this.openTab = name
+    },
   }
 }
 </script>
 
 <template>
-  <div>
-    <MenuView
-      header="Saved settings"
-      :tabs="tabs"
-      :updateTabs="() => loadSettings()"
-    />
-  </div>
+  <MenuView
+    header="Saved devices settings"
+    :tabs="tabs"
+    :tab="openTab"
+    @onUpdate="(event) => handleChange(event)"
+  />
 </template>
-
-<style scoped>
-  .update {
-    position: absolute;
-    right: 0px;
-    top: 5px;
-  }
-</style>

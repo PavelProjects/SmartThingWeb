@@ -2,7 +2,7 @@ import { Client } from '@stomp/stompjs';
 import axios from "axios";
 import { EventBus, toast, STOMP_CONNECTED } from "../utils/EventBus";
 
-const CLOUD_IP = import.meta.env.VITE_CLOUD_IP
+const CLOUD_IP = import.meta.env.VITE_CLOUD_IP || document.location.hostname
 const CLOUD_PORT = import.meta.env.VITE_CLOUD_PORT
 const CLOUD_BROKER_PATH = import.meta.env.VITE_CLOUD_WS
 

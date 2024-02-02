@@ -6,7 +6,6 @@ import GatewayItem from './GatewayItem.vue';
 import GatewayInfoDialog from './GatewayInfoDialog.vue';
 import UpdateButton from '../controls/UpdateButton.vue';
 import AddButton from '../controls/AddButton.vue'
-import MenuItem from '../menu/MenuItem.vue';
 import MenuView from '../menu/MenuView.vue';
 
 export default {
@@ -14,7 +13,6 @@ export default {
     components: {
         GatewayItem,
         MenuView,
-        MenuItem,
         LoadingButton,
         GatewayInfoDialog,
         UpdateButton,
@@ -154,20 +152,17 @@ export default {
             />
         </div>
         <div class="list">
-            <MenuItem
+            <GatewayItem
                 v-for="gateway in gateways"
                 :key="gateway.id"
-                :selected="selectedGateway && selectedGateway.id == gateway.id"
-            >
-                <GatewayItem 
-                    :gateway="gateway"
-                    @updateGateway="handleUpdategateway(gateway)"
-                    @deleteGateway="deleteGateway(gateway)"
-                    @generateToken="generateToken(gateway)"
-                    @showControlPanel="showControlPanel(gateway)"
-                    @logout="logoutGateway(gateway)"
-                />
-            </MenuItem>
+                :gateway="gateway"
+                @updateGateway="handleUpdategateway(gateway)"
+                @deleteGateway="deleteGateway(gateway)"
+                @generateToken="generateToken(gateway)"
+                @showControlPanel="showControlPanel(gateway)"
+                @logout="logoutGateway(gateway)"
+                :class="{'menu-selected': selectedGateway && selectedGateway.id == gateway.id}"
+            />
         </div>
         <GatewayInfoDialog
             :visible="showDialog"
