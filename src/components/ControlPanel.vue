@@ -1,5 +1,5 @@
 <script>
-  import DevicesSearchView from './device/DevicesSearchView.vue'
+  import DevicesMain from './device/DevicesMain.vue'
   import GatewaysList from "./gateway/GatewaysList.vue";
   import CloudAuthDialog from './dialogs/CloudAuthDialog.vue';
   import { CloudApi } from '../api/CloudApi';
@@ -7,7 +7,7 @@
   export default {
     name: "ControlPanel",
     components: {
-      DevicesSearchView,
+      DevicesMain,
       GatewaysList,
       CloudAuthDialog,
     },
@@ -51,7 +51,7 @@
           v-if="mode == 'cloud'"
           @select="handleGatewaySelect"
         />
-        <DevicesSearchView 
+        <DevicesMain 
           v-if="selectedGateway"
           :gateway="selectedGateway"
         />
@@ -59,7 +59,7 @@
     </div>
   </div>
   <div v-if="mode == 'gateway'">
-    <DevicesSearchView />
+    <DevicesMain />
   </div>
   <div v-else>
     <h1>Unkown mode: {{ mode }}</h1>

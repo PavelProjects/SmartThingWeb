@@ -1,6 +1,4 @@
 <script>
-import DeviceControlPanel from './DeviceControlPanel.vue'
-import { h } from 'vue'
 import { SearchApi } from '../../api/SearchDevicesApi';
 import { EventBus, REQUEST } from '../../utils/EventBus';
 import UpdateButton from '../controls/UpdateButton.vue';
@@ -8,20 +6,18 @@ import DeviceItem from './DeviceItem.vue'
 
 export default {
   components: {
-    DeviceControlPanel,
     UpdateButton,
     DeviceItem
   },
   props: {
-    gateway: Object
+    gateway: Object,
+    title: String,
   },
   data() {
     return {
-      tabs: {},
       devices: {},
-      selectedIp: null,
-      client: null,
-      loading: false
+      loading: false,
+      selectedIp: undefined,
     }
   },
   watch: {
@@ -63,44 +59,28 @@ export default {
         }
       }, this.gateway);
     },
-    switchTab(ip) {
-      if (!this.tabs[ip]) {
-        this.tabs[ip] = h(
-          DeviceControlPanel, {
-          key: ip,
-          device: this.devices[ip],
-          gateway: this.gateway
-        }
-        );
-      }
-      this.selectedIp = ip;
-    },
+    handleClick(ip, deviceInfo) {
+      this.selectedIp = ip
+      this.$emit('select', deviceInfo)
+    }
   },
 }
 </script>
 
 <template>
-  <div class="devices-table">
-    <div>
-      <div style="position: relative;">
-        <h1 class="title">Found devices</h1>
-        <UpdateButton class="update" :loading="loading" :onClick="search" />
-      </div>
-      <div class="search-results">
-        <DeviceItem 
-          v-for="[ip, deviceInfo] in Object.entries(devices)" 
-          :key="ip" 
-          :selected="selectedIp == ip"
-          :device="deviceInfo"
-          @click="() => switchTab(ip)"
-        />
-      </div>
+  <div>
+    <div style="position: relative;">
+      <h1 class="title">{{ !!title ? title :"Found devices" }}</h1>
+      <UpdateButton class="update" :loading="loading" :onClick="search" />
     </div>
-    <div v-if="selectedIp">
-      <h1 class="title">Control panel</h1>
-      <KeepAlive>
-        <component :is="tabs[selectedIp]"></component>
-      </KeepAlive>
+    <div class="search-results">
+      <DeviceItem 
+        v-for="[ip, deviceInfo] in Object.entries(devices)" 
+        :key="ip" 
+        :selected="selectedIp == ip"
+        :device="deviceInfo"
+        @click="() => handleClick(ip, deviceInfo)"
+      />
     </div>
   </div>
 </template>
@@ -111,14 +91,9 @@ export default {
   right: 0px;
   top: 5px;
 }
-.devices-table {
-  display: flex;
-  flex-direction: row;
-  gap: var(--default-gap);
-}
-
 .search-results {
-  display: grid;
+  display: flex;
+  flex-direction: column;
   row-gap: var(--default-gap);
   height: fit-content;
   width: 400px;

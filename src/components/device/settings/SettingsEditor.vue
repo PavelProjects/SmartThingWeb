@@ -5,7 +5,8 @@
   import InputWithLabel from '../../fields/InputWithLabel.vue'
   import DeviceItem from '../DeviceItem.vue';
   import UpdateButton from '../../controls/UpdateButton.vue';
-import { DeviceApi } from '../../../api/device/DeviceApi';
+  import { DeviceApi } from '../../../api/device/DeviceApi';
+  import DevicesSearchView from '../DevicesSearchView.vue';
 
   const MODE = {
     EXPORT: "export",
@@ -14,7 +15,13 @@ import { DeviceApi } from '../../../api/device/DeviceApi';
 
   export default {
     name: "SettingsEditor",
-    components: { InputWithLabel, LoadingButton, DeviceItem, UpdateButton },
+    components: { 
+      InputWithLabel,
+      LoadingButton,
+      DeviceItem,
+      UpdateButton,
+      DevicesSearchView
+    },
     props: {
       settings: {
         type: Object
@@ -159,23 +166,12 @@ import { DeviceApi } from '../../../api/device/DeviceApi';
         </button>
       </div>
     </div>
-    <div v-if="mode" class="devices-select">
-      <h1 class="title">Select device</h1>
-      <UpdateButton
-        class="update"
-        @click="loadDevices"
-        :loading="loadingDevices"
-      />
-      <div class="list">
-        <DeviceItem 
-          v-for="deviceInfo of devices"
-          :key="deviceInfo.ip"
-          :device="deviceInfo"
-          :selected="selectedDevice === deviceInfo"
-          @click="() => handleDeviceClick(deviceInfo)"
-        />
-      </div>
-    </div>  
+    <DevicesSearchView
+      v-if="mode"
+      :gateway="gateway"
+      title="Select device"
+      @select="handleDeviceClick"
+    />
   </div>
 </template>
 
