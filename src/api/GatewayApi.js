@@ -40,9 +40,9 @@ async function extractDataFromError(error) {
 }
 
 const GatewayApi = {
-  async callDeviceApi({ device, method, params }) {
+  async callDeviceApi({ device, command, params }) {
     return await axiosInstance.post(PATH_DEVICE_API, {
-      method,
+      command,
       device,
       params
     })

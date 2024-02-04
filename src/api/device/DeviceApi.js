@@ -22,6 +22,7 @@ const DELETE_CALLBACK = 'deleteCallback'
 const GET_METRICS = 'getMetrics'
 const EXPORT_SETTINGS = 'exportSettings'
 const IMPORT_SETTINGS = 'importSettings'
+const RESTART = 'restart'
 
 async function extractDataFromError(error) {
   const { response } = error || {}
@@ -31,7 +32,7 @@ async function extractDataFromError(error) {
 export const DeviceApi = {
   async getDeviceInfo(device, gateway) {
     try {
-      const response = await deviceFetch({ device, method: GET_INFO, gateway })
+      const response = await deviceFetch({ device, command: GET_INFO, gateway })
       return response.data
     } catch (error) {
       console.error(error)
@@ -42,7 +43,7 @@ export const DeviceApi = {
   },
   async getDeviceActionsInfo(device, gateway) {
     try {
-      const response = await deviceFetch({ device, method: GET_ACTIONS, gateway })
+      const response = await deviceFetch({ device, command: GET_ACTIONS, gateway })
       return response.data
     } catch (error) {
       console.error(error)
@@ -53,7 +54,7 @@ export const DeviceApi = {
   },
   async getDeviceConfigInfo(device, gateway) {
     try {
-      const response = await deviceFetch({ device, method: GET_CONFIG_INFO, gateway })
+      const response = await deviceFetch({ device, command: GET_CONFIG_INFO, gateway })
       return response.data
     } catch (error) {
       console.error(error)
@@ -67,7 +68,7 @@ export const DeviceApi = {
       const result = await deviceFetch({
         device,
         gateway,
-        method: SAVE_NAME,
+        command: SAVE_NAME,
         params: {
           name
         }
@@ -90,7 +91,7 @@ export const DeviceApi = {
   },
   async getConfig(device, gateway) {
     try {
-      const response = await deviceFetch({ device, method: GET_CONFIG_VALUES, gateway })
+      const response = await deviceFetch({ device, command: GET_CONFIG_VALUES, gateway })
       return response.data
     } catch (error) {
       console.error(error)
@@ -103,7 +104,7 @@ export const DeviceApi = {
     try {
       const result = await deviceFetch({
         device,
-        method: SAVE_CONFIG_VALUES,
+        command: SAVE_CONFIG_VALUES,
         params: { values },
         gateway
       })
@@ -128,7 +129,7 @@ export const DeviceApi = {
     try {
       const result = await deviceFetch({
         device,
-        method: DELETE_CONFIG_VALUE,
+        command: DELETE_CONFIG_VALUE,
         params: {
           name: key
         },
@@ -155,7 +156,7 @@ export const DeviceApi = {
     try {
       const result = await deviceFetch({
         device,
-        method: DELETE_ALL_CONFIG_VALUES,
+        command: DELETE_ALL_CONFIG_VALUES,
         gateway
       })
 
@@ -179,7 +180,7 @@ export const DeviceApi = {
     try {
       const result = await deviceFetch({
         device,
-        method: CALL_ACTION,
+        command: CALL_ACTION,
         params: {
           action
         },
@@ -203,7 +204,7 @@ export const DeviceApi = {
   },
   async getDeviceSensors(device, gateway) {
     try {
-      const response = await deviceFetch({ device, method: GET_SENSORS, gateway })
+      const response = await deviceFetch({ device, command: GET_SENSORS, gateway })
       return response.data
     } catch (error) {
       console.error(error)
@@ -214,7 +215,7 @@ export const DeviceApi = {
   },
   async getDeviceStates(device, gateway) {
     try {
-      const response = await deviceFetch({ device, method: GET_STATES, gateway })
+      const response = await deviceFetch({ device, command: GET_STATES, gateway })
       return response.data
     } catch (error) {
       console.error(error)
@@ -226,7 +227,7 @@ export const DeviceApi = {
   },
   async getAllCallbacks(device, gateway) {
     try {
-      const response = await deviceFetch({ device, method: GET_ALL_CALLBACKS, gateway })
+      const response = await deviceFetch({ device, command: GET_ALL_CALLBACKS, gateway })
       return response.data
     } catch (error) {
       console.error(error)
@@ -239,7 +240,7 @@ export const DeviceApi = {
     try {
       const response = await deviceFetch({
         device,
-        method: GET_CALLBACKS,
+        command: GET_CALLBACKS,
         params: {
           observable
         },
@@ -259,7 +260,7 @@ export const DeviceApi = {
     try {
       const response = await deviceFetch({
         device,
-        method: GET_CALLBACK_BY_ID,
+        command: GET_CALLBACK_BY_ID,
         params: { observable, id },
         gateway
       })
@@ -275,7 +276,7 @@ export const DeviceApi = {
   },
   async getCallbacksTemplates(device, gateway) {
     try {
-      const response = await deviceFetch({ device, method: GET_CALLBACKS_TEMPLATES, gateway })
+      const response = await deviceFetch({ device, command: GET_CALLBACKS_TEMPLATES, gateway })
       return response.data
     } catch (error) {
       console.error(error)
@@ -288,7 +289,7 @@ export const DeviceApi = {
     try {
       const result = await deviceFetch({
         device,
-        method: CREATE_CALLBACK,
+        command: CREATE_CALLBACK,
         params: {
           observable,
           callback
@@ -315,7 +316,7 @@ export const DeviceApi = {
     try {
       const result = await deviceFetch({
         device,
-        method: UPDATE_CALLBACK,
+        command: UPDATE_CALLBACK,
         params: {
           observable,
           callback
@@ -344,7 +345,7 @@ export const DeviceApi = {
     try {
       const result = await deviceFetch({
         device,
-        method: DELETE_CALLBACK,
+        command: DELETE_CALLBACK,
         params: { observable, id },
         gateway
       })
@@ -370,7 +371,7 @@ export const DeviceApi = {
       const result = await deviceFetch({
         device,
         gateway,
-        method: GET_METRICS
+        command: GET_METRICS
       })
       if (!result || result.status !== 200) {
         throw new Error({ result })
@@ -388,7 +389,7 @@ export const DeviceApi = {
       const result = await deviceFetch({
         device,
         gateway,
-        method: EXPORT_SETTINGS
+        command: EXPORT_SETTINGS
       })
       if (!result || result.status !== 200) {
         throw new Error({ result })
@@ -408,10 +409,27 @@ export const DeviceApi = {
       const result = await deviceFetch({
         device,
         gateway,
-        method: IMPORT_SETTINGS,
+        command: IMPORT_SETTINGS,
         params: {
           settings
         }
+      })
+      return result.status === 200
+    } catch (error) {
+      console.error(error)
+      const { error: description } = await extractDataFromError(error)
+      toast.error({
+        caption: 'Failed to import settings',
+        description
+      })
+    }
+  },
+  async restartDevice(device, gateway) {
+    try {
+      const result = await deviceFetch({
+        device,
+        gateway,
+        command: RESTART,
       })
       return result.status === 200
     } catch (error) {

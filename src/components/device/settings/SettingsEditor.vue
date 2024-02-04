@@ -22,7 +22,6 @@ export default {
     settings: {
       type: Object
     },
-    gateway: Object
   },
   data() {
     const { name, value } = this.settings
@@ -110,7 +109,7 @@ export default {
     },
     async importFrom() {
       const loadedSettings =
-        (await DeviceApi.exportSettings(this.selectedDevice, this.gateway)) || {}
+        (await DeviceApi.exportSettings(this.selectedDevice, {})) || {}
       this.newSettings.value = JSON.stringify(loadedSettings, null, 2)
       this.newSettings.name = `${this.selectedDevice.name}_${!!this.selectedDevice.type && this.selectedDevice.type}`
     },
@@ -120,7 +119,7 @@ export default {
       if (
         await DeviceApi.importSettings(
           this.selectedDevice,
-          this.gateway,
+          {},
           JSON.parse(this.newSettings.value)
         )
       ) {
@@ -171,7 +170,6 @@ export default {
     </div>
     <DevicesSearchView
       v-if="mode"
-      :gateway="gateway"
       title="Select device"
       @select="handleDeviceClick"
     />
