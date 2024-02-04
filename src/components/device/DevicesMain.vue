@@ -10,7 +10,7 @@ export default {
     DeviceControlPanel
   },
   props: {
-    gateway: Object
+    gateway: String
   },
   data() {
     return {
@@ -40,7 +40,7 @@ export default {
 
 <template>
   <div class="devices-table">
-    <DevicesSearchView :gateway="gateway" @select="handleDeviceSwitch" />
+    <DevicesSearchView @select="handleDeviceSwitch" />
     <div v-if="selected">
       <h1 class="title">Control panel</h1>
       <KeepAlive>

@@ -10,14 +10,14 @@ export default {
     DeviceItem
   },
   props: {
-    gateway: Object,
     title: String
   },
   data() {
     return {
       devices: {},
       loading: false,
-      selectedIp: undefined
+      selectedIp: undefined,
+      gateway: this.$route.params.gateway
     }
   },
   watch: {

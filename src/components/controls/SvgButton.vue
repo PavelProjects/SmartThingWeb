@@ -11,7 +11,9 @@ export default {
     },
     onClick: {
       type: Function,
-      default: () => {}
+      default: () => {
+        return () => {}
+      }
     }
   },
   components: {
@@ -29,13 +31,16 @@ export default {
 </script>
 
 <template>
-  <div class="container" :id="testId" @click.prevent="handleClick">
+  <div class="container" :id="testId" @click.stop="handleClick">
     <moon-loader :loading="loading" size="35px" />
     <slot v-if="!loading" :size="35"></slot>
   </div>
 </template>
 
 <style scoped>
+.container {
+  height: 100%;
+}
 .container:hover {
   cursor: pointer;
 }

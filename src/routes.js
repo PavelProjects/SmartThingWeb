@@ -3,24 +3,49 @@ import DeviceLogs from './components/device/logs/DeviceLogs.vue'
 import SettingsManager from './components/device/settings/SettingsManager.vue'
 import { createRouter, createWebHashHistory } from 'vue-router'
 
-const routes = [
+const mode = import.meta.env.VITE_MODE
+
+const gatewayRoutes = [
   {
     path: '/',
     redirect: () => {
-      return '/devices/panel'
+      return '/panel'
     },
     children: [
       {
-        path: '/devices/panel',
+        path: '/panel',
         component: ControlPanel
       },
       {
-        path: '/devices/logs',
+        path: '/logs',
         component: DeviceLogs
       },
       {
-        path: '/devices/settings',
+        path: '/settings',
         component: SettingsManager
+      }
+    ]
+  }
+]
+
+const cloudRoutes = [
+  {
+    path: '/',
+    redirect: () => {
+      return '/panel'
+    },
+    children: [
+      {
+        path: '/panel',
+        component: {
+          render() {
+            return null
+          }
+        }
+      },
+      {
+        path: '/panel/:gateway',
+        component: ControlPanel
       }
     ]
   }
@@ -28,5 +53,5 @@ const routes = [
 
 export const router = createRouter({
   history: createWebHashHistory(),
-  routes: routes
+  routes: mode === 'cloud' ? cloudRoutes : gatewayRoutes
 })

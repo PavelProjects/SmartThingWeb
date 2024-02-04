@@ -6,8 +6,7 @@ import SyncLoader from 'vue-spinner/src/SyncLoader.vue'
 export default {
   name: 'MetricsView',
   props: {
-    device: Object,
-    gateway: Object
+    device: Object
   },
   components: {
     TreeList,
@@ -16,7 +15,8 @@ export default {
   data() {
     return {
       loading: false,
-      metrics: {}
+      metrics: {},
+      gateway: this.$route.params.gateway
     }
   },
   mounted() {

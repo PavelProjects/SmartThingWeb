@@ -38,7 +38,7 @@ export default {
 <style scoped>
 .device-container {
   position: relative;
-  padding: 2px;
+  padding: var(--padding-default);
   display: flex;
   flex-direction: column;
   gap: var(--default-gap);
@@ -49,7 +49,7 @@ img {
   height: 50px;
   position: absolute;
   top: 20px;
-  right: 2px;
+  right: var(--padding-default);
   border-radius: var(--border-radius);
 }
 </style>

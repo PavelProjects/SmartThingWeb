@@ -162,7 +162,7 @@ textarea {
   column-gap: calc(var(--default-gap) / 2);
   grid-template-columns: 200px 150px 120px auto;
   text-align: center;
-  padding: 2px;
+  padding: var(--padding-default);
 }
 .log-message-container * {
   border-right: 2px solid var(--color-border);

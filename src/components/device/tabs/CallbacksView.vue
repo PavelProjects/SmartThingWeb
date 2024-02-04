@@ -16,8 +16,7 @@ export default {
   },
   props: {
     device: Object,
-    observable: Object,
-    gateway: Object
+    observable: Object
   },
   data() {
     return {
@@ -25,7 +24,8 @@ export default {
       callbacks: [],
       templates: {},
       selectedType: null,
-      loading: false
+      loading: false,
+      gateway: this.$route.params.gateway
     }
   },
   computed: {
@@ -99,7 +99,6 @@ export default {
           :observable="observable"
           :callbackProp="callback"
           :template="templateForType(callback.type)"
-          :gateway="gateway"
           @update="update"
         />
       </div>

@@ -1,19 +1,13 @@
 <script>
-import DeleteButton from '../controls/DeleteButton.vue'
-import EditButton from '../controls/EditButton.vue'
+import DotsVertical from 'vue-material-design-icons/DotsVertical.vue'
 
 export default {
   name: 'GatewayItem',
   props: {
-    gateway: Object,
-    updateGateway: Function,
-    deleteGateway: Function,
-    generateToken: Function,
-    showControlPanel: Function
+    gateway: Object
   },
   components: {
-    DeleteButton,
-    EditButton
+    DotsVertical
   }
 }
 </script>
@@ -21,60 +15,65 @@ export default {
 <template>
   <div class="gateway-item">
     <div
-      class="dot"
+      class="status"
       :style="{ background: gateway.online ? 'green' : 'red' }"
       :title="gateway.online ? 'Online' : 'Offline'"
     ></div>
-    <div class="header-actions">
-      <EditButton :onClick="() => $emit('updateGateway')" title="Edit gateway" />
-      <DeleteButton :onClick="() => $emit('deleteGateway')" />
+    <div class="info">
+      <h2>{{ gateway.name }}</h2>
+      <h3>{{ gateway.description }}</h3>
     </div>
-    <h2>{{ gateway.name }}</h2>
-    <h3>{{ gateway.description }}</h3>
-
-    <button v-if="gateway.haveToken" class="btn controls" @click="() => $emit('logout')">
-      Logout
-    </button>
-    <button v-else class="btn controls" @click="() => $emit('generateToken')">
-      Generate token
-    </button>
-    <button class="btn controls" @click="() => $emit('showControlPanel')">Control panel</button>
+    <div class="menu" @click.stop="() => {}">
+      <DotsVertical class="menu-icon" />
+      <div class="menu-items">
+        <p @click.stop="$emit('edit')">Edit</p>
+        <p @click.stop="$emit('delete')">Delete</p>
+        <p v-if="gateway.haveToken" @click.stop="$emit('logout')">Logout</p>
+        <p v-else @click.stop="$emit('generateToken')">Token</p>
+      </div>
+    </div>
   </div>
 </template>
 
 <style scoped>
+.info {
+  padding: 0px 30px;
+}
 .gateway-item {
+  background-color: var(--color-background);
+  padding: var(--padding-default);
   text-align: center;
   position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: var(--default-gap);
 }
-.header-actions {
+.status {
   position: absolute;
-  top: 0px;
-  right: 0px;
-  display: flex;
-  flex-direction: row;
-}
-.footer-actions {
-  display: flex;
-  flex-direction: row;
-  gap: var(--default-gap);
-}
-.footer-actions button {
-  width: 50%;
-}
-.dot {
-  position: absolute;
-  top: 0px;
-  left: 0px;
+  top: var(--padding-default);
+  left: var(--padding-default);
   width: 20px;
   height: 20px;
   border-radius: 50%;
 }
-.controls {
-  min-width: fit-content;
-  min-height: fit-content;
+.menu-icon {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+}
+.menu:hover .menu-items {
+  display: block;
+}
+.menu-items {
+  display: none;
+  position: absolute;
+  top: 5px;
+  right: -100px;
+  min-width: 100px;
+  border: solid 1px var(--color-border);
+  border-radius: var(--border-radius);
+  background-color: var(--color-background-mute);
+  padding: 2px;
+}
+.menu-items p:hover {
+  cursor: pointer;
+  opacity: 0.8;
 }
 </style>

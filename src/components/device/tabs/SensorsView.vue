@@ -12,7 +12,7 @@ export default {
   },
   props: {
     device: Object,
-    gateway: Object
+    gateway: String
   },
   data() {
     return {

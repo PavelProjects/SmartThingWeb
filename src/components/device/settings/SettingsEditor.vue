@@ -21,7 +21,7 @@ export default {
   props: {
     settings: {
       type: Object
-    },
+    }
   },
   data() {
     const { name, value } = this.settings
@@ -108,8 +108,7 @@ export default {
       }
     },
     async importFrom() {
-      const loadedSettings =
-        (await DeviceApi.exportSettings(this.selectedDevice, {})) || {}
+      const loadedSettings = (await DeviceApi.exportSettings(this.selectedDevice, {})) || {}
       this.newSettings.value = JSON.stringify(loadedSettings, null, 2)
       this.newSettings.name = `${this.selectedDevice.name}_${!!this.selectedDevice.type && this.selectedDevice.type}`
     },
@@ -117,11 +116,7 @@ export default {
       await this.save()
       this.loading = true
       if (
-        await DeviceApi.importSettings(
-          this.selectedDevice,
-          {},
-          JSON.parse(this.newSettings.value)
-        )
+        await DeviceApi.importSettings(this.selectedDevice, {}, JSON.parse(this.newSettings.value))
       ) {
         toast.success({
           caption: 'Export to ' + this.selectedDevice.name + ' finished!',
@@ -168,11 +163,7 @@ export default {
         </button>
       </div>
     </div>
-    <DevicesSearchView
-      v-if="mode"
-      title="Select device"
-      @select="handleDeviceClick"
-    />
+    <DevicesSearchView v-if="mode" title="Select device" @select="handleDeviceClick" />
   </div>
 </template>
 
@@ -182,7 +173,7 @@ export default {
   flex-direction: column;
   gap: var(--default-gap);
   width: 500px;
-  padding: 2px;
+  padding: var(--padding-default);
 }
 .editor {
   font-size: 20px;

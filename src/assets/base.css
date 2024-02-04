@@ -54,6 +54,8 @@
   --color-text: var(--vt-c-text-light-1);
 
   --color-svg-fill: var();
+
+  --padding-default: 2px;
 }
 
 @media (prefers-color-scheme: dark) {

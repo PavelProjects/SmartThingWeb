@@ -1,11 +1,13 @@
 <script>
 import GatewayInfoView from './GatewayInfoView.vue'
 import MenuSvg from 'vue-material-design-icons/Menu.vue'
+import GatewaySelector from '../gateway/GatewaySelector.vue'
 
 export default {
   name: 'HeaderDoc',
   components: {
     GatewayInfoView,
+    GatewaySelector,
     MenuSvg
   },
   data() {
@@ -36,7 +38,8 @@ export default {
         </router-link>
       </div>
     </div>
-    <GatewayInfoView v-if="mode == 'gateway'" class="log-in-info" />
+    <GatewaySelector v-if="mode === 'cloud'" class="gateways-selector" />
+    <GatewayInfoView v-if="mode === 'gateway'" class="log-in-info" />
   </div>
 </template>
 
@@ -65,12 +68,13 @@ export default {
 }
 
 .menu-items {
+  min-width: 200px;
   text-align: center;
   display: none;
   position: absolute;
-  top: calc(var(--doc-height));
+  top: var(--doc-height);
   left: var(--default-gap);
-  padding: 2px;
+  padding: var(--padding-default);
   background-color: var(--color-background-mute);
   border: solid 1px var(--color-border);
   border-radius: var(--border-radius);
@@ -78,6 +82,11 @@ export default {
 
 .menu-items h2:hover {
   opacity: 0.5;
+}
+
+.gateways-selector {
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .log-in-info {

@@ -21,7 +21,7 @@ export default {
     callbackProp: Object,
     observable: Object,
     template: Object,
-    gateway: Object
+    gateway: String
   },
   components: {
     InputWithLabel,
@@ -182,7 +182,7 @@ export default {
 </script>
 
 <template>
-  <div class="bordered" style="padding: 2px">
+  <div class="bordered" style="padding: var(--padding-default)">
     <div class="header">
       <h3 class="title" style="flex: 1 1 auto; text-align: start">
         [{{ callback.id }}] {{ callback.caption || systemNameToNormal(callback.type) }}

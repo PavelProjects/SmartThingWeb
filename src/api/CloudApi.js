@@ -129,7 +129,7 @@ const CloudApi = {
   async sendGatewayCommand(gateway, command) {
     try {
       const response = await axiosInstance.post(URL_GATEWAY_REQUEST + '/command', {
-        gatewayId: gateway.id,
+        gatewayId: gateway,
         command
       })
       return response.data || {}
@@ -140,7 +140,7 @@ const CloudApi = {
   async sendDeviceRequest({ gateway, device, command, params }) {
     try {
       const response = await axiosInstance.post(URL_GATEWAY_REQUEST + '/device', {
-        gatewayId: gateway.id,
+        gatewayId: gateway,
         request: { device, command, params }
       })
       return response.data

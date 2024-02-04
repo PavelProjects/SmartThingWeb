@@ -1,30 +1,18 @@
 <script>
 export default {
   name: 'PopUpDialog',
-  props: {
-    visible: {
-      type: Boolean,
-      default: false
-    }
-  },
   methods: {
-    clickOutside(event) {
-      event.stopPropagation()
+    clickOutside() {
       this.$emit('close')
-    },
-    clickDialog(event) {
-      event.stopPropagation()
     }
   }
 }
 </script>
 
 <template>
-  <div v-if="visible">
-    <div class="overlay" @click="clickOutside">
-      <div class="dialog" @click="clickDialog">
-        <slot></slot>
-      </div>
+  <div class="overlay" @click.stop="clickOutside">
+    <div class="dialog" @click.stop="() => {}">
+      <slot></slot>
     </div>
   </div>
 </template>

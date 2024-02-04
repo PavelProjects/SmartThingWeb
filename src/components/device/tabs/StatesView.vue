@@ -11,14 +11,14 @@ export default {
     MenuView
   },
   props: {
-    device: Object,
-    gateway: Object
+    device: Object
   },
   data() {
     return {
       states: null,
       loading: false,
-      tabs: {}
+      tabs: {},
+      gateway: this.$route.params.gateway
     }
   },
   created() {

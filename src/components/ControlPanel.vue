@@ -1,6 +1,5 @@
 <script>
 import DevicesMain from './device/DevicesMain.vue'
-import GatewaysList from './gateway/GatewaysList.vue'
 import CloudAuthDialog from './dialogs/CloudAuthDialog.vue'
 import { CloudApi } from '../api/CloudApi'
 
@@ -8,7 +7,6 @@ export default {
   name: 'ControlPanel',
   components: {
     DevicesMain,
-    GatewaysList,
     CloudAuthDialog
   },
   data() {
@@ -16,7 +14,7 @@ export default {
     return {
       mode,
       authorization: null,
-      selectedGateway: null
+      gateway: this.$route.params.gateway
     }
   },
   computed: {
@@ -30,9 +28,6 @@ export default {
       if (this.isAuthorized) {
         CloudApi.connectToWs(this.authorization.user)
       }
-    },
-    handleGatewaySelect(gateway) {
-      this.selectedGateway = gateway
     }
   }
 }
@@ -40,20 +35,19 @@ export default {
 
 <template>
   <div>
-    <div v-if="mode == 'cloud'">
-      <CloudAuthDialog :visible="!isAuthorized" @authorized="handleAuthorization" />
+    <div v-if="mode === 'cloud'">
+      <CloudAuthDialog v-if="!isAuthorized" @authorized="handleAuthorization" />
       <div v-if="isAuthorized">
         <div class="content">
-          <GatewaysList v-if="mode == 'cloud'" @select="handleGatewaySelect" />
-          <DevicesMain v-if="selectedGateway" :gateway="selectedGateway" />
+          <DevicesMain v-if="gateway" />
         </div>
       </div>
     </div>
-    <div v-if="mode == 'gateway'">
+    <div v-else-if="mode === 'gateway'">
       <DevicesMain />
     </div>
     <div v-else>
-      <h1>Unkown mode: {{ mode }}</h1>
+      <h1 style="color: red">Unkown mode: {{ mode }}</h1>
     </div>
   </div>
 </template>

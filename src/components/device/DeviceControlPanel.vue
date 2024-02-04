@@ -13,13 +13,12 @@ export default {
     MenuView
   },
   props: {
-    device: Object,
-    gateway: Object
+    device: Object
   },
   data() {
     const props = {
       device: this.device,
-      gateway: this.gateway
+      gateway: this.$route.params.gateway
     }
     return {
       tabs: {
@@ -71,7 +70,7 @@ export default {
   flex-direction: row;
   column-gap: var(--default-gap);
   margin: 0 auto;
-  padding: 2px;
+  padding: var(--padding-default);
   width: 700px;
 }
 </style>

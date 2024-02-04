@@ -73,9 +73,6 @@ export const DeviceApi = {
           name
         }
       })
-      if (!result || result.status !== 200) {
-        throw new Error({ result })
-      }
       toast.success({
         caption: 'Device name updated!'
       })
@@ -108,10 +105,6 @@ export const DeviceApi = {
         params: { values },
         gateway
       })
-
-      if (!result || result.status !== 200) {
-        throw new Error({ result })
-      }
       toast.success({
         caption: 'Config updated'
       })
@@ -135,10 +128,6 @@ export const DeviceApi = {
         },
         gateway
       })
-
-      if (!result || result.status !== 200) {
-        throw new Error({ result })
-      }
       toast.success({
         caption: 'Config value deleted'
       })
@@ -159,10 +148,6 @@ export const DeviceApi = {
         command: DELETE_ALL_CONFIG_VALUES,
         gateway
       })
-
-      if (!result || result.status !== 200) {
-        throw new Error({ result })
-      }
       toast.success({
         caption: 'Config deleted'
       })
@@ -186,9 +171,6 @@ export const DeviceApi = {
         },
         gateway
       })
-      if (!result || result.status !== 200) {
-        throw new Error({ result })
-      }
       toast.success({
         caption: 'Done'
       })
@@ -323,10 +305,6 @@ export const DeviceApi = {
         },
         gateway
       })
-
-      if (!result || result.status !== 200) {
-        throw new Error({ result })
-      }
       toast.success({
         caption: 'Callback updated'
       })
@@ -349,10 +327,6 @@ export const DeviceApi = {
         params: { observable, id },
         gateway
       })
-
-      if (!result || result.status !== 200) {
-        throw new Error({ result })
-      }
       toast.success({
         caption: 'Callback deleted'
       })
@@ -373,9 +347,6 @@ export const DeviceApi = {
         gateway,
         command: GET_METRICS
       })
-      if (!result || result.status !== 200) {
-        throw new Error({ result })
-      }
       return result.data
     } catch (error) {
       console.error(error)
@@ -391,9 +362,6 @@ export const DeviceApi = {
         gateway,
         command: EXPORT_SETTINGS
       })
-      if (!result || result.status !== 200) {
-        throw new Error({ result })
-      }
       return result.data
     } catch (error) {
       console.error(error)
@@ -429,7 +397,7 @@ export const DeviceApi = {
       const result = await deviceFetch({
         device,
         gateway,
-        command: RESTART,
+        command: RESTART
       })
       return result.status === 200
     } catch (error) {

@@ -7,8 +7,7 @@ import SyncLoader from 'vue-spinner/src/SyncLoader.vue'
 export default {
   name: 'ConfigView',
   props: {
-    device: Object,
-    gateway: Object
+    device: Object
   },
   components: {
     InputWithLabel,
@@ -21,7 +20,8 @@ export default {
       configInfo: {},
       loading: false,
       saveLoading: false,
-      deleteLoading: false
+      deleteLoading: false,
+      gateway: this.$route.params.gateway
     }
   },
   created() {
