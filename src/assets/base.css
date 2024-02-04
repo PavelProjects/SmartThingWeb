@@ -19,7 +19,7 @@
   --vt-c-text-light-2: rgba(60, 60, 60, 0.66);
   --vt-c-text-dark-1: var(--vt-c-white);
   --vt-c-text-dark-2: rgba(235, 235, 235, 0.64);
-  
+
   --color-positive: hsla(160, 100%, 37%, 1);
   --color-accent: #2c3e50;
   --color-danger: rgba(147, 4, 4, 0.453);
@@ -32,11 +32,11 @@
   --border-radius: 10px;
   --section-gap: 160px;
   --default-gap: 5px;
-  
+
   --toast-width: 300px;
   --toast-min-height: 50px;
 
-  --menu-item-width: 250px;
+  --menu-item-width: 200px;
 
   --icon-size: 35px;
 }
@@ -53,7 +53,7 @@
   --color-heading: var(--vt-c-text-light-1);
   --color-text: var(--vt-c-text-light-1);
 
-  --color-svg-fill: var()
+  --color-svg-fill: var();
 }
 
 @media (prefers-color-scheme: dark) {

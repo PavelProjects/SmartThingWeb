@@ -1,32 +1,34 @@
 <script setup>
-  import Doc from "./components/doc/Doc.vue"
-  import ToatsView from "./components/toasts/ToastsView.vue"
+import HeaderDoc from './components/doc/HeaderDoc.vue'
+import ToatsView from './components/toasts/ToastsView.vue'
 </script>
 
 <template>
-  <Doc class="doc"/>
-  <ToatsView id="toasts-list"/>
+  <div>
+    <HeaderDoc class="doc" />
+    <ToatsView id="toasts-list" />
 
-  <div class="content">
-    <router-view v-slot="{ Component }">
-      <keep-alive>
-        <component :is="Component" :key="$route.fullPath"/>
-      </keep-alive>
-    </router-view>
+    <div class="content">
+      <router-view v-slot="{ Component }">
+        <keep-alive>
+          <component :is="Component" :key="$route.fullPath" />
+        </keep-alive>
+      </router-view>
+    </div>
   </div>
 </template>
 
 <style>
-  .doc {
-    position: sticky;
-    z-index: 999;
-  }
-  .content {
-    width: fit-content;
-    display: flex;
-    flex-direction: row;
-    column-gap: var(--default-gap);
-    margin: 0 auto;
-    z-index: 1;
-  }
+.doc {
+  position: sticky;
+  z-index: 999;
+}
+.content {
+  width: fit-content;
+  display: flex;
+  flex-direction: row;
+  column-gap: var(--default-gap);
+  margin: 0 auto;
+  z-index: 1;
+}
 </style>

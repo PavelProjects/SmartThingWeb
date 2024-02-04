@@ -1,27 +1,42 @@
 <script>
 import { h } from 'vue'
 import UpdateButton from '../controls/UpdateButton.vue'
+import MenuItem from './MenuItem.vue'
 
 export default {
-  name: "MenuView",
+  name: 'MenuView',
   components: {
-    UpdateButton
+    UpdateButton,
+    MenuItem
   },
   props: {
     tabs: Object,
     tab: String,
+    vertical: {
+      type: Boolean,
+      default: () => false
+    },
     header: String,
-    tabTitle: String,
+    tabTitle: String
   },
   data() {
     return {
       currentTab: undefined,
       haveUpdateButton: this.haveUpdateMethod(this.tab),
-      loading: false
+      loading: false,
+      renders: {}
+    }
+  },
+  computed: {
+    panelStyle() {
+      return { 'flex-direction': this.vertical ? 'column' : 'row' }
+    },
+    itemsStyle() {
+      return { 'flex-direction': this.vertical ? 'row' : 'column' }
     }
   },
   mounted() {
-    this.switchTab(this.currentTab || this.getDefaultTab());
+    this.switchTab(this.currentTab || this.getDefaultTab())
   },
   watch: {
     tabs() {
@@ -38,19 +53,16 @@ export default {
   },
   methods: {
     getDefaultTab() {
-      return this.tab || Object.keys(this.tabs)[0];
+      return this.tab || Object.keys(this.tabs)[0]
     },
-    switchTab(name, forceRender=false) {
+    switchTab(name, forceRender = false) {
       if (this.currentTab == name && !forceRender) {
         this.updateContent()
         return
-      } 
+      }
       if (this.tabs[name]) {
-        if (!this.tabs[name]["render"] || forceRender) {
-          this.tabs[name]["render"] = h(
-            this.tabs[name].class,
-            this.tabs[name].props
-          )
+        if (!this.renders[name] || forceRender) {
+          this.renders[name] = h(this.tabs[name].class, this.tabs[name].props)
         }
         this.haveUpdateButton = this.haveUpdateMethod(name)
         this.currentTab = name
@@ -79,28 +91,29 @@ export default {
 </script>
 
 <template>
-  <div class="list" style="position: relative">
+  <div class="list menu">
     <h1 v-if="header" class="title">{{ header }}</h1>
-    <div v-if="tabs" class="menu-panel">
-      <div class="menu-items list bordered">
-        <h2 v-for="[name, { caption }] in Object.entries(tabs)" 
+    <div v-if="tabs" class="menu-panel" :style="panelStyle">
+      <div class="menu-items bordered" :style="itemsStyle">
+        <MenuItem
+          v-for="[name, { caption }] in Object.entries(tabs)"
           :key="name"
           :id="name"
           :title="tabTitle"
-          :class="{ 'menu-selected': currentTab == name }" 
-          @click="switchTab(name)">
-          {{ caption }}
-        </h2>
+          :caption="caption"
+          :selected="currentTab === name"
+          @click="switchTab(name)"
+        />
       </div>
-      <div v-if="tabs[currentTab] && tabs[currentTab]['render']" class="menu-item-content">
-        <UpdateButton class="update-button" v-if="haveUpdateButton" :loading="loading" :onClick="updateContent" />
+      <div v-if="renders[currentTab]" class="menu-item-content">
+        <UpdateButton
+          class="update-button"
+          v-if="haveUpdateButton"
+          :loading="loading"
+          :onClick="updateContent"
+        />
         <KeepAlive>
-          <component 
-            ref="content"
-            :key="currentTab"
-            :is="tabs[currentTab]['render']"
-            v-bind="$attrs"
-          />
+          <component ref="content" :key="currentTab" :is="renders[currentTab]" v-bind="$attrs" />
         </KeepAlive>
       </div>
     </div>
@@ -108,6 +121,10 @@ export default {
 </template>
 
 <style scoped>
+.menu {
+  display: flex;
+  flex: 1 0 auto;
+}
 .update-button {
   position: absolute;
   top: 0px;
@@ -115,28 +132,14 @@ export default {
 }
 .menu-panel {
   display: flex;
-  flex-direction: row;
-  width: 100%;
+  gap: var(--default-gap);
 }
-
 .menu-items {
-  width: var(--menu-item-width);
+  display: flex;
   height: fit-content;
-  padding: 2px;
 }
-
-.menu-items h2 {
-  transition: 0.5s;
-  cursor: pointer;
-  border-radius: var(--border-radius);
-  padding: 5px;
-  text-align: center;
-  word-wrap: break-word;
-}
-
 .menu-item-content {
   position: relative;
-  width: calc(100% - var(--menu-item-width));
-  margin-left: 5px;
+  flex: 1 0 auto;
 }
 </style>

@@ -1,21 +1,19 @@
 <script>
 import { GatewayApi } from '../../../api/GatewayApi'
-import UpdateButton from '../../controls/UpdateButton.vue'
 import SettingsEditor from './SettingsEditor.vue'
 import MenuView from '../../menu/MenuView.vue'
 
 export default {
-  name: "SettingsManager",
+  name: 'SettingsManager',
   components: {
-    UpdateButton,
-    MenuView,
+    MenuView
   },
   data() {
     return {
       loading: false,
       selected: undefined,
       tabs: {},
-      openTab: undefined,
+      openTab: undefined
     }
   },
   mounted() {
@@ -35,11 +33,11 @@ export default {
             }
           }
           return acc
-        }, {});
+        }, {})
       }
-      this.tabs["new"] = {
+      this.tabs['new'] = {
         class: SettingsEditor,
-        caption: "Add new",
+        caption: 'Add new',
         props: {
           settings: {}
         }
@@ -47,9 +45,9 @@ export default {
       this.loading = false
     },
     async handleChange(name) {
-      await this.loadSettings();
+      await this.loadSettings()
       this.openTab = name
-    },
+    }
   }
 }
 </script>
@@ -59,6 +57,6 @@ export default {
     header="Saved devices settings"
     :tabs="tabs"
     :tab="openTab"
-    @onUpdate="(event) => handleChange(event)"
+    @changed="(event) => handleChange(event)"
   />
 </template>

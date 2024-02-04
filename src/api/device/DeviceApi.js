@@ -1,5 +1,5 @@
-import { toast } from "../../utils/EventBus"
-import { deviceFetch } from "./DeviceFetch"
+import { toast } from '../../utils/EventBus'
+import { deviceFetch } from './DeviceFetch'
 
 const GET_INFO = 'getInfo'
 const GET_CALLBACKS = 'getCallbacks'
@@ -25,7 +25,7 @@ const IMPORT_SETTINGS = 'importSettings'
 
 async function extractDataFromError(error) {
   const { response } = error || {}
-  return await response.data || {}
+  return (await response.data) || {}
 }
 
 export const DeviceApi = {
@@ -36,7 +36,7 @@ export const DeviceApi = {
     } catch (error) {
       console.error(error)
       toast.error({
-        caption: "Failed to fetch device info"
+        caption: 'Failed to fetch device info'
       })
     }
   },
@@ -47,7 +47,7 @@ export const DeviceApi = {
     } catch (error) {
       console.error(error)
       toast.error({
-        caption: "Failed to fetch device actions"
+        caption: 'Failed to fetch device actions'
       })
     }
   },
@@ -58,30 +58,32 @@ export const DeviceApi = {
     } catch (error) {
       console.error(error)
       toast.error({
-        caption: "Failed to fetch device configuration information"
+        caption: 'Failed to fetch device configuration information'
       })
     }
   },
   async saveName(device, name, gateway) {
     try {
-      const result = await deviceFetch({ device, gateway, 
+      const result = await deviceFetch({
+        device,
+        gateway,
         method: SAVE_NAME,
         params: {
           name
-        },
+        }
       })
       if (!result || result.status !== 200) {
-        throw new Error({ result });
+        throw new Error({ result })
       }
       toast.success({
-        caption: "Device name updated!"
+        caption: 'Device name updated!'
       })
       return true
     } catch (error) {
       console.error(error)
       const { error: description } = await extractDataFromError(error)
       toast.error({
-        caption: "Failed to save device name",
+        caption: 'Failed to save device name',
         description
       })
     }
@@ -93,7 +95,7 @@ export const DeviceApi = {
     } catch (error) {
       console.error(error)
       toast.error({
-        caption: "Failed to fetch device configuration values"
+        caption: 'Failed to fetch device configuration values'
       })
     }
   },
@@ -107,17 +109,17 @@ export const DeviceApi = {
       })
 
       if (!result || result.status !== 200) {
-        throw new Error({ result });
+        throw new Error({ result })
       }
       toast.success({
-        caption: "Config updated"
+        caption: 'Config updated'
       })
       return true
     } catch (error) {
       console.error(error)
       const { error: description } = await extractDataFromError(error)
       toast.error({
-        caption: "Failed to save configuration values",
+        caption: 'Failed to save configuration values',
         description
       })
     }
@@ -134,21 +136,20 @@ export const DeviceApi = {
       })
 
       if (!result || result.status !== 200) {
-        throw new Error({ result });
+        throw new Error({ result })
       }
       toast.success({
-        caption: "Config value deleted"
+        caption: 'Config value deleted'
       })
       return true
     } catch (error) {
       console.error(error)
       const { error: description } = await extractDataFromError(error)
       toast.error({
-        caption: "Failed to delete device config value",
+        caption: 'Failed to delete device config value',
         description
       })
     }
-
   },
   async deleteAllConfigValues(device, gateway) {
     try {
@@ -159,17 +160,17 @@ export const DeviceApi = {
       })
 
       if (!result || result.status !== 200) {
-        throw new Error({ result });
+        throw new Error({ result })
       }
       toast.success({
-        caption: "Config deleted"
+        caption: 'Config deleted'
       })
       return true
     } catch (error) {
       console.error(error)
       const { error: description } = await extractDataFromError(error)
       toast.error({
-        caption: "Failed to delete all config values",
+        caption: 'Failed to delete all config values',
         description
       })
     }
@@ -185,21 +186,20 @@ export const DeviceApi = {
         gateway
       })
       if (!result || result.status !== 200) {
-        throw new Error({ result });
+        throw new Error({ result })
       }
       toast.success({
-        caption: "Done"
+        caption: 'Done'
       })
       return true
     } catch (error) {
       console.error(error)
       const { error: description } = await extractDataFromError(error)
       toast.error({
-        caption: "Failed to execute action " + action,
+        caption: 'Failed to execute action ' + action,
         description
       })
     }
-
   },
   async getDeviceSensors(device, gateway) {
     try {
@@ -208,7 +208,7 @@ export const DeviceApi = {
     } catch (error) {
       console.error(error)
       toast.error({
-        caption: "Failed to fetch sensors values"
+        caption: 'Failed to fetch sensors values'
       })
     }
   },
@@ -219,8 +219,8 @@ export const DeviceApi = {
     } catch (error) {
       console.error(error)
       toast.error({
-        type: "error",
-        caption: "Failed to fetch device states"
+        type: 'error',
+        caption: 'Failed to fetch device states'
       })
     }
   },
@@ -231,7 +231,7 @@ export const DeviceApi = {
     } catch (error) {
       console.error(error)
       toast.error({
-        caption: "Failed to fetch callbacks"
+        caption: 'Failed to fetch callbacks'
       })
     }
   },
@@ -272,7 +272,6 @@ export const DeviceApi = {
         description
       })
     }
-
   },
   async getCallbacksTemplates(device, gateway) {
     try {
@@ -281,10 +280,9 @@ export const DeviceApi = {
     } catch (error) {
       console.error(error)
       toast.error({
-        caption: "Failed to fetch callbacks templates"
+        caption: 'Failed to fetch callbacks templates'
       })
     }
-
   },
   async createCallback(device, observable, callback, gateway) {
     try {
@@ -298,21 +296,20 @@ export const DeviceApi = {
         gateway
       })
       if (!result || result.status !== 201) {
-        throw new Error({ result });
+        throw new Error({ result })
       }
       toast.success({
-        caption: "Callback created"
+        caption: 'Callback created'
       })
       return true
     } catch (error) {
       console.error(error)
       const { error: description } = await extractDataFromError(error)
       toast.error({
-        caption: "Failed to create callback",
+        caption: 'Failed to create callback',
         description
       })
     }
-
   },
   async updateCallback(device, observable, callback, gateway) {
     try {
@@ -327,22 +324,21 @@ export const DeviceApi = {
       })
 
       if (!result || result.status !== 200) {
-        throw new Error({ result });
+        throw new Error({ result })
       }
       toast.success({
-        caption: "Callback updated"
+        caption: 'Callback updated'
       })
       return true
     } catch (error) {
       console.error(error)
       const { error: description } = await extractDataFromError(error)
       toast.error({
-        type: "error",
+        type: 'error',
         caption: `Failed to update callback id=${callback.id}`,
         description
       })
     }
-
   },
   async deleteCallback(device, observable, id, gateway) {
     try {
@@ -354,10 +350,10 @@ export const DeviceApi = {
       })
 
       if (!result || result.status !== 200) {
-        throw new Error({ result });
+        throw new Error({ result })
       }
       toast.success({
-        caption: "Callback deleted"
+        caption: 'Callback deleted'
       })
       return true
     } catch (error) {
@@ -377,7 +373,7 @@ export const DeviceApi = {
         method: GET_METRICS
       })
       if (!result || result.status !== 200) {
-        throw new Error({ result });
+        throw new Error({ result })
       }
       return result.data
     } catch (error) {
@@ -395,7 +391,7 @@ export const DeviceApi = {
         method: EXPORT_SETTINGS
       })
       if (!result || result.status !== 200) {
-        throw new Error({ result });
+        throw new Error({ result })
       }
       return result.data
     } catch (error) {
@@ -415,7 +411,7 @@ export const DeviceApi = {
         method: IMPORT_SETTINGS,
         params: {
           settings
-        },
+        }
       })
       return result.status === 200
     } catch (error) {

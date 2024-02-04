@@ -1,30 +1,26 @@
 <script>
-import GatewayInfoView from './GatewayInfoView.vue';
-import CloudAuthDialog from "../dialogs/CloudAuthDialog.vue";
-import Menu from 'vue-material-design-icons/Menu.vue'
-import SvgButton from '../controls/SvgButton.vue';
+import GatewayInfoView from './GatewayInfoView.vue'
+import MenuSvg from 'vue-material-design-icons/Menu.vue'
 
 export default {
-  name: "Doc",
+  name: 'HeaderDoc',
   components: {
     GatewayInfoView,
-    CloudAuthDialog,
-    SvgButton,
-    Menu,
+    MenuSvg
   },
   data() {
     const mode = import.meta.env.VITE_MODE
     return {
-      mode,
+      mode
     }
-  },
+  }
 }
 </script>
 
 <template>
   <div class="doc">
     <div class="menu">
-      <Menu />
+      <MenuSvg />
       <router-link to="/">
         <h1 class="green">SmartThing</h1>
       </router-link>
@@ -81,10 +77,11 @@ export default {
 }
 
 .menu-items h2:hover {
-  opacity: 0.50;
+  opacity: 0.5;
 }
 
 .log-in-info {
   margin-left: auto;
   margin-right: 10px;
-}</style>
+}
+</style>

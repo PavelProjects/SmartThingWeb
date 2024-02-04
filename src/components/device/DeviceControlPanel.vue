@@ -10,11 +10,6 @@ import MenuView from '../menu/MenuView.vue'
 export default {
   name: 'DeviceControlPanel',
   components: {
-    DeviceInfoView,
-    ActionsView,
-    SensorsView,
-    StatesView,
-    ConfigView,
     MenuView
   },
   props: {
@@ -28,53 +23,55 @@ export default {
     }
     return {
       tabs: {
-        "info": {
+        info: {
           class: DeviceInfoView,
-          caption: "Information",
+          caption: 'Information',
           props
         },
-        "actions": {
+        actions: {
           class: ActionsView,
-          caption: "Actions",
+          caption: 'Actions',
           props
         },
-        "sensors": {
+        sensors: {
           class: SensorsView,
-          caption: "Sensors",
+          caption: 'Sensors',
           props
         },
-        "states": {
+        states: {
           class: StatesView,
-          caption: "States",
+          caption: 'States',
           props
         },
-        "config": {
+        config: {
           class: ConfigView,
-          caption: "Configuration",
+          caption: 'Configuration',
           props
         },
-        "metrics": {
+        metrics: {
           class: MetricsViewVue,
-          caption: "Metrics",
+          caption: 'Metrics',
           props
         }
       }
     }
-  },
+  }
 }
 </script>
 
 <template>
-  <MenuView id="control-panel" class="bordered" :tabs="tabs" />
+  <div id="control-panel" class="bordered">
+    <MenuView :tabs="tabs" :vertical="true" />
+  </div>
 </template>
 
 <style scoped>
-  #control-panel {
-    display: flex;
-    flex-direction: row;
-    column-gap: var(--default-gap);
-    margin: 0 auto;
-    width: 1000px;
-    padding: 2px;
-  }
+#control-panel {
+  display: flex;
+  flex-direction: row;
+  column-gap: var(--default-gap);
+  margin: 0 auto;
+  padding: 2px;
+  width: 700px;
+}
 </style>
