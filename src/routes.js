@@ -1,6 +1,7 @@
-import ControlPanel from './components/ControlPanel.vue'
+import GatewayControlPanel from './components/GatewayControlPanel.vue'
 import DeviceLogs from './components/device/logs/DeviceLogs.vue'
 import SettingsManager from './components/device/settings/SettingsManager.vue'
+import GatewaySelector from './components/gateway/GatewaySelector.vue'
 import { createRouter, createWebHashHistory } from 'vue-router'
 
 const mode = import.meta.env.VITE_MODE
@@ -14,7 +15,7 @@ const gatewayRoutes = [
     children: [
       {
         path: '/panel',
-        component: ControlPanel
+        component: GatewayControlPanel
       },
       {
         path: '/logs',
@@ -32,20 +33,16 @@ const cloudRoutes = [
   {
     path: '/',
     redirect: () => {
-      return '/panel'
+      return '/home'
     },
     children: [
       {
-        path: '/panel',
-        component: {
-          render() {
-            return null
-          }
-        }
+        path: '/home',
+        component: GatewaySelector
       },
       {
         path: '/panel/:gateway',
-        component: ControlPanel
+        component: GatewayControlPanel
       }
     ]
   }

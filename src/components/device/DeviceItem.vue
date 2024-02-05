@@ -22,34 +22,38 @@ export default {
         return IMG_PATH + 'amogus.gif'
       }
       return undefined
+    },
+    header() {
+      const { name, type } = this.device
+      return `${name} ${type ? "(" + type + ")" : ""}`
     }
   }
 }
 </script>
 <template>
   <div class="bordered device-container" :class="{ 'menu-selected': selected }">
+    <div class="list" style="flex: 1 1 auto">
+      <h1 class="header">{{ header }}</h1>
+      <h2>
+        Ip <a :href="'http://' + device.ip" target="”_blank”">{{ device.ip }}</a>
+      </h2>
+    </div>
     <img v-if="imgSrc" :src="imgSrc" />
-    <h1>{{ this.device.name }} {{ this.device.type ? '(' + this.device.type + ')' : '' }}</h1>
-    <h2>
-      Ip <a :href="'http://' + this.device.ip" target="”_blank”">{{ this.device.ip }}</a>
-    </h2>
   </div>
 </template>
 <style scoped>
 .device-container {
-  position: relative;
   padding: var(--padding-default);
   display: flex;
-  flex-direction: column;
-  gap: var(--default-gap);
-  width: 400px;
+  flex-direction: row;
+}
+.header {
+  word-wrap: break-word;
 }
 img {
   width: 50px;
   height: 50px;
-  position: absolute;
-  top: 20px;
-  right: var(--padding-default);
   border-radius: var(--border-radius);
+  margin: auto;
 }
 </style>

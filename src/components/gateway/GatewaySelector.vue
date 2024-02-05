@@ -4,74 +4,41 @@ import { router } from '../../routes'
 import { toast } from '../../utils/EventBus'
 import GatewayItem from './GatewayItem.vue'
 import GatewayEditDialog from './GatewayEditDialog.vue'
+import UpdateButton from '../controls/UpdateButton.vue'
 
 export default {
   name: 'GatewaySelector',
   components: {
     GatewayItem,
-    GatewayEditDialog
+    GatewayEditDialog,
+    UpdateButton,
   },
   data() {
     return {
       gateways: [],
-      selected: undefined,
       loading: false,
-      listVisible: false,
       showDialog: false,
       gatewayToEdit: undefined
     }
   },
   async mounted() {
     await this.loadGateways()
-    this.selectFromPath()
-  },
-  watch: {
-    '$route.params.gateway': {
-      handler() {
-        this.selectFromPath()
-      }
-    },
-    selected() {
-      if (this.selected) {
-        router.push('/panel/' + this.selected.id)
-      }
-    }
   },
   methods: {
-    selectFromPath() {
-      const fromPath = this.$route.params.gateway
-      if (fromPath) {
-        this.selected = this.gateways.find(({ id }) => id === fromPath)
-      } else {
-        this.selected = undefined
-      }
-    },
-    handleTitleClick() {
-      this.listVisible = !this.listVisible
-      if (this.listVisible) {
-        this.loadGateways()
-      }
-    },
     handleGatewayClick(gateway) {
-      if (!gateway.online) {
+      if (gateway.online) {
+        router.push('/panel/' + gateway.id)
+      } else {
         toast.error({
           caption: 'Gateway is offline!',
           description: "Can't open control panel of offline gateway"
         })
-        return
       }
-      this.selected = gateway
-      this.listVisible = false
     },
     async loadGateways() {
       this.loading = true
-      try {
-        this.gateways = (await CloudApi.getGatewaysList()) || []
-      } catch (error) {
-        console.error(error)
-      } finally {
-        this.loading = false
-      }
+      this.gateways = (await CloudApi.getGatewaysList()) || []
+      this.loading = false
     },
     async saveGateway(gateway) {
       this.gatewayToEdit = undefined
@@ -103,6 +70,7 @@ export default {
             caption: 'Gateway was deleted'
           })
           this.loadGateways()
+          router.push('/home')
         } else {
           toast.error({
             caption: 'Failed to delete gateway'
@@ -147,27 +115,24 @@ export default {
 </script>
 
 <template>
-  <div class="gateway-selector bordered">
-    <div class="current-gateway title" @click="handleTitleClick">
-      <h2 v-if="selected">Current: {{ selected.name }}</h2>
-      <h2 v-else>Select gateway</h2>
+  <div class="gateway-selector">
+    <div class="header">
+      <h2 class="title">Gateways</h2>
+      <UpdateButton class="update" :loading="loading" :onClick="loadGateways" />
     </div>
-    <div v-if="listVisible && !gatewayToEdit">
-      <div class="gateways-list">
-        <GatewayItem
-          v-for="gateway of gateways"
-          class="bordered"
-          :key="gateway.id"
-          :gateway="gateway"
-          @click.stop="handleGatewayClick(gateway)"
-          @edit="() => (gatewayToEdit = gateway)"
-          @delete="deleteGateway(gateway)"
-          @generateToken="generateToken(gateway)"
-          @logout="logoutGateway(gateway)"
-        />
-        <button class="btn" @click="gatewayToEdit = {}">Add gateway</button>
-      </div>
-      <div class="overlay" @click="listVisible = false"></div>
+    <div class="list">
+      <GatewayItem
+        v-for="gateway of gateways"
+        class="bordered"
+        :key="gateway.id"
+        :gateway="gateway"
+        @click.stop="handleGatewayClick(gateway)"
+        @edit="() => (gatewayToEdit = gateway)"
+        @delete="deleteGateway(gateway)"
+        @generateToken="generateToken(gateway)"
+        @logout="logoutGateway(gateway)"
+      />
+      <button class="btn" @click="gatewayToEdit = {}">Add gateway</button>
     </div>
     <GatewayEditDialog
       v-if="!!gatewayToEdit"
@@ -180,31 +145,15 @@ export default {
 
 <style scoped>
 .gateway-selector {
+  margin: auto;
+  width: 300px;
+}
+.header {
   position: relative;
 }
-.gateway-selector .title {
-  cursor: pointer;
-}
-.current-gateway {
-  user-select: none;
-  padding: 0px 2px;
-}
-.gateways-list {
+.update {
   position: absolute;
-  top: calc(var(--doc-height) - 2px);
-  display: flex;
-  flex-direction: column;
-  gap: var(--default-gap);
-  z-index: 999;
-}
-
-.overlay {
-  position: fixed;
-  left: 0px;
-  top: var(--doc-height);
-  width: 100%;
-  height: 100%;
-  background-color: var(--background-tilt);
-  z-index: 900;
+  top: 0px;
+  right: 0px;
 }
 </style>

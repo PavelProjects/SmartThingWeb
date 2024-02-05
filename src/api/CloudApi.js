@@ -12,6 +12,7 @@ const URL_AUTH = '/auth'
 const URL_AUTH_USER = '/auth/user'
 const URL_AUTH_GATEWAY = '/auth/gateway'
 const URL_LOGOUT_GATEWAY = '/auth/gateway/logout'
+const URL_GATEWAY_BY_ID = '/gateway/management'
 const URL_GATEWAYS_LIST = '/gateway/management/list'
 const URL_GATEWAY_REQUEST = '/gateway/requests'
 const URL_GATEWAY_CREATE = '/gateway/management/create'
@@ -50,7 +51,7 @@ const CloudApi = {
   async authUser(login, password) {
     try {
       const response = await axiosInstance.post(URL_AUTH_USER, { login, password })
-      toast.success({ caption: 'Successfully authorized' })
+      toast.success({ caption: 'Welcome, ' + login })
       return response.data
     } catch (error) {
       console.log(error)
@@ -80,6 +81,17 @@ const CloudApi = {
     } catch (error) {
       console.error(error)
     }
+  },
+  async getGateway(id) {
+  try {
+    const response = await axiosInstance.get(`${URL_GATEWAY_BY_ID}/${id}`)
+    return response.data
+  } catch (error) {
+    console.error(error)
+    toast.error({
+      caption: 'Failed to load gateway ' + id
+    })
+  }
   },
   async getGatewaysList() {
     try {

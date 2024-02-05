@@ -19,13 +19,7 @@ export default {
       loading: false
     }
   },
-  mounted() {
-    this.getAuthorization()
-  },
   methods: {
-    async getAuthorization() {
-      this.emitAuthorization(await CloudApi.getAuthorization())
-    },
     async auth() {
       if (!this.login || !this.password) {
         toast.error({
@@ -36,13 +30,10 @@ export default {
       this.loading = true
       try {
         const auth = await CloudApi.authUser(this.login, this.password)
-        this.emitAuthorization(auth)
+        this.$emit('authorized', auth)
       } finally {
         this.loading = false
       }
-    },
-    emitAuthorization(authorization) {
-      this.$emit('authorized', authorization)
     }
   }
 }

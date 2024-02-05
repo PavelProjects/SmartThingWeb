@@ -1,13 +1,11 @@
 <script>
 import GatewayInfoView from './GatewayInfoView.vue'
 import MenuSvg from 'vue-material-design-icons/Menu.vue'
-import GatewaySelector from '../gateway/GatewaySelector.vue'
 
 export default {
   name: 'HeaderDoc',
   components: {
     GatewayInfoView,
-    GatewaySelector,
     MenuSvg
   },
   data() {
@@ -38,7 +36,6 @@ export default {
         </router-link>
       </div>
     </div>
-    <GatewaySelector v-if="mode === 'cloud'" class="gateways-selector" />
     <GatewayInfoView v-if="mode === 'gateway'" class="log-in-info" />
   </div>
 </template>
