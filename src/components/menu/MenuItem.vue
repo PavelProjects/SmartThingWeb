@@ -31,7 +31,7 @@ export default {
   display: flex;
   flex-direction: row;
   flex: 1 0 auto;
-  margin: var(--padding-default) var(--padding-default);
+  margin: var(--padding-default);
 }
 .menu-item:hover {
   opacity: 0.8;

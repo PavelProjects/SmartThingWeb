@@ -44,7 +44,7 @@ export default {
 
 <template>
   <div class="list">
-    <div v-if="gateway">
+    <div v-if="gateway && gateway.name">
       <h1 class="title">
         Current gateway: {{ gateway.name }}
       </h1>

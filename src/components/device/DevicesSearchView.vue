@@ -96,6 +96,5 @@ export default {
   flex-direction: column;
   row-gap: var(--default-gap);
   height: fit-content;
-  width: 300px;
 }
 </style>

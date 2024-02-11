@@ -91,7 +91,7 @@ export default {
 </script>
 
 <template>
-  <div class="list menu">
+  <div class="list">
     <h1 v-if="header" class="title">{{ header }}</h1>
     <div v-if="tabs" class="menu-panel" :style="panelStyle">
       <div class="menu-items bordered" :style="itemsStyle">
@@ -121,10 +121,6 @@ export default {
 </template>
 
 <style scoped>
-.menu {
-  display: flex;
-  flex: 1 0 auto;
-}
 .update-button {
   position: absolute;
   top: 0px;

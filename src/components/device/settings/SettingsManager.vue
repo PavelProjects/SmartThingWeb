@@ -53,10 +53,19 @@ export default {
 </script>
 
 <template>
-  <MenuView
-    header="Saved devices settings"
-    :tabs="tabs"
-    :tab="openTab"
-    @changed="(event) => handleChange(event)"
-  />
+  <div class="container">
+    <MenuView
+      header="Saved devices settings"
+      :tabs="tabs"
+      :tab="openTab"
+      @changed="(event) => handleChange(event)"
+    />
+  </div>
 </template>
+
+<style scoped>
+  .container {
+    width: fit-content;
+    margin: 0 auto;
+  }
+</style>

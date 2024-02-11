@@ -66,9 +66,6 @@ export default {
 
 <style scoped>
 #control-panel {
-  display: flex;
-  flex-direction: row;
-  column-gap: var(--default-gap);
   margin: 0 auto;
   padding: var(--padding-default);
   width: 700px;

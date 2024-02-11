@@ -87,11 +87,6 @@ export default {
         this.$emit('changed')
       }
     },
-    async loadDevices() {
-      this.loadingDevices = true
-      this.devices = await GatewayApi.getFoundDevices()
-      this.loadingDevices = false
-    },
     async handleDeviceClick(deviceInfo) {
       this.selectedDevice = deviceInfo
       this.loading = true
@@ -113,10 +108,21 @@ export default {
       this.newSettings.name = `${this.selectedDevice.name}_${!!this.selectedDevice.type && this.selectedDevice.type}`
     },
     async exportTo() {
+      let settings = {}
+      try {
+        settings = JSON.parse(this.newSettings.value)
+      } catch (error) {
+        toast.error({
+          caption: "Json parsing failed!",
+          description: error
+        })
+        return
+      }
+      
       await this.save()
       this.loading = true
       if (
-        await DeviceApi.importSettings(this.selectedDevice, {}, JSON.parse(this.newSettings.value))
+        await DeviceApi.importSettings(this.selectedDevice, {}, settings)
       ) {
         toast.success({
           caption: 'Export to ' + this.selectedDevice.name + ' finished!',
@@ -126,11 +132,9 @@ export default {
     },
     handleExportBtn() {
       this.mode = MODE.EXPORT
-      this.loadDevices()
     },
     handleImportBtn() {
       this.mode = MODE.IMPORT
-      this.loadDevices()
     }
   }
 }
@@ -169,9 +173,6 @@ export default {
 
 <style scoped>
 .container {
-  display: flex;
-  flex-direction: column;
-  gap: var(--default-gap);
   width: 500px;
   padding: var(--padding-default);
 }
