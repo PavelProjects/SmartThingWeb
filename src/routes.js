@@ -10,19 +10,19 @@ const gatewayRoutes = [
   {
     path: '/',
     redirect: () => {
-      return '/panel'
+      return '/devices/panel'
     },
     children: [
       {
-        path: '/panel',
+        path: '/devices/panel',
         component: GatewayControlPanel
       },
       {
-        path: '/logs',
+        path: '/devices/logs',
         component: DeviceLogs
       },
       {
-        path: '/settings',
+        path: '/devices/settings',
         component: SettingsManager
       }
     ]

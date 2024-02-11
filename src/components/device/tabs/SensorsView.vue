@@ -1,7 +1,7 @@
 <script>
 import SyncLoader from 'vue-spinner/src/SyncLoader.vue'
 import { DeviceApi } from '../../../api/device/DeviceApi.js'
-import CallbacksView from './CallbacksView.vue'
+import HooksView from './HooksView.vue'
 import MenuView from '../../menu/MenuView.vue'
 
 export default {
@@ -35,7 +35,7 @@ export default {
             this.tabs[name].caption = caption
           } else {
             this.tabs[name] = {
-              class: CallbacksView,
+              class: HooksView,
               caption,
               props: {
                 key: 'sensor_' + name,
@@ -64,6 +64,6 @@ export default {
   <div>
     <h1 class="title">Sensors values</h1>
     <sync-loader class="loading-spinner" :loading="loading"></sync-loader>
-    <MenuView :tabs="tabs" tabTitle="Click to open callbacks" />
+    <MenuView :tabs="tabs" tabTitle="Click to open hooks" />
   </div>
 </template>

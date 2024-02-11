@@ -2,7 +2,7 @@ import { toast } from '../../utils/EventBus'
 import { deviceFetch } from './DeviceFetch'
 
 const GET_INFO = 'getInfo'
-const GET_CALLBACKS = 'getCallbacks'
+const GET_HOOKS = 'getHooks'
 const GET_ACTIONS = 'getActions'
 const SAVE_NAME = 'saveName'
 const CALL_ACTION = 'callAction'
@@ -13,12 +13,12 @@ const DELETE_CONFIG_VALUE = 'deleteConfigValue'
 const DELETE_ALL_CONFIG_VALUES = 'deleteAllConfigValues'
 const GET_SENSORS = 'getSensors'
 const GET_STATES = 'getStates'
-const GET_ALL_CALLBACKS = 'getAllCallbacks'
-const GET_CALLBACK_BY_ID = 'getCallbackById'
-const GET_CALLBACKS_TEMPLATES = 'getCallbacksTemplates'
-const CREATE_CALLBACK = 'createCallback'
-const UPDATE_CALLBACK = 'updateCallback'
-const DELETE_CALLBACK = 'deleteCallback'
+const GET_ALL_HOOKS = 'getAllHooks'
+const GET_HOOK_BY_ID = 'getHookById'
+const GET_HOOKS_TEMPLATES = 'getHooksTemplates'
+const CREATE_HOOK = 'createHook'
+const UPDATE_HOOK = 'updateHook'
+const DELETE_HOOK = 'deleteHook'
 const GET_METRICS = 'getMetrics'
 const EXPORT_SETTINGS = 'exportSettings'
 const IMPORT_SETTINGS = 'importSettings'
@@ -207,22 +207,22 @@ export const DeviceApi = {
       })
     }
   },
-  async getAllCallbacks(device, gateway) {
+  async getAllHooks(device, gateway) {
     try {
-      const response = await deviceFetch({ device, command: GET_ALL_CALLBACKS, gateway })
+      const response = await deviceFetch({ device, command: GET_ALL_HOOKS, gateway })
       return response.data
     } catch (error) {
       console.error(error)
       toast.error({
-        caption: 'Failed to fetch callbacks'
+        caption: 'Failed to fetch hooks'
       })
     }
   },
-  async getCallbacks(device, observable, gateway) {
+  async getHooks(device, observable, gateway) {
     try {
       const response = await deviceFetch({
         device,
-        command: GET_CALLBACKS,
+        command: GET_HOOKS,
         params: {
           observable
         },
@@ -233,16 +233,16 @@ export const DeviceApi = {
       console.error(error)
       const { error: description } = await extractDataFromError(error)
       toast.error({
-        caption: `Failed to fetch callbacks for [${observable.type}]${observable.name}`,
+        caption: `Failed to fetch hooks for [${observable.type}]${observable.name}`,
         description
       })
     }
   },
-  async getCallbackById(device, observable, id, gateway) {
+  async getHookById(device, observable, id, gateway) {
     try {
       const response = await deviceFetch({
         device,
-        command: GET_CALLBACK_BY_ID,
+        command: GET_HOOK_BY_ID,
         params: { observable, id },
         gateway
       })
@@ -251,30 +251,30 @@ export const DeviceApi = {
       console.error(error)
       const { error: description } = await extractDataFromError(error)
       toast.error({
-        caption: `Failed to fetch callback by id=${id}`,
+        caption: `Failed to fetch hook by id=${id}`,
         description
       })
     }
   },
-  async getCallbacksTemplates(device, gateway) {
+  async getHooksTemplates(device, gateway) {
     try {
-      const response = await deviceFetch({ device, command: GET_CALLBACKS_TEMPLATES, gateway })
+      const response = await deviceFetch({ device, command: GET_HOOKS_TEMPLATES, gateway })
       return response.data
     } catch (error) {
       console.error(error)
       toast.error({
-        caption: 'Failed to fetch callbacks templates'
+        caption: 'Failed to fetch hooks templates'
       })
     }
   },
-  async createCallback(device, observable, callback, gateway) {
+  async createHook(device, observable, hook, gateway) {
     try {
       const result = await deviceFetch({
         device,
-        command: CREATE_CALLBACK,
+        command: CREATE_HOOK,
         params: {
           observable,
-          callback
+          hook
         },
         gateway
       })
@@ -282,31 +282,31 @@ export const DeviceApi = {
         throw new Error({ result })
       }
       toast.success({
-        caption: 'Callback created'
+        caption: 'Hook created'
       })
       return true
     } catch (error) {
       console.error(error)
       const { error: description } = await extractDataFromError(error)
       toast.error({
-        caption: 'Failed to create callback',
+        caption: 'Failed to create hook',
         description
       })
     }
   },
-  async updateCallback(device, observable, callback, gateway) {
+  async updateHook(device, observable, hook, gateway) {
     try {
       const result = await deviceFetch({
         device,
-        command: UPDATE_CALLBACK,
+        command: UPDATE_HOOK,
         params: {
           observable,
-          callback
+          hook
         },
         gateway
       })
       toast.success({
-        caption: 'Callback updated'
+        caption: 'Hook updated'
       })
       return true
     } catch (error) {
@@ -314,28 +314,28 @@ export const DeviceApi = {
       const { error: description } = await extractDataFromError(error)
       toast.error({
         type: 'error',
-        caption: `Failed to update callback id=${callback.id}`,
+        caption: `Failed to update hook id=${hook.id}`,
         description
       })
     }
   },
-  async deleteCallback(device, observable, id, gateway) {
+  async deleteHook(device, observable, id, gateway) {
     try {
       const result = await deviceFetch({
         device,
-        command: DELETE_CALLBACK,
+        command: DELETE_HOOK,
         params: { observable, id },
         gateway
       })
       toast.success({
-        caption: 'Callback deleted'
+        caption: 'Hook deleted'
       })
       return true
     } catch (error) {
       console.error(error)
       const { error: description } = await extractDataFromError(error)
       toast.error({
-        caption: `Failed to delete callback by id=${id}`,
+        caption: `Failed to delete hook by id=${id}`,
         description
       })
     }

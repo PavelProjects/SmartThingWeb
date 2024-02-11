@@ -1,6 +1,6 @@
 <script>
 import SyncLoader from 'vue-spinner/src/SyncLoader.vue'
-import CallbacksView from './CallbacksView.vue'
+import HooksView from './HooksView.vue'
 import { DeviceApi } from '../../../api/device/DeviceApi.js'
 import MenuView from '../../menu/MenuView.vue'
 
@@ -34,7 +34,7 @@ export default {
             this.tabs[name].caption = `${name}: ${value}`
           } else {
             this.tabs[name] = {
-              class: CallbacksView,
+              class: HooksView,
               caption: `${name}: ${value}`,
               props: {
                 key: 'state_' + name,
@@ -63,6 +63,6 @@ export default {
   <div>
     <h1 class="title">Device states</h1>
     <sync-loader class="loading-spinner" :loading="loading"></sync-loader>
-    <MenuView :tabs="tabs" tabTitle="Click to open callbacks" />
+    <MenuView :tabs="tabs" tabTitle="Click to open hooks" />
   </div>
 </template>

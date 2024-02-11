@@ -3,7 +3,7 @@ import { systemNameToNormal } from '../../../utils/StringUtils.js'
 import InputWithLabel from '../../fields/InputWithLabel.vue'
 import ComboBox from '../../fields/ComboBox.vue'
 import { DeviceApi } from '../../../api/device/DeviceApi.js'
-import { NEW_CALLBACK_ID } from './CallbacksView.vue'
+import { NEW_HOOK_ID } from './HooksView.vue'
 import { h } from 'vue'
 import { toast } from '../../../utils/EventBus.js'
 import LoadingButton from '../../controls/LoadingButton.vue'
@@ -15,10 +15,10 @@ import SaveButton from '../../controls/SaveButton.vue'
 const SYSTEM_FIELDS = ['id', 'type', 'readonly']
 
 export default {
-  name: 'CallbackView',
+  name: 'HookView',
   props: {
     device: Object,
-    callbackProp: Object,
+    hookProp: Object,
     observable: Object,
     template: Object,
     gateway: String
@@ -34,16 +34,16 @@ export default {
   },
   data() {
     return {
-      callback: this.callbackProp,
-      editing: this.callbackProp.id == NEW_CALLBACK_ID,
-      haveChanges: this.callbackProp.id == NEW_CALLBACK_ID,
+      hook: this.hookProp,
+      editing: this.hookProp.id == NEW_HOOK_ID,
+      haveChanges: this.hookProp.id == NEW_HOOK_ID,
       validationFailed: [],
       loading: false
     }
   },
   computed: {
     visibleFields() {
-      return Object.entries(this.callback)
+      return Object.entries(this.hook)
         .filter(([key]) => !this.isDefaultField(key))
         .reverse()
     },
@@ -77,7 +77,7 @@ export default {
       }
       return h(InputWithLabel, {})
     },
-    async saveCallback() {
+    async saveHook() {
       if (!this.haveChanges) {
         console.warn('No changes were made')
         this.editing = false
@@ -94,14 +94,14 @@ export default {
       let saveFunc = async () => {}
       this.loading = true
       try {
-        if (this.callback.id !== NEW_CALLBACK_ID) {
-          saveFunc = DeviceApi.updateCallback
+        if (this.hook.id !== NEW_HOOK_ID) {
+          saveFunc = DeviceApi.updateHook
         } else {
-          delete this.callback.id
-          saveFunc = DeviceApi.createCallback
+          delete this.hook.id
+          saveFunc = DeviceApi.createHook
         }
-        if (await saveFunc(this.device, this.observable, this.callback, this.gateway)) {
-          console.info('Callback was saved')
+        if (await saveFunc(this.device, this.observable, this.hook, this.gateway)) {
+          console.info('Hook was saved')
           this.$emit('update')
           this.editing = false
           this.haveChanges = false
@@ -110,19 +110,19 @@ export default {
         this.loading = false
       }
     },
-    async deleteCallback() {
-      if (this.callback.id !== 0 && !this.callback.id) {
-        console.error('Callback id is missing')
+    async deleteHook() {
+      if (this.hook.id !== 0 && !this.hook.id) {
+        console.error('Hook id is missing')
         return
       }
-      if (confirm('Are you sure you wan to delete callback ' + this.callback.id + '?')) {
+      if (confirm('Are you sure you wan to delete hook ' + this.hook.id + '?')) {
         this.loading = true
         try {
           if (
-            await DeviceApi.deleteCallback(
+            await DeviceApi.deleteHook(
               this.device,
               this.observable,
-              this.callback.id,
+              this.hook.id,
               this.gateway
             )
           ) {
@@ -136,13 +136,13 @@ export default {
     cancel() {
       this.validationFailed = []
       this.editing = false
-      this.$emit('reloadCallback', this.callback)
+      this.$emit('reloadHook', this.hook)
     },
     validate() {
       this.validationFailed = []
       Object.entries(this.template).forEach(([key, { required }]) => {
         if (required) {
-          const value = this.callback[key]
+          const value = this.hook[key]
           if (value == null || value == undefined || value === '') {
             this.validationFailed.push(key)
           }
@@ -174,7 +174,7 @@ export default {
             console.error('Type ' + type + ' not supported yet')
         }
       }
-      this.callback[key] = finalValue
+      this.hook[key] = finalValue
       this.haveChanges = true
     }
   }
@@ -185,14 +185,14 @@ export default {
   <div class="bordered" style="padding: var(--padding-default)">
     <div class="header">
       <h3 class="title" style="flex: 1 1 auto; text-align: start">
-        [{{ callback.id }}] {{ callback.caption || systemNameToNormal(callback.type) }}
+        [{{ hook.id }}] {{ hook.caption || systemNameToNormal(hook.type) }}
       </h3>
       <div class="controls">
-        <div v-if="!callback.readonly" class="callback-view-controls">
-          <DeleteButton v-if="!editing" :onClick="deleteCallback" :loading="loading" />
+        <div v-if="!hook.readonly" class="hook-view-controls">
+          <DeleteButton v-if="!editing" :onClick="deleteHook" :loading="loading" />
           <CancelButton v-if="editing" :onClick="cancel" />
           <EditButton v-if="!editing" :onClick="() => (editing = true)" />
-          <SaveButton v-if="editing" :onClick="saveCallback" :loading="loading" />
+          <SaveButton v-if="editing" :onClick="saveHook" :loading="loading" />
         </div>
         <div v-else>
           <h3 style="text-align: center">Readonly</h3>
@@ -200,7 +200,7 @@ export default {
       </div>
     </div>
     <div class="list">
-      <InputWithLabel label="type" :value="callback.type" :disabled="true" />
+      <InputWithLabel label="type" :value="hook.type" :disabled="true" />
       <component
         v-for="{ key, label, value, render, required } in fieldsComponents"
         :is="render"
@@ -235,7 +235,7 @@ export default {
   flex: 1 1 auto;
 }
 
-.callback-view-controls {
+.hook-view-controls {
   display: flex;
   flex-direction: row-reverse;
   column-gap: var(--default-gap);

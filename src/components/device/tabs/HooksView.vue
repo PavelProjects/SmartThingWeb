@@ -1,16 +1,16 @@
 <script>
 import { systemNameToNormal } from '../../../utils/StringUtils.js'
-import CallbackView from './CallbackView.vue'
+import HookView from './HookView.vue'
 import { DeviceApi } from '../../../api/device/DeviceApi.js'
 import ComboBox from '../../fields/ComboBox.vue'
 import SyncLoader from 'vue-spinner/src/SyncLoader.vue'
 
-export const NEW_CALLBACK_ID = 'New'
+export const NEW_HOOK_ID = 'New'
 
 export default {
-  name: 'CallbacksView',
+  name: 'HooksView',
   components: {
-    CallbackView,
+    HookView,
     ComboBox,
     SyncLoader
   },
@@ -21,7 +21,7 @@ export default {
   data() {
     return {
       selectedTemplate: null,
-      callbacks: [],
+      hooks: [],
       templates: {},
       selectedType: null,
       loading: false,
@@ -29,7 +29,7 @@ export default {
     }
   },
   computed: {
-    callbackTypes() {
+    hookTypes() {
       return Object.keys(this.templates)
         .filter((key) => key !== 'default')
         .reduce((acc, key) => {
@@ -41,38 +41,38 @@ export default {
   async mounted() {
     this.loading = true
     await this.loadTemplates()
-    await this.loadCallbacks()
+    await this.loadHooks()
     this.loading = false
   },
   methods: {
     async update() {
       this.loading = true
-      await this.loadCallbacks()
+      await this.loadHooks()
       this.loading = false
     },
-    async loadCallbacks() {
-      this.callbacks =
-        (await DeviceApi.getCallbacks(this.device, this.observable, this.gateway)) || []
+    async loadHooks() {
+      this.hooks =
+        (await DeviceApi.getHooks(this.device, this.observable, this.gateway)) || []
     },
     async loadTemplates() {
-      this.templates = (await DeviceApi.getCallbacksTemplates(this.device, this.gateway)) || {}
+      this.templates = (await DeviceApi.getHooksTemplates(this.device, this.gateway)) || {}
     },
-    addCallback(type) {
-      if (this.callbacks && this.callbacks.length > 0 && this.callbacks[0].id == NEW_CALLBACK_ID) {
-        this.callbacks.shift()
+    addHook(type) {
+      if (this.hooks && this.hooks.length > 0 && this.hooks[0].id == NEW_HOOK_ID) {
+        this.hooks.shift()
       }
       if (!type) {
         return
       }
       const template = { ...this.templates[type], ...this.templates['default'] }
-      const callbackFromTemplate = Object.entries(template).reduce(
+      const hookFromTemplate = Object.entries(template).reduce(
         (acc, [key, info]) => {
           acc[key] = info['default'] || ''
           return acc
         },
-        { id: NEW_CALLBACK_ID, type }
+        { id: NEW_HOOK_ID, type }
       )
-      this.callbacks.unshift(callbackFromTemplate)
+      this.hooks.unshift(hookFromTemplate)
     },
     templateForType(type) {
       return { ...this.templates[type], ...this.templates.default }
@@ -83,34 +83,34 @@ export default {
 
 <template>
   <div>
-    <h1 class="title">Callbacks</h1>
+    <h1 class="title">Hooks</h1>
     <sync-loader class="loading-spinner" :loading="loading"></sync-loader>
     <div v-if="!loading">
       <ComboBox
-        label="Add callback of type "
-        :items="callbackTypes"
-        @input="addCallback($event.target.value)"
+        label="Add hook of type "
+        :items="hookTypes"
+        @input="addHook($event.target.value)"
       />
-      <div v-if="callbacks.length > 0" class="callbacks-list-view list">
-        <CallbackView
-          v-for="callback in callbacks"
+      <div v-if="hooks.length > 0" class="hooks-list-view list">
+        <HookView
+          v-for="hook in hooks"
           :device="device"
-          :key="callback.id"
+          :key="hook.id"
           :observable="observable"
-          :callbackProp="callback"
-          :template="templateForType(callback.type)"
+          :hookProp="hook"
+          :template="templateForType(hook.type)"
           @update="update"
         />
       </div>
       <div v-else class="title">
-        <h3>No callbacks added yet</h3>
+        <h3>No hooks added yet</h3>
       </div>
     </div>
   </div>
 </template>
 
 <style scoped>
-.callbacks-list-view {
+.hooks-list-view {
   max-height: 80vh;
   overflow-y: auto;
   margin-top: var(--default-gap);
