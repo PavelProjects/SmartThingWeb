@@ -92,12 +92,13 @@ export default {
       />
       <div v-if="hooks.length > 0" class="hooks-list-view list">
         <HookView
-          v-for="hook in hooks"
+          v-for="hook, index in hooks"
           :key="hook.id"
           :observable="observable"
           :hookProp="hook"
           :template="templateForType(hook.type)"
           @update="update"
+          @remove="() => hooks.splice(index, 1)"
         />
       </div>
       <div v-else class="title">

@@ -7,11 +7,11 @@ import { NEW_HOOK_ID } from './HooksView.vue'
 import { h } from 'vue'
 import { toast } from '../../../utils/EventBus.js'
 import LoadingButton from '../../controls/LoadingButton.vue'
-import DeleteButton from '../../controls/DeleteButton.vue'
-import EditButton from '../../controls/EditButton.vue'
-import CancelButton from '../../controls/CancelButton.vue'
-import SaveButton from '../../controls/SaveButton.vue'
 import CheckBoxField from '../../fields/CheckBoxField.vue'
+import DeleteSVG from 'vue-material-design-icons/Delete.vue'
+import SaveSVG from 'vue-material-design-icons/ContentSave.vue'
+import CancelSVG from 'vue-material-design-icons/WindowClose.vue'
+import EditSVG from 'vue-material-design-icons/Pencil.vue'
 
 const SYSTEM_FIELDS = ['id', 'type', 'readonly']
 
@@ -23,15 +23,16 @@ export default {
     template: Object
   },
   inject: ['device', 'gateway'],
+  emits: ['remove'],
   components: {
     InputField,
     ComboBoxField,
     LoadingButton,
-    DeleteButton,
-    EditButton,
-    CancelButton,
-    SaveButton,
-    CheckBoxField
+    CheckBoxField,
+    DeleteSVG,
+    SaveSVG,
+    CancelSVG,
+    EditSVG,
   },
   data() {
     return {
@@ -140,7 +141,7 @@ export default {
     cancel() {
       this.validationFailed = []
       this.editing = false
-      this.$emit('reloadHook', this.hook)
+      this.$emit('remove')
     },
     validate() {
       this.validationFailed = []
@@ -193,10 +194,10 @@ export default {
       </h3>
       <div class="controls">
         <div v-if="!hook.readonly" class="hook-view-controls">
-          <DeleteButton v-if="!editing" :onClick="deleteHook" :loading="loading" />
-          <CancelButton v-if="editing" :onClick="cancel" />
-          <EditButton v-if="!editing" :onClick="() => (editing = true)" />
-          <SaveButton v-if="editing" :onClick="saveHook" :loading="loading" />
+          <DeleteSVG v-if="!editing" :onClick="deleteHook" :loading="loading" />
+          <CancelSVG v-if="editing" :onClick="cancel" />
+          <EditSVG v-if="!editing" :onClick="() => (editing = true)" />
+          <SaveSVG v-if="editing" :onClick="saveHook" :loading="loading" />
         </div>
         <div v-else>
           <h3 style="text-align: center">Readonly</h3>
