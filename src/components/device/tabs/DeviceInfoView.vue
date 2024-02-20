@@ -1,7 +1,7 @@
 <script>
 import SyncLoader from 'vue-spinner/src/SyncLoader.vue'
 import { DeviceApi } from '../../../api/device/DeviceApi.js'
-import InputWithLabel from '../../fields/InputWithLabel.vue'
+import InputField from '../../fields/InputField.vue'
 import LoadingButton from '../../controls/LoadingButton.vue'
 import { EventBus } from '../../../utils/EventBus.js'
 
@@ -11,7 +11,7 @@ export default {
   name: 'DeviceInfoView',
   components: {
     SyncLoader,
-    InputWithLabel,
+    InputField,
     LoadingButton
   },
   props: {
@@ -69,21 +69,20 @@ export default {
   <div>
     <h1 class="title">Device information</h1>
     <div v-if="info" class="list">
-      <InputWithLabel
+      <InputField
         label="Device name"
         :title="validName ? '' : NAME_ERROR"
-        :value="deviceName"
+        v-model="deviceName"
         :validationFailed="!validName"
-        @input="deviceName = $event.target.value.trim()"
       >
         <LoadingButton :loading="loading" @click="saveName">
           <h3>save</h3>
         </LoadingButton>
-      </InputWithLabel>
-      <InputWithLabel label="Device type" :value="info.type" :disabled="true" />
-      <InputWithLabel label="Firmware version" :value="info.version" :disabled="true" />
-      <InputWithLabel label="Chip model" :value="info.chip_model" :disabled="true" />
-      <InputWithLabel label="Chip revision" :value="info.chip_revision" :disabled="true" />
+      </InputField>
+      <InputField label="Device type" :modelValue="info.type" :disabled="true" />
+      <InputField label="Firmware version" :modelValue="info.version" :disabled="true" />
+      <InputField label="Chip model" :modelValue="info.chip_model" :disabled="true" />
+      <InputField label="Chip revision" :modelValue="info.chip_revision" :disabled="true" />
     </div>
     <sync-loader v-else class="loading-spinner" :loading="true"></sync-loader>
   </div>

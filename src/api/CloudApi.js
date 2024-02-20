@@ -30,7 +30,7 @@ const CLOUD_STOMP_CLIENT = new Client({ brokerURL: CLOUD_BROKER_URL })
 const CloudApi = {
   connectToWs(user) {
     if (!user || !user.login) {
-      console.error("Can't subscribe to response topic - user is missing!")
+      console.error("Can't connect to message broker - user is missing!")
       return
     }
     CLOUD_STOMP_CLIENT.onConnect = () => {

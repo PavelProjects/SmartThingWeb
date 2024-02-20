@@ -74,5 +74,6 @@ export default {
   position: absolute;
   top: var(--default-gap);
   left: var(--default-gap);
+  min-width: 300px;
 }
 </style>

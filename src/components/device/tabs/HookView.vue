@@ -1,7 +1,7 @@
 <script>
 import { systemNameToNormal } from '../../../utils/StringUtils.js'
-import InputWithLabel from '../../fields/InputWithLabel.vue'
-import ComboBox from '../../fields/ComboBox.vue'
+import InputField from '../../fields/InputField.vue'
+import ComboBoxField from '../../fields/ComboBoxField.vue'
 import { DeviceApi } from '../../../api/device/DeviceApi.js'
 import { NEW_HOOK_ID } from './HooksView.vue'
 import { h } from 'vue'
@@ -11,6 +11,7 @@ import DeleteButton from '../../controls/DeleteButton.vue'
 import EditButton from '../../controls/EditButton.vue'
 import CancelButton from '../../controls/CancelButton.vue'
 import SaveButton from '../../controls/SaveButton.vue'
+import CheckBoxField from '../../fields/CheckBoxField.vue'
 
 const SYSTEM_FIELDS = ['id', 'type', 'readonly']
 
@@ -24,13 +25,14 @@ export default {
     gateway: String
   },
   components: {
-    InputWithLabel,
-    ComboBox,
+    InputField,
+    ComboBoxField,
     LoadingButton,
     DeleteButton,
     EditButton,
     CancelButton,
-    SaveButton
+    SaveButton,
+    CheckBoxField
   },
   data() {
     return {
@@ -73,9 +75,12 @@ export default {
     },
     getFieldComponent(field) {
       if (this.template[field] && this.template[field]['values']) {
-        return h(ComboBox, { items: this.template[field]['values'] })
+        return h(ComboBoxField, { items: this.template[field]['values'] })
       }
-      return h(InputWithLabel, {})
+      if (this.template[field] && this.template[field].type === 'boolean') {
+        return h(CheckBoxField, {})
+      }
+      return h(InputField, {})
     },
     async saveHook() {
       if (!this.haveChanges) {
@@ -200,17 +205,17 @@ export default {
       </div>
     </div>
     <div class="list">
-      <InputWithLabel label="type" :value="hook.type" :disabled="true" />
+      <InputField label="type" :modelValue="hook.type" :disabled="true" />
       <component
         v-for="{ key, label, value, render, required } in fieldsComponents"
         :is="render"
         :key="key"
         :label="label"
-        :value="value"
+        :modelValue="value"
         :notBlank="required"
         :disabled="isFieldDisabled(key)"
         :validationFailed="validationFailed.includes(key)"
-        @input="setValue(key, $event.target.value)"
+        @update:modelValue="(value) => setValue(key, value)"
       />
     </div>
   </div>

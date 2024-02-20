@@ -2,7 +2,7 @@
 import { systemNameToNormal } from '../../../utils/StringUtils.js'
 import HookView from './HookView.vue'
 import { DeviceApi } from '../../../api/device/DeviceApi.js'
-import ComboBox from '../../fields/ComboBox.vue'
+import ComboBoxField from '../../fields/ComboBoxField.vue'
 import SyncLoader from 'vue-spinner/src/SyncLoader.vue'
 
 export const NEW_HOOK_ID = 'New'
@@ -11,7 +11,7 @@ export default {
   name: 'HooksView',
   components: {
     HookView,
-    ComboBox,
+    ComboBoxField,
     SyncLoader
   },
   props: {
@@ -86,10 +86,10 @@ export default {
     <h1 class="title">Hooks</h1>
     <sync-loader class="loading-spinner" :loading="loading"></sync-loader>
     <div v-if="!loading">
-      <ComboBox
+      <ComboBoxField
         label="Add hook of type "
         :items="hookTypes"
-        @input="addHook($event.target.value)"
+        @update:modelValue="(v) => addHook(v)"
       />
       <div v-if="hooks.length > 0" class="hooks-list-view list">
         <HookView

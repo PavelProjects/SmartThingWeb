@@ -1,10 +1,10 @@
 <script>
 export default {
-  name: 'InputWithLabel',
+  name: 'InputField',
   props: {
     testId: String,
     label: String,
-    value: [String, Number, Boolean],
+    modelValue: [String, Number],
     type: {
       type: String,
       default: 'text'
@@ -17,6 +17,16 @@ export default {
       type: Boolean,
       default: false
     }
+  },
+  emits: ["update:modelValue"],
+  methods: {
+    emitUpdate(value) {
+      let v = value
+      if (this.type === 'number') {
+        v = Number.parseInt(value)
+      }
+      this.$emit('update:modelValue', v)
+    }
   }
 }
 </script>
@@ -27,17 +37,18 @@ export default {
     <div class="input-with-slot">
       <input
         :id="testId"
-        :value="value"
+        :value="modelValue"
         :disabled="disabled"
         :type="type"
         :class="{ legit: !validationFailed, required: validationFailed }"
+        @input="emitUpdate($event.target.value)"
       />
       <slot></slot>
     </div>
   </div>
 </template>
 
-<style lang="scss" scoped>
+<style scoped>
 .field-container .input-with-slot {
   display: flex;
   flex-direction: row;

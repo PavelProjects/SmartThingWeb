@@ -1,11 +1,11 @@
 <script>
 export default {
-  name: 'ComboBox',
+  name: 'ComboBoxField',
   props: {
     testId: String,
     label: String,
     items: [Array, Object],
-    value: [String, Boolean],
+    modelValue: [String, Boolean],
     notBlank: {
       type: Boolean,
       default: false
@@ -19,6 +19,7 @@ export default {
       default: false
     }
   },
+  emits: ["update:modelValue"],
   computed: {
     mapedItems() {
       if (Array.isArray(this.items)) {
@@ -57,9 +58,10 @@ export default {
     <h2 class="field-label">{{ label || 'Select:' }}</h2>
     <select
       :id="testId"
-      :value="value"
+      :value="modelValue"
       :disabled="disabled"
       :class="{ legit: !validationFailed, required: validationFailed }"
+      @input="$emit('update:modelValue', $event.target.value)"
     >
       <option v-if="!notBlank"></option>
       <option v-for="{ key, caption } in mapedItems" :key="key" :value="key">

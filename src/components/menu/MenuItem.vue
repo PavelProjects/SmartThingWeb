@@ -32,6 +32,9 @@ export default {
   flex-direction: row;
   flex: 1 0 auto;
   margin: var(--padding-default);
+  transition:
+    color 0.5s,
+    background-color 0.5s;
 }
 .menu-item:hover {
   opacity: 0.8;

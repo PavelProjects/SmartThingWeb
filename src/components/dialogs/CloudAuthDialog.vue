@@ -2,13 +2,13 @@
 import { CloudApi } from '../../api/CloudApi'
 import { toast } from '../../utils/EventBus'
 import LoadingButton from '../controls/LoadingButton.vue'
-import InputWithLabel from '../fields/InputWithLabel.vue'
+import InputField from '../fields/InputField.vue'
 import PopUpDialog from './PopUpDialog.vue'
 
 export default {
   name: 'CloudAuthDialog',
   components: {
-    InputWithLabel,
+    InputField,
     LoadingButton,
     PopUpDialog
   },
@@ -41,13 +41,13 @@ export default {
 
 <template>
   <PopUpDialog>
-    <InputWithLabel
+    <InputField
       label="Login"
       :value="login"
       @input="login = $event.target.value.trim()"
       type="login"
     />
-    <InputWithLabel
+    <InputField
       label="Password"
       :value="password"
       @input="password = $event.target.value.trim()"

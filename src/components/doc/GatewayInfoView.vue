@@ -1,12 +1,12 @@
 <script>
 import { GatewayApi } from '../../api/GatewayApi.js'
-import InputWithLabel from '../fields/InputWithLabel.vue'
+import InputField from '../fields/InputField.vue'
 import LoadingButton from '../controls/LoadingButton.vue'
 
 export default {
   name: 'GatewayInfoView',
   components: {
-    InputWithLabel,
+    InputField,
     LoadingButton
   },
   data() {
@@ -92,7 +92,7 @@ export default {
       <div class="overlay" @click="cloudPopupVisible = false"></div>
       <div class="cloud-popup bordered">
         <div v-if="authorizedShortInfo">
-          <InputWithLabel
+          <InputField
             label="Connection status"
             :value="isConnected ? 'Connected' : 'Connection lost'"
             :disabled="true"
@@ -100,25 +100,25 @@ export default {
             <LoadingButton v-if="!isConnected" :loading="loading" @click="connectToCloud">
               <h3>reconnect</h3>
             </LoadingButton>
-          </InputWithLabel>
-          <InputWithLabel label="User login" :value="user.login" :disabled="true" />
+          </InputField>
+          <InputField label="User login" :value="user.login" :disabled="true" />
           <h2 class="title">Gateway</h2>
-          <InputWithLabel label="Name" :value="gateway.name" :disabled="true" />
-          <InputWithLabel label="Description" :value="gateway.description" :disabled="true" />
+          <InputField label="Name" :value="gateway.name" :disabled="true" />
+          <InputField label="Description" :value="gateway.description" :disabled="true" />
         </div>
 
         <h2 class="title">Cloud authorization info</h2>
-        <InputWithLabel
+        <InputField
           label="Token"
           :value="cloudInfo.token"
           @input="cloudInfo.token = $event.target.value"
         />
-        <InputWithLabel
+        <InputField
           label="Cloud ip"
           :value="cloudInfo.cloudIp"
           @input="cloudInfo.cloudIp = $event.target.value"
         />
-        <InputWithLabel
+        <InputField
           label="Cloud port"
           :value="cloudInfo.cloudPort"
           @input="cloudInfo.cloudPort = $event.target.value"

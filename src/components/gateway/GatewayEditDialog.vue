@@ -2,13 +2,13 @@
 import { toast } from '../../utils/EventBus'
 import LoadingButton from '../controls/LoadingButton.vue'
 import PopUpDialog from '../dialogs/PopUpDialog.vue'
-import InputWithLabel from '../fields/InputWithLabel.vue'
+import InputField from '../fields/InputField.vue'
 
 export default {
   name: 'GatewayEditDialog',
   components: {
     PopUpDialog,
-    InputWithLabel,
+    InputField,
     LoadingButton
   },
   props: {
@@ -51,8 +51,8 @@ export default {
 
 <template>
   <PopUpDialog>
-    <InputWithLabel label="Name" :value="name" @input="(event) => (name = event.target.value)" />
-    <InputWithLabel
+    <InputField label="Name" :value="name" @input="(event) => (name = event.target.value)" />
+    <InputField
       label="Description"
       :value="description"
       @input="(event) => (description = event.target.value)"

@@ -2,7 +2,7 @@
 import { GatewayApi } from '../../../api/GatewayApi'
 import { toast } from '../../../utils/EventBus'
 import LoadingButton from '../../controls/LoadingButton.vue'
-import InputWithLabel from '../../fields/InputWithLabel.vue'
+import InputField from '../../fields/InputField.vue'
 import { DeviceApi } from '../../../api/device/DeviceApi'
 import DevicesSearchView from '../DevicesSearchView.vue'
 
@@ -14,7 +14,7 @@ const MODE = {
 export default {
   name: 'SettingsEditor',
   components: {
-    InputWithLabel,
+    InputField,
     LoadingButton,
     DevicesSearchView
   },
@@ -143,7 +143,7 @@ export default {
 <template>
   <div class="container bordered">
     <div class="list">
-      <InputWithLabel
+      <InputField
         label="Name"
         :value="newSettings.name"
         @input="newSettings.name = $event.target.value"

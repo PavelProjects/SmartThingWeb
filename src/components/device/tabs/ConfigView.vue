@@ -1,8 +1,9 @@
 <script>
 import { DeviceApi } from '../../../api/device/DeviceApi.js'
-import InputWithLabel from '../../fields/InputWithLabel.vue'
+import InputField from '../../fields/InputField.vue'
 import LoadingButton from '../../controls/LoadingButton.vue'
 import SyncLoader from 'vue-spinner/src/SyncLoader.vue'
+import CheckBoxField from '../../fields/CheckBoxField.vue'
 
 export default {
   name: 'ConfigView',
@@ -10,7 +11,8 @@ export default {
     device: Object
   },
   components: {
-    InputWithLabel,
+    InputField,
+    CheckBoxField,
     LoadingButton,
     SyncLoader
   },
@@ -27,14 +29,6 @@ export default {
   created() {
     this.update()
   },
-  computed: {
-    inputs() {
-      return Object.entries(this.configInfo).map(([key, { caption, type }]) => {
-        const value = this.values[key] || ''
-        return { key, caption, value, type }
-      })
-    }
-  },
   methods: {
     async update() {
       this.loading = true
@@ -46,10 +40,10 @@ export default {
       }
     },
     async loadConfigInfo() {
-      this.configInfo = await DeviceApi.getDeviceConfigInfo(this.device, this.gateway)
+      this.configInfo = await DeviceApi.getDeviceConfigInfo(this.device, this.gateway) ?? {}
     },
     async loadConfigValues() {
-      this.values = await DeviceApi.getConfig(this.device, this.gateway)
+      this.values = await DeviceApi.getConfig(this.device, this.gateway) ?? {}
     },
     async saveConfig() {
       this.saveLoading = true
@@ -73,32 +67,6 @@ export default {
         }
       }
     },
-    setValue(key, value) {
-      if (!key) {
-        console.error('Key is missing')
-        return
-      }
-      let finalValue = value
-      const type = this.configInfo[key]['type']
-      if (type) {
-        switch (type) {
-          case 'boolean':
-            finalValue = value == 'true'
-            break
-          case 'integer':
-          case 'number':
-            finalValue = Number.parseInt(value)
-            break
-          case 'string':
-          case 'text':
-            finalValue = value
-            break
-          default:
-            console.error('Type ' + type + ' not supported yet')
-        }
-      }
-      this.values[key] = finalValue
-    }
   }
 }
 </script>
@@ -108,14 +76,22 @@ export default {
     <h1 class="title">Configuration</h1>
     <sync-loader class="loading-spinner" :loading="loading"></sync-loader>
     <div class="config-inputs list">
-      <InputWithLabel
-        v-for="{ key, caption, value, type } in inputs"
+      <div
+        v-for="[key, { caption, type }] of Object.entries(this.configInfo)"
         :key="key"
-        :label="caption"
-        :value="value"
-        :type="type"
-        @input="setValue(key, $event.target.value)"
-      />
+      >
+        <CheckBoxField
+          v-if="type === 'boolean'"
+          :label="caption"
+          v-model="values[key]"
+        />
+        <InputField
+          v-else
+          :label="caption"
+          :type="type"
+          v-model="values[key]"
+        />
+      </div>
       <div class="controls-holder">
         <LoadingButton class="delete" :loading="deleteLoading" @click="deleteAllValues">
           <h2>Delete all values</h2>
