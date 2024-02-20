@@ -10,15 +10,12 @@ export default {
     SyncLoader,
     MenuView
   },
-  props: {
-    device: Object
-  },
+  inject: ['device', 'gateway'],
   data() {
     return {
       states: null,
       loading: false,
       tabs: {},
-      gateway: this.$route.params.gateway
     }
   },
   created() {

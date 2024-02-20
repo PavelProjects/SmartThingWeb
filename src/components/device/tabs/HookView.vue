@@ -18,12 +18,11 @@ const SYSTEM_FIELDS = ['id', 'type', 'readonly']
 export default {
   name: 'HookView',
   props: {
-    device: Object,
     hookProp: Object,
     observable: Object,
-    template: Object,
-    gateway: String
+    template: Object
   },
+  inject: ['device', 'gateway'],
   components: {
     InputField,
     ComboBoxField,

@@ -15,11 +15,14 @@ export default {
   props: {
     device: Object
   },
-  data() {
-    const props = {
+  provide() {
+    return {
       device: this.device,
-      gateway: this.$route.params.gateway
+      gateway: this.$route.params.gateway,
     }
+  },
+  data() {
+    const props = {}
     return {
       tabs: {
         info: {

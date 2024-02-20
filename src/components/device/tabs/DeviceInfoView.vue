@@ -14,10 +14,7 @@ export default {
     InputField,
     LoadingButton
   },
-  props: {
-    device: Object,
-    gateway: String
-  },
+  inject: ['device', 'gateway'],
   data() {
     return {
       info: null,

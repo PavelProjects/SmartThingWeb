@@ -9,10 +9,7 @@ export default {
     LoadingButton,
     SyncLoader
   },
-  props: {
-    device: Object,
-    gateway: String
-  },
+  inject: ['device', 'gateway'],
   data() {
     return {
       actions: null,

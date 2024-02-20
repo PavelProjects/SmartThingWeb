@@ -15,9 +15,9 @@ export default {
     SyncLoader
   },
   props: {
-    device: Object,
     observable: Object
   },
+  inject: ['device', 'gateway'],
   data() {
     return {
       selectedTemplate: null,
@@ -25,7 +25,6 @@ export default {
       templates: {},
       selectedType: null,
       loading: false,
-      gateway: this.$route.params.gateway
     }
   },
   computed: {
@@ -94,7 +93,6 @@ export default {
       <div v-if="hooks.length > 0" class="hooks-list-view list">
         <HookView
           v-for="hook in hooks"
-          :device="device"
           :key="hook.id"
           :observable="observable"
           :hookProp="hook"

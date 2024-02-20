@@ -7,9 +7,7 @@ import CheckBoxField from '../../fields/CheckBoxField.vue'
 
 export default {
   name: 'ConfigView',
-  props: {
-    device: Object
-  },
+  inject: ['device'],
   components: {
     InputField,
     CheckBoxField,

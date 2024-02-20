@@ -10,10 +10,7 @@ export default {
     SyncLoader,
     MenuView
   },
-  props: {
-    device: Object,
-    gateway: String
-  },
+  inject: ['device', 'gateway'],
   data() {
     return {
       sensors: null,
