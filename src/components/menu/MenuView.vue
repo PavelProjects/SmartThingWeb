@@ -82,8 +82,6 @@ export default {
         } finally {
           this.loading = false
         }
-      } else {
-        console.error("Content don't have update method")
       }
     }
   }

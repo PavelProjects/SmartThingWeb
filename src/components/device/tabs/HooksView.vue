@@ -57,7 +57,7 @@ export default {
       this.templates = (await DeviceApi.getHooksTemplates(this.device, this.gateway)) || {}
     },
     addHook(type) {
-      if (this.hooks && this.hooks.length > 0 && this.hooks[0].id == NEW_HOOK_ID) {
+      if (this.hooks.length > 0 && this.hooks[0].id == NEW_HOOK_ID) {
         this.hooks.shift()
       }
       if (!type) {
