@@ -3,34 +3,39 @@ import HeaderDoc from './components/doc/HeaderDoc.vue'
 import ToatsView from './components/toasts/ToastsView.vue'
 import CloudAuthDialog from './components/dialogs/CloudAuthDialog.vue'
 import { CloudApi } from './api/CloudApi'
+import { useAuthStore } from './store/authStore'
+import { storeToRefs } from 'pinia'
 
 export default {
   components: {
     HeaderDoc, ToatsView, CloudAuthDialog
   },
   data() {
+    const store = useAuthStore()
+    const { id, login } = storeToRefs(store)
     return {
       mode: import.meta.env.VITE_MODE,
-      authorization: undefined
+      id, login,
+      authStore: store
     }
   },
   computed: {
-    isAuthorized() {
-      return !!this.authorization || this.mode === 'gateway'
+    isAuthenticated() {
+      return !!this.id || this.mode === 'gateway'
     }
   },
   async mounted() {
     if (this.mode === 'gateway') {
-      this.authorization = {}
+      this.id = ''
       return
     }
-    this.authorization = await CloudApi.getAuthorization()
+    const { user } = await CloudApi.getAuthentication()
+    this.authStore.setUser(user)
   },
   watch: {
-    authorization() {
-      const { user } = this.authorization || {}
-      if (user) {
-        CloudApi.connectToWs(user)
+    id() {
+      if (this.id) {
+        CloudApi.connectToWs()
       }
     }
   },
@@ -42,9 +47,9 @@ export default {
     <HeaderDoc class="doc" />
     <ToatsView id="toasts-list" />
 
-    <CloudAuthDialog v-if="!isAuthorized" @authorized="(auth) => authorization = auth" />
+    <CloudAuthDialog v-if="!isAuthenticated" @authenticated="({ user }) => authStore.setUser(user)" />
 
-    <router-view v-if="isAuthorized" v-slot="{ Component }">
+    <router-view v-if="isAuthenticated" v-slot="{ Component }">
       <keep-alive>
         <component :is="Component" :key="$route.fullPath" />
       </keep-alive>

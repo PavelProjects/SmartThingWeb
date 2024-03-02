@@ -65,7 +65,7 @@ const GatewayApi = {
         throw new Error('Failed to auth in cloud')
       }
       toast.success({
-        caption: 'Successfuly authorized in cloud'
+        caption: 'Successfuly authenticated in cloud'
       })
       return response.data
     } catch (error) {

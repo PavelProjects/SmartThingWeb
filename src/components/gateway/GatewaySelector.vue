@@ -93,7 +93,7 @@ export default {
         })
       }
     },
-    async logoutGateway(gateway) {
+    async deleteToken(gateway) {
       if (
         !confirm('Are you sure? This action will delete token and disconnect gateway from cloud!')
       ) {
@@ -130,7 +130,7 @@ export default {
         @edit="() => (gatewayToEdit = gateway)"
         @delete="deleteGateway(gateway)"
         @generateToken="generateToken(gateway)"
-        @logout="logoutGateway(gateway)"
+        @deleteToken="deleteToken(gateway)"
       />
       <button class="btn" @click="gatewayToEdit = {}">Add gateway</button>
     </div>

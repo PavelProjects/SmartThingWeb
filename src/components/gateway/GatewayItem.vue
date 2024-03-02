@@ -6,6 +6,7 @@ export default {
   props: {
     gateway: Object
   },
+  emits: ['edit', 'delete', 'deleteToken', 'generateToken'],
   components: {
     DotsVertical
   }
@@ -28,7 +29,7 @@ export default {
       <div class="menu-items">
         <p @click.stop="$emit('edit')">Edit</p>
         <p @click.stop="$emit('delete')">Delete</p>
-        <p v-if="gateway.haveToken" @click.stop="$emit('logout')">Logout</p>
+        <p v-if="gateway.haveToken" @click.stop="$emit('deleteToken')">Delete token</p>
         <p v-else @click.stop="$emit('generateToken')">Token</p>
       </div>
     </div>

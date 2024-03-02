@@ -1,12 +1,14 @@
 <script>
-import GatewayInfoView from './GatewayInfoView.vue'
+import GatewayAuthInfo from './GatewayAuthInfo.vue'
 import MenuSvg from 'vue-material-design-icons/Menu.vue'
+import UserAuthInfo from './UserAuthInfo.vue'
 
 export default {
   name: 'HeaderDoc',
   components: {
-    GatewayInfoView,
-    MenuSvg
+    GatewayAuthInfo,
+    MenuSvg,
+    UserAuthInfo
   },
   data() {
     const mode = import.meta.env.VITE_MODE
@@ -36,7 +38,8 @@ export default {
         </router-link>
       </div>
     </div>
-    <GatewayInfoView v-if="mode === 'gateway'" class="log-in-info" />
+    <UserAuthInfo v-if="mode === 'cloud'" class="log-in-info" />
+    <GatewayAuthInfo v-if="mode === 'gateway'" class="log-in-info" />
   </div>
 </template>
 

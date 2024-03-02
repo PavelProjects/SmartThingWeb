@@ -33,6 +33,16 @@ a,
   opacity: 0.5;
 }
 
+.overlay {
+  position: fixed;
+  top: var(--doc-height);
+  left: 0px;
+  width: 100vw;
+  height: calc(100vh - var(--doc-height));
+  background-color: var(--background-tilt);
+  z-index: 998;
+}
+
 input,
 select {
   min-height: 40px;

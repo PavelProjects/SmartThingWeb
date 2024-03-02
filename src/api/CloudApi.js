@@ -28,11 +28,7 @@ const axiosInstance = axios.create({
 const CLOUD_STOMP_CLIENT = new Client({ brokerURL: CLOUD_BROKER_URL })
 
 const CloudApi = {
-  connectToWs(user) {
-    if (!user || !user.login) {
-      console.error("Can't connect to message broker - user is missing!")
-      return
-    }
+  connectToWs() {
     CLOUD_STOMP_CLIENT.onConnect = () => {
       console.debug('Connected to message broker')
       EventBus.emit(STOMP_CONNECTED, CLOUD_STOMP_CLIENT)
@@ -40,7 +36,7 @@ const CloudApi = {
     console.debug('Connecting to ws broker ' + CLOUD_BROKER_URL)
     CLOUD_STOMP_CLIENT.activate()
   },
-  async getAuthorization() {
+  async getAuthentication() {
     try {
       const response = await axiosInstance.get(URL_AUTH)
       return response.data

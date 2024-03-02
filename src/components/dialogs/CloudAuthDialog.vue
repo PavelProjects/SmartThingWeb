@@ -30,7 +30,7 @@ export default {
       this.loading = true
       try {
         const auth = await CloudApi.authUser(this.login, this.password)
-        this.$emit('authorized', auth)
+        this.$emit('authenticated', auth)
       } finally {
         this.loading = false
       }
@@ -41,18 +41,29 @@ export default {
 
 <template>
   <PopUpDialog>
-    <InputField
-      label="Login"
-      :value="login"
-      @input="login = $event.target.value.trim()"
-      type="login"
-    />
-    <InputField
-      label="Password"
-      :value="password"
-      @input="password = $event.target.value.trim()"
-      type="password"
-    />
-    <LoadingButton :loading="loading" @click="auth"> Log in </LoadingButton>
+    <div class="container">
+      <InputField
+        label="Login"
+        :value="login"
+        @input="login = $event.target.value.trim()"
+        type="login"
+      />
+      <InputField
+        label="Password"
+        :value="password"
+        @input="password = $event.target.value.trim()"
+        type="password"
+      />
+      <LoadingButton :loading="loading" @click="auth"> Log in </LoadingButton>
+    </div>
   </PopUpDialog>
 </template>
+
+<style scoped>
+  .container {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 5px;
+  }
+</style>

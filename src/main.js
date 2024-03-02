@@ -2,6 +2,7 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import { EventBus, STOMP_CONNECTED, notifyFromDevice } from './utils/EventBus'
 import { router } from './routes'
+import { createPinia } from 'pinia'
 
 const NOTIFCATION_TOPIC = import.meta.env.VITE_NOTIFCATION_TOPIC
 const mode = import.meta.env.VITE_MODE
@@ -26,5 +27,6 @@ EventBus.on(STOMP_CONNECTED, (client) => {
 })
 
 const app = createApp(App)
+app.use(createPinia())
 app.use(router)
 app.mount('#app')

@@ -51,14 +51,25 @@ export default {
 
 <template>
   <PopUpDialog>
-    <InputField label="Name" :value="name" @input="(event) => (name = event.target.value)" />
-    <InputField
-      label="Description"
-      :value="description"
-      @input="(event) => (description = event.target.value)"
-    />
-    <LoadingButton @click.stop="handleSave">
-      {{ buttonTitle }}
-    </LoadingButton>
+    <div class="container">
+      <InputField label="Name" :value="name" @input="(event) => (name = event.target.value)" />
+      <InputField
+        label="Description"
+        :value="description"
+        @input="(event) => (description = event.target.value)"
+      />
+      <LoadingButton @click.stop="handleSave">
+        {{ buttonTitle }}
+      </LoadingButton>
+    </div>
   </PopUpDialog>
 </template>
+
+<style scoped>
+  .container {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 5px;
+  }
+</style>

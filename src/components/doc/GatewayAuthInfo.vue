@@ -4,7 +4,7 @@ import InputField from '../fields/InputField.vue'
 import LoadingButton from '../controls/LoadingButton.vue'
 
 export default {
-  name: 'GatewayInfoView',
+  name: 'GatewayAuthInfo',
   components: {
     InputField,
     LoadingButton
@@ -28,7 +28,7 @@ export default {
     this.isConnected = await GatewayApi.getConnectionStatus()
   },
   computed: {
-    authorizedShortInfo() {
+    authenticatedShortInfo() {
       if (!this.gateway || !this.user) {
         return null
       }
@@ -70,14 +70,14 @@ export default {
     openCloudInfoEditor() {
       this.cloudPopupVisible = !this.cloudPopupVisible
     },
-    parseAuthorizedUser(authorizedUser) {
-      if (!authorizedUser || Object.keys(authorizedUser) === 0) {
+    parseAuthorizedUser(authenticatedUser) {
+      if (!authenticatedUser || Object.keys(authenticatedUser) === 0) {
         this.gateway = null
         this.user = null
         return
       }
-      this.gateway = authorizedUser['gateway']
-      this.user = authorizedUser['user']
+      this.gateway = authenticatedUser['gateway']
+      this.user = authenticatedUser['user']
     }
   }
 }
@@ -86,12 +86,12 @@ export default {
 <template>
   <div>
     <h2 class="status title" @click="openCloudInfoEditor">
-      {{ authorizedShortInfo ? authorizedShortInfo : 'Log in' }}
+      {{ authenticatedShortInfo ? authenticatedShortInfo : 'Log in' }}
     </h2>
     <div v-if="cloudPopupVisible">
       <div class="overlay" @click="cloudPopupVisible = false"></div>
       <div class="cloud-popup bordered">
-        <div v-if="authorizedShortInfo">
+        <div v-if="authenticatedShortInfo">
           <InputField
             label="Connection status"
             :value="isConnected ? 'Connected' : 'Connection lost'"
@@ -135,14 +135,6 @@ export default {
 .status {
   cursor: pointer;
   user-select: none;
-}
-.overlay {
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  width: 100vw;
-  height: calc(100vh - var(--doc-height));
-  background-color: var(--background-tilt);
 }
 .cloud-popup {
   position: absolute;
