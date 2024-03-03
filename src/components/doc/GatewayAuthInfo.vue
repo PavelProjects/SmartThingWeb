@@ -22,10 +22,7 @@ export default {
   },
   created() {
     this.loadCloudInfo()
-    this.loadAuthorization()
-  },
-  async mounted() {
-    this.isConnected = await GatewayApi.getConnectionStatus()
+    this.loadAuthentication()
   },
   computed: {
     authenticatedShortInfo() {
@@ -40,92 +37,74 @@ export default {
       this.cloudInfo = await GatewayApi.getCloudInfo()
       this.isConnected = await GatewayApi.getConnectionStatus()
     },
-    async loadAuthorization() {
+    async loadAuthentication() {
       this.loading = true
-      try {
-        this.parseAuthorizedUser(await GatewayApi.getCloudAuthorization())
-      } finally {
-        this.loading = false
-      }
+      const { user, gateway } = await GatewayApi.getCloudAuthentication().finally(() => this.loading = false) ?? {}
+      this.user = user
+      this.gateway = gateway
     },
-    async saveAuthorization() {
+    async saveAuthentication() {
       this.loading = true
-      try {
-        this.parseAuthorizedUser(await GatewayApi.cloudAuthorize(this.cloudInfo))
-      } finally {
-        this.loading = false
-      }
+      const { user, gateway } = await GatewayApi.cloudAuth(this.cloudInfo).finally(() => this.loading = false) ?? {}
+      this.user = user
+      this.gateway = gateway
     },
     async connectToCloud() {
       if (this.isConnected) {
         return
       }
       this.loading = true
-      try {
-        this.isConnected = await GatewayApi.cloudConnect('cloudConnect')
-      } finally {
-        this.loading = false
-      }
+      this.isConnected = await GatewayApi.cloudConnect().finally(() => this.loading = false)
     },
-    openCloudInfoEditor() {
-      this.cloudPopupVisible = !this.cloudPopupVisible
-    },
-    parseAuthorizedUser(authenticatedUser) {
-      if (!authenticatedUser || Object.keys(authenticatedUser) === 0) {
-        this.gateway = null
-        this.user = null
-        return
-      }
-      this.gateway = authenticatedUser['gateway']
-      this.user = authenticatedUser['user']
-    }
   }
 }
 </script>
 
 <template>
   <div>
-    <h2 class="status title" @click="openCloudInfoEditor">
-      {{ authenticatedShortInfo ? authenticatedShortInfo : 'Log in' }}
+    <h2 class="status title" @click="cloudPopupVisible = !cloudPopupVisible">
+      {{ authenticatedShortInfo ? authenticatedShortInfo : 'No connection to the cloud' }}
     </h2>
     <div v-if="cloudPopupVisible">
-      <div class="overlay" @click="cloudPopupVisible = false"></div>
-      <div class="cloud-popup bordered">
-        <div v-if="authenticatedShortInfo">
-          <InputField
-            label="Connection status"
-            :value="isConnected ? 'Connected' : 'Connection lost'"
-            :disabled="true"
-          >
-            <LoadingButton v-if="!isConnected" :loading="loading" @click="connectToCloud">
-              <h3>reconnect</h3>
-            </LoadingButton>
-          </InputField>
-          <InputField label="User login" :value="user.login" :disabled="true" />
-          <h2 class="title">Gateway</h2>
-          <InputField label="Name" :value="gateway.name" :disabled="true" />
-          <InputField label="Description" :value="gateway.description" :disabled="true" />
-        </div>
+      <div class="overlay" @click.stop="cloudPopupVisible = false">
+        <div class="cloud-popup bordered" @click.stop="() => {}">
+          <div v-if="authenticatedShortInfo">
+            <InputField
+              label="Connection status"
+              :modelValue="isConnected ? 'Connected' : 'Connection lost'"
+              :disabled="true"
+            >
+              <LoadingButton v-if="!isConnected" :loading="loading" @click="connectToCloud">
+                <h3>reconnect</h3>
+              </LoadingButton>
+            </InputField>
+            <InputField label="User login" :modelValue="user.login" :disabled="true" />
+            <h2 class="title">Gateway</h2>
+            <InputField label="Name" :modelValue="gateway.name" :disabled="true" />
+            <InputField label="Description" :modelValue="gateway.description" :disabled="true" />
+          </div>
 
-        <h2 class="title">Cloud authorization info</h2>
-        <InputField
-          label="Token"
-          :value="cloudInfo.token"
-          @input="cloudInfo.token = $event.target.value"
-        />
-        <InputField
-          label="Cloud ip"
-          :value="cloudInfo.cloudIp"
-          @input="cloudInfo.cloudIp = $event.target.value"
-        />
-        <InputField
-          label="Cloud port"
-          :value="cloudInfo.cloudPort"
-          @input="cloudInfo.cloudPort = $event.target.value"
-        />
-        <LoadingButton :loading="loading" @click="saveAuthorization">
-          <h2>Authorize</h2>
-        </LoadingButton>
+          <h2 class="title">Cloud authentication info</h2>
+          <InputField
+            label="Token"
+            v-model="cloudInfo.token"
+          />
+          <InputField
+            label="Cloud ip"
+            v-model="cloudInfo.cloudIp"
+          />
+          <InputField
+            label="Cloud port"
+            v-model="cloudInfo.cloudPort"
+          />
+          <LoadingButton 
+            v-if="!isConnected || !authenticatedShortInfo"
+            :loading="loading"
+            @click="saveAuthentication"
+          >
+            <h2>Authenticate</h2>
+          </LoadingButton>
+        </div>
       </div>
     </div>
   </div>
@@ -138,7 +117,7 @@ export default {
 }
 .cloud-popup {
   position: absolute;
-  top: calc(var(--doc-height) + var(--default-gap));
+  top: var(--default-gap);
   right: var(--default-gap);
   width: 400px;
   display: flex;

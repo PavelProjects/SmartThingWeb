@@ -9,7 +9,7 @@ const GATEWAY_WS = import.meta.env.VITE_GATEWAY_WS
 const GATEWAY_SEARCH_TOPIC = import.meta.env.VITE_GATEWAY_SEARCH_TOPIC
 const GATEWAY_BROKER_URL = `ws://${GATEWAY_PATH}${GATEWAY_PORT ? ':' + GATEWAY_PORT : ''}/${GATEWAY_WS}`
 
-const PATH_AUTHORIZATION = '/auth'
+const PATH_AUTHENTICATION = '/auth'
 const PATH_CLOUD_INFO = '/auth/configuration'
 const PATH_CLOUD_CONNECTED = '/connection/status'
 const PATH_CLOUD_CONNECT = '/connection/connect'
@@ -47,20 +47,20 @@ const GatewayApi = {
       params
     })
   },
-  async getCloudAuthorization() {
+  async getCloudAuthentication() {
     try {
-      const response = axiosInstance.get(PATH_AUTHORIZATION)
+      const response = await axiosInstance.get(PATH_AUTHENTICATION)
       return response.data
     } catch (error) {
       console.error(error)
       toast.error({
-        caption: 'Failed to fetch cloud authorization info'
+        caption: 'Failed to fetch cloud authentication info'
       })
     }
   },
-  async cloudAuthorize(payload) {
+  async cloudAuth(payload) {
     try {
-      const response = await axiosInstance.put(PATH_AUTHORIZATION, payload)
+      const response = await axiosInstance.put(PATH_AUTHENTICATION, payload)
       if (response.status != 200) {
         throw new Error('Failed to auth in cloud')
       }
