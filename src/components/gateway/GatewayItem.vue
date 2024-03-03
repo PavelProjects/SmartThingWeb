@@ -10,7 +10,7 @@ export default {
   props: {
     gateway: Object
   },
-  emits: ['gatewaysUpdate'],
+  emits: ['gatewaysUpdate', 'click'],
   components: {
     DotsVertical,
     PopUpDialog,
@@ -88,7 +88,7 @@ export default {
 </script>
 
 <template>
-  <div class="gateway-item bordered">
+  <div class="gateway-item bordered" @click="$emit('click')">
     <div
       class="status"
       :style="{ background: gateway.online ? 'green' : 'red' }"

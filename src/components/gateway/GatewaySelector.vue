@@ -27,6 +27,7 @@ export default {
   },
   methods: {
     handleGatewayClick(gateway) {
+      console.log(1)
       if (gateway.online) {
         router.push('/panel/' + gateway.id)
       } else {
@@ -69,7 +70,7 @@ export default {
         v-for="gateway of gateways"
         :key="gateway.id"
         :gateway="gateway"
-        @click.stop="handleGatewayClick(gateway)"
+        @click="handleGatewayClick(gateway)"
         @gatewaysUpdate="loadGateways"
       />
       <button class="btn" @click="showCreateDialog = true">Add gateway</button>
