@@ -1,6 +1,7 @@
 <script>
 export default {
   name: 'PopUpDialog',
+  emits: ['close'],
   methods: {
     clickOutside() {
       this.$emit('close')

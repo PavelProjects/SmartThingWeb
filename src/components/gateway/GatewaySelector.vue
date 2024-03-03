@@ -5,6 +5,7 @@ import { toast } from '../../utils/EventBus'
 import GatewayItem from './GatewayItem.vue'
 import GatewayEditDialog from './GatewayEditDialog.vue'
 import UpdateButton from '../controls/UpdateButton.vue'
+import PopUpDialog from '../dialogs/PopUpDialog.vue'
 
 export default {
   name: 'GatewaySelector',
@@ -12,13 +13,13 @@ export default {
     GatewayItem,
     GatewayEditDialog,
     UpdateButton,
+    PopUpDialog,
   },
   data() {
     return {
       gateways: [],
       loading: false,
-      showDialog: false,
-      gatewayToEdit: undefined
+      showCreateDialog: false,
     }
   },
   async mounted() {
@@ -40,76 +41,19 @@ export default {
       this.gateways = (await CloudApi.getGatewaysList()) || []
       this.loading = false
     },
-    async saveGateway(gateway) {
-      this.gatewayToEdit = undefined
-      let result = false
-
-      if (gateway.id) {
-        result = await CloudApi.updateGateway(gateway)
-      } else {
-        result = await CloudApi.createGateway(gateway)
-      }
-
-      if (result) {
+    async createGateway(gateway) {
+      if (await CloudApi.createGateway(gateway)) {
         toast.success({
-          caption: 'Gateway saved'
+          caption: 'Gateway created'
         })
-        this.showDialog = false
         this.loadGateways()
+        this.showCreateDialog = false
       } else {
         toast.error({
-          caption: 'Failed to save gateway'
+          caption: 'Failed to create gateway'
         })
       }
     },
-    async deleteGateway(gateway) {
-      if (confirm('Are you sure ypu want to delete gateway ' + gateway.name + '?')) {
-        const res = await CloudApi.deleteGateway(gateway)
-        if (res) {
-          toast.success({
-            caption: 'Gateway was deleted'
-          })
-          this.loadGateways()
-          router.push('/home')
-        } else {
-          toast.error({
-            caption: 'Failed to delete gateway'
-          })
-        }
-      }
-    },
-    async generateToken(gateway) {
-      const { token } = (await CloudApi.authGateway(gateway)) || {}
-      if (token) {
-        toast.info({
-          caption: 'Token generated',
-          description: token,
-          autoClose: false
-        })
-        this.loadGateways()
-      } else {
-        toast.error({
-          caption: 'Failed to generate gateway token'
-        })
-      }
-    },
-    async deleteToken(gateway) {
-      if (
-        !confirm('Are you sure? This action will delete token and disconnect gateway from cloud!')
-      ) {
-        return
-      }
-      if (await CloudApi.logoutGateway(gateway)) {
-        toast.info({
-          caption: 'Token deleted'
-        })
-        this.loadGateways()
-      } else {
-        toast.error({
-          caption: 'Failed to logout gateway'
-        })
-      }
-    }
   }
 }
 </script>
@@ -123,21 +67,17 @@ export default {
     <div class="list">
       <GatewayItem
         v-for="gateway of gateways"
-        class="bordered"
         :key="gateway.id"
         :gateway="gateway"
         @click.stop="handleGatewayClick(gateway)"
-        @edit="() => (gatewayToEdit = gateway)"
-        @delete="deleteGateway(gateway)"
-        @generateToken="generateToken(gateway)"
-        @deleteToken="deleteToken(gateway)"
+        @gatewaysUpdate="loadGateways"
       />
-      <button class="btn" @click="gatewayToEdit = {}">Add gateway</button>
+      <button class="btn" @click="showCreateDialog = true">Add gateway</button>
     </div>
     <GatewayEditDialog
-      v-if="!!gatewayToEdit"
-      :gateway="gatewayToEdit"
-      @save="saveGateway"
+      v-if="showCreateDialog"
+      :gateway="{}"
+      @save="createGateway"
       @close="gatewayToEdit = undefined"
     />
   </div>

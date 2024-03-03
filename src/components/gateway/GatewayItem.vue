@@ -1,20 +1,94 @@
 <script>
 import DotsVertical from 'vue-material-design-icons/DotsVertical.vue'
+import PopUpDialog from '../dialogs/PopUpDialog.vue'
+import { CloudApi } from '../../api/CloudApi'
+import { toast } from '../../utils/EventBus'
+import GatewayEditDialog from './GatewayEditDialog.vue'
 
 export default {
   name: 'GatewayItem',
   props: {
     gateway: Object
   },
-  emits: ['edit', 'delete', 'deleteToken', 'generateToken'],
+  emits: ['gatewaysUpdate'],
   components: {
-    DotsVertical
+    DotsVertical,
+    PopUpDialog,
+    GatewayEditDialog,
+  },
+  data() {
+    return {
+      token: undefined,
+      showEditDialog: false
+    }
+  },
+  methods: {
+    async saveGateway(gateway) {
+      if (await CloudApi.updateGateway(gateway)) {
+        toast.success({
+          caption: 'Gateway info updated'
+        })
+        this.$emit('gatewaysUpdate')
+        this.showEditDialog = false
+      } else {
+        toast.error({
+          caption: 'Failed to update gateway'
+        })
+      }
+    },
+    async deleteGateway() {
+      if (confirm('Are you sure ypu want to delete gateway ' + this.gateway.name + '?')) {
+        const res = await CloudApi.deleteGateway(this.gateway)
+        if (res) {
+          toast.success({
+            caption: 'Gateway was deleted'
+          })
+          this.$emit('gatewaysUpdate')
+          router.push('/home')
+        } else {
+          toast.error({
+            caption: 'Failed to delete gateway'
+          })
+        }
+      }
+    },
+    async generateToken() {
+      const { token } = (await CloudApi.authGateway(this.gateway)) || {}
+      if (token) {
+        toast.info({
+          caption: 'Token generated',
+        })
+        this.token = token
+        this.$emit('gatewaysUpdate')
+      } else {
+        toast.error({
+          caption: 'Failed to generate gateway token'
+        })
+      }
+    },
+    async deleteToken() {
+      if (
+        !confirm('Are you sure? This action will delete token and disconnect gateway from cloud!')
+      ) {
+        return
+      }
+      if (await CloudApi.logoutGateway(this.gateway)) {
+        toast.info({
+          caption: 'Token deleted'
+        })
+        this.$emit('gatewaysUpdate')
+      } else {
+        toast.error({
+          caption: 'Failed to logout gateway'
+        })
+      }
+    }
   }
 }
 </script>
 
 <template>
-  <div class="gateway-item">
+  <div class="gateway-item bordered">
     <div
       class="status"
       :style="{ background: gateway.online ? 'green' : 'red' }"
@@ -27,13 +101,22 @@ export default {
     <div class="menu" @click.stop="() => {}">
       <DotsVertical class="menu-icon" />
       <div class="menu-items">
-        <p @click.stop="$emit('edit')">Edit</p>
-        <p @click.stop="$emit('delete')">Delete</p>
-        <p v-if="gateway.haveToken" @click.stop="$emit('deleteToken')">Delete token</p>
-        <p v-else @click.stop="$emit('generateToken')">Token</p>
+        <p @click.stop="showEditDialog = true">Edit</p>
+        <p @click.stop="deleteGateway">Delete</p>
+        <p v-if="gateway.haveToken" @click.stop="deleteToken">Delete token</p>
+        <p v-else @click.stop="generateToken">Token</p>
       </div>
     </div>
   </div>
+  <GatewayEditDialog
+    v-if="showEditDialog"
+    :gateway="gateway"
+    @save="saveGateway"
+    @close="showEditDialog = false"
+  />
+  <PopUpDialog v-if="token" @close="token = undefined">
+    <p class="token-field">{{ token }}</p>
+  </PopUpDialog>
 </template>
 
 <style scoped>
@@ -76,5 +159,10 @@ export default {
 .menu-items p:hover {
   cursor: pointer;
   opacity: 0.8;
+}
+.token-field {
+  padding: 5px;
+  width: 50vw;
+  word-wrap: break-word;
 }
 </style>

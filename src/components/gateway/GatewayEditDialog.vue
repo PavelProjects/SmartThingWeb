@@ -52,11 +52,12 @@ export default {
 <template>
   <PopUpDialog>
     <div class="container">
-      <InputField label="Name" :value="name" @input="(event) => (name = event.target.value)" />
+      <InputField label="Name" 
+        v-model="name"
+      />
       <InputField
         label="Description"
-        :value="description"
-        @input="(event) => (description = event.target.value)"
+        v-model="description"
       />
       <LoadingButton @click.stop="handleSave">
         {{ buttonTitle }}
