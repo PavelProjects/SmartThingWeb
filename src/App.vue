@@ -5,6 +5,7 @@ import CloudAuthDialog from './components/dialogs/CloudAuthDialog.vue'
 import { CloudApi } from './api/CloudApi'
 import { useCloudAuthStore } from './store/cloudAuthStore'
 import { storeToRefs } from 'pinia'
+import { useStompClientStore } from './store/stompClientStore'
 
 export default {
   components: {
@@ -35,7 +36,8 @@ export default {
   watch: {
     id() {
       if (this.id) {
-        CloudApi.connectToWs()
+        const { client } = useStompClientStore()
+        client.activate()
       }
     }
   },

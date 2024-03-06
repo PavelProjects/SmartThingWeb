@@ -1,12 +1,12 @@
 import { Client } from '@stomp/stompjs'
 import axios from 'axios'
-import { EventBus, toast, STOMP_CONNECTED } from '../utils/EventBus'
+import { EventBus, toast } from '../utils/EventBus'
 
 export const CLOUD_IP = import.meta.env.VITE_CLOUD_IP || document.location.hostname
 export const CLOUD_PORT = import.meta.env.VITE_CLOUD_PORT
 const CLOUD_BROKER_PATH = import.meta.env.VITE_CLOUD_WS
 
-const CLOUD_BROKER_URL = `ws://${CLOUD_IP}:${CLOUD_PORT}/${CLOUD_BROKER_PATH}`
+export const CLOUD_BROKER_URL = `ws://${CLOUD_IP}:${CLOUD_PORT}/${CLOUD_BROKER_PATH}`
 
 const URL_AUTH = '/auth'
 const URL_AUTH_USER = '/auth/user'
@@ -26,17 +26,8 @@ const axiosInstance = axios.create({
   withCredentials: true
 })
 
-const CLOUD_STOMP_CLIENT = new Client({ brokerURL: CLOUD_BROKER_URL })
 
 const CloudApi = {
-  connectToWs() {
-    CLOUD_STOMP_CLIENT.onConnect = () => {
-      console.debug('Connected to message broker')
-      EventBus.emit(STOMP_CONNECTED, CLOUD_STOMP_CLIENT)
-    }
-    console.debug('Connecting to ws broker ' + CLOUD_BROKER_URL)
-    CLOUD_STOMP_CLIENT.activate()
-  },
   async getAuthentication() {
     try {
       const response = await axiosInstance.get(URL_AUTH)
@@ -169,4 +160,4 @@ const CloudApi = {
     }
   }
 }
-export { CloudApi, CLOUD_STOMP_CLIENT }
+export { CloudApi }

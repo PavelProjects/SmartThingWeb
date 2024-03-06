@@ -1,13 +1,11 @@
 import axios from 'axios'
 import { Client } from '@stomp/stompjs'
-import { EventBus, STOMP_CONNECTED, toast } from '../utils/EventBus'
+import { toast } from '../utils/EventBus'
 
 const GATEWAY_PATH = import.meta.env.VITE_GATEWAY_PATH || document.location.hostname
 const GATEWAY_PORT = import.meta.env.VITE_GATEWAY_PORT
-
 const GATEWAY_WS = import.meta.env.VITE_GATEWAY_WS
-const GATEWAY_SEARCH_TOPIC = import.meta.env.VITE_GATEWAY_SEARCH_TOPIC
-const GATEWAY_BROKER_URL = `ws://${GATEWAY_PATH}${GATEWAY_PORT ? ':' + GATEWAY_PORT : ''}/${GATEWAY_WS}`
+export const GATEWAY_BROKER_URL = `ws://${GATEWAY_PATH}${GATEWAY_PORT ? ':' + GATEWAY_PORT : ''}/${GATEWAY_WS}`
 
 const PATH_AUTHENTICATION = '/cloud/auth'
 const PATH_LOGIN = '/cloud/login'
@@ -20,17 +18,6 @@ const PATH_DEVICES_FOUND = '/device/found'
 const PATH_DEVICE_API = '/device/api'
 const PATH_DEVICE_LOGS = '/device/logs'
 const PATH_DEVICE_SETTINGS = '/device/settings'
-
-const GATEWAY_STOMP_CLIENT = new Client({ brokerURL: GATEWAY_BROKER_URL })
-//todo rework bruhhh
-if (import.meta.env.VITE_MODE == 'gateway') {
-  console.debug('Connecting to message broker ' + GATEWAY_BROKER_URL)
-  GATEWAY_STOMP_CLIENT.onConnect = async () => {
-    console.debug('Connected to message broker ' + GATEWAY_STOMP_CLIENT.brokerURL)
-    EventBus.emit(STOMP_CONNECTED, GATEWAY_STOMP_CLIENT)
-  }
-  GATEWAY_STOMP_CLIENT.activate()
-}
 
 const axiosInstance = axios.create({
   baseURL: `http://${GATEWAY_PATH}${GATEWAY_PORT ? ':' + GATEWAY_PORT : ''}`,
@@ -202,4 +189,4 @@ const GatewayApi = {
   }
 }
 
-export { GatewayApi, GATEWAY_SEARCH_TOPIC, GATEWAY_STOMP_CLIENT }
+export { GatewayApi }

@@ -5,6 +5,7 @@ import LoadingButton from '../controls/LoadingButton.vue'
 import GatewayAuthDialog from '../dialogs/GatewayAuthDialog.vue'
 import { useGatewayAuthStore } from '../../store/gatewayAuthStore.js'
 import { toast } from '../../utils/EventBus.js'
+import { useStompClientStore } from '../../store/stompClientStore.js'
 
 export default {
   name: 'GatewayAuthInfo',
@@ -15,8 +16,11 @@ export default {
   },
   data() {
     const store = useGatewayAuthStore()
+    const stompClient = useStompClientStore()
+    
     return {
       store,
+      stompClient,
       dialogVisible: false,
       authDialogVisible: false,
       status: '',
@@ -25,10 +29,26 @@ export default {
   mounted() {
     this.loadAuthentication()
     this.loadCloudInfo()
+    this.getConnStatus()
+
+    this.stompClient.subscribe(
+      "/connection/status",
+      (message) => {
+        if (message && message.body) {
+          const data = JSON.parse(message.body)
+          this.status = data.status
+        }
+      }
+    )
+  },
+  unmounted() {
+    this.stompClient.unsubscribe("/connection/status")
   },
   methods: {
     async loadCloudInfo() {
       this.cloudInfo = await GatewayApi.getCloudInfo()
+    },
+    async getConnStatus() {
       this.status = await GatewayApi.getConnectionStatus()
     },
     async loadAuthentication() {
@@ -39,7 +59,6 @@ export default {
         toast.success({
           caption: 'Connected'
         })
-        this.loadCloudInfo()
       } else {
         toast.error({
           caption: 'Failed to connect'
@@ -52,7 +71,6 @@ export default {
           toast.success({
             caption: 'Disconnected'
           })
-          this.loadCloudInfo()
         } else {
           toast.error({
             caption: 'Failed to disconnect'

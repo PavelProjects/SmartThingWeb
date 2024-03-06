@@ -1,6 +1,6 @@
-import { EventBus, REQUEST, STOMP_CONNECTED } from '../utils/EventBus'
+import { useStompClientStore } from '../store/stompClientStore'
+import { EventBus, REQUEST } from '../utils/EventBus'
 import { CloudApi } from './CloudApi'
-import { GATEWAY_STOMP_CLIENT, GATEWAY_SEARCH_TOPIC } from './GatewayApi'
 
 const SEARCH_TIME = 10000
 
@@ -10,31 +10,26 @@ const GatewaySearhApi = {
       console.log(device)
     }
   ) {
-    if (!GATEWAY_STOMP_CLIENT.connected) {
-      let promiseResolver
-      const promise = new Promise((resolve) => (promiseResolver = resolve))
-      EventBus.on(STOMP_CONNECTED, () => promiseResolver())
-      await promise
-    }
+    const { subscribe, unsubscribe } = useStompClientStore()
 
     EventBus.emit(REQUEST, { id: 'search', loading: true })
 
-    console.debug('Subscribing to search topic ' + GATEWAY_SEARCH_TOPIC)
-    GATEWAY_STOMP_CLIENT.unsubscribe('search')
-    GATEWAY_STOMP_CLIENT.subscribe(
-      GATEWAY_SEARCH_TOPIC,
+    const searchTopic = import.meta.env.VITE_GATEWAY_SEARCH_TOPIC
+    console.debug('Subscribing to search topic ' + searchTopic)
+    unsubscribe(searchTopic)
+    subscribe(
+      searchTopic,
       (message) => {
         if (message && message.body) {
           onDeviceFound(JSON.parse(message.body))
         } else {
           console.warn('Empty topic message')
         }
-      },
-      { id: 'search' }
+      }
     )
 
     setTimeout(() => {
-      GATEWAY_STOMP_CLIENT.unsubscribe('search')
+      unsubscribe(searchTopic)
       console.debug('Unsubscribed from search topic')
       EventBus.emit(REQUEST, { id: 'search', loading: false })
     }, SEARCH_TIME)

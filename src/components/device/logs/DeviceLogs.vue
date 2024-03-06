@@ -1,6 +1,6 @@
 <script>
-import { GatewayApi, GATEWAY_STOMP_CLIENT } from '../../../api/GatewayApi'
-import { EventBus, STOMP_CONNECTED } from '../../../utils/EventBus'
+import { GatewayApi } from '../../../api/GatewayApi'
+import { useStompClientStore } from '../../../store/stompClientStore'
 import LogMessage from './LogMessage.vue'
 
 export default {
@@ -9,25 +9,22 @@ export default {
     LogMessage
   },
   data() {
+    const stompClient = useStompClientStore()
+
     return {
       idSequence: 0,
       messages: [],
-      colors: {}
+      colors: {},
+      stompClient,
     }
   },
   async mounted() {
-    if (!GATEWAY_STOMP_CLIENT.connected) {
-      let promiseResolver
-      const promise = new Promise((resolve) => (promiseResolver = resolve))
-      EventBus.on(STOMP_CONNECTED, () => promiseResolver())
-      await promise
-    }
 
     this.messages = await GatewayApi.getLogs()
     this.messages.reverse()
 
-    GATEWAY_STOMP_CLIENT.unsubscribe('logs')
-    GATEWAY_STOMP_CLIENT.subscribe(
+    this.stompClient.unsubscribe('/devices/logs')
+    this.stompClient.subscribe(
       '/devices/logs',
       (message) => {
         if (message && message.body) {
@@ -36,13 +33,12 @@ export default {
           parsed.id = this.idSequence++
           this.messages.unshift(parsed)
         }
-      },
-      { id: 'logs' }
+      }
     )
     console.debug('Subscribed to the logs topic')
   },
   unmounted() {
-    GATEWAY_STOMP_CLIENT.unsubscribe('logs')
+    this.stompClient.unsubscribe('logs')
   },
   methods: {
     generateColorByIp(ip) {

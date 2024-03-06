@@ -24,7 +24,6 @@ export default {
   emits: ['close'],
   watch: {
     cloudToken() {
-      console.log(1)
       this.errorMessage = ''
       if (!this.cloudToken) {
         this.parsedToken = undefined

@@ -115,7 +115,10 @@ export default {
     @close="showEditDialog = false"
   />
   <PopUpDialog v-if="token" @close="token = undefined">
-    <p class="token-field">{{ token }}</p>
+    <div class="list">
+      <h1 class="title">Connection token</h1>
+      <p class="token-field">{{ token }}</p>
+    </div>
   </PopUpDialog>
 </template>
 
