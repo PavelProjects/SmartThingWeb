@@ -85,6 +85,7 @@ export default {
             caption: 'Loged out'
           })
           this.loadCloudInfo()
+          this.dialogVisible = false
         } else {
           toast.success({
             caption: 'Failed to log out'
@@ -137,7 +138,7 @@ export default {
             :disabled="true"
           />
           <LoadingButton
-            v-if="['CONNECTION_LOST', 'DISCONNECTED'].includes(status)"
+            v-if="['CONNECTION_LOST', 'DISCONNECTED', 'FAILED_TO_CONNECT'].includes(status)"
             @click="connect"
           >
             <h2>Reconnect</h2>
