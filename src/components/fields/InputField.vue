@@ -4,6 +4,7 @@ export default {
   props: {
     testId: String,
     label: String,
+    title: String,
     modelValue: [String, Number],
     type: {
       type: String,
@@ -16,7 +17,8 @@ export default {
     validationFailed: {
       type: Boolean,
       default: false
-    }
+    },
+    errorMessage: String,
   },
   emits: ["update:modelValue"],
   methods: {
@@ -27,24 +29,27 @@ export default {
       }
       this.$emit('update:modelValue', v)
     }
-  }
+  },
 }
 </script>
 
 <template>
-  <div class="field-container">
-    <h2 class="field-label">{{ label }}</h2>
+  <div class="field-container" :title="title">
+    <h2 v-if="label" class="field-label">{{ label }}</h2>
     <div class="input-with-slot">
       <input
         :id="testId"
         :value="modelValue"
         :disabled="disabled"
         :type="type"
-        :class="{ legit: !validationFailed, required: validationFailed }"
+        :class="{ required: validationFailed }"
         @input="emitUpdate($event.target.value)"
       />
       <slot></slot>
     </div>
+  </div>
+  <div v-if="errorMessage">
+    <h3 class="error-message">{{ errorMessage }}</h3>
   </div>
 </template>
 
@@ -58,5 +63,9 @@ export default {
 .input-with-slot input {
   width: 100%;
   border: none;
+}
+.error-message {
+  color: var(--color-danger);
+  text-align: center;
 }
 </style>

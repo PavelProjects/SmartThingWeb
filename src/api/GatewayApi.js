@@ -9,10 +9,13 @@ const GATEWAY_WS = import.meta.env.VITE_GATEWAY_WS
 const GATEWAY_SEARCH_TOPIC = import.meta.env.VITE_GATEWAY_SEARCH_TOPIC
 const GATEWAY_BROKER_URL = `ws://${GATEWAY_PATH}${GATEWAY_PORT ? ':' + GATEWAY_PORT : ''}/${GATEWAY_WS}`
 
-const PATH_AUTHENTICATION = '/auth'
-const PATH_CLOUD_INFO = '/auth/configuration'
-const PATH_CLOUD_CONNECTED = '/connection/status'
-const PATH_CLOUD_CONNECT = '/connection/connect'
+const PATH_AUTHENTICATION = '/cloud/auth'
+const PATH_LOGIN = '/cloud/login'
+const PATH_LOGOUT = '/cloud/logout'
+const PATH_CLOUD_INFO = '/cloud/info'
+const PATH_CLOUD_CONNECTED = '/cloud/connection/status'
+const PATH_CLOUD_CONNECT = '/cloud/connection/connect'
+const PATH_CLOUD_DISCONNECT = '/cloud/connection/disconnect'
 const PATH_DEVICES_FOUND = '/device/found'
 const PATH_DEVICE_API = '/device/api'
 const PATH_DEVICE_LOGS = '/device/logs'
@@ -58,12 +61,9 @@ const GatewayApi = {
       })
     }
   },
-  async cloudAuth(payload) {
+  async cloudLogin(payload) {
     try {
-      const response = await axiosInstance.put(PATH_AUTHENTICATION, payload)
-      if (response.status != 200) {
-        throw new Error('Failed to auth in cloud')
-      }
+      const response = await axiosInstance.put(PATH_LOGIN, payload)
       toast.success({
         caption: 'Successfuly authenticated in cloud'
       })
@@ -79,9 +79,18 @@ const GatewayApi = {
         description = 'Cloud is unavailable'
       }
       toast.error({
-        caption: 'Failed to authorize in cloud',
+        caption: 'Failed to authenticate in cloud',
         description
       })
+    }
+  },
+  async cloudLogout() {
+    try {
+      await axiosInstance.delete(PATH_LOGOUT)
+      return true
+    } catch (error) {
+      console.error(error)
+      return false
     }
   },
   async getCloudInfo() {
@@ -106,18 +115,17 @@ const GatewayApi = {
   async cloudConnect() {
     try {
       const response = await axiosInstance.put(PATH_CLOUD_CONNECT)
-      if (response.status != 200) {
-        throw new Error('Failed to auth in cloud')
-      }
-      toast.success({
-        caption: 'Connected'
-      })
       return response.data
     } catch (error) {
       console.error(error)
-      toast.error({
-        caption: 'Failed to connect'
-      })
+    }
+  },
+  async cloudDisconnect() {
+    try {
+      const response = await axiosInstance.put(PATH_CLOUD_DISCONNECT)
+      return response.data
+    } catch (error) {
+      console.error(error)
     }
   },
   async getLogs() {

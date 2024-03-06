@@ -3,7 +3,7 @@ import HeaderDoc from './components/doc/HeaderDoc.vue'
 import ToatsView from './components/toasts/ToastsView.vue'
 import CloudAuthDialog from './components/dialogs/CloudAuthDialog.vue'
 import { CloudApi } from './api/CloudApi'
-import { useAuthStore } from './store/authStore'
+import { useCloudAuthStore } from './store/cloudAuthStore'
 import { storeToRefs } from 'pinia'
 
 export default {
@@ -11,12 +11,12 @@ export default {
     HeaderDoc, ToatsView, CloudAuthDialog
   },
   data() {
-    const store = useAuthStore()
+    const store = useCloudAuthStore()
     const { id, login } = storeToRefs(store)
     return {
       mode: import.meta.env.VITE_MODE,
       id, login,
-      authStore: store
+      cloudAuthStore: store
     }
   },
   computed: {
@@ -30,7 +30,7 @@ export default {
       return
     }
     const { user } = await CloudApi.getAuthentication()
-    this.authStore.setUser(user)
+    this.cloudAuthStore.setUser(user)
   },
   watch: {
     id() {
@@ -47,7 +47,7 @@ export default {
     <HeaderDoc class="doc" />
     <ToatsView id="toasts-list" />
 
-    <CloudAuthDialog v-if="!isAuthenticated" @authenticated="({ user }) => authStore.setUser(user)" />
+    <CloudAuthDialog v-if="!isAuthenticated" @authenticated="({ user }) => cloudAuthStore.setUser(user)" />
 
     <router-view v-if="isAuthenticated" v-slot="{ Component }">
       <keep-alive>

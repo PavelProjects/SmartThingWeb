@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 
-export const useAuthStore = defineStore({
-  id: 'auth_store',
+export const useCloudAuthStore = defineStore({
+  id: 'cloud_auth_store',
   state: () => ({
     id: undefined,
     login: undefined,

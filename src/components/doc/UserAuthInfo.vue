@@ -1,13 +1,13 @@
 <script>
 import { storeToRefs } from 'pinia';
-import { useAuthStore } from '../../store/authStore'
+import { useCloudAuthStore } from '../../store/cloudAuthStore'
 import { CloudApi } from '../../api/CloudApi';
 export default {
   data() {
-    const authStore = useAuthStore();
-    const { id, login } = storeToRefs(authStore);
+    const cloudAuthStore = useCloudAuthStore();
+    const { id, login } = storeToRefs(cloudAuthStore);
     return {
-      id, login, authStore,
+      id, login, cloudAuthStore,
       openDialog: false,
     }
   },
@@ -16,7 +16,7 @@ export default {
       if (confirm("Are you sure?")) {
         await CloudApi.logoutUser()
         this.openDialog = false
-        this.authStore.setUser()
+        this.cloudAuthStore.setUser()
       }
     }
   }

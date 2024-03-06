@@ -1,7 +1,7 @@
 <script>
 import DotsVertical from 'vue-material-design-icons/DotsVertical.vue'
 import PopUpDialog from '../dialogs/PopUpDialog.vue'
-import { CloudApi } from '../../api/CloudApi'
+import { CLOUD_IP, CLOUD_PORT, CloudApi } from '../../api/CloudApi'
 import { toast } from '../../utils/EventBus'
 import GatewayEditDialog from './GatewayEditDialog.vue'
 
@@ -58,7 +58,7 @@ export default {
         toast.info({
           caption: 'Token generated',
         })
-        this.token = token
+        this.token = btoa(`${CLOUD_IP}|${CLOUD_PORT}|${token}`)
         this.$emit('gatewaysUpdate')
       } else {
         toast.error({

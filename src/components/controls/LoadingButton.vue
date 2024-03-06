@@ -9,12 +9,18 @@ export default {
   },
   components: {
     PulseLoader
-  }
+  },
+  emits: ['click']
 }
 </script>
 
 <template>
-  <button :id="testId" :disabled="loading" @click="handle" class="btn">
+  <button 
+    :id="testId"
+    :disabled="loading"
+    class="btn"
+    @click.stop="() => $emit('click')"
+  >
     <slot v-if="!loading"></slot>
     <pulse-loader :loading="loading"></pulse-loader>
   </button>

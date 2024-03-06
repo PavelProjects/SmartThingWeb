@@ -84,11 +84,6 @@ export default {
   opacity: 0.5;
 }
 
-.gateways-selector {
-  margin-left: auto;
-  margin-right: auto;
-}
-
 .log-in-info {
   margin-left: auto;
   margin-right: 10px;

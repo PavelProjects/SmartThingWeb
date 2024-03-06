@@ -44,14 +44,12 @@ export default {
     <div class="container">
       <InputField
         label="Login"
-        :value="login"
-        @input="login = $event.target.value.trim()"
+        v-model="login"
         type="login"
       />
       <InputField
-        label="Password"
-        :value="password"
-        @input="password = $event.target.value.trim()"
+        label="Password"        
+        v-model="password"
         type="password"
       />
       <LoadingButton :loading="loading" @click="auth"> Log in </LoadingButton>
