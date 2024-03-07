@@ -2,6 +2,8 @@
 import GatewayAuthInfo from './GatewayAuthInfo.vue'
 import MenuSvg from 'vue-material-design-icons/Menu.vue'
 import UserAuthInfo from './UserAuthInfo.vue'
+import { storeToRefs } from 'pinia'
+import { useControlPanelStore } from '../../store/controlPanelStore'
 
 export default {
   name: 'HeaderDoc',
@@ -12,9 +14,8 @@ export default {
   },
   data() {
     const mode = import.meta.env.VITE_MODE
-    return {
-      mode
-    }
+    const { gateway } = storeToRefs(useControlPanelStore())
+    return { mode, gateway }
   }
 }
 </script>
@@ -37,6 +38,11 @@ export default {
           <h2>Devices logs</h2>
         </router-link>
       </div>
+    </div>
+    <div v-if="gateway" class="gateway-info">
+      <h1 :title="gateway.description" class="title">
+        Gateway: {{ gateway.name }}
+      </h1>
     </div>
     <UserAuthInfo v-if="mode === 'cloud'" class="log-in-info" />
     <GatewayAuthInfo v-if="mode === 'gateway'" class="log-in-info" />
@@ -83,7 +89,9 @@ export default {
 .menu-items h2:hover {
   opacity: 0.5;
 }
-
+.gateway-info {
+  margin: auto;
+}
 .log-in-info {
   margin-left: auto;
   margin-right: 10px;

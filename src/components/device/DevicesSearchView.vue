@@ -1,23 +1,26 @@
 <script>
+import { storeToRefs } from 'pinia'
 import { SearchApi } from '../../api/SearchDevicesApi'
 import { EventBus, REQUEST } from '../../utils/EventBus'
 import UpdateButton from '../controls/UpdateButton.vue'
 import DeviceItem from './DeviceItem.vue'
+import { useControlPanelStore } from '../../store/controlPanelStore'
 
 export default {
   components: {
     UpdateButton,
     DeviceItem
   },
+  emits: ['select'],
   props: {
-    title: String
+    title: String,
+    gateway: Object,
   },
   data() {
     return {
       devices: {},
       loading: false,
       selectedIp: undefined,
-      gateway: this.$route.params.gateway
     }
   },
   watch: {
@@ -57,7 +60,7 @@ export default {
           foundDevices.push(deviceInfo.ip)
           console.debug(`Found new device: ${deviceInfo.name}`)
         }
-      }, this.gateway)
+      })
     },
     handleClick(ip, deviceInfo) {
       this.selectedIp = ip

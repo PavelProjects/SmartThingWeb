@@ -3,6 +3,8 @@ import DevicesSearchView from './device/DevicesSearchView.vue'
 import DeviceControlPanel from './device/DeviceControlPanel.vue'
 import { h } from 'vue'
 import { CloudApi } from '../api/CloudApi'
+import { useControlPanelStore } from '../store/controlPanelStore'
+import { storeToRefs } from 'pinia'
 
 export default {
   name: 'DevicesMain',
@@ -11,51 +13,34 @@ export default {
     DeviceControlPanel
   },
   data() {
+    const { gateway, device } = storeToRefs(useControlPanelStore())
     return {
-      tabs: {},
-      selected: undefined,
+      gateway,
+      device,
       gatewayId: this.$route.params.gateway,
-      gateway: {},
     }
   },
   async mounted() {
-    if (this.gatewayId && import.meta.env.VITE_MODE === 'cloud') {
+    if (!this.gateway && this.gatewayId && import.meta.env.VITE_MODE === 'cloud') {
       this.gateway = await CloudApi.getGateway(this.gatewayId);
     }
   },
-  methods: {
-    handleDeviceSwitch(deviceInfo) {
-      const { ip } = deviceInfo || {}
-      if (!ip) {
-        console.log(`Failed to get ip from ${deviceInfo}`)
-        return
-      }
-      if (!this.tabs[ip]) {
-        this.tabs[ip] = h(DeviceControlPanel, {
-          key: ip,
-          device: deviceInfo
-        })
-      }
-      this.selected = ip
-    }
-  }
 }
 </script>
 
 <template>
   <div class="list">
-    <div v-if="gateway && gateway.name">
-      <h1 class="title">
-        Current gateway: {{ gateway.name }}
-      </h1>
-    </div>
     <div class="devices-table">
       <div v-if="!gatewayId || gateway">
-        <DevicesSearchView class="search" @select="handleDeviceSwitch" />
-        <div v-if="selected">
+        <DevicesSearchView 
+          class="search"
+          :gateway="gateway"
+          @select="(deviceInfo) => device = deviceInfo"
+        />
+        <div v-if="device">
           <h1 class="title">Control panel</h1>
           <KeepAlive>
-            <component :is="tabs[selected]"></component>
+            <DeviceControlPanel :key="device.ip" />
           </KeepAlive>
         </div>
       </div>

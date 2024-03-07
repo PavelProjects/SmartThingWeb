@@ -3,7 +3,7 @@ import mitt from 'mitt'
 export const EventBus = mitt()
 export const TOAST = 'toast'
 export const REQUEST = 'request'
-export const STOMP_CONNECTED = 'STOMP_CONNECTED'
+export const WS_CONNECTED = 'WS_CONNECTED'
 
 export const notifyFromDevice = ({ gateway, device, notification: { message, type } }) => {
   EventBus.emit(TOAST, {

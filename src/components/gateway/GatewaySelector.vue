@@ -6,6 +6,7 @@ import GatewayItem from './GatewayItem.vue'
 import GatewayEditDialog from './GatewayEditDialog.vue'
 import UpdateButton from '../controls/UpdateButton.vue'
 import PopUpDialog from '../dialogs/PopUpDialog.vue'
+import { useControlPanelStore } from '../../store/controlPanelStore'
 
 export default {
   name: 'GatewaySelector',
@@ -16,7 +17,9 @@ export default {
     PopUpDialog,
   },
   data() {
+    const controlPanelStore = useControlPanelStore()
     return {
+      controlPanelStore,
       gateways: [],
       loading: false,
       showCreateDialog: false,
@@ -27,8 +30,8 @@ export default {
   },
   methods: {
     handleGatewayClick(gateway) {
-      console.log(1)
       if (gateway.online) {
+        this.controlPanelStore.gateway = gateway
         router.push('/panel/' + gateway.id)
       } else {
         toast.error({

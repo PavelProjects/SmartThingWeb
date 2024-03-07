@@ -1,3 +1,4 @@
+import { useControlPanelStore } from '../store/controlPanelStore'
 import { useStompClientStore } from '../store/stompClientStore'
 import { EventBus, REQUEST } from '../utils/EventBus'
 import { CloudApi } from './CloudApi'
@@ -37,7 +38,8 @@ const GatewaySearhApi = {
 }
 
 const CloudSearchApi = {
-  async searchDevices(onDeviceFound = () => {}, gateway) {
+  async searchDevices(onDeviceFound = () => {}) {
+    const { gateway } = useControlPanelStore()
     EventBus.emit(REQUEST, { id: 'search', loading: true })
 
     const requestInfo = await CloudApi.sendGatewayCommand(gateway, 'search')

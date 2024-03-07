@@ -6,19 +6,19 @@ import StatesView from './tabs/StatesView.vue'
 import ConfigView from './tabs/ConfigView.vue'
 import MetricsViewVue from './tabs/MetricsView.vue'
 import MenuView from '../menu/MenuView.vue'
+import { storeToRefs } from 'pinia'
+import { useControlPanelStore } from '../../store/controlPanelStore'
 
 export default {
   name: 'DeviceControlPanel',
   components: {
     MenuView
   },
-  props: {
-    device: Object
-  },
   provide() {
+    const { device, gateway } = storeToRefs(useControlPanelStore())
     return {
-      device: this.device,
-      gateway: this.$route.params.gateway,
+      device,
+      gateway,
     }
   },
   data() {

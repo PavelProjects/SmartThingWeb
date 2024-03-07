@@ -2,7 +2,7 @@ import { Client } from "@stomp/stompjs";
 import { defineStore } from "pinia";
 import { GATEWAY_BROKER_URL } from "../api/GatewayApi";
 import { CLOUD_BROKER_URL } from "../api/CloudApi";
-import { EventBus, STOMP_CONNECTED } from "../utils/EventBus";
+import { EventBus, WS_CONNECTED } from "../utils/EventBus";
 
 export const useStompClientStore = defineStore({
   id: 'stomp_client',
@@ -15,7 +15,7 @@ export const useStompClientStore = defineStore({
     const client = new Client({ brokerURL })
     client.onConnect = () => {
       console.debug("Connected to web socket")
-      EventBus.emit(STOMP_CONNECTED)
+      EventBus.emit(WS_CONNECTED)
 
       client.subscribe(
         notifyTopic,
@@ -30,7 +30,7 @@ export const useStompClientStore = defineStore({
         },
         { id: 'notification' }
       )
-      console.debug("subscribed to notification topic")
+      console.debug("Subscribed to notification topic: " + notifyTopic)
     }
     if (mode === 'gateway') {
       client.activate()
@@ -44,7 +44,7 @@ export const useStompClientStore = defineStore({
       if (!this.client.connected) {
         let promiseResolver
         const promise = new Promise((resolve) => (promiseResolver = resolve))
-        EventBus.on(STOMP_CONNECTED, () => promiseResolver())
+        EventBus.on(WS_CONNECTED, () => promiseResolver())
         await promise
       }
       this.client.subscribe(topic, callback, { id: topic + "_topic" })

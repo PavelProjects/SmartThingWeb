@@ -29,7 +29,7 @@ export default {
       {{ login }}
     </h2>
     <div v-if="openDialog && login" class="overlay" @click.stop="openDialog = false">
-      <div class="dialog bordered" @click.stop="() => {}">
+      <div class="dialog" @click.stop="() => {}">
         <h2>User ID: {{ id }}</h2>
         <h2>Login: {{ login }}</h2>
         <button class="btn" @click.stop="logout">Logout</button>
