@@ -59,8 +59,8 @@ export default {
         label="Description"
         v-model="description"
       />
-      <LoadingButton @click.stop="handleSave">
-        {{ buttonTitle }}
+      <LoadingButton @click="handleSave">
+        <h2>{{ buttonTitle }}</h2>
       </LoadingButton>
     </div>
   </PopUpDialog>
