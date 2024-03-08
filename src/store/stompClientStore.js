@@ -2,7 +2,7 @@ import { Client } from "@stomp/stompjs";
 import { defineStore } from "pinia";
 import { GATEWAY_BROKER_URL } from "../api/GatewayApi";
 import { CLOUD_BROKER_URL } from "../api/CloudApi";
-import { EventBus, WS_CONNECTED } from "../utils/EventBus";
+import { EventBus, LOGGED_IN, LOGGED_OUT, WS_CONNECTED } from "../utils/EventBus";
 
 export const useStompClientStore = defineStore({
   id: 'stomp_client',
@@ -13,6 +13,7 @@ export const useStompClientStore = defineStore({
     const notifyTopic = mode === 'gateway' ? env.VITE_GATEWAY_NOTIFCATION_TOPIC : env.VITE_CLOUD_NOTIFCATION_TOPIC
 
     const client = new Client({ brokerURL })
+    console.debug(`WebSocket broker url: ${brokerURL}`)
     client.onConnect = () => {
       console.debug("Connected to web socket")
       EventBus.emit(WS_CONNECTED)
@@ -32,9 +33,17 @@ export const useStompClientStore = defineStore({
       )
       console.debug("Subscribed to notification topic: " + notifyTopic)
     }
+
     if (mode === 'gateway') {
       client.activate()
+    } else {
+      EventBus.on(LOGGED_IN, () => client.activate())
+      EventBus.on(LOGGED_OUT, () => client.deactivate())
     }
+    window.onbeforeunload = () => {
+      client.deactivate()
+    }
+
     return {
       client
     }

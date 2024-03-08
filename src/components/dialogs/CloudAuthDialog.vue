@@ -29,7 +29,7 @@ export default {
       }
       this.loading = true
       try {
-        const auth = await CloudApi.authUser(this.login, this.password)
+        const auth = await CloudApi.authUser(this.login, this.password) ?? {}
         this.$emit('authenticated', auth)
       } finally {
         this.loading = false

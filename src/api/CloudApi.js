@@ -23,9 +23,8 @@ const URL_GATEWAY_DELETE = '/gateway/management/delete'
 const axiosInstance = axios.create({
   baseURL: `http://${CLOUD_IP}:${CLOUD_PORT}`,
   timeout: 5000,
-  withCredentials: true
+  withCredentials: true,
 })
-
 
 const CloudApi = {
   async getAuthentication() {
@@ -45,7 +44,7 @@ const CloudApi = {
       console.log(error)
       toast.error({
         caption: 'Failed to authorize!',
-        description: error.response.status == 403 ? 'Wrong login/passwor' : 'Service error'
+        description: error.response.status == 401 ? 'Wrong login/passwor' : 'Service error'
       })
     }
   },

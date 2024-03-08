@@ -26,20 +26,14 @@ export default {
     }
   },
   async mounted() {
+    useStompClientStore()
+
     if (this.mode === 'gateway') {
       this.id = ''
       return
     }
-    const { user } = await CloudApi.getAuthentication()
-    this.cloudAuthStore.setUser(user)
-  },
-  watch: {
-    id() {
-      if (this.id) {
-        const { client } = useStompClientStore()
-        client.activate()
-      }
-    }
+    const { user } = await CloudApi.getAuthentication() ?? {}
+    this.cloudAuthStore.setAuthentication(user)
   },
 }
 </script>
@@ -49,7 +43,10 @@ export default {
     <HeaderDoc class="doc" />
     <ToatsView id="toasts-list" />
 
-    <CloudAuthDialog v-if="!isAuthenticated" @authenticated="({ user }) => cloudAuthStore.setUser(user)" />
+    <CloudAuthDialog 
+      v-if="!isAuthenticated"
+      @authenticated="({ user }) => cloudAuthStore.setAuthentication(user)"
+    />
 
     <router-view v-if="isAuthenticated" v-slot="{ Component }">
       <keep-alive>

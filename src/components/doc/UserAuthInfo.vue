@@ -16,7 +16,7 @@ export default {
       if (confirm("Are you sure?")) {
         await CloudApi.logoutUser()
         this.openDialog = false
-        this.cloudAuthStore.setUser()
+        this.cloudAuthStore.setAuthentication()
       }
     }
   }
@@ -52,5 +52,6 @@ export default {
   right: var(--default-gap);
   padding: var(--default-gap);
   background-color: var(--color-background-soft);
+  border-radius: var(--border-radius);
 }
 </style>
