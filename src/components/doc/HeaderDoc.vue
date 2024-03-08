@@ -40,7 +40,10 @@ export default {
       </div>
     </div>
     <div v-if="gateway" class="gateway-info">
-      <h1 :title="gateway.description" class="title">
+      <h1
+        :title="'id: ' + gateway.description"
+        class="title"
+      >
         Gateway: {{ gateway.name }}
       </h1>
     </div>
@@ -90,7 +93,12 @@ export default {
   opacity: 0.5;
 }
 .gateway-info {
-  margin: auto;
+  position: absolute;
+  left: 50%;
+}
+.gateway-info h1 {
+  position: relative;
+  left: -50%;
 }
 .log-in-info {
   margin-left: auto;
