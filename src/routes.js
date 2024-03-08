@@ -6,6 +6,11 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 
 const mode = import.meta.env.VITE_MODE
 
+const unkownRoute = {
+  path: "/:pathMatch(.*)*",
+  redirect: '/'
+}
+
 const gatewayRoutes = [
   {
     path: '/',
@@ -26,7 +31,8 @@ const gatewayRoutes = [
         component: SettingsManager
       }
     ]
-  }
+  },
+  unkownRoute
 ]
 
 const cloudRoutes = [
@@ -45,7 +51,8 @@ const cloudRoutes = [
         component: GatewayControlPanel
       }
     ]
-  }
+  },
+  unkownRoute
 ]
 
 export const router = createRouter({
