@@ -23,8 +23,16 @@ export const useStompClientStore = defineStore({
         (message) => {
           if (message && message.body) {
             console.debug('Got notification message! ' + message.body)
-            const notification = JSON.parse(message.body)
-            notifyFromDevice(notification)
+            const { gateway, device, notification: { message, type } } = JSON.parse(message.body)
+            EventBus.emit(TOAST, {
+              gateway,
+              device,
+              toast: {
+                description: message,
+                type: type,
+                autoClose: false
+              }
+            })
           } else {
             console.error('Empty notification message')
           }

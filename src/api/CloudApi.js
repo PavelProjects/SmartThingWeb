@@ -41,7 +41,7 @@ const CloudApi = {
       toast.success({ caption: 'Welcome, ' + login })
       return response.data
     } catch (error) {
-      console.log(error)
+      console.error(error)
       toast.error({
         caption: 'Failed to authorize!',
         description: error.response.status == 401 ? 'Wrong login/passwor' : 'Service error'

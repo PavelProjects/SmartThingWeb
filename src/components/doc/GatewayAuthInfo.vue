@@ -44,6 +44,13 @@ export default {
   unmounted() {
     this.stompClient.unsubscribe("/connection/status")
   },
+  computed: {
+    connectionStatus() {
+      const fixed = this.status
+        .toLowerCase().replace('_', ' ')
+      return `Cloud: ${fixed}`
+    }
+  },
   methods: {
     async loadCloudInfo() {
       this.cloudInfo = await GatewayApi.getCloudInfo()
@@ -106,7 +113,12 @@ export default {
 <template>
   <div>
     <div class="status" @click="dialogVisible = !dialogVisible">
-      <h1>{{ status }}</h1>
+      <h2 
+        class="title"
+        title="Cloud connection status"
+      >
+        {{ connectionStatus }}
+      </h2>
     </div>
     <div v-if="dialogVisible" class="overlay" @click.stop="dialogVisible = false">
       <div class="dialog" @click.stop="() => {}">
