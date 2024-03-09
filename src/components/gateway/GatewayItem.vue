@@ -4,6 +4,7 @@ import PopUpDialog from '../dialogs/PopUpDialog.vue'
 import { CLOUD_IP, CLOUD_PORT, CloudApi } from '../../api/CloudApi'
 import { toast } from '../../utils/EventBus'
 import GatewayEditDialog from './GatewayEditDialog.vue'
+import InputField from '../fields/InputField.vue'
 
 export default {
   name: 'GatewayItem',
@@ -15,11 +16,24 @@ export default {
     DotsVertical,
     PopUpDialog,
     GatewayEditDialog,
+    InputField,
   },
   data() {
     return {
       token: undefined,
-      showEditDialog: false
+      showEditDialog: false,
+      tokenData: {
+        cloudIp: CLOUD_IP,
+        cloudPort: CLOUD_PORT
+      }
+    }
+  },
+  watch: {
+    tokenData: {
+      handler: function() {
+        this.buildToken()
+      },
+      deep: true,
     }
   },
   methods: {
@@ -58,13 +72,24 @@ export default {
         toast.info({
           caption: 'Token generated',
         })
-        this.token = btoa(`${CLOUD_IP}|${CLOUD_PORT}|${token}`)
+        this.tokenData.token = token
         this.$emit('gatewaysUpdate')
       } else {
         toast.error({
           caption: 'Failed to generate gateway token'
         })
       }
+    },
+    buildToken() {
+      if (!this.tokenData) {
+        return;
+      }
+      const { cloudIp, cloudPort, token } = this.tokenData
+      if (!cloudIp) {
+        this.token = "Cloud ip can't be blank"
+        return
+      }
+      this.token = btoa(`${cloudIp}|${cloudPort}|${token}`)
     },
     async deleteToken() {
       if (
@@ -117,6 +142,23 @@ export default {
   <PopUpDialog v-if="token" @close="token = undefined">
     <div class="list">
       <h1 class="title">Connection token</h1>
+      <div class="list">
+        <InputField
+          label="Cloud ip"
+          v-model="tokenData.cloudIp"
+          :validationFailed="tokenData.cloudIp.length === 0"
+        />
+        <InputField
+          label="Cloud port"
+          type="number"
+          v-model="tokenData.cloudPort"
+        />
+        <InputField
+          label="Auth token"
+          v-model="tokenData.token"
+          :validationFailed="tokenData.token.length === 0"
+        />
+      </div>
       <p class="token-field">{{ token }}</p>
     </div>
   </PopUpDialog>

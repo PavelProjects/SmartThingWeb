@@ -26,6 +26,8 @@ export default {
     }
   },
   async mounted() {
+    document.title = 'SmartThingWeb ' + this.mode
+
     useStompClientStore()
 
     if (this.mode === 'gateway') {
