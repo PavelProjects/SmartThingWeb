@@ -7,7 +7,7 @@ import CheckBoxField from '../../fields/CheckBoxField.vue'
 
 export default {
   name: 'ConfigView',
-  inject: ['device'],
+  inject: ['device', 'gateway'],
   components: {
     InputField,
     CheckBoxField,
@@ -20,8 +20,7 @@ export default {
       configInfo: {},
       loading: false,
       saveLoading: false,
-      deleteLoading: false,
-      gateway: this.$route.params.gateway
+      deleteLoading: false
     }
   },
   created() {
