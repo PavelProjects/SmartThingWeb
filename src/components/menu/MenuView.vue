@@ -56,7 +56,7 @@ export default {
       return this.tab || Object.keys(this.tabs)[0]
     },
     switchTab(name, forceRender = false) {
-      if (this.currentTab == name && !forceRender) {
+      if (this.currentTab == name || forceRender) {
         this.updateContent()
         return
       }
@@ -100,7 +100,7 @@ export default {
           :title="tabTitle"
           :caption="caption"
           :selected="currentTab === name"
-          @click="switchTab(name)"
+          @select="switchTab(name)"
         />
       </div>
       <div v-if="renders[currentTab]" class="menu-item-content">

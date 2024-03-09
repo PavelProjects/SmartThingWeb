@@ -6,6 +6,7 @@ export default {
     selected: Boolean,
     vertical: Boolean
   },
+  $emits: ['select'],
   computed: {
     style() {
       if (this.selected) {
@@ -21,7 +22,7 @@ export default {
 </script>
 
 <template>
-  <div class="menu-item" :style="style" @click="(event) => $emit('click', event)">
+  <div class="menu-item" :style="style" @click.stop="() => $emit('select')">
     <h2>{{ caption }}</h2>
   </div>
 </template>

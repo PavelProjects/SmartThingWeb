@@ -2,7 +2,7 @@ import axios from 'axios'
 import { Client } from '@stomp/stompjs'
 import { toast } from '../utils/EventBus'
 
-const GATEWAY_PATH = import.meta.env.VITE_GATEWAY_PATH || document.location.hostname
+const GATEWAY_PATH = import.meta.env.VITE_GATEWAY_IP || document.location.hostname
 const GATEWAY_PORT = import.meta.env.VITE_GATEWAY_PORT
 const GATEWAY_WS = import.meta.env.VITE_GATEWAY_WS
 export const GATEWAY_BROKER_URL = `ws://${GATEWAY_PATH}${GATEWAY_PORT ? ':' + GATEWAY_PORT : ''}/${GATEWAY_WS}`
