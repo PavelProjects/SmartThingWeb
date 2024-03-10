@@ -2,7 +2,7 @@ import { Client } from "@stomp/stompjs";
 import { defineStore } from "pinia";
 import { GATEWAY_BROKER_URL } from "../api/GatewayApi";
 import { CLOUD_BROKER_URL } from "../api/CloudApi";
-import { EventBus, LOGGED_IN, LOGGED_OUT, WS_CONNECTED } from "../utils/EventBus";
+import { EventBus, LOGGED_IN, LOGGED_OUT, TOAST, WS_CONNECTED } from "../utils/EventBus";
 
 export const useStompClientStore = defineStore({
   id: 'stomp_client',

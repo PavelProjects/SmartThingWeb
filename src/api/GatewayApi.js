@@ -7,7 +7,7 @@ const GATEWAY_PORT = import.meta.env.VITE_GATEWAY_PORT
 const GATEWAY_WS = import.meta.env.VITE_GATEWAY_WS
 export const GATEWAY_BROKER_URL = `ws://${GATEWAY_PATH}${GATEWAY_PORT ? ':' + GATEWAY_PORT : ''}/${GATEWAY_WS}`
 
-const PATH_AUTHENTICATION = '/cloud/auth'
+const PATH_AUTHENTICATION = '/cloud/identity'
 const PATH_LOGIN = '/cloud/login'
 const PATH_LOGOUT = '/cloud/logout'
 const PATH_CLOUD_INFO = '/cloud/info'
@@ -101,16 +101,16 @@ const GatewayApi = {
   },
   async cloudConnect() {
     try {
-      const response = await axiosInstance.put(PATH_CLOUD_CONNECT)
-      return response.data
+      await axiosInstance.put(PATH_CLOUD_CONNECT)
+      return true
     } catch (error) {
       console.error(error)
     }
   },
   async cloudDisconnect() {
     try {
-      const response = await axiosInstance.put(PATH_CLOUD_DISCONNECT)
-      return response.data
+      await axiosInstance.put(PATH_CLOUD_DISCONNECT)
+      return true
     } catch (error) {
       console.error(error)
     }

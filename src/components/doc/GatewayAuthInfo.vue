@@ -47,7 +47,7 @@ export default {
   computed: {
     connectionStatus() {
       const fixed = this.status
-        .toLowerCase().replace('_', ' ')
+        .toLowerCase().replaceAll('_', ' ')
       return `Cloud: ${fixed}`
     }
   },
@@ -62,11 +62,7 @@ export default {
       this.store.setAuthentication(await GatewayApi.getCloudAuthentication())
     },
     async connect() {
-      if (await GatewayApi.cloudConnect()) {
-        toast.success({
-          caption: 'Connected'
-        })
-      } else {
+      if (!await GatewayApi.cloudConnect()) {
         toast.error({
           caption: 'Failed to connect'
         })
@@ -74,11 +70,7 @@ export default {
     },
     async disconnect() {
       if (confirm("Are you sure?")) {
-        if (await GatewayApi.cloudDisconnect()) {
-          toast.success({
-            caption: 'Disconnected'
-          })
-        } else {
+        if (!await GatewayApi.cloudDisconnect()) {
           toast.error({
             caption: 'Failed to disconnect'
           })
@@ -104,6 +96,7 @@ export default {
       this.authDialogVisible = false
       if(this.store.gateway) {
         this.loadCloudInfo()
+        this.connect()
       }
     }
   }
