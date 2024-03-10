@@ -13,13 +13,18 @@ export default {
   inject: ['device', 'gateway'],
   data() {
     return {
-      states: null,
+      states: {},
       loading: false,
       tabs: {},
     }
   },
   created() {
     this.loadStates()
+  },
+  computed: {
+    haveStates() {
+      return Object.keys(this.states).length !== 0
+    }
   },
   methods: {
     async loadStates() {
@@ -60,6 +65,7 @@ export default {
   <div>
     <h1 class="title">Device states</h1>
     <sync-loader class="loading-spinner" :loading="loading"></sync-loader>
-    <MenuView :tabs="tabs" tabTitle="Click to open hooks" />
+    <MenuView v-if="haveStates" :tabs="tabs" tabTitle="Click to open hooks" />
+    <h2 v-else class="title">No states configured</h2>
   </div>
 </template>

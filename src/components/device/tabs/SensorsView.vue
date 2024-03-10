@@ -13,7 +13,7 @@ export default {
   inject: ['device', 'gateway'],
   data() {
     return {
-      sensors: null,
+      sensors: {},
       loading: false,
       tabs: {}
     }
@@ -21,11 +21,16 @@ export default {
   created() {
     this.loadSensors()
   },
+  computed: {
+    haveSensors() {
+      return Object.keys(this.sensors).length !== 0
+    }
+  },
   methods: {
     async loadSensors() {
       this.loading = true
       try {
-        this.sensors = await DeviceApi.getDeviceSensors(this.device, this.gateway)
+        this.sensors = await DeviceApi.getDeviceSensors(this.device, this.gateway) ?? {}
         Object.entries(this.sensors).forEach(([name, { type, value }]) => {
           const caption = `${name} (${type}): ${value}`
           if (this.tabs[name]) {
@@ -61,6 +66,7 @@ export default {
   <div>
     <h1 class="title">Sensors values</h1>
     <sync-loader class="loading-spinner" :loading="loading"></sync-loader>
-    <MenuView :tabs="tabs" tabTitle="Click to open hooks" />
+    <MenuView v-if="haveSensors" :tabs="tabs" tabTitle="Click to open hooks" />
+    <h2 v-else class="title">No sensors configured</h2>
   </div>
 </template>

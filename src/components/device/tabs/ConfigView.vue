@@ -26,6 +26,11 @@ export default {
   created() {
     this.update()
   },
+  computed: {
+    haveConfigEntries() {
+      return Object.keys(this.configInfo).length !== 0
+    }
+  },
   methods: {
     async update() {
       this.loading = true
@@ -72,7 +77,7 @@ export default {
   <div>
     <h1 class="title">Configuration</h1>
     <sync-loader class="loading-spinner" :loading="loading"></sync-loader>
-    <div class="config-inputs list">
+    <div v-if="haveConfigEntries" class="config-inputs list">
       <div
         v-for="[key, { caption, type }] of Object.entries(this.configInfo)"
         :key="key"
@@ -98,6 +103,7 @@ export default {
         </LoadingButton>
       </div>
     </div>
+    <h2 v-else class="title">No config entries configured</h2>
   </div>
 </template>
 
