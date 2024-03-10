@@ -10,7 +10,7 @@ export const GATEWAY_BROKER_URL = `ws://${GATEWAY_PATH}${GATEWAY_PORT ? ':' + GA
 const PATH_AUTHENTICATION = '/cloud/identity'
 const PATH_LOGIN = '/cloud/login'
 const PATH_LOGOUT = '/cloud/logout'
-const PATH_CLOUD_INFO = '/cloud/info'
+const PATH_CLOUD_CONFIG = '/cloud/config'
 const PATH_CLOUD_CONNECTED = '/cloud/connection/status'
 const PATH_CLOUD_CONNECT = '/cloud/connection/connect'
 const PATH_CLOUD_DISCONNECT = '/cloud/connection/disconnect'
@@ -80,9 +80,9 @@ const GatewayApi = {
       return false
     }
   },
-  async getCloudInfo() {
+  async getCloudConfig() {
     try {
-      const response = await axiosInstance.get(PATH_CLOUD_INFO)
+      const response = await axiosInstance.get(PATH_CLOUD_CONFIG)
       return response.data
     } catch (error) {
       console.error(error)

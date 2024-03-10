@@ -28,7 +28,7 @@ export default {
   },
   mounted() {
     this.loadAuthentication()
-    this.loadCloudInfo()
+    this.loadCloudConfig()
     this.getConnStatus()
 
     this.stompClient.subscribe(
@@ -52,8 +52,8 @@ export default {
     }
   },
   methods: {
-    async loadCloudInfo() {
-      this.cloudInfo = await GatewayApi.getCloudInfo()
+    async loadCloudConfig() {
+      this.cloudConfig = await GatewayApi.getCloudConfig()
     },
     async getConnStatus() {
       this.status = await GatewayApi.getConnectionStatus()
@@ -83,7 +83,7 @@ export default {
           toast.success({
             caption: 'Loged out'
           })
-          this.loadCloudInfo()
+          this.loadCloudConfig()
           this.dialogVisible = false
         } else {
           toast.success({
@@ -95,7 +95,7 @@ export default {
     authDialogCloseHandle() {
       this.authDialogVisible = false
       if(this.store.gateway) {
-        this.loadCloudInfo()
+        this.loadCloudConfig()
         this.connect()
       }
     }
@@ -116,7 +116,7 @@ export default {
     <div v-if="dialogVisible" class="overlay" @click.stop="dialogVisible = false">
       <div class="dialog" @click.stop="() => {}">
         <div v-if="store.gateway" class="list">
-          <h2 class="title">Authentication</h2>
+          <h2 class="title">Identity</h2>
           <InputField
             label="User"
             :modelValue="store.user.login"
@@ -130,16 +130,16 @@ export default {
             :disabled="true"
           />
         </div>
-        <div v-if="cloudInfo" class="list">
-          <h2 class="title">Cloud info</h2>
+        <div v-if="cloudConfig" class="list">
+          <h2 class="title">Cloud config</h2>
           <InputField
             label="Ip"
-            :modelValue="cloudInfo.cloudIp"
+            :modelValue="cloudConfig.cloudIp"
             :disabled="true"
           />
           <InputField
             label="Port"
-            :modelValue="cloudInfo.cloudPort"
+            :modelValue="cloudConfig.cloudPort"
             :disabled="true"
           />
           <LoadingButton
@@ -160,7 +160,7 @@ export default {
             <h2>Logout</h2>
           </LoadingButton>
         </div>
-        <button v-if="!cloudInfo" class="btn" @click="authDialogVisible = true">
+        <button v-if="!cloudConfig" class="btn" @click="authDialogVisible = true">
           <h2>Add cloud token</h2>
         </button>
       </div>
