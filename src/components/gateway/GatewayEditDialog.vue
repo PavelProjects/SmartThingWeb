@@ -1,8 +1,11 @@
 <script>
+import { useIntl } from 'vue-intl'
 import { toast } from '../../utils/EventBus'
 import LoadingButton from '../controls/LoadingButton.vue'
 import PopUpDialog from '../dialogs/PopUpDialog.vue'
 import InputField from '../fields/InputField.vue'
+
+const NAME_MAX_LENGTH = 32;
 
 export default {
   name: 'GatewayEditDialog',
@@ -16,26 +19,33 @@ export default {
   },
   data() {
     const { name, description } = this.gateway || {}
-    return { name, description }
+    const intl = useIntl()
+    return { name, description, intl }
   },
   computed: {
     buttonTitle() {
       const { id } = this.gateway || {}
-      return id ? 'Update' : 'Create'
+      return  this.intl.formatMessage(
+        { id: 'gateway.edit.button' },
+        { action: id ? 'update' : 'create'}
+      )
     }
   },
   methods: {
     handleSave() {
       if (!this.name) {
         toast.error({
-          caption: "Gateway name can't be blank!"
+          caption: this.intl.formatMessage({ id: 'gateway.edit.validation.name.blank' })
         })
         return
       }
-      if (this.name.length > 32) {
+      if (this.name.length > NAME_MAX_LENGTH) {
         toast.error({
-          caption: 'Name is too long!',
-          description: 'Max name length - 32 symbols'
+          caption: this.intl.formatMessage({ id: 'gateway.edit.validation.name.long' }),
+          description: this.intl.formatMessage(
+            { id: 'gateway.edit.validation.name.desc' },
+            { len: NAME_MAX_LENGTH }
+          )
         })
       }
       const { id } = this.gateway || {}
@@ -50,13 +60,14 @@ export default {
 </script>
 
 <template>
-  <PopUpDialog>
+  <PopUpDialog @close="$emit('close')">
     <div class="container">
-      <InputField label="Name" 
+      <InputField
+        :label="intl.formatMessage({ id: 'gateway.edit.name' })"
         v-model="name"
       />
       <InputField
-        label="Description"
+        :label="intl.formatMessage({ id: 'gateway.edit.description' })"
         v-model="description"
       />
       <LoadingButton @click="handleSave">

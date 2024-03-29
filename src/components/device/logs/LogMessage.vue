@@ -46,7 +46,6 @@ export default {
 <style scoped>
 .message {
   display: inline-block;
-  border-right: none;
   word-wrap: break-word;
   text-align: left;
 }

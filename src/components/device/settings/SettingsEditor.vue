@@ -5,6 +5,7 @@ import LoadingButton from '../../controls/LoadingButton.vue'
 import InputField from '../../fields/InputField.vue'
 import { DeviceApi } from '../../../api/device/DeviceApi'
 import DevicesSearchView from '../DevicesSearchView.vue'
+import { useIntl } from 'vue-intl'
 
 const MODE = {
   EXPORT: 'export',
@@ -24,8 +25,10 @@ export default {
     }
   },
   data() {
+    const intl = useIntl()
     const { name, value } = this.settings
     return {
+      intl,
       newSettings: { name, value },
       loading: false,
       loadingDevices: false,
@@ -39,15 +42,15 @@ export default {
       let valid = true
       if (this.newSettings.name.length === 0) {
         toast.error({
-          caption: "Name can't be empty!",
-          description: 'Insert settings name'
+          caption: this.intl.formatMessage({ id: 'device.settings.editor.name.empty' }),
+          description: this.intl.formatMessage({ id: 'device.settings.editor.name.empty.desc' })
         })
         valid = false
       }
       if (this.newSettings.value.length === 0) {
         toast.error({
-          caption: "Settings can't be empty!",
-          description: 'Insert settings json'
+          caption: this.intl.formatMessage({ id: 'device.settings.editor.setting.empty' }),
+          description: this.intl.formatMessage({ id: 'device.settings.editor.setting.empty.desc' })
         })
         valid = false
       }
@@ -65,12 +68,16 @@ export default {
             ...this.newSettings
           }
           if (await GatewayApi.updateDeviceSettings(payload)) {
-            toast.success({ caption: 'Settings updated!' })
+            toast.success({ 
+              caption: this.intl.formatMessage({ id: 'device.settings.editor.updated' })
+            })
             this.$emit('changed', this.newSettings.name)
           }
         } else {
           if (await GatewayApi.createDeviceSettings(this.newSettings)) {
-            toast.success({ caption: 'Settings created!' })
+            toast.success({ 
+              caption: this.intl.formatMessage({ id: 'device.settings.editor.created' })
+            })
             this.$emit('changed', this.newSettings.name)
           }
         }
@@ -79,11 +86,13 @@ export default {
       }
     },
     async deleteSettings() {
-      if (!confirm('This action will delete saved settings permanently. Are you sure?')) {
+      if (!confirm(this.intl.formatMessage({ id: 'device.settings.editor.delete.confirm' }))) {
         return
       }
       if (await GatewayApi.deleteDeviceSettings(this.settings.name)) {
-        toast.success({ caption: 'Settings deleted' })
+        toast.success({
+          caption: this.intl.formatMessage({ id: 'device.settings.editor.delete.success' })
+        })
         this.$emit('changed')
       }
     },
@@ -113,7 +122,7 @@ export default {
         settings = JSON.parse(this.newSettings.value)
       } catch (error) {
         toast.error({
-          caption: "Json parsing failed!",
+          caption: this.intl.formatMessage({ id: 'device.settings.editor.json.parse.error' }),
           description: error
         })
         return
@@ -125,8 +134,11 @@ export default {
         await DeviceApi.importSettings(this.selectedDevice, {}, settings)
       ) {
         toast.success({
-          caption: 'Export to ' + this.selectedDevice.name + ' finished!',
-          description: 'Device will restart now'
+          caption: this.intl.formatMessage(
+            { id: 'device.settings.editor.export.success' },
+            { name: this.selectedDevice.name }
+          ),
+          description: this.intl.formatMessage({ id: 'device.settings.editor.export.success.desc' })
         })
       }
     },
@@ -144,30 +156,55 @@ export default {
   <div class="container bordered">
     <div class="list">
       <InputField
-        label="Name"
-        :value="newSettings.name"
-        @input="newSettings.name = $event.target.value"
+        :label="intl.formatMessage({ id: 'device.settings.editor.name' })"
+        v-model="newSettings.name"
       />
-      <h2 class="title">Settings</h2>
+      <h2 class="title">
+        {{ intl.formatMessage({ id: 'device.settings.editor.title' }) }}
+      </h2>
       <textarea class="editor" v-model="newSettings.value"></textarea>
       <div class="controls">
         <LoadingButton @click="save" :loading="loading">
-          <h2>{{ settings.name ? 'Update' : 'Create' }}</h2>
+          <h2>{{ 
+            intl.formatMessage(
+              { id: 'device.settings.editor.button' },
+              { action: settings.name ? 'update' : 'create' }
+            )
+          }}</h2>
         </LoadingButton>
         <LoadingButton v-if="settings.name" @click="deleteSettings" class="delete">
-          <h2>Delete</h2>
+          <h2>{{ 
+            intl.formatMessage(
+              { id: 'device.settings.editor.button' },
+              { action: 'delete' }
+            )
+          }}</h2>
         </LoadingButton>
       </div>
       <div class="controls">
         <button v-if="settings.name" class="btn" @click="handleExportBtn">
-          <h2>Export to device</h2>
+          <h2>{{ 
+            intl.formatMessage(
+              { id: 'device.settings.editor.button' },
+              { action: 'export' }
+            )
+          }}</h2>
         </button>
         <button v-else class="btn" @click="handleImportBtn">
-          <h2>Import from device</h2>
+          <h2>{{ 
+            intl.formatMessage(
+              { id: 'device.settings.editor.button' },
+              { action: 'import' }
+            )
+          }}</h2>
         </button>
       </div>
     </div>
-    <DevicesSearchView v-if="mode" title="Select device" @select="handleDeviceClick" />
+    <DevicesSearchView
+      v-if="mode"
+      :title="intl.formatMessage({ id: 'device.settings.editor.select.device' })"
+      @select="handleDeviceClick"
+    />
   </div>
 </template>
 

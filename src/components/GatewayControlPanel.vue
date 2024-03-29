@@ -1,10 +1,10 @@
 <script>
 import DevicesSearchView from './device/DevicesSearchView.vue'
 import DeviceControlPanel from './device/DeviceControlPanel.vue'
-import { h } from 'vue'
 import { CloudApi } from '../api/CloudApi'
 import { useControlPanelStore } from '../store/controlPanelStore'
 import { storeToRefs } from 'pinia'
+import { useIntl } from 'vue-intl'
 
 export default {
   name: 'DevicesMain',
@@ -14,9 +14,11 @@ export default {
   },
   data() {
     const { gateway, device } = storeToRefs(useControlPanelStore())
+    const intl = useIntl();
     return {
       gateway,
       device,
+      intl,
       gatewayId: this.$route.params.gateway,
     }
   },
@@ -38,14 +40,14 @@ export default {
           @select="(deviceInfo) => device = deviceInfo"
         />
         <div v-if="device">
-          <h1 class="title">Control panel</h1>
+          <h1 class="title">{{ intl.formatMessage({ id: 'gateway.panel' }) }}</h1>
           <KeepAlive>
             <DeviceControlPanel :key="device.ip" />
           </KeepAlive>
         </div>
       </div>
       <div v-else style="color: red">
-        <h1>Access denied</h1>
+        <h1>{{ intl.formatMessage({ 'id': 'error' }, { 'type': 'access_denied' }) }}</h1>
       </div>
     </div>
   </div>

@@ -12,12 +12,10 @@ export default {
     HeaderDoc, ToatsView, CloudAuthDialog
   },
   data() {
-    const store = useCloudAuthStore()
-    const { id, login } = storeToRefs(store)
+    const { id, login, setAuthentication } = storeToRefs(useCloudAuthStore())
     return {
       mode: import.meta.env.VITE_MODE,
-      id, login,
-      cloudAuthStore: store
+      id, login, setAuthentication,
     }
   },
   computed: {
@@ -35,7 +33,7 @@ export default {
       return
     }
     const { user } = await CloudApi.getAuthentication() ?? {}
-    this.cloudAuthStore.setAuthentication(user)
+    this.setAuthentication(user)
   },
 }
 </script>
@@ -47,7 +45,7 @@ export default {
 
     <CloudAuthDialog 
       v-if="!isAuthenticated"
-      @authenticated="({ user }) => cloudAuthStore.setAuthentication(user)"
+      @authenticated="({ user }) => setAuthentication(user)"
     />
 
     <router-view v-if="isAuthenticated" v-slot="{ Component }">

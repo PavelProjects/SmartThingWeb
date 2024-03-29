@@ -6,6 +6,7 @@ import GatewayAuthDialog from '../dialogs/GatewayAuthDialog.vue'
 import { useGatewayAuthStore } from '../../store/gatewayAuthStore.js'
 import { toast } from '../../utils/EventBus.js'
 import { useStompClientStore } from '../../store/stompClientStore.js'
+import { useIntl } from 'vue-intl'
 
 export default {
   name: 'GatewayAuthInfo',
@@ -17,9 +18,11 @@ export default {
   data() {
     const store = useGatewayAuthStore()
     const stompClient = useStompClientStore()
+    const intl = useIntl()
     
     return {
       store,
+      intl,
       stompClient,
       dialogVisible: false,
       authDialogVisible: false,
@@ -46,9 +49,10 @@ export default {
   },
   computed: {
     connectionStatus() {
-      const fixed = this.status
-        .toLowerCase().replaceAll('_', ' ')
-      return `Cloud: ${fixed}`
+      return this.intl.formatMessage(
+        { id: 'gateway.cloud.conn.status' },
+        { status: this.status.toLowerCase().replaceAll('_', ' ') }
+      )
     }
   },
   methods: {
@@ -64,30 +68,30 @@ export default {
     async connect() {
       if (!await GatewayApi.cloudConnect()) {
         toast.error({
-          caption: 'Failed to connect'
+          caption: this.intl.formatMessage({ id: 'gateway.cloud.conn.failed' })
         })
       }
     },
     async disconnect() {
-      if (confirm("Are you sure?")) {
+      if (confirm(this.intl.formatMessage({ id: 'gateway.cloud.disconnect.confirm' }))) {
         if (!await GatewayApi.cloudDisconnect()) {
           toast.error({
-            caption: 'Failed to disconnect'
+            caption: this.intl.formatMessage({ id: 'gateway.cloud.disconnect.failed' })
           })
         }
       }
     },
     async logout() {
-      if (confirm("Are you sure?")) {
+      if (confirm(this.intl.formatMessage({ id: 'gateway.cloud.logout.confirm' }))) {
         if(await GatewayApi.cloudLogout()) {
           toast.success({
-            caption: 'Loged out'
+            caption: this.intl.formatMessage({ id: 'gateway.cloud.logout.success' })
           })
           this.loadCloudConfig()
           this.dialogVisible = false
         } else {
           toast.success({
-            caption: 'Failed to log out'
+            caption: this.intl.formatMessage({ id: 'gateway.cloud.logout.error' })
           })
         }
       }
@@ -108,7 +112,7 @@ export default {
     <div class="status" @click="dialogVisible = !dialogVisible">
       <h2 
         class="title"
-        title="Cloud connection status"
+        :title="intl.formatMessage({ id: 'gateway.cloud.conn.status.title' })"
       >
         {{ connectionStatus }}
       </h2>
@@ -116,29 +120,33 @@ export default {
     <div v-if="dialogVisible" class="overlay" @click.stop="dialogVisible = false">
       <div class="dialog" @click.stop="() => {}">
         <div v-if="store.gateway" class="list">
-          <h2 class="title">Identity</h2>
+          <h2 class="title">
+            {{ intl.formatMessage({ id: 'gateway.cloud.info.identity' }) }}
+          </h2>
           <InputField
-            label="User"
+            :label="intl.formatMessage({ id: 'gateway.cloud.info.user' })"
             :modelValue="store.user.login"
             :title="store.user.id"
             :disabled="true"
           />
           <InputField
-            label="Gateway"
+            :label="intl.formatMessage({ id: 'gateway.cloud.info.gateway' })"
             :modelValue="store.gateway.name"
             :title="store.gateway.description"
             :disabled="true"
           />
         </div>
         <div v-if="cloudConfig" class="list">
-          <h2 class="title">Cloud config</h2>
+          <h2 class="title">
+            {{ intl.formatMessage({ id: 'gateway.cloud.config' }) }}
+          </h2>
           <InputField
-            label="Ip"
+            :label="intl.formatMessage({ id: 'gateway.cloud.config.ip' })"
             :modelValue="cloudConfig.cloudIp"
             :disabled="true"
           />
           <InputField
-            label="Port"
+            :label="intl.formatMessage({ id: 'gateway.cloud.config.port' })"
             :modelValue="cloudConfig.cloudPort"
             :disabled="true"
           />
@@ -146,22 +154,22 @@ export default {
             v-if="['CONNECTION_LOST', 'DISCONNECTED', 'FAILED_TO_CONNECT'].includes(status)"
             @click="connect"
           >
-            <h2>Reconnect</h2>
+            <h2>{{ intl.formatMessage({ id: 'gateway.cloud.reconnect' }) }}</h2>
           </LoadingButton>
           <LoadingButton
             v-if="status === 'CONNECTED'"
             @click="disconnect"
           >
-            <h2>Disconnect</h2>
+            <h2>{{ intl.formatMessage({ id: 'gateway.cloud.disconnect' }) }}</h2>
           </LoadingButton>
           <LoadingButton 
             @click="logout"
           >
-            <h2>Logout</h2>
+            <h2>{{ intl.formatMessage({ id: 'log.out' }) }}</h2>
           </LoadingButton>
         </div>
         <button v-if="!cloudConfig" class="btn" @click="authDialogVisible = true">
-          <h2>Add cloud token</h2>
+          <h2>{{ intl.formatMessage({ id: 'gateway.cloud.add.token' }) }}</h2>
         </button>
       </div>
     </div>

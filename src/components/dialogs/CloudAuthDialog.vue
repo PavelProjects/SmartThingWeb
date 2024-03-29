@@ -1,4 +1,5 @@
 <script>
+import { useIntl } from 'vue-intl'
 import { CloudApi } from '../../api/CloudApi'
 import { toast } from '../../utils/EventBus'
 import LoadingButton from '../controls/LoadingButton.vue'
@@ -13,7 +14,9 @@ export default {
     PopUpDialog
   },
   data() {
+    const intl = useIntl()
     return {
+      intl,
       login: '',
       password: '',
       loading: false
@@ -23,7 +26,7 @@ export default {
     async auth() {
       if (!this.login || !this.password) {
         toast.error({
-          caption: 'Login and password are required!'
+          caption: this.intl.formatMessage({ id: 'cloud.auth.lprequired' })
         })
         return
       }
@@ -43,16 +46,18 @@ export default {
   <PopUpDialog>
     <div class="container">
       <InputField
-        label="Login"
+        :label="intl.formatMessage({ id: 'login' })"
         v-model="login"
         type="login"
       />
       <InputField
-        label="Password"        
+        :label="intl.formatMessage({ id: 'password' })"
         v-model="password"
         type="password"
       />
-      <LoadingButton :loading="loading" @click="auth"> Log in </LoadingButton>
+      <LoadingButton :loading="loading" @click="auth">
+        {{ intl.formatMessage({ id: 'log.in' }) }}
+      </LoadingButton>
     </div>
   </PopUpDialog>
 </template>

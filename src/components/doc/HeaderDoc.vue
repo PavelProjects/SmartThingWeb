@@ -4,6 +4,7 @@ import MenuSvg from 'vue-material-design-icons/Menu.vue'
 import UserAuthInfo from './UserAuthInfo.vue'
 import { storeToRefs } from 'pinia'
 import { useControlPanelStore } from '../../store/controlPanelStore'
+import { useIntl } from 'vue-intl'
 
 export default {
   name: 'HeaderDoc',
@@ -14,8 +15,9 @@ export default {
   },
   data() {
     const mode = import.meta.env.VITE_MODE
+    const intl = useIntl()
     const { gateway } = storeToRefs(useControlPanelStore())
-    return { mode, gateway }
+    return { mode, intl, gateway }
   }
 }
 </script>
@@ -25,17 +27,17 @@ export default {
     <div class="menu">
       <MenuSvg />
       <router-link to="/">
-        <h1 class="green">SmartThing</h1>
+        <h1 class="green">{{  intl.formatMessage({ id: 'doc.title' }) }}</h1>
       </router-link>
       <div class="menu-items">
         <router-link to="/">
-          <h2>Home</h2>
+          <h2>{{  intl.formatMessage({ id: 'doc.home' }) }}</h2>
         </router-link>
         <router-link v-if="mode === 'gateway'" to="/devices/settings">
-          <h2>Devices settings</h2>
+          <h2>{{  intl.formatMessage({ id: 'doc.device.settings' }) }}</h2>
         </router-link>
         <router-link v-if="mode === 'gateway'" to="/devices/logs">
-          <h2>Devices logs</h2>
+          <h2>{{  intl.formatMessage({ id: 'doc.device.logs' }) }}</h2>
         </router-link>
       </div>
     </div>
@@ -44,7 +46,7 @@ export default {
         :title="'id: ' + gateway.description"
         class="title"
       >
-        Gateway: {{ gateway.name }}
+        {{  intl.formatMessage({ id: 'gateway' }, { gateway: gateway.name}) }}
       </h1>
     </div>
     <UserAuthInfo v-if="mode === 'cloud'" class="log-in-info" />

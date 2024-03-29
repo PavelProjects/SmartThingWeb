@@ -7,6 +7,7 @@ import GatewayEditDialog from './GatewayEditDialog.vue'
 import UpdateButton from '../controls/UpdateButton.vue'
 import PopUpDialog from '../dialogs/PopUpDialog.vue'
 import { useControlPanelStore } from '../../store/controlPanelStore'
+import { useIntl } from 'vue-intl'
 
 export default {
   name: 'GatewaySelector',
@@ -17,8 +18,10 @@ export default {
     PopUpDialog,
   },
   data() {
+    const intl = useIntl()
     const controlPanelStore = useControlPanelStore()
     return {
+      intl,
       controlPanelStore,
       gateways: [],
       loading: false,
@@ -35,8 +38,8 @@ export default {
         router.push('/panel/' + gateway.id)
       } else {
         toast.error({
-          caption: 'Gateway is offline!',
-          description: "Can't open control panel of offline gateway"
+          caption: this.intl.formatMessage({ id: 'gateway.select.offline' }),
+          description: this.intl.formatMessage({ id: 'gateway.select.offline.desc' })
         })
       }
     },
@@ -48,13 +51,13 @@ export default {
     async createGateway(gateway) {
       if (await CloudApi.createGateway(gateway)) {
         toast.success({
-          caption: 'Gateway created'
+          caption: this.intl.formatMessage({ id: 'gateway.create.success' })
         })
         this.loadGateways()
         this.showCreateDialog = false
       } else {
         toast.error({
-          caption: 'Failed to create gateway'
+          caption: this.intl.formatMessage({ id: 'gateway.create.error' })
         })
       }
     },
@@ -65,7 +68,9 @@ export default {
 <template>
   <div class="gateway-selector">
     <div class="header">
-      <h2 class="title">Gateways</h2>
+      <h2 class="title">
+        {{ intl.formatMessage({ id: 'gateway.selector.title' }) }}
+      </h2>
       <UpdateButton class="update" :loading="loading" :onClick="loadGateways" />
     </div>
     <div class="list">
@@ -76,7 +81,9 @@ export default {
         @click="handleGatewayClick(gateway)"
         @gatewaysUpdate="loadGateways"
       />
-      <button class="btn" @click="showCreateDialog = true">Add gateway</button>
+      <button class="btn" @click="showCreateDialog = true">
+        <h2>{{ intl.formatMessage({ id: 'gateway.create.button' }) }}</h2>
+      </button>
     </div>
     <GatewayEditDialog
       v-if="showCreateDialog"

@@ -2,6 +2,7 @@
 import SyncLoader from 'vue-spinner/src/SyncLoader.vue'
 import { DeviceApi } from '../../../api/device/DeviceApi.js'
 import LoadingButton from '../../controls/LoadingButton.vue'
+import { useIntl } from 'vue-intl'
 
 export default {
   name: 'ActionsView',
@@ -11,7 +12,9 @@ export default {
   },
   inject: ['device', 'gateway'],
   data() {
+    const intl = useIntl()
     return {
+      intl,
       actions: null,
       loading: false,
       loadingAction: false
@@ -43,7 +46,9 @@ export default {
 
 <template>
   <div>
-    <h1 class="title">Device actions</h1>
+    <h1 class="title">
+      {{ intl.formatMessage({ id: 'device.actions.title' }) }}
+    </h1>
     <sync-loader class="loading-spinner" :loading="loading"></sync-loader>
     <div class="buttons-panel">
       <LoadingButton

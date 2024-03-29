@@ -1,4 +1,5 @@
 <script>
+import { useIntl } from 'vue-intl'
 import { GatewayApi } from '../../../api/GatewayApi'
 import { useStompClientStore } from '../../../store/stompClientStore'
 import LogMessage from './LogMessage.vue'
@@ -9,10 +10,12 @@ export default {
     LogMessage
   },
   data() {
+    const intl = useIntl()
     const stompClient = useStompClientStore()
 
     return {
-      idSequence: 0,
+      intl,
+      columns: ['device', 'date', 'level', 'msg'],
       messages: [],
       colors: {},
       stompClient,
@@ -30,7 +33,6 @@ export default {
         if (message && message.body) {
           console.debug('LOG:' + message.body)
           const parsed = JSON.parse(message.body)
-          parsed.id = this.idSequence++
           this.messages.unshift(parsed)
         }
       }
@@ -75,14 +77,13 @@ export default {
 <template>
   <div class="logs-view">
     <div class="log-message-container bordered">
-      <h2>Device</h2>
-      <h2>Date</h2>
-      <h2>Level</h2>
-      <h2 style="border-right: none">Message</h2>
+      <h2 v-for="column of columns" :key="column">
+        {{ intl.formatMessage({ id: 'device.logs.columns' }, { column }) }}
+      </h2>
     </div>
     <LogMessage
-      v-for="message of messages"
-      :key="message.id"
+      v-for="message, index of messages"
+      :key="index"
       :log="message"
       :color="colorByIp(message)"
     />

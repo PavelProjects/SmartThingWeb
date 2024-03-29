@@ -2,6 +2,7 @@
 import { GatewayApi } from '../../../api/GatewayApi'
 import SettingsEditor from './SettingsEditor.vue'
 import MenuView from '../../menu/MenuView.vue'
+import { useIntl } from 'vue-intl'
 
 export default {
   name: 'SettingsManager',
@@ -9,7 +10,9 @@ export default {
     MenuView
   },
   data() {
+    const intl = useIntl()
     return {
+      intl,
       loading: false,
       selected: undefined,
       tabs: {},
@@ -37,7 +40,7 @@ export default {
       }
       this.tabs['new'] = {
         class: SettingsEditor,
-        caption: 'Add new',
+        caption: this.intl.formatMessage({ id: 'device.settings.manager.add' }),
         props: {
           settings: {}
         }
@@ -55,7 +58,7 @@ export default {
 <template>
   <div class="container">
     <MenuView
-      header="Saved devices settings"
+      :header="intl.formatMessage({ id: 'device.settings.manager.menu.header' })"
       :tabs="tabs"
       :tab="openTab"
       @changed="(event) => handleChange(event)"

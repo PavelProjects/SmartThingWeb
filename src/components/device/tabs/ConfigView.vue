@@ -4,6 +4,7 @@ import InputField from '../../fields/InputField.vue'
 import LoadingButton from '../../controls/LoadingButton.vue'
 import SyncLoader from 'vue-spinner/src/SyncLoader.vue'
 import CheckBoxField from '../../fields/CheckBoxField.vue'
+import { useIntl } from 'vue-intl'
 
 export default {
   name: 'ConfigView',
@@ -15,7 +16,9 @@ export default {
     SyncLoader
   },
   data() {
+    const intl = useIntl()
     return {
+      intl,
       values: {},
       configInfo: {},
       loading: false,
@@ -58,7 +61,7 @@ export default {
       }
     },
     async deleteAllValues() {
-      if (confirm('Are you sure you want to delete all configuration values?')) {
+      if (confirm(this.intl.formatMessage({ id: 'device.config.delete.confirm' }))) {
         this.deleteLoading = true
         try {
           if (await DeviceApi.deleteAllConfigValues(this.device, this.gateway)) {
@@ -75,7 +78,9 @@ export default {
 
 <template>
   <div>
-    <h1 class="title">Configuration</h1>
+    <h1 class="title">
+      {{ intl.formatMessage({ id: 'device.config.title' }) }}
+    </h1>
     <sync-loader class="loading-spinner" :loading="loading"></sync-loader>
     <div v-if="haveConfigEntries" class="config-inputs list">
       <div
@@ -96,14 +101,16 @@ export default {
       </div>
       <div class="controls-holder">
         <LoadingButton class="delete" :loading="deleteLoading" @click="deleteAllValues">
-          <h2>Delete all values</h2>
+          <h2>{{ intl.formatMessage({ id: 'device.config.button.delete.all' }) }}</h2>
         </LoadingButton>
         <LoadingButton :loading="saveLoading" @click="saveConfig">
-          <h2>Save</h2>
+          <h2>{{ intl.formatMessage({ id: 'device.config.button.save' }) }}</h2>
         </LoadingButton>
       </div>
     </div>
-    <h2 v-else class="title">No config entries configured</h2>
+    <h2 v-else class="title">
+      {{ intl.formatMessage({ id: 'device.config.empty.entries' }) }}
+    </h2>
   </div>
 </template>
 

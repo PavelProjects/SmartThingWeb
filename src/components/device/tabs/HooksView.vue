@@ -4,6 +4,7 @@ import HookView from './HookView.vue'
 import { DeviceApi } from '../../../api/device/DeviceApi.js'
 import ComboBoxField from '../../fields/ComboBoxField.vue'
 import SyncLoader from 'vue-spinner/src/SyncLoader.vue'
+import { intlKey, useIntl } from 'vue-intl'
 
 export const NEW_HOOK_ID = 'New'
 
@@ -19,7 +20,9 @@ export default {
   },
   inject: ['device', 'gateway'],
   data() {
+    const intl = useIntl()
     return {
+      intl,
       selectedTemplate: null,
       hooks: [],
       templates: {},
@@ -82,11 +85,11 @@ export default {
 
 <template>
   <div>
-    <h1 class="title">Hooks</h1>
+    <h1 class="title">{{ intl.formatMessage({ id: 'device.hooks.title' }) }}</h1>
     <sync-loader class="loading-spinner" :loading="loading"></sync-loader>
     <div v-if="!loading">
       <ComboBoxField
-        label="Add hook of type "
+        :label="intl.formatMessage({ id: 'device.hooks.button.add' })"
         :items="hookTypes"
         @update:modelValue="(v) => addHook(v)"
       />
@@ -102,7 +105,7 @@ export default {
         />
       </div>
       <div v-else class="title">
-        <h3>No hooks added yet</h3>
+        <h3>{{ intl.formatMessage({ id: 'device.hooks.empty' }) }}</h3>
       </div>
     </div>
   </div>

@@ -30,7 +30,6 @@ export default {
       @input="$emit('update:modelValue', $event.target.checked)"
       type="checkbox"
       :class="{ legit: !validationFailed, required: validationFailed }"
-      :title="notValid ? 'Поле обязательно для заполнения' : ''"
     />
   </div>
 </template>

@@ -4,8 +4,7 @@ import { DeviceApi } from '../../../api/device/DeviceApi.js'
 import InputField from '../../fields/InputField.vue'
 import LoadingButton from '../../controls/LoadingButton.vue'
 import { EventBus } from '../../../utils/EventBus.js'
-
-const NAME_ERROR = "Name can't be empty!"
+import { useIntl } from 'vue-intl'
 
 export default {
   name: 'DeviceInfoView',
@@ -16,21 +15,16 @@ export default {
   },
   inject: ['device', 'gateway'],
   data() {
+    const intl = useIntl()
     return {
+      intl,
       info: null,
       loading: false,
       deviceName: '',
-      validName: true,
-      NAME_ERROR // bruh
     }
   },
   created() {
     this.loadInfo()
-  },
-  watch: {
-    deviceName(value) {
-      this.validName = value.length != 0
-    }
   },
   methods: {
     async update() {
@@ -41,7 +35,7 @@ export default {
       this.deviceName = this.info['name'] || ''
     },
     async saveName() {
-      if (!this.validName) {
+      if (!this.deviceName) {
         console.error('Not valid name')
         return
       }
@@ -64,22 +58,38 @@ export default {
 
 <template>
   <div>
-    <h1 class="title">Device information</h1>
+    <h1 class="title">{{ intl.formatMessage({ id: 'device.info.title' }) }}</h1>
     <div v-if="info" class="list">
       <InputField
-        label="Device name"
-        :title="validName ? '' : NAME_ERROR"
+        :label="intl.formatMessage({ id: 'device.info.name' })"
+        :title="deviceName ? '' : intl.formatMessage({ id: 'device.info.name.error.empty' })"
         v-model="deviceName"
-        :validationFailed="!validName"
+        :validationFailed="!deviceName"
       >
         <LoadingButton :loading="loading" @click="saveName">
-          <h3>save</h3>
+          <h3>{{ intl.formatMessage({ id: 'device.info.name.save' }) }}</h3>
         </LoadingButton>
       </InputField>
-      <InputField label="Device type" :modelValue="info.type" :disabled="true" />
-      <InputField label="Firmware version" :modelValue="info.version" :disabled="true" />
-      <InputField label="Chip model" :modelValue="info.chip_model" :disabled="true" />
-      <InputField label="Chip revision" :modelValue="info.chip_revision" :disabled="true" />
+      <InputField
+        :label="intl.formatMessage({ id: 'device.info.type' })"
+        :modelValue="info.type"
+        :disabled="true"
+      />
+      <InputField
+        :label="intl.formatMessage({ id: 'device.info.version' })"
+        :modelValue="info.version"
+        :disabled="true"
+      />
+      <InputField
+        :label="intl.formatMessage({ id: 'device.info.chip.model' })"
+        :modelValue="info.chip_model"
+        :disabled="true"
+      />
+      <InputField
+        :label="intl.formatMessage({ id: 'device.info.chip.revision' })"
+        :modelValue="info.chip_revision"
+        :disabled="true"
+      />
     </div>
     <sync-loader v-else class="loading-spinner" :loading="true"></sync-loader>
   </div>

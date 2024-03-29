@@ -3,6 +3,7 @@ import SyncLoader from 'vue-spinner/src/SyncLoader.vue'
 import { DeviceApi } from '../../../api/device/DeviceApi.js'
 import HooksView from './HooksView.vue'
 import MenuView from '../../menu/MenuView.vue'
+import { useIntl } from 'vue-intl'
 
 export default {
   name: 'SensorsView',
@@ -12,7 +13,9 @@ export default {
   },
   inject: ['device', 'gateway'],
   data() {
+    const intl = useIntl()
     return {
+      intl,
       sensors: {},
       loading: false,
       tabs: {}
@@ -64,9 +67,13 @@ export default {
 
 <template>
   <div>
-    <h1 class="title">Sensors values</h1>
+    <h1 class="title">
+      {{ intl.formatMessage({ id: 'device.sensors.title' }) }}
+    </h1>
     <sync-loader class="loading-spinner" :loading="loading"></sync-loader>
     <MenuView v-if="haveSensors" :tabs="tabs" tabTitle="Click to open hooks" />
-    <h2 v-else class="title">No sensors configured</h2>
+    <h2 v-else class="title">
+      {{ intl.formatMessage({ id: 'device.sensors.empty' }) }}
+    </h2>
   </div>
 </template>

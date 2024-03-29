@@ -12,7 +12,9 @@ export default {
   },
   inject: ['device', 'gateway'],
   data() {
+    const intl = useIntl()
     return {
+      intl,
       states: {},
       loading: false,
       tabs: {},
@@ -63,9 +65,13 @@ export default {
 
 <template>
   <div>
-    <h1 class="title">Device states</h1>
+    <h1 class="title">
+      {{ intl.formatMessage({ id: 'device.states.title' }) }}
+    </h1>
     <sync-loader class="loading-spinner" :loading="loading"></sync-loader>
     <MenuView v-if="haveStates" :tabs="tabs" tabTitle="Click to open hooks" />
-    <h2 v-else class="title">No states configured</h2>
+    <h2 v-else class="title">
+      {{ intl.formatMessage({ id: 'device.states.empty' }) }}
+    </h2>
   </div>
 </template>

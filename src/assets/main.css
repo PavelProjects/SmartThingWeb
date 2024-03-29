@@ -175,6 +175,9 @@ textarea {
   flex-direction: column;
   align-items: center;
 }
+.log-message-container:last-child {
+  border-right: none
+}
 
 .menu-selected {
   background-color: var(--color-background-mute);

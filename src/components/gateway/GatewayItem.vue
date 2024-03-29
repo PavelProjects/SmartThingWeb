@@ -5,6 +5,7 @@ import { CLOUD_IP, CLOUD_PORT, CloudApi } from '../../api/CloudApi'
 import { toast } from '../../utils/EventBus'
 import GatewayEditDialog from './GatewayEditDialog.vue'
 import InputField from '../fields/InputField.vue'
+import { useIntl } from 'vue-intl'
 
 export default {
   name: 'GatewayItem',
@@ -19,7 +20,9 @@ export default {
     InputField,
   },
   data() {
+    const intl = useIntl()
     return {
+      intl,
       token: undefined,
       showEditDialog: false,
       tokenData: {
@@ -40,28 +43,28 @@ export default {
     async saveGateway(gateway) {
       if (await CloudApi.updateGateway(gateway)) {
         toast.success({
-          caption: 'Gateway info updated'
+          caption: this.intl.formatMessage({ id: 'gateway.item.save.success' })
         })
         this.$emit('gatewaysUpdate')
         this.showEditDialog = false
       } else {
         toast.error({
-          caption: 'Failed to update gateway'
+          caption: this.intl.formatMessage({ id: 'gateway.item.save.error' })
         })
       }
     },
     async deleteGateway() {
-      if (confirm('Are you sure ypu want to delete gateway ' + this.gateway.name + '?')) {
+      if (confirm(this.intl.formatMessage({ id: 'gateway.item.delete.confirm' }, { name: this.gateway.name }))) {
         const res = await CloudApi.deleteGateway(this.gateway)
         if (res) {
           toast.success({
-            caption: 'Gateway was deleted'
+            caption: this.intl.formatMessage({ id: 'gateway.item.delete.success' })
           })
           this.$emit('gatewaysUpdate')
           router.push('/home')
         } else {
           toast.error({
-            caption: 'Failed to delete gateway'
+            caption: this.intl.formatMessage({ id: 'gateway.item.delete.error' })
           })
         }
       }
@@ -70,13 +73,13 @@ export default {
       const { token } = (await CloudApi.authGateway(this.gateway)) || {}
       if (token) {
         toast.info({
-          caption: 'Token generated',
+          caption: this.intl.formatMessage({ id: 'gateway.item.token.gen.success' }),
         })
         this.tokenData.token = token
         this.$emit('gatewaysUpdate')
       } else {
         toast.error({
-          caption: 'Failed to generate gateway token'
+          caption: this.intl.formatMessage({ id: 'gateway.item.token.gen.error' }),
         })
       }
     },
@@ -86,25 +89,23 @@ export default {
       }
       const { cloudIp, cloudPort, token } = this.tokenData
       if (!cloudIp) {
-        this.token = "Cloud ip can't be blank"
+        this.token = this.intl.formatMessage({ id: 'gateway.item.token.validation.ip.blank' })
         return
       }
       this.token = btoa(`${cloudIp}|${cloudPort}|${token}`)
     },
     async deleteToken() {
-      if (
-        !confirm('Are you sure? This action will delete token and disconnect gateway from cloud!')
-      ) {
+      if (!confirm(this.intl.formatMessage({ id: 'gateway.item.token.delete.confirm' }))) {
         return
       }
       if (await CloudApi.logoutGateway(this.gateway)) {
         toast.info({
-          caption: 'Token deleted'
+          caption: this.intl.formatMessage({ id: 'gateway.item.token.delete.success' })
         })
         this.$emit('gatewaysUpdate')
       } else {
         toast.error({
-          caption: 'Failed to logout gateway'
+          caption: this.intl.formatMessage({ id: 'gateway.item.token.delete.error' })
         })
       }
     }
@@ -117,7 +118,7 @@ export default {
     <div
       class="status"
       :style="{ background: gateway.online ? 'green' : 'red' }"
-      :title="gateway.online ? 'Online' : 'Offline'"
+      :title="intl.formatMessage({ id: 'gateway.item.status' }, { status: gateway.online })"
     ></div>
     <div class="info">
       <h2>{{ gateway.name }}</h2>
@@ -126,10 +127,18 @@ export default {
     <div class="menu" @click.stop="() => {}">
       <DotsVertical class="menu-icon" />
       <div class="menu-items">
-        <p @click.stop="showEditDialog = true">Edit</p>
-        <p @click.stop="deleteGateway">Delete</p>
-        <p v-if="gateway.haveToken" @click.stop="deleteToken">Delete token</p>
-        <p v-else @click.stop="generateToken">Token</p>
+        <p @click.stop="showEditDialog = true">
+          {{ intl.formatMessage({ id: 'gateway.item.button.edit' }) }}
+        </p>
+        <p @click.stop="deleteGateway">
+          {{ intl.formatMessage({ id: 'gateway.item.button.delete' }) }}
+        </p>
+        <p v-if="gateway.haveToken" @click.stop="deleteToken">
+          {{ intl.formatMessage({ id: 'gateway.item.button.token.delete' }) }}
+        </p>
+        <p v-else @click.stop="generateToken">
+          {{ intl.formatMessage({ id: 'gateway.item.button.token.gen' }) }}
+        </p>
       </div>
     </div>
   </div>
@@ -141,20 +150,22 @@ export default {
   />
   <PopUpDialog v-if="token" @close="token = undefined">
     <div class="list">
-      <h1 class="title">Connection token</h1>
+      <h1 class="title">
+        {{ intl.formatMessage({ id: 'gateway.item.connection.token' }) }}
+      </h1>
       <div class="list">
         <InputField
-          label="Cloud ip"
+          :label="intl.formatMessage({ id: 'gateway.item.cloud.ip' })"
           v-model="tokenData.cloudIp"
           :validationFailed="tokenData.cloudIp.length === 0"
         />
         <InputField
-          label="Cloud port"
+          :label="intl.formatMessage({ id: 'gateway.item.cloud.port' })"
           type="number"
           v-model="tokenData.cloudPort"
         />
         <InputField
-          label="Auth token"
+          :label="intl.formatMessage({ id: 'gateway.item.auth.token' })"
           v-model="tokenData.token"
           :validationFailed="tokenData.token.length === 0"
         />

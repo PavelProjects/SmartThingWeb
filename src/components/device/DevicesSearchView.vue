@@ -1,10 +1,8 @@
 <script>
-import { storeToRefs } from 'pinia'
 import { SearchApi } from '../../api/SearchDevicesApi'
 import { EventBus, REQUEST } from '../../utils/EventBus'
 import UpdateButton from '../controls/UpdateButton.vue'
 import DeviceItem from './DeviceItem.vue'
-import { useControlPanelStore } from '../../store/controlPanelStore'
 
 export default {
   components: {

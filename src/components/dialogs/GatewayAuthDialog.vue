@@ -1,4 +1,5 @@
 <script>
+import { useIntl } from 'vue-intl'
 import { GatewayApi } from '../../api/GatewayApi'
 import { useGatewayAuthStore } from '../../store/gatewayAuthStore'
 import LoadingButton from '../controls/LoadingButton.vue'
@@ -13,12 +14,14 @@ export default {
   },
   data() {
     const store = useGatewayAuthStore()
+    const intl = useIntl()
     return {
       loading: false,
       cloudToken: '',
       errorMessage: '',
       parsedToken: undefined,
       store,
+      intl,
     }
   },
   emits: ['close'],
@@ -64,31 +67,33 @@ export default {
 <template>
   <PopUpDialog @close="$emit('close')">
     <div class="gtw-auth-dialog">
-      <h1 class="title">Add cloud token</h1>
+      <h1 class="title">
+        {{ intl.formatMessage({ id: 'gateway.cloud.auth.title' }) }}
+      </h1>
       <InputField
-        label="Connection token"
+        :label="intl.formatMessage({ id: 'gateway.cloud.auth.conn.token' })"
         v-model="cloudToken"
         :validationFailed="cloudToken.length === 0"
         :errorMessage="errorMessage"
       />
       <div v-if="parsedToken" class="list">
         <InputField
-          label="Cloud ip"
+          :label="intl.formatMessage({ id: 'gateway.cloud.auth.ip' })"
           v-model="parsedToken.cloudIp"
           :validationFailed="parsedToken.cloudIp.length === 0"
         />
         <InputField
-          label="Cloud port"
+          :label="intl.formatMessage({ id: 'gateway.cloud.auth.port' })"
           type="number"
           v-model="parsedToken.cloudPort"
         />
         <InputField
-          label="Auth token"
+          :label="intl.formatMessage({ id: 'gateway.cloud.auth.token' })"
           v-model="parsedToken.token"
           :validationFailed="parsedToken.token.length === 0"
         />
         <LoadingButton @click="authenticate">
-          <h2>Connect</h2>
+          <h2>{{ intl.formatMessage({ id: 'gateway.cloud.auth.connect' }) }}</h2>
         </LoadingButton>
       </div>
     </div>

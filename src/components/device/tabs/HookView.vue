@@ -12,8 +12,11 @@ import DeleteSVG from 'vue-material-design-icons/Delete.vue'
 import SaveSVG from 'vue-material-design-icons/ContentSave.vue'
 import CancelSVG from 'vue-material-design-icons/WindowClose.vue'
 import EditSVG from 'vue-material-design-icons/Pencil.vue'
+import { useIntl } from 'vue-intl'
 
 const SYSTEM_FIELDS = ['id', 'type', 'readonly']
+
+//todo fields names select from messages in intl
 
 export default {
   name: 'HookView',
@@ -35,7 +38,9 @@ export default {
     EditSVG,
   },
   data() {
+    const intl = useIntl()
     return {
+      intl,
       hook: this.hookProp,
       editing: this.hookProp.id == NEW_HOOK_ID,
       haveChanges: this.hookProp.id == NEW_HOOK_ID,
@@ -91,8 +96,8 @@ export default {
       if (!this.validate()) {
         console.error('Validation failed: ' + this.validationFailed)
         toast.error({
-          caption: 'Validation failed',
-          description: `This fields cannot be empty: ${this.validationFailed}`
+          caption: this.intl.formatMessage({ id: 'device.hook.validation.error' }),
+          description: this.intl.formatMessage({ id: 'device.hook.validation.error.desc' }, { fields: this.validationFailed })
         })
         return
       }
@@ -106,7 +111,6 @@ export default {
           saveFunc = DeviceApi.createHook
         }
         if (await saveFunc(this.device, this.observable, this.hook, this.gateway)) {
-          console.info('Hook was saved')
           this.$emit('update')
           this.editing = false
           this.haveChanges = false
@@ -120,7 +124,7 @@ export default {
         console.error('Hook id is missing')
         return
       }
-      if (confirm('Are you sure you wan to delete hook ' + this.hook.id + '?')) {
+      if (confirm(this.intl.formatMessage({ id: 'device.hook.delete.confirm' }, { id: this.hook.id} ))) {
         this.loading = true
         try {
           if (
@@ -200,7 +204,9 @@ export default {
           <SaveSVG v-if="editing" :onClick="saveHook" :loading="loading" />
         </div>
         <div v-else>
-          <h3 style="text-align: center">Readonly</h3>
+          <h3 style="text-align: center">
+            {{ intl.formatMessage({ id: 'device.hook.readonly' }) }}
+          </h3>
         </div>
       </div>
     </div>
