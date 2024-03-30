@@ -66,6 +66,6 @@ export default {
 #control-panel {
   margin: 0 auto;
   padding: var(--padding-default);
-  width: 700px;
+  width: 800px;
 }
 </style>

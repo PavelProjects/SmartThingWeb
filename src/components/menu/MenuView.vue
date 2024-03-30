@@ -131,6 +131,7 @@ export default {
 .menu-items {
   display: flex;
   height: fit-content;
+  overflow: auto;
 }
 .menu-item-content {
   position: relative;
