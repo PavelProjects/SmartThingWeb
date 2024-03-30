@@ -8,6 +8,7 @@ import MetricsViewVue from './tabs/MetricsView.vue'
 import MenuView from '../menu/MenuView.vue'
 import { storeToRefs } from 'pinia'
 import { useControlPanelStore } from '../../store/controlPanelStore'
+import { useIntl } from 'vue-intl'
 
 export default {
   name: 'DeviceControlPanel',
@@ -22,38 +23,32 @@ export default {
     }
   },
   data() {
-    const props = {}
+    const intl = useIntl()
     return {
       tabs: {
         info: {
           class: DeviceInfoView,
-          caption: 'Information',
-          props
+          caption: intl.formatMessage({ id: 'device.tabs' }, { tab: 'info' }),
         },
         actions: {
           class: ActionsView,
-          caption: 'Actions',
-          props
+          caption: intl.formatMessage({ id: 'device.tabs' }, { tab: 'actions' }),
         },
         sensors: {
           class: SensorsView,
-          caption: 'Sensors',
-          props
+          caption: intl.formatMessage({ id: 'device.tabs' }, { tab: 'sensors' }),
         },
         states: {
           class: StatesView,
-          caption: 'States',
-          props
+          caption: intl.formatMessage({ id: 'device.tabs' }, { tab: 'states' }),
         },
         config: {
           class: ConfigView,
-          caption: 'Configuration',
-          props
+          caption: intl.formatMessage({ id: 'device.tabs' }, { tab: 'config' }),
         },
         metrics: {
           class: MetricsViewVue,
-          caption: 'Metrics',
-          props
+          caption: intl.formatMessage({ id: 'device.tabs' }, { tab: 'metrics' }),
         }
       }
     }

@@ -1,4 +1,5 @@
 <script>
+import { useIntl } from 'vue-intl'
 import { SearchApi } from '../../api/SearchDevicesApi'
 import { EventBus, REQUEST } from '../../utils/EventBus'
 import UpdateButton from '../controls/UpdateButton.vue'
@@ -15,7 +16,9 @@ export default {
     gateway: Object
   },
   data() {
+    const intl = useIntl()
     return {
+      intl,
       devices: {},
       loading: false,
       selectedIp: undefined
@@ -71,7 +74,7 @@ export default {
 <template>
   <div>
     <div style="position: relative">
-      <h1 class="title">{{ !!title ? title : 'Found devices' }}</h1>
+      <h1 class="title">{{ !!title ? title : intl.formatMessage({ id: 'devices.search' }) }}</h1>
       <UpdateButton class="update" :loading="loading" :onClick="search" />
     </div>
     <div class="search-results">

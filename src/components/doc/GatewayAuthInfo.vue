@@ -46,9 +46,10 @@ export default {
   },
   computed: {
     connectionStatus() {
+      const mappedStatus = this.intl.formatMessage
       return this.intl.formatMessage(
         { id: 'gateway.cloud.conn.status' },
-        { status: this.status.toLowerCase().replaceAll('_', ' ') }
+        { status: this.status }
       )
     }
   },

@@ -98,7 +98,7 @@ export default {
           :key="name"
           :id="name"
           :title="tabTitle"
-          :caption="caption"
+          :caption="caption ?? name"
           :selected="currentTab === name"
           @select="switchTab(name)"
         />
