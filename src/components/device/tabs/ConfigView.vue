@@ -45,10 +45,10 @@ export default {
       }
     },
     async loadConfigInfo() {
-      this.configInfo = await DeviceApi.getDeviceConfigInfo(this.device, this.gateway) ?? {}
+      this.configInfo = (await DeviceApi.getDeviceConfigInfo(this.device, this.gateway)) ?? {}
     },
     async loadConfigValues() {
-      this.values = await DeviceApi.getConfig(this.device, this.gateway) ?? {}
+      this.values = (await DeviceApi.getConfig(this.device, this.gateway)) ?? {}
     },
     async saveConfig() {
       this.saveLoading = true
@@ -71,7 +71,7 @@ export default {
           this.deleteLoading = false
         }
       }
-    },
+    }
   }
 }
 </script>
@@ -83,21 +83,9 @@ export default {
     </h1>
     <sync-loader class="loading-spinner" :loading="loading"></sync-loader>
     <div v-if="haveConfigEntries" class="config-inputs list">
-      <div
-        v-for="[key, { caption, type }] of Object.entries(this.configInfo)"
-        :key="key"
-      >
-        <CheckBoxField
-          v-if="type === 'boolean'"
-          :label="caption"
-          v-model="values[key]"
-        />
-        <InputField
-          v-else
-          :label="caption"
-          :type="type"
-          v-model="values[key]"
-        />
+      <div v-for="[key, { caption, type }] of Object.entries(this.configInfo)" :key="key">
+        <CheckBoxField v-if="type === 'boolean'" :label="caption" v-model="values[key]" />
+        <InputField v-else :label="caption" :type="type" v-model="values[key]" />
       </div>
       <div class="controls-holder">
         <LoadingButton class="delete" :loading="deleteLoading" @click="deleteAllValues">

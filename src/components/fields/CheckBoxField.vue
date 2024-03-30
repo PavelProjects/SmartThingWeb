@@ -13,7 +13,7 @@ export default {
       default: false
     }
   },
-  emits: ["update:modelValue"],
+  emits: ['update:modelValue'],
   computed: {
     notValid() {
       return this.required && !this.modelValue
@@ -35,9 +35,9 @@ export default {
 </template>
 
 <style scoped>
-  input {
-    margin: auto 0;
-    height: 20px;
-    width: 20px;
-  }
+input {
+  margin: auto 0;
+  height: 20px;
+  width: 20px;
+}
 </style>

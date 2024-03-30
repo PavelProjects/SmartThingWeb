@@ -18,9 +18,9 @@ export default {
       type: Boolean,
       default: false
     },
-    errorMessage: String,
+    errorMessage: String
   },
-  emits: ["update:modelValue"],
+  emits: ['update:modelValue'],
   methods: {
     emitUpdate(value) {
       let v = value
@@ -29,27 +29,29 @@ export default {
       }
       this.$emit('update:modelValue', v)
     }
-  },
+  }
 }
 </script>
 
 <template>
-  <div class="field-container" :title="title">
-    <h2 v-if="label" class="field-label">{{ label }}</h2>
-    <div class="input-with-slot">
-      <input
-        :id="testId"
-        :value="modelValue"
-        :disabled="disabled"
-        :type="type"
-        :class="{ required: validationFailed }"
-        @input="emitUpdate($event.target.value)"
-      />
-      <slot></slot>
+  <div>
+    <div class="field-container" :title="title">
+      <h2 v-if="label" class="field-label">{{ label }}</h2>
+      <div class="input-with-slot">
+        <input
+          :id="testId"
+          :value="modelValue"
+          :disabled="disabled"
+          :type="type"
+          :class="{ required: validationFailed }"
+          @input="emitUpdate($event.target.value)"
+        />
+        <slot></slot>
+      </div>
     </div>
-  </div>
-  <div v-if="errorMessage">
-    <h3 class="error-message">{{ errorMessage }}</h3>
+    <div v-if="errorMessage">
+      <h3 class="error-message">{{ errorMessage }}</h3>
+    </div>
   </div>
 </template>
 

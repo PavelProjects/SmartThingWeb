@@ -19,30 +19,26 @@ export default {
       messages: [],
       colors: {},
       stompClient,
-      idSeq: 0,
+      idSeq: 0
     }
   },
   async mounted() {
-
     this.messages = await GatewayApi.getLogs()
     this.messages.reverse()
 
     this.stompClient.unsubscribe('/devices/logs')
-    this.stompClient.subscribe(
-      '/devices/logs',
-      (message) => {
-        if (message && message.body) {
-          console.debug(`Device log  message: ${message.body}`)
-          const parsed = JSON.parse(message.body)
-          if (!parsed?.device?.ip  || !parsed?.device?.name) {
-            console.error("Davice name or ip in log message is missing!")
-            return
-          }
-          parsed.id = this.idSeq++;
-          this.messages.unshift(parsed)
+    this.stompClient.subscribe('/devices/logs', (message) => {
+      if (message && message.body) {
+        console.debug(`Device log  message: ${message.body}`)
+        const parsed = JSON.parse(message.body)
+        if (!parsed?.device?.ip || !parsed?.device?.name) {
+          console.error('Davice name or ip in log message is missing!')
+          return
         }
+        parsed.id = this.idSeq++
+        this.messages.unshift(parsed)
       }
-    )
+    })
     console.debug('Subscribed to the logs topic')
   },
   unmounted() {

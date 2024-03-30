@@ -18,7 +18,7 @@ export default {
       intl,
       states: {},
       loading: false,
-      tabs: {},
+      tabs: {}
     }
   },
   created() {

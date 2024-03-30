@@ -18,16 +18,13 @@ const GatewaySearhApi = {
     const searchTopic = import.meta.env.VITE_GATEWAY_SEARCH_TOPIC
     console.debug('Subscribing to search topic ' + searchTopic)
     unsubscribe(searchTopic)
-    subscribe(
-      searchTopic,
-      (message) => {
-        if (message && message.body) {
-          onDeviceFound(JSON.parse(message.body))
-        } else {
-          console.warn('Empty topic message')
-        }
+    subscribe(searchTopic, (message) => {
+      if (message && message.body) {
+        onDeviceFound(JSON.parse(message.body))
+      } else {
+        console.warn('Empty topic message')
       }
-    )
+    })
 
     setTimeout(() => {
       unsubscribe(searchTopic)

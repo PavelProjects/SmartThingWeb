@@ -1,5 +1,4 @@
 import axios from 'axios'
-import { Client } from '@stomp/stompjs'
 import { toast } from '../utils/EventBus'
 
 const GATEWAY_PATH = import.meta.env.VITE_GATEWAY_IP || document.location.hostname

@@ -1,6 +1,5 @@
 @import './base.css';
 
-
 a,
 .green {
   text-decoration: none;
@@ -176,7 +175,7 @@ textarea {
   align-items: center;
 }
 .log-message-container:last-child {
-  border-right: none
+  border-right: none;
 }
 
 .menu-selected {

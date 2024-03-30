@@ -19,14 +19,14 @@ export default {
     const store = useGatewayAuthStore()
     const stompClient = useStompClientStore()
     const intl = useIntl()
-    
+
     return {
       store,
       intl,
       stompClient,
       dialogVisible: false,
       authDialogVisible: false,
-      status: '',
+      status: ''
     }
   },
   mounted() {
@@ -34,18 +34,15 @@ export default {
     this.loadCloudConfig()
     this.getConnStatus()
 
-    this.stompClient.subscribe(
-      "/connection/status",
-      (message) => {
-        if (message && message.body) {
-          const data = JSON.parse(message.body)
-          this.status = data.status
-        }
+    this.stompClient.subscribe('/connection/status', (message) => {
+      if (message && message.body) {
+        const data = JSON.parse(message.body)
+        this.status = data.status
       }
-    )
+    })
   },
   unmounted() {
-    this.stompClient.unsubscribe("/connection/status")
+    this.stompClient.unsubscribe('/connection/status')
   },
   computed: {
     connectionStatus() {
@@ -66,7 +63,7 @@ export default {
       this.store.setAuthentication(await GatewayApi.getCloudAuthentication())
     },
     async connect() {
-      if (!await GatewayApi.cloudConnect()) {
+      if (!(await GatewayApi.cloudConnect())) {
         toast.error({
           caption: this.intl.formatMessage({ id: 'gateway.cloud.conn.failed' })
         })
@@ -74,7 +71,7 @@ export default {
     },
     async disconnect() {
       if (confirm(this.intl.formatMessage({ id: 'gateway.cloud.disconnect.confirm' }))) {
-        if (!await GatewayApi.cloudDisconnect()) {
+        if (!(await GatewayApi.cloudDisconnect())) {
           toast.error({
             caption: this.intl.formatMessage({ id: 'gateway.cloud.disconnect.failed' })
           })
@@ -83,7 +80,7 @@ export default {
     },
     async logout() {
       if (confirm(this.intl.formatMessage({ id: 'gateway.cloud.logout.confirm' }))) {
-        if(await GatewayApi.cloudLogout()) {
+        if (await GatewayApi.cloudLogout()) {
           toast.success({
             caption: this.intl.formatMessage({ id: 'gateway.cloud.logout.success' })
           })
@@ -98,7 +95,7 @@ export default {
     },
     authDialogCloseHandle() {
       this.authDialogVisible = false
-      if(this.store.gateway) {
+      if (this.store.gateway) {
         this.loadCloudConfig()
         this.connect()
       }
@@ -110,10 +107,7 @@ export default {
 <template>
   <div>
     <div class="status" @click="dialogVisible = !dialogVisible">
-      <h2 
-        class="title"
-        :title="intl.formatMessage({ id: 'gateway.cloud.conn.status.title' })"
-      >
+      <h2 class="title" :title="intl.formatMessage({ id: 'gateway.cloud.conn.status.title' })">
         {{ connectionStatus }}
       </h2>
     </div>
@@ -156,15 +150,10 @@ export default {
           >
             <h2>{{ intl.formatMessage({ id: 'gateway.cloud.reconnect' }) }}</h2>
           </LoadingButton>
-          <LoadingButton
-            v-if="status === 'CONNECTED'"
-            @click="disconnect"
-          >
+          <LoadingButton v-if="status === 'CONNECTED'" @click="disconnect">
             <h2>{{ intl.formatMessage({ id: 'gateway.cloud.disconnect' }) }}</h2>
           </LoadingButton>
-          <LoadingButton 
-            @click="logout"
-          >
+          <LoadingButton @click="logout">
             <h2>{{ intl.formatMessage({ id: 'log.out' }) }}</h2>
           </LoadingButton>
         </div>
@@ -173,10 +162,7 @@ export default {
         </button>
       </div>
     </div>
-    <GatewayAuthDialog 
-      v-if="authDialogVisible" 
-      @close="authDialogCloseHandle"
-    />
+    <GatewayAuthDialog v-if="authDialogVisible" @close="authDialogCloseHandle" />
   </div>
 </template>
 

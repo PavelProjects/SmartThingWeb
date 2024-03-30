@@ -12,13 +12,13 @@ export default {
   emits: ['select'],
   props: {
     title: String,
-    gateway: Object,
+    gateway: Object
   },
   data() {
     return {
       devices: {},
       loading: false,
-      selectedIp: undefined,
+      selectedIp: undefined
     }
   },
   watch: {

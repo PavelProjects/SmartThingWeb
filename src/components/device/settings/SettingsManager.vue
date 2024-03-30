@@ -67,8 +67,8 @@ export default {
 </template>
 
 <style scoped>
-  .container {
-    width: fit-content;
-    margin: 0 auto;
-  }
+.container {
+  width: fit-content;
+  margin: 0 auto;
+}
 </style>

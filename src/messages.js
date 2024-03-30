@@ -2,12 +2,12 @@ const defaultLocale = 'en'
 const currentLocale = navigator.language.slice(0, 2)
 
 const messages = {
-  'en': {
+  en: {
     'doc.title': 'SmartThing',
     'doc.home': 'Home',
     'doc.device.settings': 'Device settings',
     'doc.device.logs': 'Device logs',
-    'gateway': 'Gateway: {gateway}',
+    gateway: 'Gateway: {gateway}',
     'gateway.panel': 'Control panel',
     'gateway.cloud.auth.title': 'Add cloud token',
     'gateway.cloud.auth.conn.token': 'Connection token',
@@ -51,7 +51,8 @@ const messages = {
     'gateway.item.token.gen.success': 'Token generated',
     'gateway.item.token.gen.error': 'Failed to generate gateway token',
     'gateway.item.token.validation.ip.blank': "Cloud ip can't be blank",
-    'gateway.item.token.delete.confirm': 'Are you sure? This action will delete token and disconnect gateway from cloud!',
+    'gateway.item.token.delete.confirm':
+      'Are you sure? This action will delete token and disconnect gateway from cloud!',
     'gateway.item.token.delete.success': 'Token deleted',
     'gateway.item.token.delete.error': 'Failed to logout gateway',
     'gateway.item.status': `{
@@ -88,7 +89,8 @@ const messages = {
     'device.settings.editor.setting.empty.desc': 'Insert settings json',
     'device.settings.editor.updated': 'Settings updated!',
     'device.settings.editor.created': 'Settings created!',
-    'device.settings.editor.delete.confirm': 'This action will delete saved settings permanently. Are you sure?',
+    'device.settings.editor.delete.confirm':
+      'This action will delete saved settings permanently. Are you sure?',
     'device.settings.editor.delete.success': 'Settings deleted',
     'device.settings.editor.json.parse.error': 'JSON parse failed',
     'device.settings.editor.export.success': 'Export to  {name} finished!',
@@ -136,21 +138,21 @@ const messages = {
     'cloud.auth.logout.confirm': 'Are you sure?',
     'cloud.auth.info.user.id': 'id: {id}',
     'cloud.auth.info.user.login': 'login: {login}',
-    'login': 'Login',
-    'password': 'Password',
+    login: 'Login',
+    password: 'Password',
     'log.in': 'Log in',
     'log.out': 'Log out',
-    'error': `{ type, select,
+    error: `{ type, select,
       access_denied {Access denied}
       other { An error has occurred }
     }`
   },
-  'ru': {
+  ru: {
     'doc.title': 'SmartThing',
     'doc.home': 'Домашняя страница',
     'doc.device.settings': 'Настройки устройств',
     'doc.device.logs': 'Device logs',
-    'gateway': 'Gateway: {gateway}',
+    gateway: 'Gateway: {gateway}',
     'gateway.panel': 'Control panel',
     'gateway.cloud.auth.title': 'Add cloud token',
     'gateway.cloud.auth.conn.token': 'Connection token',
@@ -194,7 +196,8 @@ const messages = {
     'gateway.item.token.gen.success': 'Token generated',
     'gateway.item.token.gen.error': 'Failed to generate gateway token',
     'gateway.item.token.validation.ip.blank': "Cloud ip can't be blank",
-    'gateway.item.token.delete.confirm': 'Are you sure? This action will delete token and disconnect gateway from cloud!',
+    'gateway.item.token.delete.confirm':
+      'Are you sure? This action will delete token and disconnect gateway from cloud!',
     'gateway.item.token.delete.success': 'Token deleted',
     'gateway.item.token.delete.error': 'Failed to logout gateway',
     'gateway.item.status': `{
@@ -231,7 +234,8 @@ const messages = {
     'device.settings.editor.setting.empty.desc': 'Insert settings json',
     'device.settings.editor.updated': 'Settings updated!',
     'device.settings.editor.created': 'Settings created!',
-    'device.settings.editor.delete.confirm': 'This action will delete saved settings permanently. Are you sure?',
+    'device.settings.editor.delete.confirm':
+      'This action will delete saved settings permanently. Are you sure?',
     'device.settings.editor.delete.success': 'Settings deleted',
     'device.settings.editor.json.parse.error': 'JSON parse failed',
     'device.settings.editor.export.success': 'Export to  {name} finished!',
@@ -279,11 +283,11 @@ const messages = {
     'cloud.auth.logout.confirm': 'Are you sure?',
     'cloud.auth.info.user.id': 'id: {id}',
     'cloud.auth.info.user.login': 'login: {login}',
-    'login': 'Login',
-    'password': 'Password',
+    login: 'Login',
+    password: 'Password',
     'log.in': 'Log in',
     'log.out': 'Log out',
-    'error': `{ type, select,
+    error: `{ type, select,
       access_denied {Access denied}
       other { An error has occurred }
     }`

@@ -20,7 +20,7 @@ export default {
       intl,
       info: null,
       loading: false,
-      deviceName: '',
+      deviceName: ''
     }
   },
   created() {

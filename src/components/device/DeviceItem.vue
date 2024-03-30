@@ -25,7 +25,7 @@ export default {
     },
     header() {
       const { name, type } = this.device
-      return `${name} ${type ? "(" + type + ")" : ""}`
+      return `${name} ${type ? '(' + type + ')' : ''}`
     }
   }
 }

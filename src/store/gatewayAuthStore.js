@@ -1,11 +1,11 @@
-import { defineStore } from "pinia";
-import { useControlPanelStore } from "./controlPanelStore";
+import { defineStore } from 'pinia'
+import { useControlPanelStore } from './controlPanelStore'
 
 export const useGatewayAuthStore = defineStore({
   id: 'gateway_auth_store',
   state: () => ({
     user: undefined,
-    gateway: undefined,
+    gateway: undefined
   }),
   actions: {
     setAuthentication(authInfo) {

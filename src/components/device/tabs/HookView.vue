@@ -35,7 +35,7 @@ export default {
     DeleteSVG,
     SaveSVG,
     CancelSVG,
-    EditSVG,
+    EditSVG
   },
   data() {
     const intl = useIntl()
@@ -97,7 +97,10 @@ export default {
         console.error('Validation failed: ' + this.validationFailed)
         toast.error({
           caption: this.intl.formatMessage({ id: 'device.hook.validation.error' }),
-          description: this.intl.formatMessage({ id: 'device.hook.validation.error.desc' }, { fields: this.validationFailed })
+          description: this.intl.formatMessage(
+            { id: 'device.hook.validation.error.desc' },
+            { fields: this.validationFailed }
+          )
         })
         return
       }
@@ -124,16 +127,13 @@ export default {
         console.error('Hook id is missing')
         return
       }
-      if (confirm(this.intl.formatMessage({ id: 'device.hook.delete.confirm' }, { id: this.hook.id} ))) {
+      if (
+        confirm(this.intl.formatMessage({ id: 'device.hook.delete.confirm' }, { id: this.hook.id }))
+      ) {
         this.loading = true
         try {
           if (
-            await DeviceApi.deleteHook(
-              this.device,
-              this.observable,
-              this.hook.id,
-              this.gateway
-            )
+            await DeviceApi.deleteHook(this.device, this.observable, this.hook.id, this.gateway)
           ) {
             this.$emit('update')
           }

@@ -4,7 +4,7 @@ import HookView from './HookView.vue'
 import { DeviceApi } from '../../../api/device/DeviceApi.js'
 import ComboBoxField from '../../fields/ComboBoxField.vue'
 import SyncLoader from 'vue-spinner/src/SyncLoader.vue'
-import { intlKey, useIntl } from 'vue-intl'
+import { useIntl } from 'vue-intl'
 
 export const NEW_HOOK_ID = 'New'
 
@@ -27,7 +27,7 @@ export default {
       hooks: [],
       templates: {},
       selectedType: null,
-      loading: false,
+      loading: false
     }
   },
   computed: {
@@ -53,8 +53,7 @@ export default {
       this.loading = false
     },
     async loadHooks() {
-      this.hooks =
-        (await DeviceApi.getHooks(this.device, this.observable, this.gateway)) || []
+      this.hooks = (await DeviceApi.getHooks(this.device, this.observable, this.gateway)) || []
     },
     async loadTemplates() {
       this.templates = (await DeviceApi.getHooksTemplates(this.device, this.gateway)) || {}
@@ -95,7 +94,7 @@ export default {
       />
       <div v-if="hooks.length > 0" class="hooks-list-view list">
         <HookView
-          v-for="hook, index in hooks"
+          v-for="(hook, index) in hooks"
           :key="hook.id"
           :observable="observable"
           :hookProp="hook"

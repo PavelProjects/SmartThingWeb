@@ -1,6 +1,5 @@
-import { Client } from '@stomp/stompjs'
 import axios from 'axios'
-import { EventBus, toast } from '../utils/EventBus'
+import { toast } from '../utils/EventBus'
 
 export const CLOUD_IP = import.meta.env.VITE_CLOUD_IP || document.location.hostname
 export const CLOUD_PORT = import.meta.env.VITE_CLOUD_PORT
@@ -23,7 +22,7 @@ const URL_GATEWAY_DELETE = '/gateway/management/delete'
 const axiosInstance = axios.create({
   baseURL: `http://${CLOUD_IP}:${CLOUD_PORT}`,
   timeout: 5000,
-  withCredentials: true,
+  withCredentials: true
 })
 
 const CloudApi = {
@@ -78,15 +77,15 @@ const CloudApi = {
     }
   },
   async getGateway(id) {
-  try {
-    const response = await axiosInstance.get(`${URL_GATEWAY_BY_ID}/${id}`)
-    return response.data
-  } catch (error) {
-    console.error(error)
-    toast.error({
-      caption: 'Failed to load gateway ' + id
-    })
-  }
+    try {
+      const response = await axiosInstance.get(`${URL_GATEWAY_BY_ID}/${id}`)
+      return response.data
+    } catch (error) {
+      console.error(error)
+      toast.error({
+        caption: 'Failed to load gateway ' + id
+      })
+    }
   },
   async getGatewaysList() {
     try {

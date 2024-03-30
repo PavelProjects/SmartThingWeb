@@ -5,7 +5,7 @@ import LoadingButton from '../controls/LoadingButton.vue'
 import PopUpDialog from '../dialogs/PopUpDialog.vue'
 import InputField from '../fields/InputField.vue'
 
-const NAME_MAX_LENGTH = 32;
+const NAME_MAX_LENGTH = 32
 
 export default {
   name: 'GatewayEditDialog',
@@ -25,9 +25,9 @@ export default {
   computed: {
     buttonTitle() {
       const { id } = this.gateway || {}
-      return  this.intl.formatMessage(
+      return this.intl.formatMessage(
         { id: 'gateway.edit.button' },
-        { action: id ? 'update' : 'create'}
+        { action: id ? 'update' : 'create' }
       )
     }
   },
@@ -62,10 +62,7 @@ export default {
 <template>
   <PopUpDialog @close="$emit('close')">
     <div class="container">
-      <InputField
-        :label="intl.formatMessage({ id: 'gateway.edit.name' })"
-        v-model="name"
-      />
+      <InputField :label="intl.formatMessage({ id: 'gateway.edit.name' })" v-model="name" />
       <InputField
         :label="intl.formatMessage({ id: 'gateway.edit.description' })"
         v-model="description"
@@ -78,10 +75,10 @@ export default {
 </template>
 
 <style scoped>
-  .container {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-    padding: 5px;
-  }
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 5px;
+}
 </style>

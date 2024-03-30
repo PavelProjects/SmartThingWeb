@@ -14,19 +14,19 @@ export default {
   },
   data() {
     const { gateway, device } = storeToRefs(useControlPanelStore())
-    const intl = useIntl();
+    const intl = useIntl()
     return {
       gateway,
       device,
       intl,
-      gatewayId: this.$route.params.gateway,
+      gatewayId: this.$route.params.gateway
     }
   },
   async mounted() {
     if (!this.gateway && this.gatewayId && import.meta.env.VITE_MODE === 'cloud') {
-      this.gateway = await CloudApi.getGateway(this.gatewayId);
+      this.gateway = await CloudApi.getGateway(this.gatewayId)
     }
-  },
+  }
 }
 </script>
 
@@ -34,10 +34,10 @@ export default {
   <div class="list">
     <div class="devices-table">
       <div v-if="!gatewayId || gateway">
-        <DevicesSearchView 
+        <DevicesSearchView
           class="search"
           :gateway="gateway"
-          @select="(deviceInfo) => device = deviceInfo"
+          @select="(deviceInfo) => (device = deviceInfo)"
         />
         <div v-if="device">
           <h1 class="title">{{ intl.formatMessage({ id: 'gateway.panel' }) }}</h1>
@@ -47,7 +47,7 @@ export default {
         </div>
       </div>
       <div v-else style="color: red">
-        <h1>{{ intl.formatMessage({ 'id': 'error' }, { 'type': 'access_denied' }) }}</h1>
+        <h1>{{ intl.formatMessage({ id: 'error' }, { type: 'access_denied' }) }}</h1>
       </div>
     </div>
   </div>

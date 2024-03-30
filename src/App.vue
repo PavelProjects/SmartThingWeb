@@ -9,13 +9,17 @@ import { useStompClientStore } from './store/stompClientStore'
 
 export default {
   components: {
-    HeaderDoc, ToatsView, CloudAuthDialog
+    HeaderDoc,
+    ToatsView,
+    CloudAuthDialog
   },
   data() {
     const { id, login, setAuthentication } = storeToRefs(useCloudAuthStore())
     return {
       mode: import.meta.env.VITE_MODE,
-      id, login, setAuthentication,
+      id,
+      login,
+      setAuthentication
     }
   },
   computed: {
@@ -32,9 +36,9 @@ export default {
       this.id = ''
       return
     }
-    const { user } = await CloudApi.getAuthentication() ?? {}
+    const { user } = (await CloudApi.getAuthentication()) ?? {}
     this.setAuthentication(user)
-  },
+  }
 }
 </script>
 
@@ -43,7 +47,7 @@ export default {
     <HeaderDoc class="doc" />
     <ToatsView id="toasts-list" />
 
-    <CloudAuthDialog 
+    <CloudAuthDialog
       v-if="!isAuthenticated"
       @authenticated="({ user }) => setAuthentication(user)"
     />

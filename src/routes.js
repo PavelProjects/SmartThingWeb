@@ -7,7 +7,7 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 const mode = import.meta.env.VITE_MODE
 
 const unkownRoute = {
-  path: "/:pathMatch(.*)*",
+  path: '/:pathMatch(.*)*',
   redirect: '/'
 }
 

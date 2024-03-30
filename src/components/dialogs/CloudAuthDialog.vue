@@ -32,7 +32,7 @@ export default {
       }
       this.loading = true
       try {
-        const auth = await CloudApi.authUser(this.login, this.password) ?? {}
+        const auth = (await CloudApi.authUser(this.login, this.password)) ?? {}
         this.$emit('authenticated', auth)
       } finally {
         this.loading = false
@@ -45,11 +45,7 @@ export default {
 <template>
   <PopUpDialog>
     <div class="container">
-      <InputField
-        :label="intl.formatMessage({ id: 'login' })"
-        v-model="login"
-        type="login"
-      />
+      <InputField :label="intl.formatMessage({ id: 'login' })" v-model="login" type="login" />
       <InputField
         :label="intl.formatMessage({ id: 'password' })"
         v-model="password"
@@ -63,10 +59,10 @@ export default {
 </template>
 
 <style scoped>
-  .container {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-    padding: 5px;
-  }
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 5px;
+}
 </style>

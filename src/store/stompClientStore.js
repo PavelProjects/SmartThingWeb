@@ -1,8 +1,8 @@
-import { Client } from "@stomp/stompjs";
-import { defineStore } from "pinia";
-import { GATEWAY_BROKER_URL } from "../api/GatewayApi";
-import { CLOUD_BROKER_URL } from "../api/CloudApi";
-import { EventBus, LOGGED_IN, LOGGED_OUT, TOAST, WS_CONNECTED } from "../utils/EventBus";
+import { Client } from '@stomp/stompjs'
+import { defineStore } from 'pinia'
+import { GATEWAY_BROKER_URL } from '../api/GatewayApi'
+import { CLOUD_BROKER_URL } from '../api/CloudApi'
+import { EventBus, LOGGED_IN, LOGGED_OUT, TOAST, WS_CONNECTED } from '../utils/EventBus'
 
 export const useStompClientStore = defineStore({
   id: 'stomp_client',
@@ -10,12 +10,13 @@ export const useStompClientStore = defineStore({
     const env = import.meta.env
     const mode = env.VITE_MODE
     const brokerURL = mode === 'gateway' ? GATEWAY_BROKER_URL : CLOUD_BROKER_URL
-    const notifyTopic = mode === 'gateway' ? env.VITE_GATEWAY_NOTIFCATION_TOPIC : env.VITE_CLOUD_NOTIFCATION_TOPIC
+    const notifyTopic =
+      mode === 'gateway' ? env.VITE_GATEWAY_NOTIFCATION_TOPIC : env.VITE_CLOUD_NOTIFCATION_TOPIC
 
     const client = new Client({ brokerURL })
     console.debug(`WebSocket broker url: ${brokerURL}`)
     client.onConnect = () => {
-      console.debug("Connected to web socket")
+      console.debug('Connected to web socket')
       EventBus.emit(WS_CONNECTED)
 
       client.subscribe(
@@ -39,7 +40,7 @@ export const useStompClientStore = defineStore({
         },
         { id: 'notification' }
       )
-      console.debug("Subscribed to notification topic: " + notifyTopic)
+      console.debug('Subscribed to notification topic: ' + notifyTopic)
     }
 
     if (mode === 'gateway') {
@@ -64,13 +65,13 @@ export const useStompClientStore = defineStore({
         EventBus.on(WS_CONNECTED, () => promiseResolver())
         await promise
       }
-      this.client.subscribe(topic, callback, { id: topic + "_topic" })
+      this.client.subscribe(topic, callback, { id: topic + '_topic' })
     },
     unsubscribe(topic) {
       if (!this.client.connected) {
         return
       }
-      this.client.unsubscribe(topic + "_topic")
+      this.client.unsubscribe(topic + '_topic')
     }
   }
 })

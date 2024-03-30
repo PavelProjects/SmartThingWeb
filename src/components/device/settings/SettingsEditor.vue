@@ -68,14 +68,14 @@ export default {
             ...this.newSettings
           }
           if (await GatewayApi.updateDeviceSettings(payload)) {
-            toast.success({ 
+            toast.success({
               caption: this.intl.formatMessage({ id: 'device.settings.editor.updated' })
             })
             this.$emit('changed', this.newSettings.name)
           }
         } else {
           if (await GatewayApi.createDeviceSettings(this.newSettings)) {
-            toast.success({ 
+            toast.success({
               caption: this.intl.formatMessage({ id: 'device.settings.editor.created' })
             })
             this.$emit('changed', this.newSettings.name)
@@ -127,12 +127,10 @@ export default {
         })
         return
       }
-      
+
       await this.save()
       this.loading = true
-      if (
-        await DeviceApi.importSettings(this.selectedDevice, {}, settings)
-      ) {
+      if (await DeviceApi.importSettings(this.selectedDevice, {}, settings)) {
         toast.success({
           caption: this.intl.formatMessage(
             { id: 'device.settings.editor.export.success' },
@@ -165,38 +163,31 @@ export default {
       <textarea class="editor" v-model="newSettings.value"></textarea>
       <div class="controls">
         <LoadingButton @click="save" :loading="loading">
-          <h2>{{ 
-            intl.formatMessage(
-              { id: 'device.settings.editor.button' },
-              { action: settings.name ? 'update' : 'create' }
-            )
-          }}</h2>
+          <h2>
+            {{
+              intl.formatMessage(
+                { id: 'device.settings.editor.button' },
+                { action: settings.name ? 'update' : 'create' }
+              )
+            }}
+          </h2>
         </LoadingButton>
         <LoadingButton v-if="settings.name" @click="deleteSettings" class="delete">
-          <h2>{{ 
-            intl.formatMessage(
-              { id: 'device.settings.editor.button' },
-              { action: 'delete' }
-            )
-          }}</h2>
+          <h2>
+            {{ intl.formatMessage({ id: 'device.settings.editor.button' }, { action: 'delete' }) }}
+          </h2>
         </LoadingButton>
       </div>
       <div class="controls">
         <button v-if="settings.name" class="btn" @click="handleExportBtn">
-          <h2>{{ 
-            intl.formatMessage(
-              { id: 'device.settings.editor.button' },
-              { action: 'export' }
-            )
-          }}</h2>
+          <h2>
+            {{ intl.formatMessage({ id: 'device.settings.editor.button' }, { action: 'export' }) }}
+          </h2>
         </button>
         <button v-else class="btn" @click="handleImportBtn">
-          <h2>{{ 
-            intl.formatMessage(
-              { id: 'device.settings.editor.button' },
-              { action: 'import' }
-            )
-          }}</h2>
+          <h2>
+            {{ intl.formatMessage({ id: 'device.settings.editor.button' }, { action: 'import' }) }}
+          </h2>
         </button>
       </div>
     </div>

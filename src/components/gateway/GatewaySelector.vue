@@ -5,7 +5,6 @@ import { toast } from '../../utils/EventBus'
 import GatewayItem from './GatewayItem.vue'
 import GatewayEditDialog from './GatewayEditDialog.vue'
 import UpdateButton from '../controls/UpdateButton.vue'
-import PopUpDialog from '../dialogs/PopUpDialog.vue'
 import { useControlPanelStore } from '../../store/controlPanelStore'
 import { useIntl } from 'vue-intl'
 
@@ -14,8 +13,7 @@ export default {
   components: {
     GatewayItem,
     GatewayEditDialog,
-    UpdateButton,
-    PopUpDialog,
+    UpdateButton
   },
   data() {
     const intl = useIntl()
@@ -25,7 +23,7 @@ export default {
       controlPanelStore,
       gateways: [],
       loading: false,
-      showCreateDialog: false,
+      showCreateDialog: false
     }
   },
   async mounted() {
@@ -60,7 +58,7 @@ export default {
           caption: this.intl.formatMessage({ id: 'gateway.create.error' })
         })
       }
-    },
+    }
   }
 }
 </script>

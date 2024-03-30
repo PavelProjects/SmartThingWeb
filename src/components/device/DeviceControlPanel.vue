@@ -18,7 +18,7 @@ export default {
     const { device, gateway } = storeToRefs(useControlPanelStore())
     return {
       device,
-      gateway,
+      gateway
     }
   },
   data() {

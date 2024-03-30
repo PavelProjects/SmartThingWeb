@@ -19,7 +19,7 @@ export default {
       default: false
     }
   },
-  emits: ["update:modelValue"],
+  emits: ['update:modelValue'],
   computed: {
     mapedItems() {
       if (Array.isArray(this.items)) {

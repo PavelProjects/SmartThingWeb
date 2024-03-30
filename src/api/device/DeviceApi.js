@@ -76,7 +76,7 @@ export const DeviceApi = {
       toast.success({
         caption: 'Device name updated!'
       })
-      return true
+      return result.status === 200
     } catch (error) {
       console.error(error)
       const { error: description } = await extractDataFromError(error)
@@ -108,7 +108,7 @@ export const DeviceApi = {
       toast.success({
         caption: 'Config updated'
       })
-      return true
+      return result.status === 200
     } catch (error) {
       console.error(error)
       const { error: description } = await extractDataFromError(error)
@@ -131,7 +131,7 @@ export const DeviceApi = {
       toast.success({
         caption: 'Config value deleted'
       })
-      return true
+      return result.status === 200
     } catch (error) {
       console.error(error)
       const { error: description } = await extractDataFromError(error)
@@ -151,7 +151,7 @@ export const DeviceApi = {
       toast.success({
         caption: 'Config deleted'
       })
-      return true
+      return result.status === 200
     } catch (error) {
       console.error(error)
       const { error: description } = await extractDataFromError(error)
@@ -174,7 +174,7 @@ export const DeviceApi = {
       toast.success({
         caption: 'Done'
       })
-      return true
+      return result.status === 200
     } catch (error) {
       console.error(error)
       const { error: description } = await extractDataFromError(error)
@@ -308,7 +308,7 @@ export const DeviceApi = {
       toast.success({
         caption: 'Hook updated'
       })
-      return true
+      return result.status === 200
     } catch (error) {
       console.error(error)
       const { error: description } = await extractDataFromError(error)
@@ -330,7 +330,7 @@ export const DeviceApi = {
       toast.success({
         caption: 'Hook deleted'
       })
-      return true
+      return result.status === 200
     } catch (error) {
       console.error(error)
       const { error: description } = await extractDataFromError(error)

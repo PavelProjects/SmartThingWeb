@@ -1,17 +1,19 @@
 <script>
-import { storeToRefs } from 'pinia';
+import { storeToRefs } from 'pinia'
 import { useCloudAuthStore } from '../../store/cloudAuthStore'
-import { CloudApi } from '../../api/CloudApi';
-import { useIntl } from 'vue-intl';
+import { CloudApi } from '../../api/CloudApi'
+import { useIntl } from 'vue-intl'
 export default {
   data() {
     const intl = useIntl()
-    const cloudAuthStore = useCloudAuthStore();
-    const { id, login } = storeToRefs(cloudAuthStore);
+    const cloudAuthStore = useCloudAuthStore()
+    const { id, login } = storeToRefs(cloudAuthStore)
     return {
-      id, login, cloudAuthStore,
+      id,
+      login,
+      cloudAuthStore,
       openDialog: false,
-      intl,
+      intl
     }
   },
   methods: {

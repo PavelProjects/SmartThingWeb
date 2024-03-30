@@ -10,7 +10,7 @@ export default {
   components: {
     InputField,
     PopUpDialog,
-    LoadingButton,
+    LoadingButton
   },
   data() {
     const store = useGatewayAuthStore()
@@ -21,7 +21,7 @@ export default {
       errorMessage: '',
       parsedToken: undefined,
       store,
-      intl,
+      intl
     }
   },
   emits: ['close'],
@@ -35,7 +35,9 @@ export default {
       let parsed = ''
       try {
         parsed = atob(this.cloudToken).split('|')
-      } catch (error) {}
+      } catch (error) {
+        console.debug(`Token parse error: ${error}`)
+      }
 
       if (parsed.length !== 3) {
         this.errorMessage = 'bad token'
@@ -45,7 +47,7 @@ export default {
       this.parsedToken = {
         cloudIp: parsed[0],
         cloudPort: parsed[1],
-        token: parsed[2],
+        token: parsed[2]
       }
     }
   },
@@ -56,7 +58,7 @@ export default {
       }
       this.loading = true
       this.store.setAuthentication(
-        await GatewayApi.cloudLogin(this.parsedToken).finally(() => this.loading = false)
+        await GatewayApi.cloudLogin(this.parsedToken).finally(() => (this.loading = false))
       )
       this.$emit('close')
     }
@@ -97,18 +99,18 @@ export default {
         </LoadingButton>
       </div>
     </div>
-  </PopUpDialog>  
+  </PopUpDialog>
 </template>
 
 <style scoped>
-  .gtw-auth-dialog {
-    display: flex;
-    flex-direction: column;
-    gap: calc(3 * var(--default-gap));
-    padding: var(--default-gap);
-    width: 500px;
-  }
-  .gtw-auth-dialog button {
-    flex: 1 0 auto;
-  }
+.gtw-auth-dialog {
+  display: flex;
+  flex-direction: column;
+  gap: calc(3 * var(--default-gap));
+  padding: var(--default-gap);
+  width: 500px;
+}
+.gtw-auth-dialog button {
+  flex: 1 0 auto;
+}
 </style>

@@ -6,6 +6,7 @@ import { toast } from '../../utils/EventBus'
 import GatewayEditDialog from './GatewayEditDialog.vue'
 import InputField from '../fields/InputField.vue'
 import { useIntl } from 'vue-intl'
+import { router } from '../../routes'
 
 export default {
   name: 'GatewayItem',
@@ -17,7 +18,7 @@ export default {
     DotsVertical,
     PopUpDialog,
     GatewayEditDialog,
-    InputField,
+    InputField
   },
   data() {
     const intl = useIntl()
@@ -33,10 +34,10 @@ export default {
   },
   watch: {
     tokenData: {
-      handler: function() {
+      handler: function () {
         this.buildToken()
       },
-      deep: true,
+      deep: true
     }
   },
   methods: {
@@ -54,7 +55,14 @@ export default {
       }
     },
     async deleteGateway() {
-      if (confirm(this.intl.formatMessage({ id: 'gateway.item.delete.confirm' }, { name: this.gateway.name }))) {
+      if (
+        confirm(
+          this.intl.formatMessage(
+            { id: 'gateway.item.delete.confirm' },
+            { name: this.gateway.name }
+          )
+        )
+      ) {
         const res = await CloudApi.deleteGateway(this.gateway)
         if (res) {
           toast.success({
@@ -73,19 +81,19 @@ export default {
       const { token } = (await CloudApi.authGateway(this.gateway)) || {}
       if (token) {
         toast.info({
-          caption: this.intl.formatMessage({ id: 'gateway.item.token.gen.success' }),
+          caption: this.intl.formatMessage({ id: 'gateway.item.token.gen.success' })
         })
         this.tokenData.token = token
         this.$emit('gatewaysUpdate')
       } else {
         toast.error({
-          caption: this.intl.formatMessage({ id: 'gateway.item.token.gen.error' }),
+          caption: this.intl.formatMessage({ id: 'gateway.item.token.gen.error' })
         })
       }
     },
     buildToken() {
       if (!this.tokenData) {
-        return;
+        return
       }
       const { cloudIp, cloudPort, token } = this.tokenData
       if (!cloudIp) {
@@ -114,65 +122,67 @@ export default {
 </script>
 
 <template>
-  <div class="gateway-item bordered" @click="$emit('click')">
-    <div
-      class="status"
-      :style="{ background: gateway.online ? 'green' : 'red' }"
-      :title="intl.formatMessage({ id: 'gateway.item.status' }, { status: gateway.online })"
-    ></div>
-    <div class="info">
-      <h2>{{ gateway.name }}</h2>
-      <h3>{{ gateway.description }}</h3>
-    </div>
-    <div class="menu" @click.stop="() => {}">
-      <DotsVertical class="menu-icon" />
-      <div class="menu-items">
-        <p @click.stop="showEditDialog = true">
-          {{ intl.formatMessage({ id: 'gateway.item.button.edit' }) }}
-        </p>
-        <p @click.stop="deleteGateway">
-          {{ intl.formatMessage({ id: 'gateway.item.button.delete' }) }}
-        </p>
-        <p v-if="gateway.haveToken" @click.stop="deleteToken">
-          {{ intl.formatMessage({ id: 'gateway.item.button.token.delete' }) }}
-        </p>
-        <p v-else @click.stop="generateToken">
-          {{ intl.formatMessage({ id: 'gateway.item.button.token.gen' }) }}
-        </p>
+  <div>
+    <div class="gateway-item bordered" @click="$emit('click')">
+      <div
+        class="status"
+        :style="{ background: gateway.online ? 'green' : 'red' }"
+        :title="intl.formatMessage({ id: 'gateway.item.status' }, { status: gateway.online })"
+      ></div>
+      <div class="info">
+        <h2>{{ gateway.name }}</h2>
+        <h3>{{ gateway.description }}</h3>
+      </div>
+      <div class="menu" @click.stop="() => {}">
+        <DotsVertical class="menu-icon" />
+        <div class="menu-items">
+          <p @click.stop="showEditDialog = true">
+            {{ intl.formatMessage({ id: 'gateway.item.button.edit' }) }}
+          </p>
+          <p @click.stop="deleteGateway">
+            {{ intl.formatMessage({ id: 'gateway.item.button.delete' }) }}
+          </p>
+          <p v-if="gateway.haveToken" @click.stop="deleteToken">
+            {{ intl.formatMessage({ id: 'gateway.item.button.token.delete' }) }}
+          </p>
+          <p v-else @click.stop="generateToken">
+            {{ intl.formatMessage({ id: 'gateway.item.button.token.gen' }) }}
+          </p>
+        </div>
       </div>
     </div>
-  </div>
-  <GatewayEditDialog
-    v-if="showEditDialog"
-    :gateway="gateway"
-    @save="saveGateway"
-    @close="showEditDialog = false"
-  />
-  <PopUpDialog v-if="token" @close="token = undefined">
-    <div class="list">
-      <h1 class="title">
-        {{ intl.formatMessage({ id: 'gateway.item.connection.token' }) }}
-      </h1>
+    <GatewayEditDialog
+      v-if="showEditDialog"
+      :gateway="gateway"
+      @save="saveGateway"
+      @close="showEditDialog = false"
+    />
+    <PopUpDialog v-if="token" @close="token = undefined">
       <div class="list">
-        <InputField
-          :label="intl.formatMessage({ id: 'gateway.item.cloud.ip' })"
-          v-model="tokenData.cloudIp"
-          :validationFailed="tokenData.cloudIp.length === 0"
-        />
-        <InputField
-          :label="intl.formatMessage({ id: 'gateway.item.cloud.port' })"
-          type="number"
-          v-model="tokenData.cloudPort"
-        />
-        <InputField
-          :label="intl.formatMessage({ id: 'gateway.item.auth.token' })"
-          v-model="tokenData.token"
-          :validationFailed="tokenData.token.length === 0"
-        />
+        <h1 class="title">
+          {{ intl.formatMessage({ id: 'gateway.item.connection.token' }) }}
+        </h1>
+        <div class="list">
+          <InputField
+            :label="intl.formatMessage({ id: 'gateway.item.cloud.ip' })"
+            v-model="tokenData.cloudIp"
+            :validationFailed="tokenData.cloudIp.length === 0"
+          />
+          <InputField
+            :label="intl.formatMessage({ id: 'gateway.item.cloud.port' })"
+            type="number"
+            v-model="tokenData.cloudPort"
+          />
+          <InputField
+            :label="intl.formatMessage({ id: 'gateway.item.auth.token' })"
+            v-model="tokenData.token"
+            :validationFailed="tokenData.token.length === 0"
+          />
+        </div>
+        <p class="token-field">{{ token }}</p>
       </div>
-      <p class="token-field">{{ token }}</p>
-    </div>
-  </PopUpDialog>
+    </PopUpDialog>
+  </div>
 </template>
 
 <style scoped>
