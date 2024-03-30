@@ -19,6 +19,7 @@ export default {
       messages: [],
       colors: {},
       stompClient,
+      idSeq: 0,
     }
   },
   async mounted() {
@@ -31,8 +32,13 @@ export default {
       '/devices/logs',
       (message) => {
         if (message && message.body) {
-          console.debug('LOG:' + message.body)
+          console.debug(`Device log  message: ${message.body}`)
           const parsed = JSON.parse(message.body)
+          if (!parsed?.device?.ip  || !parsed?.device?.name) {
+            console.error("Davice name or ip in log message is missing!")
+            return
+          }
+          parsed.id = this.idSeq++;
           this.messages.unshift(parsed)
         }
       }
@@ -82,8 +88,8 @@ export default {
       </h2>
     </div>
     <LogMessage
-      v-for="message, index of messages"
-      :key="index"
+      v-for="message of messages"
+      :key="message.id"
       :log="message"
       :color="colorByIp(message)"
     />

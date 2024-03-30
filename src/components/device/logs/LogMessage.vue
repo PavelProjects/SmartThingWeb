@@ -36,7 +36,7 @@ export default {
 
 <template>
   <div class="log-message-container bordered" :style="{ borderColor: color }">
-    <div>{{ `${device.ip} [${device.name}]` }}</div>
+    <div>{{ `${device?.ip} [${device?.name}]` }}</div>
     <div>{{ dateTime }}</div>
     <div class="level" :style="{ color: levelColor }">{{ level }}</div>
     <div class="message">{{ message }}</div>
