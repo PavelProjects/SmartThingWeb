@@ -8,7 +8,6 @@ import { currentLocale, defaultLocale, messages } from './messages'
 const app = createApp(App)
 app.use(createPinia())
 app.use(router)
-console.log(currentLocale, defaultLocale)
 app.use(createIntl({
   locale: currentLocale,
   defaultLocale,

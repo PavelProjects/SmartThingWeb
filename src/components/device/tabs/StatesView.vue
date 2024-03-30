@@ -3,6 +3,7 @@ import SyncLoader from 'vue-spinner/src/SyncLoader.vue'
 import HooksView from './HooksView.vue'
 import { DeviceApi } from '../../../api/device/DeviceApi.js'
 import MenuView from '../../menu/MenuView.vue'
+import { useIntl } from 'vue-intl'
 
 export default {
   name: 'StatesView',
