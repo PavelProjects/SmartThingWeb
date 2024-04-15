@@ -49,7 +49,7 @@ const GatewayApi = {
   },
   async cloudLogin(payload) {
     try {
-      const response = await axiosInstance.put(PATH_LOGIN, payload)
+      const response = await axiosInstance.post(PATH_LOGIN, payload)
       toast.success({
         caption: 'Successfuly authenticated in cloud'
       })
