@@ -56,7 +56,7 @@ export default {
       this.hooks = (await DeviceApi.getHooks(this.device, this.observable, this.gateway)) || []
     },
     async loadTemplates() {
-      this.templates = (await DeviceApi.getHooksTemplates(this.device, this.gateway)) || {}
+      this.templates = (await DeviceApi.getHooksTemplates(this.device, this.observable.type, this.gateway)) || {}
     },
     addHook(type) {
       if (this.hooks.length > 0 && this.hooks[0].id == NEW_HOOK_ID) {

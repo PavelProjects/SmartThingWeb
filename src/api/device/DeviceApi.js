@@ -256,9 +256,9 @@ export const DeviceApi = {
       })
     }
   },
-  async getHooksTemplates(device, gateway) {
+  async getHooksTemplates(device, type, gateway) {
     try {
-      const response = await deviceFetch({ device, command: GET_HOOKS_TEMPLATES, gateway })
+      const response = await deviceFetch({ device, command: GET_HOOKS_TEMPLATES, gateway, params: { type } })
       return response.data
     } catch (error) {
       console.error(error)
