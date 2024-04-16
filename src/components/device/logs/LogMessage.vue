@@ -6,12 +6,13 @@ export default {
     color: String
   },
   data() {
-    const { device, message, level, dateTime } = this.log
+    const { device, message, level, dateTime, tag } = this.log
     return {
       device,
       message,
       level,
-      dateTime
+      dateTime,
+      tag,
     }
   },
   computed: {
@@ -38,6 +39,7 @@ export default {
   <div class="log-message-container bordered" :style="{ borderColor: color }">
     <div>{{ `${device?.ip} [${device?.name}]` }}</div>
     <div>{{ dateTime }}</div>
+    <div>{{ tag }}</div>
     <div class="level" :style="{ color: levelColor }">{{ level }}</div>
     <div class="message">{{ message }}</div>
   </div>

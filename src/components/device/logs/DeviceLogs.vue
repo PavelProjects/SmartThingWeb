@@ -15,7 +15,7 @@ export default {
 
     return {
       intl,
-      columns: ['device', 'date', 'level', 'msg'],
+      columns: ['device', 'date', 'tag', 'level', 'msg'],
       messages: [],
       colors: {},
       stompClient,

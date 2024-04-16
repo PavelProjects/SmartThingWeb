@@ -91,6 +91,7 @@ const messages = {
       date {Date}
       level {Level}
       msg {Message}
+      tag {Tag}
       other {{ column }}
     }`,
     'device.tabs': `{
@@ -257,6 +258,7 @@ const messages = {
       date {Дата}
       level {Уровень}
       msg {Сообщение}
+      tag {Тег}
       other {{ column }}
     }`,
     'device.tabs': `{
