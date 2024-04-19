@@ -70,7 +70,12 @@ export default {
       {{ intl.formatMessage({ id: 'device.states.title' }) }}
     </h1>
     <sync-loader class="loading-spinner" :loading="loading"></sync-loader>
-    <MenuView v-if="haveStates" :tabs="tabs" tabTitle="Click to open hooks" />
+    <MenuView
+      v-if="haveStates"
+      :tabs="tabs"
+      :tabTitle="intl.formatMessage({ id: 'device.hooks.menu.item.title' })"
+      :placeholder="intl.formatMessage({ id: 'device.hooks.select.to.manage' }, { type: 'state' })"
+    />
     <h2 v-else class="title">
       {{ intl.formatMessage({ id: 'device.states.empty' }) }}
     </h2>

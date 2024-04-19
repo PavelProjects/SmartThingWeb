@@ -38,7 +38,7 @@ export default {
           acc[key] = systemNameToNormal(key)
           return acc
         }, {})
-    }
+    },
   },
   async mounted() {
     this.loading = true
@@ -48,12 +48,13 @@ export default {
   },
   methods: {
     async update() {
-      this.loading = true
       await this.loadHooks()
-      this.loading = false
     },
     async loadHooks() {
+      console.log("Update hooks called")
+      this.loading = true
       this.hooks = (await DeviceApi.getHooks(this.device, this.observable, this.gateway)) || []
+      this.loading = false
     },
     async loadTemplates() {
       this.templates = (await DeviceApi.getHooksTemplates(this.device, this.observable.type, this.gateway)) || {}
@@ -78,7 +79,7 @@ export default {
     templateForType(type) {
       return { ...this.templates[type], ...this.templates.default }
     }
-  }
+  },
 }
 </script>
 
@@ -99,8 +100,8 @@ export default {
           :observable="observable"
           :hookProp="hook"
           :template="templateForType(hook.type)"
-          @update="update"
-          @remove="() => hooks.splice(index, 1)"
+          @updateHooks="loadHooks"
+          @removeHook="() => hooks.splice(index, 1)"
         />
       </div>
       <div v-else class="title">

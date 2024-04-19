@@ -50,7 +50,7 @@ export default {
       {{ intl.formatMessage({ id: 'device.actions.title' }) }}
     </h1>
     <sync-loader class="loading-spinner" :loading="loading"></sync-loader>
-    <div class="buttons-panel">
+    <div v-if="actions.length > 0" class="buttons-panel">
       <LoadingButton
         v-for="(caption, name) in actions"
         :key="name"
@@ -60,6 +60,9 @@ export default {
         <h1>{{ caption }}</h1>
       </LoadingButton>
     </div>
+    <div v-else class="title">
+        <h3>{{ intl.formatMessage({ id: 'device.actions.empty' }) }}</h3>
+      </div>
   </div>
 </template>
 

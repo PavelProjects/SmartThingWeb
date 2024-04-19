@@ -17,7 +17,11 @@ export default {
       default: () => false
     },
     header: String,
-    tabTitle: String
+    tabTitle: String,
+    placeholder: {
+      type: String,
+      default: () => "Select menu item"
+    },
   },
   data() {
     return {
@@ -36,14 +40,14 @@ export default {
     }
   },
   mounted() {
-    this.switchTab(this.currentTab || this.getDefaultTab())
+    this.switchTab(this.currentTab || this.tab)
   },
   watch: {
     tabs() {
       if (this.tabs[this.currentTab]) {
         this.switchTab(this.currentTab, true)
       } else {
-        this.switchTab(this.getDefaultTab(), true)
+        this.switchTab(this.tab, true)
       }
     },
     tab() {
@@ -52,9 +56,6 @@ export default {
     }
   },
   methods: {
-    getDefaultTab() {
-      return this.tab || Object.keys(this.tabs)[0]
-    },
     switchTab(name, forceRender = false) {
       if (this.currentTab == name || forceRender) {
         this.updateContent()
@@ -114,6 +115,11 @@ export default {
           <component ref="content" :key="currentTab" :is="renders[currentTab]" v-bind="$attrs" />
         </KeepAlive>
       </div>
+      <div v-else class="placeholder">
+        <h2 class="title">
+          {{ placeholder }}
+        </h2>
+      </div>
     </div>
   </div>
 </template>
@@ -136,5 +142,8 @@ export default {
 .menu-item-content {
   position: relative;
   flex: 1 0 auto;
+}
+.placeholder {
+  margin: auto;
 }
 </style>

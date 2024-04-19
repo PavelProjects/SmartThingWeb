@@ -58,7 +58,7 @@ export default {
 
 <template>
   <div id="control-panel" class="bordered">
-    <MenuView :tabs="tabs" :vertical="true" />
+    <MenuView :tabs="tabs" tab="info" :vertical="true" />
   </div>
 </template>
 

@@ -26,7 +26,7 @@ export default {
     template: Object
   },
   inject: ['device', 'gateway'],
-  emits: ['remove'],
+  emits: ['updateHooks', 'removeHook'],
   components: {
     InputField,
     ComboBoxField,
@@ -104,17 +104,17 @@ export default {
         })
         return
       }
-      let saveFunc = async () => {}
+      let result = false
       this.loading = true
       try {
         if (this.hook.id !== NEW_HOOK_ID) {
-          saveFunc = DeviceApi.updateHook
+          result = await DeviceApi.updateHook(this.device, this.observable, this.hook, this.gateway)
         } else {
-          delete this.hook.id
-          saveFunc = DeviceApi.createHook
+          result = await DeviceApi.createHook(this.device, this.observable, {id: undefined, ...this.hook}, this.gateway)
         }
-        if (await saveFunc(this.device, this.observable, this.hook, this.gateway)) {
-          this.$emit('update')
+        if (result) {
+          console.log("Calling update hooks")
+          this.$emit('updateHooks')
           this.editing = false
           this.haveChanges = false
         }
@@ -135,7 +135,7 @@ export default {
           if (
             await DeviceApi.deleteHook(this.device, this.observable, this.hook.id, this.gateway)
           ) {
-            this.$emit('update')
+            this.$emit('updateHooks')
           }
         } finally {
           this.loading = false
@@ -145,7 +145,9 @@ export default {
     cancel() {
       this.validationFailed = []
       this.editing = false
-      this.$emit('remove')
+      if (this.hook.id === NEW_HOOK_ID) {
+        this.$emit('removeHook')
+      }
     },
     validate() {
       this.validationFailed = []

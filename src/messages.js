@@ -131,6 +131,7 @@ const messages = {
     'device.settings.manager.add': 'Add new',
     'device.settings.manager.menu.header': 'Saved devices settings',
     'device.actions.title': 'Device actions',
+    'device.actions.empty': 'No actions configured',
     'device.config.title': 'Configuration',
     'device.config.button.delete.all': 'Delete all values',
     'device.config.button.save': 'Save',
@@ -144,6 +145,8 @@ const messages = {
     'device.info.version': 'Firmware version',
     'device.info.chip.model': 'Chip model',
     'device.info.chip.revision': 'Chip revision',
+    'device.hooks.menu.item.title': 'Click to open hooks',
+    'device.hooks.select.to.manage': 'Select {type} to manage hooks',
     'device.hooks.title': 'Hooks',
     'device.hooks.button.add': 'Add hook of type ',
     'device.hooks.empty': 'No hooks added yet',
@@ -298,6 +301,7 @@ const messages = {
     'device.settings.manager.add': 'Добавить',
     'device.settings.manager.menu.header': 'Сохраненный настройки устройств',
     'device.actions.title': 'Действия',
+    'device.actions.empty': 'Нет настроенных действий',
     'device.config.title': 'Конфигурация',
     'device.config.button.delete.all': 'Удалить все значения',
     'device.config.button.save': 'Сохранить',
@@ -311,6 +315,13 @@ const messages = {
     'device.info.version': 'Версия прошивки',
     'device.info.chip.model': 'Модель чипа',
     'device.info.chip.revision': 'Ревизия чипа',
+    'device.hooks.menu.item.title': 'Нажмите для открытия хуков',
+    'device.hooks.select.to.manage': `Select {
+      type, select,
+      sensor {сенсор}
+      state {состояние}
+      other {{type}}
+    } to manage hooks`,
     'device.hooks.title': 'Хуки',
     'device.hooks.button.add': 'Добавить хук типа ',
     'device.hooks.empty': 'Нет добавленных хуков',

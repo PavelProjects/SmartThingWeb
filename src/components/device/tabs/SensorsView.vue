@@ -71,7 +71,12 @@ export default {
       {{ intl.formatMessage({ id: 'device.sensors.title' }) }}
     </h1>
     <sync-loader class="loading-spinner" :loading="loading"></sync-loader>
-    <MenuView v-if="haveSensors" :tabs="tabs" tabTitle="Click to open hooks" />
+    <MenuView 
+      v-if="haveSensors"
+      :tabs="tabs"
+      :tabTitle="intl.formatMessage({ id: 'device.hooks.menu.item.title' })"
+      :placeholder="intl.formatMessage({ id: 'device.hooks.select.to.manage' }, { type: 'sensor' })"
+    />
     <h2 v-else class="title">
       {{ intl.formatMessage({ id: 'device.sensors.empty' }) }}
     </h2>

@@ -278,13 +278,10 @@ export const DeviceApi = {
         },
         gateway
       })
-      if (!result || result.status !== 201) {
-        throw new Error({ result })
-      }
       toast.success({
         caption: 'Hook created'
       })
-      return true
+      return result.status === 201
     } catch (error) {
       console.error(error)
       const { error: description } = await extractDataFromError(error)
