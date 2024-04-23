@@ -2,6 +2,7 @@ import GatewayControlPanel from './components/GatewayControlPanel.vue'
 import DeviceLogs from './components/device/logs/DeviceLogs.vue'
 import SettingsManager from './components/device/settings/SettingsManager.vue'
 import GatewaySelector from './components/gateway/GatewaySelector.vue'
+import Dashborard from './components/dashboard/Dashboard.vue'
 import { createRouter, createWebHashHistory } from 'vue-router'
 
 const mode = import.meta.env.VITE_MODE
@@ -15,20 +16,24 @@ const gatewayRoutes = [
   {
     path: '/',
     redirect: () => {
-      return '/devices/panel'
+      return '/panel'
     },
     children: [
       {
-        path: '/devices/panel',
+        path: '/panel',
         component: GatewayControlPanel
       },
       {
-        path: '/devices/logs',
+        path: '/logs',
         component: DeviceLogs
       },
       {
-        path: '/devices/settings',
+        path: '/settings',
         component: SettingsManager
+      },
+      {
+        path: '/dashboard',
+        component: Dashborard
       }
     ]
   },
@@ -39,11 +44,11 @@ const cloudRoutes = [
   {
     path: '/',
     redirect: () => {
-      return '/home'
+      return '/panel'
     },
     children: [
       {
-        path: '/home',
+        path: '/panel',
         component: GatewaySelector
       },
       {

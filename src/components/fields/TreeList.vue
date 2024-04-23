@@ -35,7 +35,7 @@ export default {
 
 <template>
   <ul>
-    <li v-for="[key, value] in Object.entries(values)" :key="key">
+    <li v-for="[key, value] of Object.entries(values)" :key="key">
       <component :is="listItem(key, value)"></component>
     </li>
   </ul>

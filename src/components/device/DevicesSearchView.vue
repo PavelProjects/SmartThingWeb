@@ -79,7 +79,7 @@ export default {
     </div>
     <div class="search-results">
       <DeviceItem
-        v-for="[ip, deviceInfo] in Object.entries(devices)"
+        v-for="[ip, deviceInfo] of Object.entries(devices)"
         :key="ip"
         :selected="selectedIp == ip"
         :device="deviceInfo"

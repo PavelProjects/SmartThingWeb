@@ -30,13 +30,16 @@ export default {
         <h1 class="green">{{ intl.formatMessage({ id: 'doc.title' }) }}</h1>
       </router-link>
       <div class="menu-items">
-        <router-link to="/">
-          <h2>{{ intl.formatMessage({ id: 'doc.home' }) }}</h2>
+        <router-link to="/dashboard">
+          <h2>{{ intl.formatMessage({ id: 'doc.dashboard' }) }}</h2>
         </router-link>
-        <router-link v-if="mode === 'gateway'" to="/devices/settings">
+        <router-link to="/panel">
+          <h2>{{ intl.formatMessage({ id: 'doc.panel' }) }}</h2>
+        </router-link>
+        <router-link v-if="mode === 'gateway'" to="/settings">
           <h2>{{ intl.formatMessage({ id: 'doc.device.settings' }) }}</h2>
         </router-link>
-        <router-link v-if="mode === 'gateway'" to="/devices/logs">
+        <router-link v-if="mode === 'gateway'" to="/logs">
           <h2>{{ intl.formatMessage({ id: 'doc.device.logs' }) }}</h2>
         </router-link>
       </div>

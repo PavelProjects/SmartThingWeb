@@ -38,7 +38,7 @@ export default {
     }
     const { user } = (await CloudApi.getAuthentication()) ?? {}
     this.setAuthentication(user)
-  }
+  },
 }
 </script>
 
@@ -52,10 +52,11 @@ export default {
       @authenticated="({ user }) => setAuthentication(user)"
     />
 
-    <router-view v-if="isAuthenticated" v-slot="{ Component }">
-      <keep-alive>
-        <component :is="Component" :key="$route.fullPath" />
-      </keep-alive>
+    <router-view v-if="isAuthenticated" v-slot="{ Component, path }">
+      <!-- <keep-alive>
+        <component :is="Component" :key="path" />
+      </keep-alive> -->
+      <component :is="Component" :key="path" />
     </router-view>
   </div>
 </template>

@@ -3,6 +3,7 @@ import { toast } from '../utils/EventBus'
 
 const GATEWAY_PATH = import.meta.env.VITE_GATEWAY_IP || document.location.hostname
 const GATEWAY_PORT = import.meta.env.VITE_GATEWAY_PORT
+export const GATEWAY_URL = `http://${GATEWAY_PATH}${GATEWAY_PORT ? ':' + GATEWAY_PORT : ''}`;
 const GATEWAY_WS = import.meta.env.VITE_GATEWAY_WS
 export const GATEWAY_BROKER_URL = `ws://${GATEWAY_PATH}${GATEWAY_PORT ? ':' + GATEWAY_PORT : ''}/${GATEWAY_WS}`
 
@@ -19,7 +20,7 @@ const PATH_DEVICE_LOGS = '/device/logs'
 const PATH_DEVICE_SETTINGS = '/device/settings'
 
 const axiosInstance = axios.create({
-  baseURL: `http://${GATEWAY_PATH}${GATEWAY_PORT ? ':' + GATEWAY_PORT : ''}`,
+  baseURL: GATEWAY_URL,
   timeout: 5000
 })
 

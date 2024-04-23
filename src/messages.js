@@ -4,7 +4,8 @@ const currentLocale = navigator.language.slice(0, 2)
 const messages = {
   en: {
     'doc.title': 'SmartThing',
-    'doc.home': 'Home',
+    'doc.panel': 'Control panel',
+    'doc.dashboard': 'Dashboard',
     'doc.device.settings': 'Device settings',
     'doc.device.logs': 'Device logs',
     gateway: 'Gateway: {gateway}',
@@ -163,6 +164,8 @@ const messages = {
     'cloud.auth.logout.confirm': 'Are you sure?',
     'cloud.auth.info.user.id': 'id: {id}',
     'cloud.auth.info.user.login': 'login: {login}',
+    'dashboard.group.edit': 'Edit',
+    'dashboard.group.edit.title': 'Edit group {name}',
     login: 'Login',
     password: 'Password',
     'log.in': 'Log in',
@@ -174,7 +177,8 @@ const messages = {
   },
   ru: {
     'doc.title': 'SmartThing',
-    'doc.home': 'Домашняя страница',
+    'doc.panel': 'Панель управления',
+    'doc.dashboard': 'Dashboard',
     'doc.device.settings': 'Настройки устройств',
     'doc.device.logs': 'Логи устройств',
     gateway: 'Маршрутизатор: {gateway}',

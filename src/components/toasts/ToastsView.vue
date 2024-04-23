@@ -35,7 +35,7 @@ export default {
 <template scoped>
   <div class="list panel">
     <ToastItem
-      v-for="[id, { gateway, device, toast }] in Object.entries(toasts)"
+      v-for="[id, { gateway, device, toast }] of Object.entries(toasts)"
       :key="id"
       :id="id"
       :gateway="gateway"

@@ -7,6 +7,7 @@ import GatewayEditDialog from './GatewayEditDialog.vue'
 import InputField from '../fields/InputField.vue'
 import { useIntl } from 'vue-intl'
 import { router } from '../../routes'
+import ContextMenu from '../menu/ContextMenu.vue'
 
 export default {
   name: 'GatewayItem',
@@ -18,7 +19,8 @@ export default {
     DotsVertical,
     PopUpDialog,
     GatewayEditDialog,
-    InputField
+    InputField,
+    ContextMenu
   },
   data() {
     const intl = useIntl()
@@ -69,7 +71,7 @@ export default {
             caption: this.intl.formatMessage({ id: 'gateway.item.delete.success' })
           })
           this.$emit('gatewaysUpdate')
-          router.push('/home')
+          router.push('/')
         } else {
           toast.error({
             caption: this.intl.formatMessage({ id: 'gateway.item.delete.error' })
@@ -133,23 +135,20 @@ export default {
         <h2>{{ gateway.name }}</h2>
         <h3>{{ gateway.description }}</h3>
       </div>
-      <div class="menu" @click.stop="() => {}">
-        <DotsVertical class="menu-icon" />
-        <div class="menu-items">
-          <p @click.stop="showEditDialog = true">
-            {{ intl.formatMessage({ id: 'gateway.item.button.edit' }) }}
-          </p>
-          <p @click.stop="deleteGateway">
-            {{ intl.formatMessage({ id: 'gateway.item.button.delete' }) }}
-          </p>
-          <p v-if="gateway.haveToken" @click.stop="deleteToken">
-            {{ intl.formatMessage({ id: 'gateway.item.button.token.delete' }) }}
-          </p>
-          <p v-else @click.stop="generateToken">
-            {{ intl.formatMessage({ id: 'gateway.item.button.token.gen' }) }}
-          </p>
-        </div>
-      </div>
+      <ContextMenu class="menu">
+        <p @click.stop="showEditDialog = true">
+          {{ intl.formatMessage({ id: 'gateway.item.button.edit' }) }}
+        </p>
+        <p @click.stop="deleteGateway">
+          {{ intl.formatMessage({ id: 'gateway.item.button.delete' }) }}
+        </p>
+        <p v-if="gateway.haveToken" @click.stop="deleteToken">
+          {{ intl.formatMessage({ id: 'gateway.item.button.token.delete' }) }}
+        </p>
+        <p v-else @click.stop="generateToken">
+          {{ intl.formatMessage({ id: 'gateway.item.button.token.gen' }) }}
+        </p>
+      </ContextMenu>
     </div>
     <GatewayEditDialog
       v-if="showEditDialog"
@@ -203,28 +202,10 @@ export default {
   height: 20px;
   border-radius: 50%;
 }
-.menu-icon {
+.menu {
   position: absolute;
   top: 0px;
   right: 0px;
-}
-.menu:hover .menu-items {
-  display: block;
-}
-.menu-items {
-  display: none;
-  position: absolute;
-  top: 5px;
-  right: -100px;
-  min-width: 100px;
-  border: solid 1px var(--color-border);
-  border-radius: var(--border-radius);
-  background-color: var(--color-background-mute);
-  padding: 2px;
-}
-.menu-items p:hover {
-  cursor: pointer;
-  opacity: 0.8;
 }
 .token-field {
   padding: 5px;

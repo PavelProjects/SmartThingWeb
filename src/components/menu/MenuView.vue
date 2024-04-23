@@ -35,9 +35,9 @@ export default {
     panelStyle() {
       return { 'flex-direction': this.vertical ? 'column' : 'row' }
     },
-    itemsStyle() {
-      return { 'flex-direction': this.vertical ? 'row' : 'column' }
-    }
+    itemsListClass() {
+      return { 'vertical': this.vertical, 'horizontal': !this.vertical }
+    },
   },
   mounted() {
     this.switchTab(this.currentTab || this.tab)
@@ -93,9 +93,9 @@ export default {
   <div class="list">
     <h1 v-if="header" class="title">{{ header }}</h1>
     <div v-if="tabs" class="menu-panel" :style="panelStyle">
-      <div class="menu-items bordered" :style="itemsStyle">
+      <div class="menu-items" :class="itemsListClass">
         <MenuItem
-          v-for="[name, { caption }] in Object.entries(tabs)"
+          v-for="[name, { caption }] of Object.entries(tabs)"
           :key="name"
           :id="name"
           :title="tabTitle"
@@ -145,5 +145,14 @@ export default {
 }
 .placeholder {
   margin: auto;
+}
+.vertical {
+  flex-direction: row;
+  border-bottom: 2px solid var(--color-border);
+}
+.horizontal {
+  flex-direction: column;
+  border: 2px solid var(--color-border);
+  border-radius: 5px;
 }
 </style>

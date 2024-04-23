@@ -15,7 +15,7 @@ export default {
     const intl = useIntl()
     return {
       intl,
-      actions: null,
+      actions: [],
       loading: false,
       loadingAction: false
     }
@@ -52,7 +52,7 @@ export default {
     <sync-loader class="loading-spinner" :loading="loading"></sync-loader>
     <div v-if="actions.length > 0" class="buttons-panel">
       <LoadingButton
-        v-for="(caption, name) in actions"
+        v-for="(caption, name) of actions"
         :key="name"
         :loading="loadingAction"
         @click="sendAction(name)"
