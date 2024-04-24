@@ -56,24 +56,31 @@ export default {
   methods: {
     async firstFetch() {
       this.loading = true;
-      const { updateDeviceConfig } = useDashboardStore()
-      updateDeviceConfig(this.group, {
-        sensors: Object.keys(await this.updateSensors()),
-        states: Object.keys(await this.updateStates()),
-      })
-      this.count = 0
-      this.loading = false;
+      try {
+        const { updateDeviceConfig } = useDashboardStore()
+        updateDeviceConfig(this.group, {
+          sensors: Object.keys(await this.updateSensors()),
+          states: Object.keys(await this.updateStates()),
+        })
+      } finally {
+        this.count = 0
+        this.loading = false
+      }
     },
     async updateValues() {
-      this.loading = true;
-      if (this.observables.find(({ type }) => type === 'sensor')) {
-        await this.updateSensors()
+      this.loading = true
+      try {
+        if (this.observables.find(({ type }) => type === 'sensor')) {
+          await this.updateSensors()
+        }
+        if (this.observables.find(({ type }) => type === 'state')) {
+          await this.updateStates()
+        }
+        // todo catch error
+      } finally {
+        this.count = 0
+        this.loading = false
       }
-      if (this.observables.find(({ type }) => type === 'state')) {
-        await this.updateStates()
-      }
-      this.count = 0
-      this.loading = false;
     },
     countTimer() {
       setTimeout(() => {
