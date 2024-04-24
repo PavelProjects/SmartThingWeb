@@ -32,8 +32,14 @@ export default {
 </script>
 
 <template>
-  <div class="container" :id="testId" @click.stop="handleClick">
+  <div class="update-button" :id="testId" @click.stop="handleClick">
     <moon-loader :loading="loading" size="35px" />
     <Refresh v-if="!loading" :size="35" />
   </div>
 </template>
+
+<style scoped>
+  .update-button {
+    cursor: pointer;
+  }
+</style>

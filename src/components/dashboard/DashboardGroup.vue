@@ -8,13 +8,15 @@ import { useDashboardStore } from '../../store/dashboardStore';
 import LoadingButton from '../controls/LoadingButton.vue';
 import { DashboardApi } from '../../api/DashboardApi';
 import { toast } from '../../utils/EventBus';
+import UpdateButton from '../controls/UpdateButton.vue';
 
 export default {
   components: { 
     DashboardValue,
     ContextMenu,
     GroupEditDialog,
-    LoadingButton
+    LoadingButton,
+    UpdateButton
   },
   name: 'DashboardGroup',
   emits: ['updateGroups'],
@@ -25,34 +27,59 @@ export default {
     const intl = useIntl()
     return {
       intl,
+      updateDelay: this.group?.config?.updateDelay || 60,
+      count: 0,
+      loading: false,
       values: {},
       intervalId: -1,
       editing: false,
       ...this.group
     }
+    // todo INTL!!!
   },
   mounted() {
+    this.countTimer()
     this.firstFetch()
-    this.intervalId = setInterval(this.updateValues, 60000)
+    this.intervalId = setInterval(this.updateValues, this.updateDelay * 1000)
   },
   unmounted() {
     clearInterval(this.intervalId)
   },
+  computed: {
+    updateTitle() {
+      return `Click to force update\nAuto update every ${this.updateDelay}s\nLast update ${this.count}s ago`
+    },
+    deviceTitle() {
+      return `Group for device:\nname: ${this.device.name}\nip: ${this.device.ip}`
+    }
+  },
   methods: {
     async firstFetch() {
+      this.loading = true;
       const { updateDeviceConfig } = useDashboardStore()
       updateDeviceConfig(this.group, {
         sensors: Object.keys(await this.updateSensors()),
         states: Object.keys(await this.updateStates()),
       })
+      this.count = 0
+      this.loading = false;
     },
-    updateValues() {
+    async updateValues() {
+      this.loading = true;
       if (this.observables.find(({ type }) => type === 'sensor')) {
-        this.updateSensors()
+        await this.updateSensors()
       }
       if (this.observables.find(({ type }) => type === 'state')) {
-        this.updateStates()
+        await this.updateStates()
       }
+      this.count = 0
+      this.loading = false;
+    },
+    countTimer() {
+      setTimeout(() => {
+        this.count += 2;
+        this.countTimer()
+      }, 2000)
     },
     async updateSensors() {
       return DeviceApi.getDeviceSensors(this.device).then((sensors) => {
@@ -95,7 +122,18 @@ export default {
 <template>
   <div>
     <div class="dashboard-group bordered">
-      <h2 class="title" :title="group.device.ip">{{ group.device.name }}</h2>
+      <UpdateButton 
+        class="update"
+        :title="updateTitle"
+        :loading="loading"
+        :onClick="updateValues"
+      />
+      <h2
+        class="title"
+        :title="deviceTitle"
+      >
+        {{ group.device.name }}
+      </h2>
       <ContextMenu class="context-menu">
         <p @click.stop="editing = true">
           {{ intl.formatMessage({ id: 'dashboard.group.edit' }) }}
@@ -138,6 +176,11 @@ export default {
   }
   .dashboard-group .title {
     border-bottom: 2px solid var(--color-border);
+  }
+  .update {
+    position: absolute;
+    top: 2px;
+    left: 2px;
   }
   .values {
     display: flex;

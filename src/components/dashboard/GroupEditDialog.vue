@@ -24,17 +24,17 @@ export default {
   data() {
     const { deviceConfig } = useDashboardStore()
     const { sensors, states } = deviceConfig[this.group.id] || {}
-    const { device, observables } = JSON.parse(JSON.stringify(this.group))
+    const { device, observables, config } = JSON.parse(JSON.stringify(this.group))
 
     const intl = useIntl()
     return {
       device,
       observables,
+      config,
       sensors,
       states,
       intl,
       loading: false,
-      haveChanges: false,
       newObs: { type: 'sensor' },
     }
   },
@@ -44,19 +44,22 @@ export default {
       if (type && name) {
         this.observables.push({ type, name, units })
         this.newObs = { type: 'sensor' }
-        this.haveChanges = true
       }
     },
     remove(index) {
       if (this.observables[index]) {
         this.observables.splice(index, 1)
-        this.haveChanges = true
       }
     },
     async save() {
       try {
         this.loading = true
-        await DashboardApi.updateGroupObservables(this.group.id, this.observables)
+        const updatedGroup = {
+          ...this.group,
+          observables: this.observables,
+          config: this.config
+        }
+        await DashboardApi.updateGroup(this.group.id, updatedGroup)
         this.$emit('close', true)
         toast.success({ caption: "Group saved" })
       } catch (error) {
@@ -72,17 +75,17 @@ export default {
 
 <template>
   <PopUpDialog v-bind="$props">
-    <div class="list">
+    <div class="content">
       <h2 class="title">
         {{ intl.formatMessage({ id: 'dashboard.group.edit.title' }, { name: device.name }) }}
       </h2>
-      <div class="values">
-        <h2>type</h2>
-        <h2>name</h2>
-        <h2>units</h2>
-        <h2></h2>
-      </div>
-      <div class="content">
+      <div class="table">
+        <div class="values">
+          <h2>type</h2>
+          <h2>name</h2>
+          <h2>units</h2>
+          <h2></h2>
+        </div>
         <div
           v-for="obs, index of observables"
           :key="index"
@@ -94,40 +97,43 @@ export default {
             class="units-input"
             type="text"
             v-model="obs.units"
-            @change="haveChanges = true"
           />
           <DeleteSVG 
             @click="remove(index)"
           />
         </div>
+        <div class="values">
+          <select
+            class="units-input"
+            v-model="newObs.type"
+            @change="newObs.name = ''"
+          >
+            <option>sensor</option>
+            <option>state</option>
+          </select>
+          <select
+            class="units-input"
+            v-model="newObs.name"
+          >
+            <option
+              v-for="state of newObs.type === 'sensor' ? sensors : states"
+              :key="state"
+            >{{ state }}</option>
+          </select>
+          <input
+            class="units-input"
+            type="text"
+            v-model="newObs.units"
+          />
+          <PlusSVG @click="add"/>
+        </div>
       </div>
-      <div class="values">
-        <select
-          class="units-input"
-          v-model="newObs.type"
-          @change="newObs.name = ''"
-        >
-          <option>sensor</option>
-          <option>state</option>
-        </select>
-        <select
-          class="units-input"
-          v-model="newObs.name"
-        >
-          <option
-            v-for="state of newObs.type === 'sensor' ? sensors : states"
-            :key="state"
-          >{{ state }}</option>
-        </select>
-        <input
-          class="units-input"
-          type="text"
-          v-model="newObs.units"
-        />
-        <PlusSVG @click="add"/>
-      </div>
+      <InputField 
+        label="Update delay (sec)"
+        v-model="config.updateDelay"
+        type="number"
+      />
       <LoadingButton
-        v-if="haveChanges"
         :loading="loading"
         @click="save"
       >
@@ -141,10 +147,16 @@ export default {
   .content {
     display: flex;
     flex-direction: column;
+    gap: 5px;
+  }
+  .table {
+    display: flex;
+    flex-direction: column;
     gap: var(--default-gap);
     max-height: 50vh;
     overflow-y: auto;
     overflow-x: hidden;
+    border-top: 1px solid var(--color-border);
   }
   .values {
     display: grid;

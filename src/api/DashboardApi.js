@@ -16,8 +16,8 @@ const DashboardApi = {
     const response = await axiosInstance.post('/dashboard', group)
     return response.data
   },
-  async updateGroupObservables(groupId, observables) {
-    const response = await axiosInstance.put('/dashboard/' + groupId, observables)
+  async updateGroup(groupId, group) {
+    const response = await axiosInstance.put('/dashboard', group)
     return response.status === 200
   },
   async deleteGroup(groupId) {
