@@ -35,7 +35,7 @@ export default {
       states,
       intl,
       loading: false,
-      newObs: { type: 'sensor' },
+      newObs: { type: 'sensor' }
     }
   },
   methods: {
@@ -61,10 +61,14 @@ export default {
         }
         await DashboardApi.updateGroup(this.group.id, updatedGroup)
         this.$emit('close', true)
-        toast.success({ caption: "Group saved" })
+        toast.success({
+          caption: this.intl.formatMessage({ id: 'dashboard.group.edit.success' })
+        })
       } catch (error) {
         console.error(error)
-        toast.error({ caption: "Failed to save group" })
+        toast.success({
+          caption: this.intl.formatMessage({ id: 'dashboard.group.edit.error' })
+        })
       } finally {
         this.loading = false
       }
@@ -80,48 +84,50 @@ export default {
         {{ intl.formatMessage({ id: 'dashboard.group.edit.title' }, { name: device.name }) }}
       </h2>
       <div class="table">
-        <div class="values">
-          <h2>type</h2>
-          <h2>name</h2>
-          <h2>units</h2>
-          <h2></h2>
+        <div class="row">
+          <h2 v-for="column of ['type', 'name', 'units', '']" :key="column">
+            {{ intl.formatMessage({ id: 'dashboard.group.edit.columns' }, { column }) }}
+          </h2>
         </div>
         <div
           v-for="obs, index of observables"
           :key="index"
-          class="values"
+          class="row"
         >
-          <h2>{{ obs.type }}</h2>
+          <h2>{{ intl.formatMessage({ id: 'dashboard.group.edit.types' }, { value: obs.type }) }}</h2>
           <h2>{{ obs.name }}</h2>
           <input
-            class="units-input"
+            class="column-input"
             type="text"
             v-model="obs.units"
           />
-          <DeleteSVG 
-            @click="remove(index)"
-          />
+          <DeleteSVG @click="remove(index)"/>
         </div>
-        <div class="values">
+        <div class="row">
           <select
-            class="units-input"
+            class="column-input"
             v-model="newObs.type"
             @change="newObs.name = ''"
           >
-            <option>sensor</option>
-            <option>state</option>
+            <option
+              v-for="value of ['sensor', 'state']"
+              :key="value"
+              :value="value"
+            >
+              {{ intl.formatMessage({ id: 'dashboard.group.edit.types' }, { value }) }}
+            </option>
           </select>
           <select
-            class="units-input"
+            class="column-input"
             v-model="newObs.name"
           >
             <option
-              v-for="state of newObs.type === 'sensor' ? sensors : states"
-              :key="state"
-            >{{ state }}</option>
+              v-for="obs of newObs.type === 'sensor' ? sensors : states"
+              :key="obs"
+            >{{ obs }}</option>
           </select>
           <input
-            class="units-input"
+            class="column-input"
             type="text"
             v-model="newObs.units"
           />
@@ -129,7 +135,7 @@ export default {
         </div>
       </div>
       <InputField 
-        label="Update delay (sec)"
+        :label="intl.formatMessage({ id: 'dashboard.group.edit.update.delay' })"
         v-model="config.updateDelay"
         type="number"
       />
@@ -137,7 +143,7 @@ export default {
         :loading="loading"
         @click="save"
       >
-        <h2>Save</h2>
+        <h2>{{ intl.formatMessage({ id: 'dashboard.group.edit.save' }) }}</h2>
       </LoadingButton>
     </div>
   </PopUpDialog>
@@ -158,19 +164,20 @@ export default {
     overflow-x: hidden;
     border-top: 1px solid var(--color-border);
   }
-  .values {
+  .row {
     display: grid;
     grid-template-columns: 100px 200px 100px 50px;
     text-align: center;
     border-bottom: 1px solid var(--color-border);
+    word-wrap: break-word;
   }
-  .values * {
+  .row * {
     border-right: 1px solid var(--color-border);
   }
-  .values *:last-child {
+  .row *:last-child {
     border-right: none;
   }
-  .units-input {
+  .column-input {
     text-align: center;
     border: none;
     border-radius: 0px;

@@ -164,8 +164,38 @@ const messages = {
     'cloud.auth.logout.confirm': 'Are you sure?',
     'cloud.auth.info.user.id': 'id: {id}',
     'cloud.auth.info.user.login': 'login: {login}',
-    'dashboard.group.edit': 'Edit',
     'dashboard.group.edit.title': 'Edit group {name}',
+    'dashboard.groups.empty': 'No groups added yet',
+    'dashboard.group.add.new': 'Add new group',
+    'dashboard.group.update.title': 'Click to force update\nAuto update every {updateDelay}s\nLast update {count}s ago',
+    'dashboard.group.device.title': 'Group for device:\nname: {name}\nip: {ip}\ntype: {type}',
+    'dashboard.group.delete.confirm': 'Are you sure?',
+    'dashboard.group.delete.success': 'Group deleted',
+    'dashboard.group.delete.error': 'Failed to delete group',
+    'dashboard.group.edit': 'Edit',
+    'dashboard.group.delete': 'Delete group',
+    'dashboard.group.add.values': 'Add values to display',
+    'dashboard.group.create.select.device': 'Select device',
+    'dashboard.group.create.error.exists': 'Group for this device already exists',
+    'dashboard.group.create.success': 'Create new group for device {name}',
+    'dashboard.group.create.error': 'Failed to create group',
+    'dashboard.group.edit.success': 'Group updated',
+    'dashboard.group.edit.error': 'Failed to update group',
+    'dashboard.group.edit.columns': `{
+      column, select,
+      type {type}
+      name {name}
+      units {units}
+      other {{column}}
+    }`,
+    'dashboard.group.edit.types': `{
+      value, select,
+      sensor {sensor}
+      state {state}
+      other {{value}}
+    }`,
+    'dashboard.group.edit.update.delay': 'Update delay (sec)',
+    'dashboard.group.edit.save': 'Save',
     login: 'Login',
     password: 'Password',
     'log.in': 'Log in',
@@ -342,6 +372,38 @@ const messages = {
     'cloud.auth.logout.confirm': 'Вы уверены?',
     'cloud.auth.info.user.id': 'id: {id}',
     'cloud.auth.info.user.login': 'логин: {login}',
+    'dashboard.group.edit.title': 'Редактировать группу {name}',
+    'dashboard.groups.empty': 'Пока еще не было добавлено групп',
+    'dashboard.group.add.new': 'Добавить новую группу',
+    'dashboard.group.update.title': 'Нажмите для принудительного обновления\nАвтоматическое обновление каждые {updateDelay}сек\nПоследнее обновление {count}сек назад',
+    'dashboard.group.device.title': 'Группа для устройства:\nимя: {name}\nip: {ip}\nтип: {type}',
+    'dashboard.group.delete.confirm': 'Вы уверены?',
+    'dashboard.group.delete.success': 'Группа удалена',
+    'dashboard.group.delete.error': 'Не удалось удалить группу',
+    'dashboard.group.edit': 'Редактировать',
+    'dashboard.group.delete': 'Удалить группу',
+    'dashboard.group.add.values': 'Добавить значения для отображения',
+    'dashboard.group.create.select.device': 'Выберите устройство',
+    'dashboard.group.create.error.exists': 'Группа для этого устройства уже существует',
+    'dashboard.group.create.success': 'Группа для {name} успешно создна',
+    'dashboard.group.create.error': 'Не удалось создать группу',
+    'dashboard.group.edit.success': 'Группа обновлена',
+    'dashboard.group.edit.error': 'Не удалось обновить группу',
+    'dashboard.group.edit.columns': `{
+      column, select,
+      type {тип}
+      name {имя}
+      units {единицы}
+      other {{column}}
+    }`,
+    'dashboard.group.edit.types': `{
+      value, select,
+      sensor {сенсор}
+      state {состояние}
+      other {{value}}
+    }`,
+    'dashboard.group.edit.update.delay': 'Задержка обновлений (сек)',
+    'dashboard.group.edit.save': 'Сохранить',
     login: 'Логин',
     password: 'Пароль',
     'log.in': 'Войти',

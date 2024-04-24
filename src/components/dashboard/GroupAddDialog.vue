@@ -1,4 +1,5 @@
 <script>
+import { useIntl } from 'vue-intl'
 import { DashboardApi } from '../../api/DashboardApi'
 import { useDashboardStore } from '../../store/dashboardStore'
 import { toast } from '../../utils/EventBus'
@@ -7,6 +8,10 @@ import PopUpDialog from '../dialogs/PopUpDialog.vue'
 export default {
   name: 'GroupAddDialog',
   components: { PopUpDialog, DevicesSearchView },
+  data() {
+    const intl = useIntl()
+    return { intl }
+  },
   methods: {
     async selectDevice(newDev) {
       const { groups } = useDashboardStore()
@@ -15,17 +20,21 @@ export default {
       ))
       if (exists) {
         toast.error({
-          caption: "Group for this device already exists"
+          caption: this.intl.formatMessage({ id: 'dashboard.group.create.error.exists' })
         })
         return
       }
       try {
         await DashboardApi.createGroup({ device: newDev, observables: [] })
         this.$emit('close', true)
-        toast.success({ caption: `Create new group for device ${newDev.name}` })
+        toast.success({
+          caption: this.intl.formatMessage({ id: 'dashboard.group.create.success' }, { name: newDev.name })
+        })
       } catch (error) {
         console.log(error)
-        toast.error({ caption: "Failed to create group" })
+        toast.error({
+          caption: this.intl.formatMessage({ id: 'dashboard.group.create.error' })
+        })
       }
     }
   }
@@ -38,7 +47,7 @@ export default {
   >
     <div class="list">
       <DevicesSearchView
-        title="Select device"
+        :title="intl.formatMessage({ id: 'dashboard.group.create.select.device' })"
         :style="{ 'width': '350px' }"
         @select="selectDevice"
       />

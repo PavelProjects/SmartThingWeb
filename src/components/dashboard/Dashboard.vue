@@ -5,6 +5,7 @@ import { storeToRefs } from 'pinia';
 import PlusSVG from 'vue-material-design-icons/Plus.vue'
 import GroupAddDialog from './GroupAddDialog.vue';
 import { DashboardApi } from '../../api/DashboardApi';
+import { useIntl } from 'vue-intl';
 
 export default {
   name: 'Dashboard',
@@ -14,9 +15,11 @@ export default {
     GroupAddDialog
   },
   data() {
+    const intl = useIntl()
     const store = useDashboardStore()
     const { groups } = storeToRefs(store)
     return {
+      intl,
       groups,
       store,
       addGroupDialog: false
@@ -49,12 +52,18 @@ export default {
         :group="group"
         @updateGroups="loadGroups"
       />
-      <div
-        class="add"
-        title="Add new group"
-        @click.stop="addGroupDialog = true"
-      >
-        <PlusSVG :size="40"/>
+      <div class="list">
+        <div v-if="!groups?.length">
+          <h1 class="title">
+            {{ intl.formatMessage({ id: 'dashboard.groups.empty' }) }}
+          </h1>
+        </div>
+        <PlusSVG
+          class="add"
+          :title="intl.formatMessage({ id: 'dashboard.group.add.new' })"
+          :size="40"
+          @click.stop="addGroupDialog = true"
+        />
       </div>
     </div>
     <GroupAddDialog 

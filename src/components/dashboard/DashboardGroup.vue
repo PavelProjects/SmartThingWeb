@@ -35,7 +35,6 @@ export default {
       editing: false,
       ...this.group
     }
-    // todo INTL!!!
   },
   mounted() {
     this.countTimer()
@@ -47,10 +46,13 @@ export default {
   },
   computed: {
     updateTitle() {
-      return `Click to force update\nAuto update every ${this.updateDelay}s\nLast update ${this.count}s ago`
+      return this.intl.formatMessage(
+        { id: 'dashboard.group.update.title' },
+        { updateDelay: this.updateDelay, count: this.count }
+      )
     },
     deviceTitle() {
-      return `Group for device:\nname: ${this.device.name}\nip: ${this.device.ip}`
+      return this.intl.formatMessage({ id: 'dashboard.group.device.title' }, this.device)
     }
   },
   methods: {
@@ -105,14 +107,18 @@ export default {
       })
     },
     async deleteGroup() {
-      if (confirm("Are you sure?")) {
+      if (confirm(this.intl.formatMessage({ id: 'dashboard.group.delete.confirm' }))) {
         try {
           await DashboardApi.deleteGroup(this.group.id)
-          toast.success({ caption: "Group deleted" })
+          toast.success({
+            caption: this.intl.formatMessage({ id: 'dashboard.group.delete.success' })
+          })
           this.$emit('updateGroups')
         } catch (error) {
           console.log(error)
-          toast.error({ caption: "Failed to delete group" })
+          toast.error({
+            caption: this.intl.formatMessage({ id: 'dashboard.group.delete.error' })
+          })
         }
       }
     },
@@ -129,7 +135,8 @@ export default {
 <template>
   <div>
     <div class="dashboard-group bordered">
-      <UpdateButton 
+      <UpdateButton
+        v-if="observables.length > 0"
         class="update"
         :title="updateTitle"
         :loading="loading"
@@ -146,24 +153,25 @@ export default {
           {{ intl.formatMessage({ id: 'dashboard.group.edit' }) }}
         </p>
         <p @click.stop="deleteGroup">
-          Delete group
+          {{ intl.formatMessage({ id: 'dashboard.group.delete' }) }}
         </p>
       </ContextMenu>
-      <div v-if="observables.length > 0" class="values">
-        <DashboardValue
-          v-for="{ name, type, units }, index of observables"
-          :key="index"
-          :type="type"
-          :name="name"
-          :value="values[type+name] || 'Nan'"
-          :units="units"
-        />
-      </div>
-      <div v-else>
-        <LoadingButton @click="editing = true">
-          <h2>Add values to display</h2>
-        </LoadingButton>
-      </div>
+      <DashboardValue
+        v-for="{ name, type, units }, index of observables"
+        :key="index"
+        :type="type"
+        :name="name"
+        :value="values[type+name] || 'Nan'"
+        :units="units"
+      />
+      <LoadingButton
+        v-if="observables.length === 0"
+        @click="editing = true"
+      >
+        <h2>
+          {{ intl.formatMessage({ id: 'dashboard.group.add.values' }) }}
+        </h2>
+      </LoadingButton>
     </div>
     <GroupEditDialog 
       v-if="editing"
