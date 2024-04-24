@@ -156,14 +156,16 @@ export default {
           {{ intl.formatMessage({ id: 'dashboard.group.delete' }) }}
         </p>
       </ContextMenu>
-      <DashboardValue
-        v-for="{ name, type, units }, index of observables"
-        :key="index"
-        :type="type"
-        :name="name"
-        :value="values[type+name] || 'Nan'"
-        :units="units"
-      />
+      <div class="values">
+        <DashboardValue
+          v-for="{ name, type, units }, index of observables"
+          :key="index"
+          :type="type"
+          :name="name"
+          :value="values[type+name] || 'Nan'"
+          :units="units"
+        />
+      </div>
       <LoadingButton
         v-if="observables.length === 0"
         @click="editing = true"
