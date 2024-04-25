@@ -1,5 +1,5 @@
 <script>
-import { GatewayApi } from '../../api/GatewayApi.js'
+import { GatewayApi } from '../../api/gateway/GatewayApi.js'
 import InputField from '../fields/InputField.vue'
 import LoadingButton from '../controls/LoadingButton.vue'
 import GatewayAuthDialog from '../dialogs/GatewayAuthDialog.vue'
@@ -55,16 +55,37 @@ export default {
   },
   methods: {
     async loadCloudConfig() {
-      this.cloudConfig = await GatewayApi.getCloudConfig()
+      try {
+        this.cloudConfig = await GatewayApi.getCloudConfig()
+      } catch (error) {
+        console.error(error)
+        toast.error({
+          caption: 'Failed to fetch cloud info'
+        })
+      }
     },
     async getConnStatus() {
-      this.status = await GatewayApi.getConnectionStatus()
+      try {
+        this.status = await GatewayApi.getConnectionStatus()
+      } catch (error) {
+        console.error(error)
+      }
     },
     async loadAuthentication() {
-      this.store.setAuthentication(await GatewayApi.getCloudAuthentication())
+      try {
+        this.store.setAuthentication(await GatewayApi.getCloudAuthentication())
+      } catch (error) {
+        console.log(error)
+        toast.error({
+          caption: 'Failed to fetch cloud authentication info'
+        })
+      }
     },
     async connect() {
-      if (!(await GatewayApi.cloudConnect())) {
+      try {
+        await GatewayApi.cloudConnect()
+      } catch (error) {
+        console.error(error)
         toast.error({
           caption: this.intl.formatMessage({ id: 'gateway.cloud.conn.failed' })
         })
@@ -72,7 +93,10 @@ export default {
     },
     async disconnect() {
       if (confirm(this.intl.formatMessage({ id: 'gateway.cloud.disconnect.confirm' }))) {
-        if (!(await GatewayApi.cloudDisconnect())) {
+        try {
+          await GatewayApi.cloudDisconnect()
+        } catch (error) {
+          console.log(error)
           toast.error({
             caption: this.intl.formatMessage({ id: 'gateway.cloud.disconnect.failed' })
           })
@@ -81,14 +105,15 @@ export default {
     },
     async logout() {
       if (confirm(this.intl.formatMessage({ id: 'gateway.cloud.logout.confirm' }))) {
-        if (await GatewayApi.cloudLogout()) {
+        try {
+          await GatewayApi.cloudLogout()
           toast.success({
             caption: this.intl.formatMessage({ id: 'gateway.cloud.logout.success' })
           })
           this.loadCloudConfig()
           this.dialogVisible = false
-        } else {
-          toast.success({
+        } catch (error) {
+          toast.error({
             caption: this.intl.formatMessage({ id: 'gateway.cloud.logout.error' })
           })
         }

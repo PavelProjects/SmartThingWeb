@@ -3,21 +3,46 @@ import GatewayAuthInfo from './GatewayAuthInfo.vue'
 import MenuSvg from 'vue-material-design-icons/Menu.vue'
 import UserAuthInfo from './UserAuthInfo.vue'
 import { storeToRefs } from 'pinia'
-import { useControlPanelStore } from '../../store/controlPanelStore'
+import { useGatewayStore } from '../../store/gatewayStore'
 import { useIntl } from 'vue-intl'
+import { router } from '../../routes'
+import GatewaySelector from '../gateway/GatewaySelector.vue'
 
 export default {
   name: 'HeaderDoc',
   components: {
     GatewayAuthInfo,
     MenuSvg,
-    UserAuthInfo
+    UserAuthInfo,
+    GatewaySelector
   },
   data() {
     const mode = import.meta.env.VITE_MODE
     const intl = useIntl()
-    const { gateway } = storeToRefs(useControlPanelStore())
-    return { mode, intl, gateway }
+    const { gateway } = storeToRefs(useGatewayStore())
+    return { 
+      mode,
+      intl,
+      gateway,
+      gatewaySelectorVisible: false
+    }
+  },
+  computed: {
+    showGatewayRoutes() {
+      return this.mode === 'gateway' || !!this.gateway
+    }
+  },
+  methods: {
+    addGatewayToPath(path) {
+      if (this.mode === 'gateway') {
+        return path
+      }
+      if (!this.gateway) {
+        router.push("/gateways")
+        return
+      }
+      return `/${this.gateway.id}${path}`
+    }
   }
 }
 </script>
@@ -29,28 +54,37 @@ export default {
       <router-link to="/">
         <h1 class="green">{{ intl.formatMessage({ id: 'doc.title' }) }}</h1>
       </router-link>
-      <div class="menu-items">
-        <router-link to="/dashboard">
+      <div v-if="showGatewayRoutes" class="menu-items">
+        <router-link :to="addGatewayToPath('/dashboard')">
           <h2>{{ intl.formatMessage({ id: 'doc.dashboard' }) }}</h2>
         </router-link>
-        <router-link to="/panel">
+        <router-link :to="addGatewayToPath('/panel')">
           <h2>{{ intl.formatMessage({ id: 'doc.panel' }) }}</h2>
         </router-link>
-        <router-link v-if="mode === 'gateway'" to="/settings">
+        <router-link :to="addGatewayToPath('/settings')">
           <h2>{{ intl.formatMessage({ id: 'doc.device.settings' }) }}</h2>
         </router-link>
-        <router-link v-if="mode === 'gateway'" to="/logs">
+        <router-link :to="addGatewayToPath('/logs')">
           <h2>{{ intl.formatMessage({ id: 'doc.device.logs' }) }}</h2>
         </router-link>
       </div>
     </div>
     <div v-if="gateway" class="gateway-info">
-      <h1 :title="'id: ' + gateway.description" class="title">
+      <h1
+        class="title"
+        style="cursor: pointer;"
+        :title="'id: ' + gateway.description"
+        @click.stop="gatewaySelectorVisible = true"
+      >
         {{ intl.formatMessage({ id: 'gateway' }, { gateway: gateway.name }) }}
       </h1>
     </div>
     <UserAuthInfo v-if="mode === 'cloud'" class="log-in-info" />
     <GatewayAuthInfo v-if="mode === 'gateway'" class="log-in-info" />
+    <GatewaySelector 
+      v-if="mode === 'cloud' && gatewaySelectorVisible"
+      @close="gatewaySelectorVisible = false"
+    />
   </div>
 </template>
 

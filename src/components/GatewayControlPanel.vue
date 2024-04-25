@@ -2,53 +2,49 @@
 import DevicesSearchView from './device/DevicesSearchView.vue'
 import DeviceControlPanel from './device/DeviceControlPanel.vue'
 import { CloudApi } from '../api/CloudApi'
-import { useControlPanelStore } from '../store/controlPanelStore'
+import { useGatewayStore } from '../store/gatewayStore'
 import { storeToRefs } from 'pinia'
 import { useIntl } from 'vue-intl'
+import GatewaySelector from './gateway/GatewaySelector.vue'
 
 export default {
   name: 'DevicesMain',
   components: {
     DevicesSearchView,
-    DeviceControlPanel
+    DeviceControlPanel,
+    GatewaySelector
   },
   data() {
-    const { gateway, device } = storeToRefs(useControlPanelStore())
+    const { gateway, device } = storeToRefs(useGatewayStore())
     const intl = useIntl()
     return {
+      mode: import.meta.env.VITE_MODE,
       gateway,
       device,
       intl,
-      gatewayId: this.$route.params.gateway
     }
   },
-  async mounted() {
-    if (!this.gateway && this.gatewayId && import.meta.env.VITE_MODE === 'cloud') {
-      this.gateway = await CloudApi.getGateway(this.gatewayId)
-    }
-  }
+  // todo select device from path
 }
 </script>
 
 <template>
-  <div class="list">
-    <div class="devices-table">
-      <div v-if="!gatewayId || gateway">
-        <DevicesSearchView
-          class="search"
-          :gateway="gateway"
-          @select="(deviceInfo) => (device = deviceInfo)"
-        />
-        <div v-if="device">
-          <h1 class="title">{{ intl.formatMessage({ id: 'gateway.panel' }) }}</h1>
-          <KeepAlive>
-            <DeviceControlPanel :key="device.ip" />
-          </KeepAlive>
-        </div>
+  <div class="devices-table">
+    <div v-if="mode === 'gateway' || !!gateway">
+      <DevicesSearchView
+        class="search"
+        :gateway="gateway"
+        @select="(deviceInfo) => (device = deviceInfo)"
+      />
+      <div v-if="device">
+        <h1 class="title">{{ intl.formatMessage({ id: 'gateway.panel' }) }}</h1>
+        <KeepAlive>
+          <DeviceControlPanel :key="device.ip" />
+        </KeepAlive>
       </div>
-      <div v-else style="color: red">
-        <h1>{{ intl.formatMessage({ id: 'error' }, { type: 'access_denied' }) }}</h1>
-      </div>
+    </div>
+    <div v-else style="color: red">
+      <h1>{{ intl.formatMessage({ id: 'error' }, { type: 'access_denied' }) }}</h1>
     </div>
   </div>
 </template>

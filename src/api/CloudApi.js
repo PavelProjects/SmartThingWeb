@@ -132,11 +132,12 @@ const CloudApi = {
       console.error(error)
     }
   },
-  async sendGatewayCommand(gateway, command) {
+  async sendGatewayCommand(gateway, command, parameters) {
     try {
       const response = await axiosInstance.post(URL_GATEWAY_REQUEST + '/command', {
         gatewayId: gateway.id,
-        command
+        command,
+        parameters
       })
       return response.data || {}
     } catch (error) {

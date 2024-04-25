@@ -1,7 +1,8 @@
 <script>
 import { useIntl } from 'vue-intl'
-import { GatewayApi } from '../../api/GatewayApi'
+import { GatewayApi } from '../../api/gateway/GatewayApi'
 import { useGatewayAuthStore } from '../../store/gatewayAuthStore'
+import { toast } from '../../utils/EventBus'
 import LoadingButton from '../controls/LoadingButton.vue'
 import InputField from '../fields/InputField.vue'
 import PopUpDialog from './PopUpDialog.vue'
@@ -57,10 +58,31 @@ export default {
         return
       }
       this.loading = true
-      this.store.setAuthentication(
-        await GatewayApi.cloudLogin(this.parsedToken).finally(() => (this.loading = false))
-      )
-      this.$emit('close')
+      try {
+        this.store.setAuthentication(
+          await GatewayApi.cloudLogin(this.parsedToken).finally(() => (this.loading = false))
+        )
+        toast.success({
+          caption: 'Successfuly authenticated in cloud'
+        })
+        this.$emit('close')
+      } catch (error) {
+        console.error(error)
+        const { response } = error || {}
+        const { status } = response
+        let description = ''
+        if (status == 403) {
+          description = 'Access denied. Wrong token?'
+        } else if (status == 503) {
+          description = 'Cloud is unavailable'
+        }
+        toast.error({
+          caption: 'Failed to authenticate in cloud',
+          description
+        })
+      } finally {
+        this.loading = false
+      }
     }
   }
 }

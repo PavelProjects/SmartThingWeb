@@ -1,8 +1,11 @@
 <script>
-import { GatewayApi } from '../../../api/GatewayApi'
+import { GatewayApi } from '../../../api/gateway/GatewayApi'
 import SettingsEditor from './SettingsEditor.vue'
 import MenuView from '../../menu/MenuView.vue'
 import { useIntl } from 'vue-intl'
+import { toast } from '../../../utils/EventBus'
+import { storeToRefs } from 'pinia'
+import { useGatewayStore } from '../../../store/gatewayStore'
 
 export default {
   name: 'SettingsManager',
@@ -10,42 +13,53 @@ export default {
     MenuView
   },
   data() {
+    const { gateway } = storeToRefs(useGatewayStore())
     const intl = useIntl()
     return {
       intl,
+      gateway,
       loading: false,
       selected: undefined,
       tabs: {},
       openTab: undefined
     }
   },
-  mounted() {
-    this.loadSettings()
+  watch: {
+    gateway() {
+      this.loadSettings()
+    }
   },
   methods: {
     async loadSettings() {
       this.loading = true
-      const settings = await GatewayApi.getDevicesSettings()
-      if (settings) {
-        this.tabs = settings.reduce((acc, settings) => {
-          acc[settings.name] = {
-            class: SettingsEditor,
-            caption: settings.name,
-            props: {
-              settings
+      try {
+        const settings = await GatewayApi.getDevicesSettings(this.gateway)
+        if (settings) {
+          this.tabs = settings.reduce((acc, settings) => {
+            acc[settings.name] = {
+              class: SettingsEditor,
+              caption: settings.name,
+              props: {
+                settings
+              }
             }
-          }
-          return acc
-        }, {})
-      }
-      this.tabs['new'] = {
-        class: SettingsEditor,
-        caption: this.intl.formatMessage({ id: 'device.settings.manager.add' }),
-        props: {
-          settings: {}
+            return acc
+          }, {})
         }
+        this.tabs['new'] = {
+          class: SettingsEditor,
+          caption: this.intl.formatMessage({ id: 'device.settings.manager.add' }),
+          props: {
+            settings: {}
+          }
+        }
+        this.loading = false
+      } catch (error) {
+        console.error(error)
+        toast.error({
+          caption: 'Failed to load saved device settings'
+        })
       }
-      this.loading = false
     },
     async handleChange(name) {
       await this.loadSettings()

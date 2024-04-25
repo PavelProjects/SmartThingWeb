@@ -1,7 +1,7 @@
-import { useControlPanelStore } from '../store/controlPanelStore'
+import { useGatewayStore } from '../store/gatewayStore'
 import { useStompClientStore } from '../store/stompClientStore'
 import { EventBus, REQUEST } from '../utils/EventBus'
-import { CloudApi } from './CloudApi'
+import { GatewayApi } from './gateway/GatewayApi'
 
 const SEARCH_TIME = 10000
 
@@ -36,19 +36,14 @@ const GatewaySearhApi = {
 
 const CloudSearchApi = {
   async searchDevices(onDeviceFound = () => {}) {
-    const { gateway } = useControlPanelStore()
+    const { gateway } = useGatewayStore()
     EventBus.emit(REQUEST, { id: 'search', loading: true })
 
-    const requestInfo = await CloudApi.sendGatewayCommand(gateway, 'search')
-    if (!requestInfo || !requestInfo.finished) {
-      console.error('Request not finished')
-      return
-    }
-    const result = JSON.parse(requestInfo.result)
-    if (Array.isArray(result)) {
-      result.forEach(onDeviceFound)
+    const response = await GatewayApi.getFoundDevices(gateway)
+    if (Array.isArray(response)) {
+      response.forEach(onDeviceFound)
     } else {
-      console.error('Search result is not array: ' + result)
+      console.error('Search result is not array: ' + response)
     }
     EventBus.emit(REQUEST, { id: 'search', loading: false })
   }

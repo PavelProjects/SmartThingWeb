@@ -1,7 +1,7 @@
 <script>
 import { useIntl } from 'vue-intl'
 import { SearchApi } from '../../api/SearchDevicesApi'
-import { EventBus, REQUEST } from '../../utils/EventBus'
+import { EventBus, REQUEST, toast } from '../../utils/EventBus'
 import UpdateButton from '../controls/UpdateButton.vue'
 import DeviceItem from './DeviceItem.vue'
 
@@ -55,13 +55,22 @@ export default {
           }
         }
       })
-      SearchApi.searchDevices((deviceInfo) => {
-        if (!this.devices[deviceInfo.ip]) {
-          this.devices[deviceInfo.ip] = deviceInfo
-          foundDevices.push(deviceInfo.ip)
-          console.debug(`Found new device: ${deviceInfo.name}`)
-        }
-      })
+
+      try {
+        // todo rework
+        SearchApi.searchDevices((deviceInfo) => {
+          if (!this.devices[deviceInfo.ip]) {
+            this.devices[deviceInfo.ip] = deviceInfo
+            foundDevices.push(deviceInfo.ip)
+            console.debug(`Found new device: ${deviceInfo.name}`)
+          }
+        })
+      } catch (error) {
+        console.error(error)
+        toast.error({
+          caption: 'Failed to load found devices'
+        })
+      }
     },
     handleClick(ip, deviceInfo) {
       this.selectedIp = ip

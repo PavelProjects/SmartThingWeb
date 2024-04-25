@@ -1,7 +1,9 @@
 <script>
+import { storeToRefs } from 'pinia'
 import { useIntl } from 'vue-intl'
-import { DashboardApi } from '../../api/DashboardApi'
+import { DashboardApi } from '../../api/gateway/DashboardApi'
 import { useDashboardStore } from '../../store/dashboardStore'
+import { useGatewayStore } from '../../store/gatewayStore'
 import { toast } from '../../utils/EventBus'
 import DevicesSearchView from '../device/DevicesSearchView.vue'
 import PopUpDialog from '../dialogs/PopUpDialog.vue'
@@ -9,8 +11,9 @@ export default {
   name: 'GroupAddDialog',
   components: { PopUpDialog, DevicesSearchView },
   data() {
+    const { gateway } = storeToRefs(useGatewayStore())
     const intl = useIntl()
-    return { intl }
+    return { intl, gateway }
   },
   methods: {
     async selectDevice(newDev) {
@@ -25,7 +28,7 @@ export default {
         return
       }
       try {
-        await DashboardApi.createGroup({ device: newDev, observables: [] })
+        await DashboardApi.createGroup({ device: newDev, observables: [] }, this.gateway)
         this.$emit('close', true)
         toast.success({
           caption: this.intl.formatMessage({ id: 'dashboard.group.create.success' }, { name: newDev.name })

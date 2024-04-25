@@ -1,11 +1,13 @@
 <script>
-import { GatewayApi } from '../../../api/GatewayApi'
+import { GatewayApi } from '../../../api/gateway/GatewayApi'
 import { toast } from '../../../utils/EventBus'
 import LoadingButton from '../../controls/LoadingButton.vue'
 import InputField from '../../fields/InputField.vue'
 import { DeviceApi } from '../../../api/device/DeviceApi'
 import DevicesSearchView from '../DevicesSearchView.vue'
 import { useIntl } from 'vue-intl'
+import { useGatewayStore } from '../../../store/gatewayStore'
+import { storeToRefs } from 'pinia'
 
 const MODE = {
   EXPORT: 'export',
@@ -25,6 +27,7 @@ export default {
     }
   },
   data() {
+    const { gateway } = storeToRefs(useGatewayStore())
     const intl = useIntl()
     const { name, value } = this.settings
     return {
@@ -34,7 +37,8 @@ export default {
       loadingDevices: false,
       devices: [],
       selectedDevice: undefined,
-      mode: undefined
+      mode: undefined,
+      gateway
     }
   },
   methods: {
@@ -67,18 +71,35 @@ export default {
             oldName: this.settings.name,
             ...this.newSettings
           }
-          if (await GatewayApi.updateDeviceSettings(payload)) {
+
+          try {
+            await GatewayApi.updateDeviceSettings(payload, this.gateway)
             toast.success({
               caption: this.intl.formatMessage({ id: 'device.settings.editor.updated' })
             })
             this.$emit('changed', this.newSettings.name)
+          } catch (error) {
+            console.error(error)
+            const { message: description } = await extractDataFromError(error)
+            toast.error({
+              caption: 'Failed to update device settings',
+              description
+            })
           }
         } else {
-          if (await GatewayApi.createDeviceSettings(this.newSettings)) {
+          try {
+            await GatewayApi.createDeviceSettings(this.newSettings, this.gateway)
             toast.success({
               caption: this.intl.formatMessage({ id: 'device.settings.editor.created' })
             })
             this.$emit('changed', this.newSettings.name)
+          } catch (error) {
+            console.error(error)
+            const { message: description } = await extractDataFromError(error)
+            toast.error({
+              caption: 'Failed to create device settings',
+              description
+            })
           }
         }
       } finally {
@@ -89,11 +110,19 @@ export default {
       if (!confirm(this.intl.formatMessage({ id: 'device.settings.editor.delete.confirm' }))) {
         return
       }
-      if (await GatewayApi.deleteDeviceSettings(this.settings.name)) {
+      try {
+        await GatewayApi.deleteDeviceSettings(this.settings.name, this.gateway)
         toast.success({
           caption: this.intl.formatMessage({ id: 'device.settings.editor.delete.success' })
         })
         this.$emit('changed')
+      } catch (error) {
+        console.error(error)
+        const { message: description } = await extractDataFromError(error)
+        toast.error({
+          caption: 'Failed to delete device settings',
+          description
+        })
       }
     },
     async handleDeviceClick(deviceInfo) {

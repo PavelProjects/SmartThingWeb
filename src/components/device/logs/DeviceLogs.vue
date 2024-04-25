@@ -1,8 +1,11 @@
 <script>
+import { storeToRefs } from 'pinia'
 import { useIntl } from 'vue-intl'
-import { GatewayApi } from '../../../api/GatewayApi'
+import { GatewayApi } from '../../../api/gateway/GatewayApi'
 import { useStompClientStore } from '../../../store/stompClientStore'
+import { toast } from '../../../utils/EventBus'
 import LogMessage from './LogMessage.vue'
+import { useGatewayStore } from '../../../store/gatewayStore'
 
 export default {
   name: 'DeviceLogs',
@@ -12,10 +15,11 @@ export default {
   data() {
     const intl = useIntl()
     const stompClient = useStompClientStore()
+    const { gateway } = storeToRefs(useGatewayStore())
 
     return {
       intl,
-      columns: ['device', 'date', 'tag', 'level', 'msg'],
+      gateway,
       messages: [],
       colors: {},
       stompClient,
@@ -23,9 +27,18 @@ export default {
     }
   },
   async mounted() {
-    this.messages = await GatewayApi.getLogs()
+    try {
+      this.messages = await GatewayApi.getLogs(this.gateway)
+    } catch (error) {
+      console.error(error)
+      toast.error({
+        caption: 'Failed to load device logs'
+      })
+      return;
+    }
     this.messages.reverse()
 
+    // todo proxy through cloud?
     this.stompClient.unsubscribe('/devices/logs')
     this.stompClient.subscribe('/devices/logs', (message) => {
       if (message && message.body) {
@@ -79,7 +92,7 @@ export default {
 <template>
   <div class="logs-view">
     <div class="log-message-container bordered">
-      <h2 v-for="column of columns" :key="column">
+      <h2 v-for="column of ['device', 'date', 'tag', 'level', 'msg']" :key="column">
         {{ intl.formatMessage({ id: 'device.logs.columns' }, { column }) }}
       </h2>
     </div>

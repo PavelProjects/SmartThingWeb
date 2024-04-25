@@ -6,9 +6,11 @@ import GroupEditDialog from './GroupEditDialog.vue';
 import { useIntl } from 'vue-intl';
 import { useDashboardStore } from '../../store/dashboardStore';
 import LoadingButton from '../controls/LoadingButton.vue';
-import { DashboardApi } from '../../api/DashboardApi';
+import { DashboardApi } from '../../api/gateway/DashboardApi';
 import { toast } from '../../utils/EventBus';
 import UpdateButton from '../controls/UpdateButton.vue';
+import { useGatewayStore } from '../../store/gatewayStore';
+import { storeToRefs } from 'pinia';
 
 export default {
   components: { 
@@ -24,6 +26,7 @@ export default {
     group: Object,
   },
   data() {
+    const { gateway } = storeToRefs(useGatewayStore())
     const intl = useIntl()
     return {
       intl,
@@ -33,6 +36,7 @@ export default {
       values: {},
       intervalId: -1,
       editing: false,
+      gateway,
       ...this.group
     }
   },
@@ -91,7 +95,7 @@ export default {
       }, 2000)
     },
     async updateSensors() {
-      return DeviceApi.getDeviceSensors(this.device).then((sensors) => {
+      return DeviceApi.getDeviceSensors(this.device, this.gateway).then((sensors) => {
         Object.entries(sensors).forEach(([name, {value}]) => {
           this.values['sensor' + name] = value
         })
@@ -99,7 +103,7 @@ export default {
       })
     },
     async updateStates() {
-      return DeviceApi.getDeviceStates(this.device).then((states) => {
+      return DeviceApi.getDeviceStates(this.device, this.gateway).then((states) => {
         Object.entries(states).forEach(([name, value]) => {
           this.values['state' + name] = value
         })
@@ -109,7 +113,7 @@ export default {
     async deleteGroup() {
       if (confirm(this.intl.formatMessage({ id: 'dashboard.group.delete.confirm' }))) {
         try {
-          await DashboardApi.deleteGroup(this.group.id)
+          await DashboardApi.deleteGroup(this.group.id, this.gateway)
           toast.success({
             caption: this.intl.formatMessage({ id: 'dashboard.group.delete.success' })
           })

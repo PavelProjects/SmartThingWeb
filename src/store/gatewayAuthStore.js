@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { useControlPanelStore } from './controlPanelStore'
+import { useGatewayStore } from './gatewayStore'
 
 export const useGatewayAuthStore = defineStore({
   id: 'gateway_auth_store',
@@ -17,8 +17,8 @@ export const useGatewayAuthStore = defineStore({
         this.user = undefined
         this.gateway = undefined
       }
-      const controlPanelStore = useControlPanelStore()
-      controlPanelStore.gateway = this.gateway
+      const gatewayStore = useGatewayStore()
+      gatewayStore.gateway = this.gateway
     }
   }
 })

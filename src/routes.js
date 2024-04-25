@@ -44,17 +44,29 @@ const cloudRoutes = [
   {
     path: '/',
     redirect: () => {
-      return '/panel'
+      return '/gateways'
     },
     children: [
       {
-        path: '/panel',
+        path: '/gateways',
         component: GatewaySelector
       },
       {
-        path: '/panel/:gateway',
+        path: '/:gateway/panel',
         component: GatewayControlPanel
-      }
+      },
+      {
+        path: '/:gateway/dashboard',
+        component: Dashborard
+      },
+      {
+        path: '/:gateway/logs',
+        component: DeviceLogs
+      },
+      {
+        path: '/:gateway/settings',
+        component: SettingsManager
+      },
     ]
   },
   unkownRoute

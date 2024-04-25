@@ -85,7 +85,7 @@ const messages = {
     'gateway.create.success': 'Gateway created',
     'gateway.create.error': 'Failed to create gateway',
     'gateway.create.button': 'Create gateway',
-    'gateway.selector.title': 'Gateways',
+    'gateway.selector.title': 'Select gateway',
     'device.logs.columns': `{
       column, select,
       device {Device}
@@ -288,7 +288,7 @@ const messages = {
     'gateway.create.success': 'Маршрутизатор создан',
     'gateway.create.error': 'Не удалось создать маршрутизатор',
     'gateway.create.button': 'Создать маршрутизатор',
-    'gateway.selector.title': 'Маршрутизаторы',
+    'gateway.selector.title': 'ВЫберите аршрутизатор',
     'device.logs.columns': `{
       column, select,
       device {Устройство}

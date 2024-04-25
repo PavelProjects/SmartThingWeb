@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 
-export const useControlPanelStore = defineStore({
+export const useGatewayStore = defineStore({
   id: 'control_panel',
   state: () => {
     return {

@@ -7,7 +7,7 @@ import ConfigView from './tabs/ConfigView.vue'
 import MetricsViewVue from './tabs/MetricsView.vue'
 import MenuView from '../menu/MenuView.vue'
 import { storeToRefs } from 'pinia'
-import { useControlPanelStore } from '../../store/controlPanelStore'
+import { useGatewayStore } from '../../store/gatewayStore'
 import { useIntl } from 'vue-intl'
 
 export default {
@@ -16,7 +16,7 @@ export default {
     MenuView
   },
   provide() {
-    const { device, gateway } = storeToRefs(useControlPanelStore())
+    const { device, gateway } = storeToRefs(useGatewayStore())
     return {
       device,
       gateway

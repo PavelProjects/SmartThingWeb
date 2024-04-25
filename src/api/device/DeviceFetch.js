@@ -1,5 +1,5 @@
 import { CloudApi } from '../CloudApi'
-import { GatewayApi } from '../GatewayApi'
+import { GatewayApi } from '../gateway/GatewayApi'
 
 const mode = import.meta.env.VITE_MODE
 

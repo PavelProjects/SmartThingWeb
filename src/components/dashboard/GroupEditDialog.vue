@@ -7,7 +7,9 @@ import LoadingButton from '../controls/LoadingButton.vue'
 import { toast } from '../../utils/EventBus'
 import DeleteSVG from 'vue-material-design-icons/Delete.vue'
 import PlusSVG from 'vue-material-design-icons/Plus.vue'
-import { DashboardApi } from '../../api/DashboardApi'
+import { DashboardApi } from '../../api/gateway/DashboardApi'
+import { useGatewayStore } from '../../store/gatewayStore'
+import { storeToRefs } from 'pinia'
 
 export default {
   name: 'GroupEditDialog',
@@ -22,6 +24,7 @@ export default {
     group: Object
   },
   data() {
+    const { gateway } = storeToRefs(useGatewayStore())
     const { deviceConfig } = useDashboardStore()
     const { sensors, states } = deviceConfig[this.group.id] || {}
     const { device, observables, config } = JSON.parse(JSON.stringify(this.group))
@@ -34,6 +37,7 @@ export default {
       sensors,
       states,
       intl,
+      gateway,
       loading: false,
       newObs: { type: 'sensor' }
     }
@@ -59,7 +63,7 @@ export default {
           observables: this.observables,
           config: this.config
         }
-        await DashboardApi.updateGroup(this.group.id, updatedGroup)
+        await DashboardApi.updateGroup(updatedGroup, this.gateway)
         this.$emit('close', true)
         toast.success({
           caption: this.intl.formatMessage({ id: 'dashboard.group.edit.success' })

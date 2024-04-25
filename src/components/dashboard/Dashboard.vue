@@ -4,8 +4,9 @@ import { useDashboardStore } from '../../store/dashboardStore'
 import { storeToRefs } from 'pinia';
 import PlusSVG from 'vue-material-design-icons/Plus.vue'
 import GroupAddDialog from './GroupAddDialog.vue';
-import { DashboardApi } from '../../api/DashboardApi';
+import { DashboardApi } from '../../api/gateway/DashboardApi';
 import { useIntl } from 'vue-intl';
+import { useGatewayStore } from '../../store/gatewayStore';
 
 export default {
   name: 'Dashboard',
@@ -16,22 +17,26 @@ export default {
   },
   data() {
     const intl = useIntl()
+    const { gateway } = storeToRefs(useGatewayStore())
     const store = useDashboardStore()
     const { groups } = storeToRefs(store)
     return {
       intl,
       groups,
       store,
+      gateway,
       addGroupDialog: false
     }
   },
-  mounted() {
-    this.loadGroups()
+  watch: {
+    gateway() {
+      this.loadGroups()
+    }
   },
   methods: {
     async loadGroups() {
       this.groups = []
-      this.groups = await DashboardApi.getGroups()
+      this.groups = await DashboardApi.getGroups(this.gateway)
     },
     handleAddClose(result) {
       if (result) {

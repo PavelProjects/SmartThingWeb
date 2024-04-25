@@ -6,20 +6,23 @@ import { CloudApi } from './api/CloudApi'
 import { useCloudAuthStore } from './store/cloudAuthStore'
 import { storeToRefs } from 'pinia'
 import { useStompClientStore } from './store/stompClientStore'
+import GatewayProvider from './components/gateway/GatewayProvider.vue'
 
 export default {
   components: {
     HeaderDoc,
     ToatsView,
-    CloudAuthDialog
+    CloudAuthDialog,
+    GatewayProvider
   },
   data() {
-    const { id, login, setAuthentication } = storeToRefs(useCloudAuthStore())
+    const authStore = useCloudAuthStore()
+    const { id, login } = storeToRefs(authStore)
     return {
       mode: import.meta.env.VITE_MODE,
       id,
       login,
-      setAuthentication
+      authStore,
     }
   },
   computed: {
@@ -37,27 +40,32 @@ export default {
       return
     }
     const { user } = (await CloudApi.getAuthentication()) ?? {}
-    this.setAuthentication(user)
+    this.authStore.setAuthentication(user)
   },
 }
 </script>
 
 <template>
   <div>
-    <HeaderDoc class="doc" />
-    <ToatsView id="toasts-list" />
+    <router-view v-if="isAuthenticated" :key="$route.fullPath" v-slot="{ Component, path }">
+      <GatewayProvider>
+        <HeaderDoc class="doc" />
+        <ToatsView id="toasts-list" />
 
+        <CloudAuthDialog
+          v-if="!isAuthenticated"
+          @authenticated="({ user }) => authStore.setAuthentication(user)"
+        />
+          <!-- <keep-alive>
+            <component :is="Component" :key="path" />
+          </keep-alive> -->
+        <component :is="Component" :key="path" />
+      </GatewayProvider>
+    </router-view>
     <CloudAuthDialog
       v-if="!isAuthenticated"
-      @authenticated="({ user }) => setAuthentication(user)"
+      @authenticated="({ user }) => authStore.setAuthentication(user)"
     />
-
-    <router-view v-if="isAuthenticated" v-slot="{ Component, path }">
-      <!-- <keep-alive>
-        <component :is="Component" :key="path" />
-      </keep-alive> -->
-      <component :is="Component" :key="path" />
-    </router-view>
   </div>
 </template>
 
