@@ -193,7 +193,7 @@ export default {
 </script>
 
 <template>
-  <div class="bordered" style="padding: var(--padding-default)">
+  <div class="hook">
     <div class="header">
       <h3 class="title" style="flex: 1 1 auto; text-align: start">
         [{{ hook.id }}] {{ hook.caption || systemNameToNormal(hook.type) }}
@@ -230,6 +230,9 @@ export default {
 </template>
 
 <style scoped>
+.hook {
+  padding: var(--padding-default);
+}
 .header {
   display: flex;
   flex-direction: row;

@@ -125,34 +125,35 @@ export default {
 </template>
 
 <style scoped>
-.update-button {
-  position: absolute;
-  top: 0px;
-  right: 0px;
-}
-.menu-panel {
-  display: flex;
-  gap: var(--default-gap);
-}
-.menu-items {
-  display: flex;
-  height: fit-content;
-  overflow: auto;
-}
-.menu-item-content {
-  position: relative;
-  flex: 1 0 auto;
-}
-.placeholder {
-  margin: auto;
-}
-.vertical {
-  flex-direction: row;
-  border-bottom: 2px solid var(--color-border);
-}
-.horizontal {
-  flex-direction: column;
-  border: 2px solid var(--color-border);
-  border-radius: 5px;
-}
+  .update-button {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+  }
+  .menu-panel {
+    display: flex;
+    gap: var(--default-gap);
+  }
+  .menu-items {
+    display: flex;
+    overflow: auto;
+  }
+  .menu-item-content {
+    position: relative;
+    flex: 1 0 auto;
+  }
+  .placeholder {
+    margin: auto;
+  }
+  .vertical {
+    flex-direction: row;
+    border-bottom: 2px solid var(--color-border);
+  }
+  .horizontal {
+    flex-direction: column;
+    border-right: 2px solid var(--color-border);
+  }
+  .vertical .menu-item {
+    flex: 1 0 auto;
+  }
 </style>

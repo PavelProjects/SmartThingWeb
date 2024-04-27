@@ -82,3 +82,9 @@ export default {
     </h2>
   </div>
 </template>
+
+<style scoped>
+  .title:not(:last-child) {
+    border-bottom: 2px solid var(--color-border);
+  }
+</style>

@@ -17,6 +17,7 @@ export default {
   methods: {
     async loadGateway() {
       if (!this.gatewayId) {
+        this.gateway = {}
         return
       }
       this.gateway = await CloudApi.getGateway(this.gatewayId)

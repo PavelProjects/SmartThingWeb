@@ -11,7 +11,7 @@ export default {
     style() {
       if (this.selected) {
         return {
-          'background-color': 'var(--color-background-mute)',
+          'background-color': 'var(--color-background-soft)',
           'border-radius': 'var(--border-radius)'
         }
       }
@@ -28,25 +28,21 @@ export default {
 </template>
 
 <style scoped>
-.menu-item {
-  display: flex;
-  flex-direction: row;
-  flex: 1 0 auto;
-  margin: var(--padding-default);
-  transition:
-    color 0.5s,
-    background-color 0.5s;
-}
-.menu-item:hover {
-  opacity: 0.8;
-}
-.menu-item h2 {
-  transition: 0.5s;
-  cursor: pointer;
-  border-radius: var(--border-radius);
-  padding: 5px;
-  word-wrap: break-word;
-  text-align: center;
-  flex: 1 0 auto;
-}
+  .menu-item {
+    display: flex;
+    flex-direction: row;
+    margin: var(--padding-default);
+    transition: background-color 0.5s;
+    cursor: pointer;
+    padding: 2px;
+    border-radius: var(--border-radius);
+  }
+  .menu-item:hover {
+    transition: background-color 0.5s;
+    background-color: var(--color-background-mute);
+  }
+  .menu-item h2 {
+    word-wrap: break-word;
+    margin: auto;
+  }
 </style>

@@ -115,6 +115,13 @@ export default {
 .hooks-list-view {
   max-height: 80vh;
   overflow-y: auto;
-  margin-top: var(--default-gap);
+  padding: 2px;
+  border-top: 1px solid var(--color-border);
+}
+.hooks-list-view * {
+  border-bottom: 1px solid var(--color-border);
+}
+.hooks-list-view *:last-child {
+  border-bottom: none;
 }
 </style>
