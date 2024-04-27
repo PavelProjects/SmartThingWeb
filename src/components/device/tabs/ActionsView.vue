@@ -27,7 +27,8 @@ export default {
     async loadActions() {
       this.loading = true
       try {
-        this.actions = (await DeviceApi.getDeviceActionsInfo(this.device, this.gateway)) || []
+        const response = (await DeviceApi.getDeviceActionsInfo(this.device, this.gateway)) || {}
+        this.actions = Object.entries(response)
       } finally {
         this.loading = false
       }
@@ -52,7 +53,7 @@ export default {
     <sync-loader class="loading-spinner" :loading="loading"></sync-loader>
     <div v-if="actions.length > 0" class="buttons-panel">
       <LoadingButton
-        v-for="(caption, name) of actions"
+        v-for="[name, caption] of actions"
         :key="name"
         :loading="loadingAction"
         @click="sendAction(name)"
