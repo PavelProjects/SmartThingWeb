@@ -30,17 +30,7 @@ async function gatewayFetchCloud({ gateway, url, method, data }) {
   if (!gateway || !url || !method) {
     throw new Error('Gateway, url and method is required in device api call!')
   }
-  const response = await CloudApi.sendGatewayCommand(gateway, 'request', { url, method, data })
-  if (!response || !response.finished) {
-    // todo websocket Promise
-    console.error('Request not finished!')
-    return
-  }
-  const result = JSON.parse(response.result)
-  return {
-    status: result.code,
-    data: JSON.parse(result.body)
-  }
+  return await CloudApi.sendGatewayCommand(gateway, 'request', { url, method, data })
 }
 
 const gatewayFetch = mode === 'gateway' ? gatewayFetchLocal : gatewayFetchCloud

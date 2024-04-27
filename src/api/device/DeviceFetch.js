@@ -14,12 +14,7 @@ async function deviceFetchCloud({ gateway, device, command, params }) {
   if (!gateway || !device || !command) {
     throw new Error('Gateway, device and command is required in device api call!')
   }
-  const { result } = await CloudApi.sendDeviceRequest({ gateway, device, command, params })
-  const response = JSON.parse(result)
-  return {
-    status: response.code,
-    data: JSON.parse(response.body)
-  }
+  return await CloudApi.sendDeviceRequest({ gateway, device, command, params })
 }
 
 const deviceFetch = mode == 'cloud' ? deviceFetchCloud : deviceFetchLocal

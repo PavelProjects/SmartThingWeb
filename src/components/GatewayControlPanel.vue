@@ -25,6 +25,7 @@ export default {
     }
   },
   // todo select device from path
+  // todo gateway select if gateway offline (handle logout events)
 }
 </script>
 

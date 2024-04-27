@@ -133,30 +133,17 @@ const CloudApi = {
     }
   },
   async sendGatewayCommand(gateway, command, parameters) {
-    try {
-      const response = await axiosInstance.post(URL_GATEWAY_REQUEST + '/command', {
-        gatewayId: gateway.id,
-        command,
-        parameters
-      })
-      return response.data || {}
-    } catch (error) {
-      console.error(error)
-    }
+    return await axiosInstance.post(URL_GATEWAY_REQUEST + '/command', {
+      gatewayId: gateway.id,
+      command,
+      parameters
+    })
   },
   async sendDeviceRequest({ gateway, device, command, params }) {
-    try {
-      const response = await axiosInstance.post(URL_GATEWAY_REQUEST + '/device', {
-        gatewayId: gateway.id,
-        request: { device, command, params }
-      })
-      return response.data
-    } catch (error) {
-      console.error(error)
-      toast.error({
-        caption: 'Failed to send device request'
-      })
-    }
+    return await axiosInstance.post(URL_GATEWAY_REQUEST + '/device', {
+      gatewayId: gateway.id,
+      request: { device, command, params }
+    })
   }
 }
 export { CloudApi }
