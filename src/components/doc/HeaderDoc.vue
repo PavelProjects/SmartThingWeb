@@ -24,12 +24,13 @@ export default {
       mode,
       intl,
       gateway,
-      gatewaySelectorVisible: false
+      gatewaySelectorVisible: false,
+      showGatewayRoutes: this.mode === 'gateway' || !!this.gateway
     }
   },
-  computed: {
-    showGatewayRoutes() {
-      return this.mode === 'gateway' || !!this.gateway
+  watch: {
+    gateway() {
+      this.showGatewayRoutes = this.mode === 'gateway' || !!this.gateway
     }
   },
   methods: {
