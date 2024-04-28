@@ -3,6 +3,11 @@ import mitt from 'mitt'
 export const EventBus = mitt()
 export const TOAST = 'toast'
 export const REQUEST = 'request'
+export const EVENT = 'event'
+export const GATEWAY_EVENT = {
+  CONNECTED: "CONNECTED",
+  DISCONNECTED: "DISCONNECTED"
+}
 export const WS_CONNECTED = 'WS_CONNECTED'
 export const LOGGED_IN = 'LOGGED_IN'
 export const LOGGED_OUT = 'LOGGED_OUT'

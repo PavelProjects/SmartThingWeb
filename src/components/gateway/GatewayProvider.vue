@@ -2,6 +2,9 @@
 import { storeToRefs } from 'pinia'
 import { CloudApi } from '../../api/CloudApi'
 import { useGatewayStore } from '../../store/gatewayStore'
+import { router } from '../../routes'
+import { EVENT, EventBus, GATEWAY_EVENT, toast } from '../../utils/EventBus'
+
 export default {
   name: 'GatewayProvider',
   data() {
@@ -13,6 +16,10 @@ export default {
   },
   mounted() {
     this.loadGateway()
+    EventBus.on(EVENT, this.handleGatewayEvent)
+  },
+  unmounted() {
+    EventBus.off(EVENT, this.handleGatewayEvent)
   },
   methods: {
     async loadGateway() {
@@ -20,7 +27,30 @@ export default {
         this.gateway = {}
         return
       }
-      this.gateway = await CloudApi.getGateway(this.gatewayId)
+      const gtw = await CloudApi.getGateway(this.gatewayId)
+      if (!gtw || !gtw.online) {
+        router.push("/gateways")
+      } else {
+        this.gateway = gtw
+      }
+    },
+    handleGatewayEvent({ gateway, event }) {
+      if (!gateway || !Object.values(GATEWAY_EVENT).includes(event)) {
+        return
+      }
+      if (event === GATEWAY_EVENT.CONNECTED) {
+        toast.info({ 
+          caption: `Gateway ${gateway?.name} connected!`
+        })
+      } else if (event === GATEWAY_EVENT.DISCONNECTED) {
+        toast.error({ 
+          caption: `Gateway ${gateway?.name} disconnected!`
+        })
+        if (this.gateway?.id === gateway?.id) {
+          this.gateway = undefined
+          router.push("/gateways")
+        }
+      }
     }
   }
 }

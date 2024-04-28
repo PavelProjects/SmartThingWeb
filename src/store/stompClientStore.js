@@ -2,7 +2,7 @@ import { Client } from '@stomp/stompjs'
 import { defineStore } from 'pinia'
 import { GATEWAY_BROKER_URL } from '../api/gateway/GatewayApi'
 import { CLOUD_BROKER_URL } from '../api/CloudApi'
-import { EventBus, LOGGED_IN, LOGGED_OUT, TOAST, WS_CONNECTED } from '../utils/EventBus'
+import { EVENT, EventBus, LOGGED_IN, LOGGED_OUT, TOAST, WS_CONNECTED } from '../utils/EventBus'
 
 export const useStompClientStore = defineStore({
   id: 'stomp_client',
@@ -22,25 +22,38 @@ export const useStompClientStore = defineStore({
       client.subscribe(
         notifyTopic,
         (message) => {
-          if (message && message.body) {
-            console.debug('Got notification message! ' + message.body)
-            const { gateway, device, notification } = JSON.parse(message.body)
-            EventBus.emit(TOAST, {
-              gateway,
-              device,
-              toast: {
-                description: notification.message,
-                type: notification.type,
-                autoClose: false
-              }
-            })
-          } else {
+          if (!message?.body) {
             console.error('Empty notification message')
+            return
           }
+          console.debug('Got notification message! ' + message.body)
+          const { gateway, device, notification } = JSON.parse(message.body)
+          EventBus.emit(TOAST, {
+            gateway,
+            device,
+            toast: {
+              description: notification.message,
+              type: notification.type,
+              autoClose: false
+            }
+          })
         },
         { id: 'notification' }
       )
       console.debug('Subscribed to notification topic: ' + notifyTopic)
+
+      if (mode === 'cloud') {
+        client.subscribe('/secured/topic/event', (message) => {
+          if (!message?.body) {
+            console.error("Empty event message")
+            return
+          }
+          const { gateway, event } = JSON.parse(message.body)
+          console.debug(`Got event=${event} from ${gateway?.name}`)
+          EventBus.emit(EVENT, { gateway, event })
+        })
+        console.debug('Subscribed to event topic')
+      }
     }
 
     if (mode === 'gateway') {

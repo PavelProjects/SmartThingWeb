@@ -1,7 +1,7 @@
 <script>
 import { CloudApi } from '../../api/CloudApi'
 import { router } from '../../routes'
-import { toast } from '../../utils/EventBus'
+import { EVENT, EventBus, GATEWAY_EVENT, toast } from '../../utils/EventBus'
 import GatewayItem from './GatewayItem.vue'
 import GatewayEditDialog from './GatewayEditDialog.vue'
 import UpdateButton from '../controls/UpdateButton.vue'
@@ -30,6 +30,10 @@ export default {
   },
   async mounted() {
     await this.loadGateways()
+    EventBus.on(EVENT, this.handleGatewayEvent)
+  },
+  unmounted() {
+    EventBus.off(EVENT, this.handleGatewayEvent)
   },
   methods: {
     handleGatewayClick(gateway) {
@@ -60,7 +64,18 @@ export default {
           caption: this.intl.formatMessage({ id: 'gateway.create.error' })
         })
       }
-    }
+    },
+    handleGatewayEvent({ gateway, event }) {
+      if (!gateway || !Object.values(GATEWAY_EVENT).includes(event)) {
+        return
+      }
+      this.gateways.forEach(({id}, index) => {
+        if (gateway.id === id) {
+          this.gateways[index].online = event === GATEWAY_EVENT.CONNECTED
+          return
+        }
+      })
+    },
   }
 }
 </script>

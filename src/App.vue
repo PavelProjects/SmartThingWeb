@@ -50,7 +50,6 @@ export default {
     <router-view v-if="isAuthenticated" :key="$route.fullPath" v-slot="{ Component, path }">
       <GatewayProvider>
         <HeaderDoc class="doc" />
-        <ToatsView id="toasts-list" />
 
         <CloudAuthDialog
           v-if="!isAuthenticated"
@@ -62,6 +61,7 @@ export default {
         <component :is="Component" :key="path" />
       </GatewayProvider>
     </router-view>
+    <ToatsView id="toasts-list" />
     <CloudAuthDialog
       v-if="!isAuthenticated"
       @authenticated="({ user }) => authStore.setAuthentication(user)"

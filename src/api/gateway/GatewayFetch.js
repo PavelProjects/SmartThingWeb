@@ -30,7 +30,7 @@ async function gatewayFetchCloud({ gateway, url, method, data }) {
   if (!gateway || !url || !method) {
     throw new Error('Gateway, url and method is required in device api call!')
   }
-  return await CloudApi.sendGatewayCommand(gateway, 'request', { url, method, data })
+  return await CloudApi.sendGatewayCommand(gateway, 'REQUEST', { url, method, data })
 }
 
 const gatewayFetch = mode === 'gateway' ? gatewayFetchLocal : gatewayFetchCloud
