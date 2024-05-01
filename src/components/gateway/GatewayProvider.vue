@@ -10,6 +10,7 @@ export default {
   data() {
     const { gateway } = storeToRefs(useGatewayStore())
     return {
+      mode: import.meta.env.VITE_MODE,
       gatewayId: this.$route.params.gateway,
       gateway
     }
@@ -23,8 +24,12 @@ export default {
   },
   methods: {
     async loadGateway() {
-      if (!this.gatewayId) {
+      if (this.mode === 'gateway') {
         this.gateway = {}
+        return
+      }
+      if (!this.gateway) {
+        router.push("/gateways")
         return
       }
       const gtw = await CloudApi.getGateway(this.gatewayId)
