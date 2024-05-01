@@ -81,7 +81,7 @@ export default {
 </script>
 
 <template>
-  <div>
+  <div class="devices-search-view">
     <div style="position: relative">
       <h1 class="title">{{ !!title ? title : intl.formatMessage({ id: 'devices.search' }) }}</h1>
       <UpdateButton class="update" :loading="loading" :onClick="search" />
@@ -94,12 +94,21 @@ export default {
         :device="deviceInfo"
         @click="() => handleClick(ip, deviceInfo)"
       />
+      <h2 v-if="!loading && Object.keys(devices).length == 0" class="title">
+        {{ intl.formatMessage({ id: 'devices.search.empty' }) }}
+      </h2>
     </div>
   </div>
 </template>
 
 <style scoped>
-.update {
+.devices-search-view {
+  min-width: 340px;
+}
+.devices-search-view .title{
+  border-bottom: 1px solid var(--color-border);
+}
+.devices-search-view .update {
   position: absolute;
   right: 0px;
   top: 5px;
@@ -109,5 +118,15 @@ export default {
   flex-direction: column;
   row-gap: var(--default-gap);
   height: fit-content;
+  padding: 2px;
+}
+.search-results .device-item {
+  cursor: pointer;
+  border-bottom: 1px solid var(--color-border);
+}
+.search-results .device-item:last-child {
+  border-bottom: none;
+  border-bottom-left-radius: var(--border-radius);
+  border-bottom-right-radius: var(--border-radius);
 }
 </style>

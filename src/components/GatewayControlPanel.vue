@@ -33,7 +33,7 @@ export default {
   <div class="devices-table">
     <div v-if="mode === 'gateway' || !!gateway">
       <DevicesSearchView
-        class="search"
+        class="search bordered"
         :gateway="gateway"
         @select="(deviceInfo) => (device = deviceInfo)"
       />

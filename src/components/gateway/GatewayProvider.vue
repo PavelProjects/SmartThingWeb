@@ -46,10 +46,6 @@ export default {
         toast.error({ 
           caption: `Gateway ${gateway?.name} disconnected!`
         })
-        if (this.gateway?.id === gateway?.id) {
-          this.gateway = undefined
-          router.push("/gateways")
-        }
       }
     }
   }

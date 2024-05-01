@@ -24,6 +24,7 @@ export default {
       openTab: undefined
     }
   },
+  // todo is it really necessery?
   watch: {
     gateway() {
       this.loadSettings()
@@ -71,12 +72,14 @@ export default {
 
 <template>
   <div class="container">
-    <MenuView
-      :header="intl.formatMessage({ id: 'device.settings.manager.menu.header' })"
-      :tabs="tabs"
-      :tab="openTab"
-      @changed="(event) => handleChange(event)"
-    />
+    <h1 class="title">{{ intl.formatMessage({ id: 'device.settings.manager.menu.header' }) }}</h1>
+    <div class="bordered">
+      <MenuView
+        :tabs="tabs"
+        :tab="openTab"
+        @changed="handleChange"
+      />
+    </div>
   </div>
 </template>
 
@@ -84,5 +87,6 @@ export default {
 .container {
   width: fit-content;
   margin: 0 auto;
+  padding: 10px;
 }
 </style>

@@ -26,12 +26,19 @@ export default {
     header() {
       const { name, type } = this.device
       return `${name} ${type ? '(' + type + ')' : ''}`
-    }
+    },
+    style() {
+      if (this.selected) {
+        return {
+          'background-color': 'var(--color-background-soft)',
+        }
+      }
+    },
   }
 }
 </script>
 <template>
-  <div class="bordered device-container" :class="{ 'menu-selected': selected }">
+  <div class="device-item" :style="style">
     <div class="list" style="flex: 1 1 auto">
       <h1 class="header">{{ header }}</h1>
       <h2>
@@ -41,11 +48,16 @@ export default {
     <img v-if="imgSrc" :src="imgSrc" />
   </div>
 </template>
+
 <style scoped>
-.device-container {
+.device-item {
   padding: var(--padding-default);
   display: flex;
   flex-direction: row;
+}
+.device-item:hover {
+  transition: background-color 0.5s;
+  background-color: var(--color-background-mute);
 }
 .header {
   word-wrap: break-word;

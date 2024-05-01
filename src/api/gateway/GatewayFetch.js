@@ -1,5 +1,6 @@
 import axios from "axios";
 import { CloudApi } from "../CloudApi";
+import { toast } from "../../utils/EventBus";
 
 const GATEWAY_PATH = import.meta.env.VITE_GATEWAY_IP || document.location.hostname
 const GATEWAY_PORT = import.meta.env.VITE_GATEWAY_PORT
@@ -29,6 +30,12 @@ async function gatewayFetchLocal({ url, method, data }) {
 async function gatewayFetchCloud({ gateway, url, method, data }) {
   if (!gateway || !url || !method) {
     throw new Error('Gateway, url and method is required in device api call!')
+  }
+  if (!gateway?.online) {
+    toast.error({
+      caption: "Gateway is offline!"
+    })
+    return
   }
   return await CloudApi.sendGatewayCommand(gateway, 'REQUEST', { url, method, data })
 }

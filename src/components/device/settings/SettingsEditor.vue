@@ -8,6 +8,7 @@ import DevicesSearchView from '../DevicesSearchView.vue'
 import { useIntl } from 'vue-intl'
 import { useGatewayStore } from '../../../store/gatewayStore'
 import { storeToRefs } from 'pinia'
+import PopUpDialog from '../../dialogs/PopUpDialog.vue'
 
 const MODE = {
   EXPORT: 'export',
@@ -19,7 +20,8 @@ export default {
   components: {
     InputField,
     LoadingButton,
-    DevicesSearchView
+    DevicesSearchView,
+    PopUpDialog
   },
   props: {
     settings: {
@@ -180,8 +182,8 @@ export default {
 </script>
 
 <template>
-  <div class="container bordered">
-    <div class="list">
+  <div>
+    <div class="settings-editor">
       <InputField
         :label="intl.formatMessage({ id: 'device.settings.editor.name' })"
         v-model="newSettings.name"
@@ -220,18 +222,25 @@ export default {
         </button>
       </div>
     </div>
-    <DevicesSearchView
-      v-if="mode"
-      :title="intl.formatMessage({ id: 'device.settings.editor.select.device' })"
-      @select="handleDeviceClick"
-    />
+    <PopUpDialog v-if="mode" @close="mode = undefined">
+      <DevicesSearchView
+        :title="intl.formatMessage({ id: 'device.settings.editor.select.device' })"
+        @select="handleDeviceClick"
+      />
+    </PopUpDialog>
   </div>
 </template>
 
 <style scoped>
-.container {
-  width: 500px;
+.settings-editor {
+  width: 50vw;
   padding: var(--padding-default);
+  display: flex;
+  flex-direction: column;
+  gap: var(--default-gap)
+}
+.settings-editor textarea{
+  resize: none;
 }
 .editor {
   font-size: 20px;
