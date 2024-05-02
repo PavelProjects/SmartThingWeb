@@ -4,6 +4,7 @@ import { DeviceApi } from '../../../api/device/DeviceApi.js'
 import HooksView from './HooksView.vue'
 import MenuView from '../../menu/MenuView.vue'
 import { useIntl } from 'vue-intl'
+import { toast } from '../../../utils/EventBus.js'
 
 export default {
   name: 'SensorsView',
@@ -53,6 +54,11 @@ export default {
               }
             }
           }
+        })
+      } catch (error) {
+        console.error(error)
+        toast.error({
+          caption: 'Failed to fetch sensors values'
         })
       } finally {
         this.loading = false

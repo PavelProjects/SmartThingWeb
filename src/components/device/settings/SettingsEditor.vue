@@ -3,7 +3,7 @@ import { GatewayApi } from '../../../api/gateway/GatewayApi'
 import { toast } from '../../../utils/EventBus'
 import LoadingButton from '../../controls/LoadingButton.vue'
 import InputField from '../../fields/InputField.vue'
-import { DeviceApi } from '../../../api/device/DeviceApi'
+import { DeviceApi, extractDataFromError } from '../../../api/device/DeviceApi'
 import DevicesSearchView from '../DevicesSearchView.vue'
 import { useIntl } from 'vue-intl'
 import { useGatewayStore } from '../../../store/gatewayStore'
@@ -143,9 +143,18 @@ export default {
       }
     },
     async importFrom() {
-      const loadedSettings = (await DeviceApi.exportSettings(this.selectedDevice, {})) || {}
-      this.newSettings.value = JSON.stringify(loadedSettings, null, 2)
-      this.newSettings.name = `${this.selectedDevice.name}_${!!this.selectedDevice.type && this.selectedDevice.type}`
+      try {
+        const loadedSettings = (await DeviceApi.exportSettings(this.selectedDevice, {})) || {}
+        this.newSettings.value = JSON.stringify(loadedSettings, null, 2)
+        this.newSettings.name = `${this.selectedDevice.name}_${!!this.selectedDevice.type && this.selectedDevice.type}`
+      } catch (error) {
+        console.error(error)
+        const { error: description } = await extractDataFromError(error)
+        toast.error({
+          caption: 'Failed to export device settings',
+          description
+        })
+      } 
     },
     async exportTo() {
       let settings = {}
@@ -161,7 +170,8 @@ export default {
 
       await this.save()
       this.loading = true
-      if (await DeviceApi.importSettings(this.selectedDevice, {}, settings)) {
+      try {
+        await DeviceApi.importSettings(this.selectedDevice, {}, settings)
         toast.success({
           caption: this.intl.formatMessage(
             { id: 'device.settings.editor.export.success' },
@@ -169,6 +179,15 @@ export default {
           ),
           description: this.intl.formatMessage({ id: 'device.settings.editor.export.success.desc' })
         })
+      } catch (error) {
+        console.error(error)
+        const { error: description } = await extractDataFromError(error)
+        toast.error({
+          caption: 'Failed to import settings',
+          description
+        })
+      } finally {
+        this.loading = false
       }
     },
     handleExportBtn() {

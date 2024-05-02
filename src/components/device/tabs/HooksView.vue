@@ -1,10 +1,11 @@
 <script>
 import { systemNameToNormal } from '../../../utils/StringUtils.js'
 import HookView from './HookView.vue'
-import { DeviceApi } from '../../../api/device/DeviceApi.js'
+import { DeviceApi, extractDataFromError } from '../../../api/device/DeviceApi.js'
 import ComboBoxField from '../../fields/ComboBoxField.vue'
 import SyncLoader from 'vue-spinner/src/SyncLoader.vue'
 import { useIntl } from 'vue-intl'
+import { toast } from '../../../utils/EventBus.js'
 
 export const NEW_HOOK_ID = 'New'
 
@@ -51,13 +52,29 @@ export default {
       await this.loadHooks()
     },
     async loadHooks() {
-      console.log("Update hooks called")
       this.loading = true
-      this.hooks = (await DeviceApi.getHooks(this.device, this.observable, this.gateway)) || []
-      this.loading = false
+      try {
+        this.hooks = (await DeviceApi.getHooks(this.device, this.observable, this.gateway)) || []
+      } catch (error) {
+        console.error(error)
+        const { error: description } = await extractDataFromError(error)
+        toast.error({
+          caption: `Failed to fetch hooks for [${observable.type}]${observable.name}`,
+          description
+        })
+      } finally {
+        this.loading = false
+      }
     },
     async loadTemplates() {
-      this.templates = (await DeviceApi.getHooksTemplates(this.device, this.observable.type, this.gateway)) || {}
+      try {
+        this.templates = (await DeviceApi.getHooksTemplates(this.device, this.observable.type, this.gateway)) || {}
+      } catch (error) {
+        console.error(error)
+        toast.error({
+          caption: 'Failed to fetch hooks templates'
+        })
+      }
     },
     addHook(type) {
       if (this.hooks.length > 0 && this.hooks[0].id == NEW_HOOK_ID) {

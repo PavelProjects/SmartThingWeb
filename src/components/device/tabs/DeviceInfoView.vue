@@ -1,9 +1,9 @@
 <script>
 import SyncLoader from 'vue-spinner/src/SyncLoader.vue'
-import { DeviceApi } from '../../../api/device/DeviceApi.js'
+import { DeviceApi, extractDataFromError } from '../../../api/device/DeviceApi.js'
 import InputField from '../../fields/InputField.vue'
 import LoadingButton from '../../controls/LoadingButton.vue'
-import { EventBus } from '../../../utils/EventBus.js'
+import { EventBus, toast } from '../../../utils/EventBus.js'
 import { useIntl } from 'vue-intl'
 
 export default {
@@ -31,8 +31,15 @@ export default {
       await this.loadInfo()
     },
     async loadInfo() {
-      this.info = (await DeviceApi.getDeviceInfo(this.device, this.gateway)) || {}
-      this.deviceName = this.info['name'] || ''
+      try {
+        this.info = (await DeviceApi.getDeviceInfo(this.device, this.gateway)) || {}
+        this.deviceName = this.info['name'] || ''
+      } catch (error) {
+        console.log(error)
+        toast.error({
+          caption: 'Failed to fetch device info'
+        })
+      }
     },
     async saveName() {
       if (!this.deviceName) {
@@ -41,13 +48,21 @@ export default {
       }
       this.loading = true
       try {
-        if (await DeviceApi.saveName(this.device, this.deviceName, this.gateway)) {
-          await this.loadInfo()
-          EventBus.emit('deviceUpdate', {
-            device: this.device,
-            name: this.deviceName
-          })
-        }
+        await DeviceApi.saveName(this.device, this.deviceName, this.gateway)
+        toast.success({
+          caption: 'Device name updated!'
+        })
+        await this.loadInfo()
+        EventBus.emit('deviceUpdate', {
+          device: this.device,
+          name: this.deviceName
+        })
+      } catch (error) {
+        const { error: description } = await extractDataFromError(error)
+        toast.error({
+          caption: 'Failed to save device name',
+          description
+        })
       } finally {
         this.loading = false
       }

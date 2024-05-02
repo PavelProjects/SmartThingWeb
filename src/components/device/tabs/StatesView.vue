@@ -4,6 +4,7 @@ import HooksView from './HooksView.vue'
 import { DeviceApi } from '../../../api/device/DeviceApi.js'
 import MenuView from '../../menu/MenuView.vue'
 import { useIntl } from 'vue-intl'
+import { toast } from '../../../utils/EventBus'
 
 export default {
   name: 'StatesView',
@@ -52,6 +53,12 @@ export default {
               }
             }
           }
+        })
+      } catch (error) {
+        console.error(error)
+        toast.error({
+          type: 'error',
+          caption: 'Failed to fetch device states'
         })
       } finally {
         this.loading = false

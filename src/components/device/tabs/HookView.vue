@@ -2,7 +2,7 @@
 import { systemNameToNormal } from '../../../utils/StringUtils.js'
 import InputField from '../../fields/InputField.vue'
 import ComboBoxField from '../../fields/ComboBoxField.vue'
-import { DeviceApi } from '../../../api/device/DeviceApi.js'
+import { DeviceApi, extractDataFromError } from '../../../api/device/DeviceApi.js'
 import { NEW_HOOK_ID } from './HooksView.vue'
 import { h } from 'vue'
 import { toast } from '../../../utils/EventBus.js'
@@ -108,17 +108,27 @@ export default {
       this.loading = true
       try {
         if (this.hook.id !== NEW_HOOK_ID) {
-          result = await DeviceApi.updateHook(this.device, this.observable, this.hook, this.gateway)
+          await DeviceApi.updateHook(this.device, this.observable, this.hook, this.gateway)
+          toast.success({
+            caption: 'Hook created'
+          })
         } else {
-          result = await DeviceApi.createHook(this.device, this.observable, {id: undefined, ...this.hook}, this.gateway)
+          await DeviceApi.createHook(this.device, this.observable, {id: undefined, ...this.hook}, this.gateway)
+          toast.success({
+            caption: 'Hook updated'
+          })
         }
-        if (result) {
-          console.log("Calling update hooks")
-          this.$emit('updateHooks')
-          this.editing = false
-          this.haveChanges = false
-        }
-      } finally {
+        this.$emit('updateHooks')
+        this.editing = false
+        this.haveChanges = false
+      } catch (error) {
+        console.error(error)
+        const { error: description } = await extractDataFromError(error)
+        toast.error({
+          caption: 'Failed to save hook',
+          description
+        })
+        } finally {
         this.loading = false
       }
     },
@@ -132,11 +142,18 @@ export default {
       ) {
         this.loading = true
         try {
-          if (
-            await DeviceApi.deleteHook(this.device, this.observable, this.hook.id, this.gateway)
-          ) {
-            this.$emit('updateHooks')
-          }
+          await DeviceApi.deleteHook(this.device, this.observable, this.hook.id, this.gateway)
+          toast.success({
+            caption: 'Hook deleted'
+          })
+          this.$emit('updateHooks')
+        } catch (error) {
+          console.error(error)
+          const { error: description } = await extractDataFromError(error)
+          toast.error({
+            caption: `Failed to delete hook by id=${id}`,
+            description
+          })
         } finally {
           this.loading = false
         }

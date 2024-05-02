@@ -27,110 +27,39 @@ const axiosInstance = axios.create({
 
 const CloudApi = {
   async getAuthentication() {
-    try {
-      const response = await axiosInstance.get(URL_AUTH)
-      return response.data
-    } catch (error) {
-      console.error(error)
-    }
+    return (await axiosInstance.get(URL_AUTH)).data
   },
   async authUser(login, password) {
-    try {
-      const response = await axiosInstance.post(URL_AUTH_USER, { login, password })
-      toast.success({ caption: 'Welcome, ' + login })
-      return response.data
-    } catch (error) {
-      console.error(error)
-      toast.error({
-        caption: 'Failed to authorize!',
-        description: error.response.status == 401 ? 'Wrong login/passwor' : 'Service error'
-      })
-    }
+    return (await axiosInstance.post(URL_AUTH_USER, { login, password })).data
   },
   async authGateway(gateway) {
-    try {
-      const response = await axiosInstance.post(URL_AUTH_GATEWAY, {
-        gatewayId: gateway.id,
-        days: 0
-      })
-      return response.data
-    } catch (error) {
-      console.error(error)
-    }
+    return (await axiosInstance.post(URL_AUTH_GATEWAY, {
+      gatewayId: gateway.id,
+      days: 0
+    })).data
   },
   async logoutUser() {
-    try {
-      const response = await axiosInstance.post(URL_LOGOUT_USER, {})
-      return response.status == 200
-    } catch (error) {
-      console.error(error)
-    }
+    await axiosInstance.post(URL_LOGOUT_USER, {})
   },
   async logoutGateway(gateway) {
-    try {
-      const response = await axiosInstance.post(URL_LOGOUT_GATEWAY, {
-        gatewayId: gateway.id
-      })
-      return response.status == 200
-    } catch (error) {
-      console.error(error)
-    }
+    await axiosInstance.post(URL_LOGOUT_GATEWAY, {
+      gatewayId: gateway.id
+    })
   },
   async getGateway(id) {
-    try {
-      const response = await axiosInstance.get(`${URL_GATEWAY_BY_ID}/${id}`)
-      return response.data
-    } catch (error) {
-      console.error(error)
-      toast.error({
-        caption: 'Failed to load gateway ' + id
-      })
-    }
+    return (await axiosInstance.get(`${URL_GATEWAY_BY_ID}/${id}`)).data
   },
   async getGatewaysList() {
-    try {
-      const response = await axiosInstance.get(URL_GATEWAYS_LIST)
-      return response.data
-    } catch (error) {
-      console.error(error)
-      toast.error({
-        caption: 'Failed to load gateways'
-      })
-    }
+    return (await axiosInstance.get(URL_GATEWAYS_LIST)).data
   },
   async createGateway({ name, description }) {
-    try {
-      const response = await axiosInstance.post(URL_GATEWAY_CREATE, { name, description })
-      return response.status == 201
-    } catch (error) {
-      console.error(error)
-      if (error.response.status == 400) {
-        toast.error({
-          caption: error.response.data
-        })
-      }
-    }
+    await axiosInstance.post(URL_GATEWAY_CREATE, { name, description })
   },
   async updateGateway({ id, name, description }) {
-    try {
-      const response = await axiosInstance.put(URL_GATEWAY_UPDATE, { id, name, description })
-      return response.status == 200
-    } catch (error) {
-      console.log(error)
-      if (error.response.status == 400) {
-        toast.error({
-          caption: error.response.data
-        })
-      }
-    }
+    await axiosInstance.put(URL_GATEWAY_UPDATE, { id, name, description })
   },
   async deleteGateway(gateway) {
-    try {
-      const response = await axiosInstance.delete(URL_GATEWAY_DELETE + '/' + gateway.id)
-      return response.status == 200
-    } catch (error) {
-      console.error(error)
-    }
+    await axiosInstance.delete(URL_GATEWAY_DELETE + '/' + gateway.id)
   },
   async sendGatewayCommand(gateway, command, parameters) {
     return await axiosInstance.post(URL_GATEWAY_REQUEST + '/command', {

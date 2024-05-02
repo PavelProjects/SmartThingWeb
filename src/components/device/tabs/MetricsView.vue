@@ -2,6 +2,7 @@
 import { DeviceApi } from '../../../api/device/DeviceApi'
 import TreeList from '../../fields/TreeList.vue'
 import SyncLoader from 'vue-spinner/src/SyncLoader.vue'
+import { toast } from '../../../utils/EventBus'
 
 export default {
   name: 'MetricsView',
@@ -24,6 +25,11 @@ export default {
       this.loading = true
       try {
         this.metrics = await DeviceApi.metrics(this.device, this.gateway)
+      } catch (error) {
+        console.error(error)
+        toast.error({
+          caption: 'Failed to load device metrics'
+        })
       } finally {
         this.loading = false
       }

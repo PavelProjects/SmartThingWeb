@@ -1,8 +1,9 @@
 <script>
 import SyncLoader from 'vue-spinner/src/SyncLoader.vue'
-import { DeviceApi } from '../../../api/device/DeviceApi.js'
+import { DeviceApi, extractDataFromError } from '../../../api/device/DeviceApi.js'
 import LoadingButton from '../../controls/LoadingButton.vue'
 import { useIntl } from 'vue-intl'
+import { toast } from '../../../utils/EventBus.js'
 
 export default {
   name: 'ActionsView',
@@ -29,6 +30,11 @@ export default {
       try {
         const response = (await DeviceApi.getDeviceActionsInfo(this.device, this.gateway)) || {}
         this.actions = Object.entries(response)
+      } catch (error) {
+        console.log(error)
+        toast.error({
+          caption: 'Failed to fetch device actions'
+        })
       } finally {
         this.loading = false
       }
@@ -37,6 +43,16 @@ export default {
       this.loadingAction = true
       try {
         await DeviceApi.executeDeviceAcion(this.device, action, this.gateway)
+        toast.success({
+          caption: 'Done'
+        })
+      } catch (error) {
+        console.error(error)
+        const { error: description } = await extractDataFromError(error)
+        toast.error({
+          caption: 'Failed to execute action ' + action,
+          description
+        })
       } finally {
         this.loadingAction = false
       }

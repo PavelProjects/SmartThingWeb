@@ -3,6 +3,7 @@ import { storeToRefs } from 'pinia'
 import { useCloudAuthStore } from '../../store/cloudAuthStore'
 import { CloudApi } from '../../api/CloudApi'
 import { useIntl } from 'vue-intl'
+import { toast } from '../../utils/EventBus'
 export default {
   data() {
     const intl = useIntl()
@@ -18,10 +19,18 @@ export default {
   },
   methods: {
     async logout() {
-      if (confirm(this.intl.formatMessage({ id: 'cloud.auth.logout.confirm' }))) {
+      if (!confirm(this.intl.formatMessage({ id: 'cloud.auth.logout.confirm' }))) {
+        return
+      }
+      try {
         await CloudApi.logoutUser()
         this.openDialog = false
         this.cloudAuthStore.setAuthentication()
+      } catch (error) {
+        console.log(error)
+        toast.error({
+          caption: 'Failed to logout'
+        })
       }
     }
   }

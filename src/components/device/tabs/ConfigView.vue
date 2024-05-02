@@ -1,10 +1,11 @@
 <script>
-import { DeviceApi } from '../../../api/device/DeviceApi.js'
+import { DeviceApi, extractDataFromError } from '../../../api/device/DeviceApi.js'
 import InputField from '../../fields/InputField.vue'
 import LoadingButton from '../../controls/LoadingButton.vue'
 import SyncLoader from 'vue-spinner/src/SyncLoader.vue'
 import CheckBoxField from '../../fields/CheckBoxField.vue'
 import { useIntl } from 'vue-intl'
+import { toast } from '../../../utils/EventBus.js'
 
 export default {
   name: 'ConfigView',
@@ -45,17 +46,41 @@ export default {
       }
     },
     async loadConfigInfo() {
-      this.configInfo = (await DeviceApi.getDeviceConfigInfo(this.device, this.gateway)) ?? {}
+      try {
+        this.configInfo = (await DeviceApi.getDeviceConfigInfo(this.device, this.gateway)) ?? {}
+      } catch (error) {
+        console.error(error)
+        toast.error({
+          caption: 'Failed to fetch device configuration information'
+        })
+      }
     },
     async loadConfigValues() {
-      this.values = (await DeviceApi.getConfig(this.device, this.gateway)) ?? {}
+      try {
+        this.values = (await DeviceApi.getConfig(this.device, this.gateway)) ?? {}
+      } catch (error) {
+        console.error(error)
+        toast.error({
+          caption: 'Failed to fetch device configuration values'
+        })
+      }
     },
     async saveConfig() {
       this.saveLoading = true
       try {
         if (await DeviceApi.saveConfigValues(this.device, this.values, this.gateway)) {
+          toast.success({
+            caption: 'Config updated'
+          })
           this.loadConfigValues()
         }
+      } catch (error) {
+        console.error(error)
+        const { error: description } = await extractDataFromError(error)
+        toast.error({
+          caption: 'Failed to save configuration values',
+          description
+        })
       } finally {
         this.saveLoading = false
       }
@@ -64,9 +89,18 @@ export default {
       if (confirm(this.intl.formatMessage({ id: 'device.config.delete.confirm' }))) {
         this.deleteLoading = true
         try {
-          if (await DeviceApi.deleteAllConfigValues(this.device, this.gateway)) {
-            this.loadConfigValues()
-          }
+          await DeviceApi.deleteAllConfigValues(this.device, this.gateway)
+          toast.success({
+            caption: 'Config deleted'
+          })
+          this.loadConfigValues()
+        } catch (error) {
+          console.error(error)
+          const { error: description } = await extractDataFromError(error)
+          toast.error({
+            caption: 'Failed to delete all config values',
+            description
+          })
         } finally {
           this.deleteLoading = false
         }

@@ -24,386 +24,163 @@ const EXPORT_SETTINGS = 'exportSettings'
 const IMPORT_SETTINGS = 'importSettings'
 const RESTART = 'restart'
 
-async function extractDataFromError(error) {
+export async function extractDataFromError(error) {
   const { response } = error || {}
   return (await response.data) || {}
 }
 
 export const DeviceApi = {
   async getDeviceInfo(device, gateway) {
-    try {
-      const response = await deviceFetch({ device, command: GET_INFO, gateway })
-      return response.data
-    } catch (error) {
-      console.error(error)
-      toast.error({
-        caption: 'Failed to fetch device info'
-      })
-    }
+    return (await deviceFetch({ device, command: GET_INFO, gateway })).data
   },
   async getDeviceActionsInfo(device, gateway) {
-    try {
-      const response = await deviceFetch({ device, command: GET_ACTIONS, gateway })
-      return response.data
-    } catch (error) {
-      console.error(error)
-      toast.error({
-        caption: 'Failed to fetch device actions'
-      })
-    }
+    return (await deviceFetch({ device, command: GET_ACTIONS, gateway })).data
   },
   async getDeviceConfigInfo(device, gateway) {
-    try {
-      const response = await deviceFetch({ device, command: GET_CONFIG_INFO, gateway })
-      return response.data
-    } catch (error) {
-      console.error(error)
-      toast.error({
-        caption: 'Failed to fetch device configuration information'
-      })
-    }
+    return (await deviceFetch({ device, command: GET_CONFIG_INFO, gateway })).data
   },
   async saveName(device, name, gateway) {
-    try {
-      const result = await deviceFetch({
-        device,
-        gateway,
-        command: SAVE_NAME,
-        params: {
-          name
-        }
-      })
-      toast.success({
-        caption: 'Device name updated!'
-      })
-      return result.status === 200
-    } catch (error) {
-      console.error(error)
-      const { error: description } = await extractDataFromError(error)
-      toast.error({
-        caption: 'Failed to save device name',
-        description
-      })
-    }
+    await deviceFetch({
+      device,
+      gateway,
+      command: SAVE_NAME,
+      params: {
+        name
+      }
+    })
   },
   async getConfig(device, gateway) {
-    try {
-      const response = await deviceFetch({ device, command: GET_CONFIG_VALUES, gateway })
-      return response.data
-    } catch (error) {
-      console.error(error)
-      toast.error({
-        caption: 'Failed to fetch device configuration values'
-      })
-    }
+    return (await deviceFetch({ device, command: GET_CONFIG_VALUES, gateway })).data
   },
   async saveConfigValues(device, values, gateway) {
-    try {
-      const result = await deviceFetch({
-        device,
-        command: SAVE_CONFIG_VALUES,
-        params: { values },
-        gateway
-      })
-      toast.success({
-        caption: 'Config updated'
-      })
-      return result.status === 200
-    } catch (error) {
-      console.error(error)
-      const { error: description } = await extractDataFromError(error)
-      toast.error({
-        caption: 'Failed to save configuration values',
-        description
-      })
-    }
+    await deviceFetch({
+      device,
+      command: SAVE_CONFIG_VALUES,
+      params: { values },
+      gateway
+    })
   },
   async deleteConfigValue(device, key, gateway) {
-    try {
-      const result = await deviceFetch({
-        device,
-        command: DELETE_CONFIG_VALUE,
-        params: {
-          name: key
-        },
-        gateway
-      })
-      toast.success({
-        caption: 'Config value deleted'
-      })
-      return result.status === 200
-    } catch (error) {
-      console.error(error)
-      const { error: description } = await extractDataFromError(error)
-      toast.error({
-        caption: 'Failed to delete device config value',
-        description
-      })
-    }
+    await deviceFetch({
+      device,
+      command: DELETE_CONFIG_VALUE,
+      params: {
+        name: key
+      },
+      gateway
+    })
   },
   async deleteAllConfigValues(device, gateway) {
-    try {
-      const result = await deviceFetch({
-        device,
-        command: DELETE_ALL_CONFIG_VALUES,
-        gateway
-      })
-      toast.success({
-        caption: 'Config deleted'
-      })
-      return result.status === 200
-    } catch (error) {
-      console.error(error)
-      const { error: description } = await extractDataFromError(error)
-      toast.error({
-        caption: 'Failed to delete all config values',
-        description
-      })
-    }
+    await deviceFetch({
+      device,
+      command: DELETE_ALL_CONFIG_VALUES,
+      gateway
+    })
   },
   async executeDeviceAcion(device, action, gateway) {
-    try {
-      const result = await deviceFetch({
-        device,
-        command: CALL_ACTION,
-        params: {
-          action
-        },
-        gateway
-      })
-      toast.success({
-        caption: 'Done'
-      })
-      return result.status === 200
-    } catch (error) {
-      console.error(error)
-      const { error: description } = await extractDataFromError(error)
-      toast.error({
-        caption: 'Failed to execute action ' + action,
-        description
-      })
-    }
+    await deviceFetch({
+      device,
+      command: CALL_ACTION,
+      params: {
+        action
+      },
+      gateway
+    })
   },
   async getDeviceSensors(device, gateway) {
-    try {
-      const response = await deviceFetch({ device, command: GET_SENSORS, gateway })
-      return response.data
-    } catch (error) {
-      console.error(error)
-      toast.error({
-        caption: 'Failed to fetch sensors values'
-      })
-    }
+    return (await deviceFetch({ device, command: GET_SENSORS, gateway })).data
   },
   async getDeviceStates(device, gateway) {
-    try {
-      const response = await deviceFetch({ device, command: GET_STATES, gateway })
-      return response.data
-    } catch (error) {
-      console.error(error)
-      toast.error({
-        type: 'error',
-        caption: 'Failed to fetch device states'
-      })
-    }
+    return (await deviceFetch({ device, command: GET_STATES, gateway })).data
   },
   async getAllHooks(device, gateway) {
-    try {
-      const response = await deviceFetch({ device, command: GET_ALL_HOOKS, gateway })
-      return response.data
-    } catch (error) {
-      console.error(error)
-      toast.error({
-        caption: 'Failed to fetch hooks'
-      })
-    }
+    return (await deviceFetch({ device, command: GET_ALL_HOOKS, gateway })).data
   },
   async getHooks(device, observable, gateway) {
-    try {
-      const response = await deviceFetch({
-        device,
-        command: GET_HOOKS,
-        params: {
-          observable
-        },
-        gateway
-      })
-      return response.data
-    } catch (error) {
-      console.error(error)
-      const { error: description } = await extractDataFromError(error)
-      toast.error({
-        caption: `Failed to fetch hooks for [${observable.type}]${observable.name}`,
-        description
-      })
-    }
+    return (await deviceFetch({
+      device,
+      command: GET_HOOKS,
+      params: {
+        observable
+      },
+      gateway
+    })).data
   },
   async getHookById(device, observable, id, gateway) {
-    try {
-      const response = await deviceFetch({
-        device,
-        command: GET_HOOK_BY_ID,
-        params: { observable, id },
-        gateway
-      })
-      return response.data
-    } catch (error) {
-      console.error(error)
-      const { error: description } = await extractDataFromError(error)
-      toast.error({
-        caption: `Failed to fetch hook by id=${id}`,
-        description
-      })
-    }
+    return (await deviceFetch({
+      device,
+      command: GET_HOOK_BY_ID,
+      params: { observable, id },
+      gateway
+    })).data
   },
   async getHooksTemplates(device, type, gateway) {
-    try {
-      const response = await deviceFetch({ device, command: GET_HOOKS_TEMPLATES, gateway, params: { type } })
-      return response.data
-    } catch (error) {
-      console.error(error)
-      toast.error({
-        caption: 'Failed to fetch hooks templates'
-      })
-    }
+    return (await deviceFetch({
+      device,
+      command: GET_HOOKS_TEMPLATES,
+      gateway,
+      params: { type }
+    })).data
   },
   async createHook(device, observable, hook, gateway) {
-    try {
-      const result = await deviceFetch({
-        device,
-        command: CREATE_HOOK,
-        params: {
-          observable,
-          hook
-        },
-        gateway
-      })
-      toast.success({
-        caption: 'Hook created'
-      })
-      return result.status === 201
-    } catch (error) {
-      console.error(error)
-      const { error: description } = await extractDataFromError(error)
-      toast.error({
-        caption: 'Failed to create hook',
-        description
-      })
-    }
+    await deviceFetch({
+      device,
+      command: CREATE_HOOK,
+      params: {
+        observable,
+        hook
+      },
+      gateway
+    })
   },
   async updateHook(device, observable, hook, gateway) {
-    try {
-      const result = await deviceFetch({
-        device,
-        command: UPDATE_HOOK,
-        params: {
-          observable,
-          hook
-        },
-        gateway
-      })
-      toast.success({
-        caption: 'Hook updated'
-      })
-      return result.status === 200
-    } catch (error) {
-      console.error(error)
-      const { error: description } = await extractDataFromError(error)
-      toast.error({
-        type: 'error',
-        caption: `Failed to update hook id=${hook.id}`,
-        description
-      })
-    }
+    await deviceFetch({
+      device,
+      command: UPDATE_HOOK,
+      params: {
+        observable,
+        hook
+      },
+      gateway
+    })
   },
   async deleteHook(device, observable, id, gateway) {
-    try {
-      const result = await deviceFetch({
-        device,
-        command: DELETE_HOOK,
-        params: { observable, id },
-        gateway
-      })
-      toast.success({
-        caption: 'Hook deleted'
-      })
-      return result.status === 200
-    } catch (error) {
-      console.error(error)
-      const { error: description } = await extractDataFromError(error)
-      toast.error({
-        caption: `Failed to delete hook by id=${id}`,
-        description
-      })
-    }
+    await deviceFetch({
+      device,
+      command: DELETE_HOOK,
+      params: { observable, id },
+      gateway
+    })
   },
   async metrics(device, gateway) {
-    try {
-      const result = await deviceFetch({
-        device,
-        gateway,
-        command: GET_METRICS
-      })
-      return result.data
-    } catch (error) {
-      console.error(error)
-      toast.error({
-        caption: 'Failed to load device metrics'
-      })
-    }
+    return (await deviceFetch({
+      device,
+      gateway,
+      command: GET_METRICS
+    })).data
   },
   async exportSettings(device, gateway) {
-    try {
-      const result = await deviceFetch({
-        device,
-        gateway,
-        command: EXPORT_SETTINGS
-      })
-      return result.data
-    } catch (error) {
-      console.error(error)
-      const { error: description } = await extractDataFromError(error)
-      toast.error({
-        caption: 'Failed to export device settings',
-        description
-      })
-    }
+    return (await deviceFetch({
+      device,
+      gateway,
+      command: EXPORT_SETTINGS
+    })).data
   },
   async importSettings(device, gateway, settings) {
-    try {
-      const result = await deviceFetch({
+    await deviceFetch({
         device,
         gateway,
         command: IMPORT_SETTINGS,
         params: {
           settings
         }
-      })
-      return result.status === 200
-    } catch (error) {
-      console.error(error)
-      const { error: description } = await extractDataFromError(error)
-      toast.error({
-        caption: 'Failed to import settings',
-        description
-      })
-    }
+    })
   },
   async restartDevice(device, gateway) {
-    try {
-      const result = await deviceFetch({
-        device,
-        gateway,
-        command: RESTART
-      })
-      return result.status === 200
-    } catch (error) {
-      console.error(error)
-      const { error: description } = await extractDataFromError(error)
-      toast.error({
-        caption: 'Failed to import settings',
-        description
-      })
-    }
+    await deviceFetch({
+      device,
+      gateway,
+      command: RESTART
+    })
   }
 }

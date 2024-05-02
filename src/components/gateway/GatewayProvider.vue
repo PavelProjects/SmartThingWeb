@@ -32,11 +32,18 @@ export default {
         router.push("/gateways")
         return
       }
-      const gtw = await CloudApi.getGateway(this.gatewayId)
-      if (!gtw || !gtw.online) {
-        router.push("/gateways")
-      } else {
-        this.gateway = gtw
+      try {
+        const gtw = await CloudApi.getGateway(this.gatewayId)
+        if (!gtw || !gtw.online) {
+          router.push("/gateways")
+        } else {
+          this.gateway = gtw
+        }
+      } catch (error) {
+        console.log(error)
+        toast.error({
+          caption: 'Failed to load gateway ' + this.gatewayId
+        })
       }
     },
     handleGatewayEvent({ gateway, event }) {

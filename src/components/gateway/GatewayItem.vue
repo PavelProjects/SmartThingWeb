@@ -44,16 +44,24 @@ export default {
   },
   methods: {
     async saveGateway(gateway) {
-      if (await CloudApi.updateGateway(gateway)) {
+      try {
+        await CloudApi.updateGateway(gateway)
         toast.success({
           caption: this.intl.formatMessage({ id: 'gateway.item.save.success' })
         })
         this.$emit('gatewaysUpdate')
         this.showEditDialog = false
-      } else {
-        toast.error({
-          caption: this.intl.formatMessage({ id: 'gateway.item.save.error' })
-        })
+      } catch (error) {
+        console.log(error)
+        if (error.response.status == 400) {
+          toast.error({
+            caption: error.response.data
+          })
+        } else {
+          toast.error({
+            caption: this.intl.formatMessage({ id: 'gateway.item.save.error' })
+          })
+        }
       }
     },
     async deleteGateway() {
@@ -65,14 +73,15 @@ export default {
           )
         )
       ) {
-        const res = await CloudApi.deleteGateway(this.gateway)
-        if (res) {
+        try {
+          await CloudApi.deleteGateway(this.gateway)
           toast.success({
             caption: this.intl.formatMessage({ id: 'gateway.item.delete.success' })
           })
           this.$emit('gatewaysUpdate')
           router.push('/')
-        } else {
+        } catch (error) {
+          console.error(error)
           toast.error({
             caption: this.intl.formatMessage({ id: 'gateway.item.delete.error' })
           })
@@ -80,14 +89,18 @@ export default {
       }
     },
     async generateToken() {
-      const { token } = (await CloudApi.authGateway(this.gateway)) || {}
-      if (token) {
+      try {
+        const { token } = (await CloudApi.authGateway(this.gateway)) || {}
+        if (!token) {
+          throw new Error("Empty token response")
+        }
         toast.info({
           caption: this.intl.formatMessage({ id: 'gateway.item.token.gen.success' })
         })
         this.tokenData.token = token
         this.$emit('gatewaysUpdate')
-      } else {
+      } catch (error) {
+        console.log(error)
         toast.error({
           caption: this.intl.formatMessage({ id: 'gateway.item.token.gen.error' })
         })
@@ -108,12 +121,14 @@ export default {
       if (!confirm(this.intl.formatMessage({ id: 'gateway.item.token.delete.confirm' }))) {
         return
       }
-      if (await CloudApi.logoutGateway(this.gateway)) {
+      try {
+        await CloudApi.logoutGateway(this.gateway)
         toast.info({
           caption: this.intl.formatMessage({ id: 'gateway.item.token.delete.success' })
         })
         this.$emit('gatewaysUpdate')
-      } else {
+      } catch (error) {
+        console.log(error)
         toast.error({
           caption: this.intl.formatMessage({ id: 'gateway.item.token.delete.error' })
         })

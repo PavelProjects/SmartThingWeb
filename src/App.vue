@@ -7,6 +7,7 @@ import { useCloudAuthStore } from './store/cloudAuthStore'
 import { storeToRefs } from 'pinia'
 import { useStompClientStore } from './store/stompClientStore'
 import GatewayProvider from './components/gateway/GatewayProvider.vue'
+import { toast } from './utils/EventBus'
 
 export default {
   components: {
@@ -39,8 +40,12 @@ export default {
       this.id = ''
       return
     }
-    const { user } = (await CloudApi.getAuthentication()) ?? {}
-    this.authStore.setAuthentication(user)
+    try {
+      const { user } = (await CloudApi.getAuthentication()) ?? {}
+      this.authStore.setAuthentication(user)
+    } catch (error) {
+      console.log(error)
+    }
   },
 }
 </script>

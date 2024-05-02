@@ -49,20 +49,36 @@ export default {
     },
     async loadGateways() {
       this.loading = true
-      this.gateways = (await CloudApi.getGatewaysList()) || []
-      this.loading = false
+      try {
+        this.gateways = (await CloudApi.getGatewaysList()) || []
+      } catch (error) {
+        console.error(error)
+        toast.error({
+          caption: 'Failed to load gateways'
+        })
+      } finally {
+        this.loading = false
+      }
     },
     async createGateway(gateway) {
-      if (await CloudApi.createGateway(gateway)) {
+      try {
+        await CloudApi.createGateway(gateway)
         toast.success({
           caption: this.intl.formatMessage({ id: 'gateway.create.success' })
         })
         this.loadGateways()
         this.showCreateDialog = false
-      } else {
-        toast.error({
-          caption: this.intl.formatMessage({ id: 'gateway.create.error' })
-        })
+      } catch (error) {
+        console.log(error)
+        if (error?.response?.status == 400) {
+          toast.error({
+            caption: error.response.data
+          })
+        } else {
+          toast.error({
+            caption: this.intl.formatMessage({ id: 'gateway.create.error' })
+          })
+        }
       }
     },
     handleGatewayEvent({ gateway, event }) {
