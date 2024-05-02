@@ -144,7 +144,7 @@ export default {
     },
     async importFrom() {
       try {
-        const loadedSettings = (await DeviceApi.exportSettings(this.selectedDevice, {})) || {}
+        const loadedSettings = (await DeviceApi.exportSettings(this.selectedDevice, this.gateway)) || {}
         this.newSettings.value = JSON.stringify(loadedSettings, null, 2)
         this.newSettings.name = `${this.selectedDevice.name}_${!!this.selectedDevice.type && this.selectedDevice.type}`
       } catch (error) {
@@ -171,7 +171,7 @@ export default {
       await this.save()
       this.loading = true
       try {
-        await DeviceApi.importSettings(this.selectedDevice, {}, settings)
+        await DeviceApi.importSettings(this.selectedDevice, this.gateway, settings)
         toast.success({
           caption: this.intl.formatMessage(
             { id: 'device.settings.editor.export.success' },
