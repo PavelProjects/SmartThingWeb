@@ -28,7 +28,7 @@ export default {
         this.gateway = {}
         return
       }
-      if (!this.gateway) {
+      if (!this.gatewayId) {
         router.push("/gateways")
         return
       }
