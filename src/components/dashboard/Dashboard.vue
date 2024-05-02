@@ -7,13 +7,16 @@ import GroupAddDialog from './GroupAddDialog.vue';
 import { DashboardApi } from '../../api/gateway/DashboardApi';
 import { useIntl } from 'vue-intl';
 import { useGatewayStore } from '../../store/gatewayStore';
+import RiseLoader from 'vue-spinner/src/RiseLoader.vue'
+import { toast } from '../../utils/EventBus';
 
 export default {
   name: 'Dashboard',
   components: {
     DashboardGroup,
+    GroupAddDialog,
     PlusSVG,
-    GroupAddDialog
+    RiseLoader
   },
   data() {
     const intl = useIntl()
@@ -25,6 +28,7 @@ export default {
       groups,
       store,
       gateway,
+      loading: false,
       addGroupDialog: false
     }
   },
@@ -35,8 +39,18 @@ export default {
   },
   methods: {
     async loadGroups() {
+      this.loading = true
       this.groups = []
-      this.groups = await DashboardApi.getGroups(this.gateway)
+      try {
+        this.groups = await DashboardApi.getGroups(this.gateway)
+      } catch (error) {
+        console.log(error)
+        toast.error({ 
+          caption: this.intl.formatMessage({ id: 'dashboard.load.error' })
+        })
+      } finally {
+        this.loading = false
+      }
     },
     handleAddClose(result) {
       if (result) {
@@ -51,13 +65,14 @@ export default {
 <template>
   <div class="dashboard">
     <div class="groups">
-      <DashboardGroup 
+      <RiseLoader v-if="loading" class="spinner" />
+      <DashboardGroup
         v-for="group of groups"
         :key="group.id"
         :group="group"
         @updateGroups="loadGroups"
       />
-      <div class="list">
+      <div v-if="!loading" class="list">
         <div v-if="!groups?.length">
           <h1 class="title">
             {{ intl.formatMessage({ id: 'dashboard.groups.empty' }) }}
@@ -89,6 +104,9 @@ export default {
     flex-direction: row;
     flex-wrap: wrap;
     gap: var(--default-gap);
+  }
+  .spinner {
+    padding-top: 30px;
   }
   .add {
     margin: auto;
