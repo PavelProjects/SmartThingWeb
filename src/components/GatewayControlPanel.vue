@@ -12,7 +12,7 @@ export default {
   components: {
     DevicesSearchView,
     DeviceControlPanel,
-    GatewaySelector
+    GatewaySelector,
   },
   data() {
     const { gateway, device } = storeToRefs(useGatewayStore())
@@ -40,7 +40,9 @@ export default {
       <div v-if="device">
         <h1 class="title">{{ intl.formatMessage({ id: 'gateway.panel' }) }}</h1>
         <KeepAlive>
-          <DeviceControlPanel :key="device.ip" />
+          <Suspense>
+            <DeviceControlPanel :key="device.ip" :device="device" :gateway="gateway"/>
+          </Suspense>
         </KeepAlive>
       </div>
     </div>

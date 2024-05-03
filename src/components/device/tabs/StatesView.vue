@@ -12,22 +12,31 @@ export default {
     SyncLoader,
     MenuView
   },
-  inject: ['device', 'gateway'],
+  inject: ['device', 'gateway', 'features'],
   data() {
     const intl = useIntl()
+    const hooksEnabled = this.features?.hooks
     return {
       intl,
+      hooksEnabled,
       states: {},
       loading: false,
       tabs: {}
     }
   },
   created() {
+    console.log(this.features)
     this.loadStates()
   },
   computed: {
     haveStates() {
       return Object.keys(this.states).length !== 0
+    },
+    placeholder() {
+      if (this.hooksEnabled) {
+        return this.intl.formatMessage({ id: 'device.hooks.select.to.manage' }, { type: 'state' })
+      }
+      return this.intl.formatMessage({ id: 'hooks.disabled' })
     }
   },
   methods: {
@@ -70,7 +79,7 @@ export default {
   }
 }
 </script>
-
+<!-- todo if hooks disabled show panel with values? -->
 <template>
   <div>
     <h1 class="title">
@@ -80,8 +89,9 @@ export default {
     <MenuView
       v-if="haveStates"
       :tabs="tabs"
-      :tabTitle="intl.formatMessage({ id: 'device.hooks.menu.item.title' })"
-      :placeholder="intl.formatMessage({ id: 'device.hooks.select.to.manage' }, { type: 'state' })"
+      :tabTitle="hooksEnabled ? intl.formatMessage({ id: 'device.hooks.menu.item.title' }) : ''"
+      :placeholder="placeholder"
+      :disabled="!hooksEnabled"
     />
     <h2 v-else class="title">
       {{ intl.formatMessage({ id: 'device.states.empty' }) }}

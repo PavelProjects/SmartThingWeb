@@ -5,6 +5,7 @@ import { useGatewayStore } from '../../store/gatewayStore'
 import { router } from '../../routes'
 import { EVENT, EventBus, GATEWAY_EVENT, toast } from '../../utils/EventBus'
 
+// todo loader
 export default {
   name: 'GatewayProvider',
   data() {

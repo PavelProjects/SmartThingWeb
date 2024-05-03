@@ -12,11 +12,14 @@ export default {
     SyncLoader,
     MenuView
   },
-  inject: ['device', 'gateway'],
+  inject: ['device', 'gateway', 'features'],
   data() {
     const intl = useIntl()
+    const hooksEnabled = this.features?.hooks
+
     return {
       intl,
+      hooksEnabled,
       sensors: {},
       loading: false,
       tabs: {}
@@ -28,6 +31,12 @@ export default {
   computed: {
     haveSensors() {
       return Object.keys(this.sensors).length !== 0
+    },
+    placeholder() {
+      if (this.hooksEnabled) {
+        return this.intl.formatMessage({ id: 'device.hooks.select.to.manage' }, { type: 'sensor' })
+      }
+      return this.intl.formatMessage({ id: 'hooks.disabled' })
     }
   },
   methods: {
@@ -80,8 +89,9 @@ export default {
     <MenuView 
       v-if="haveSensors"
       :tabs="tabs"
-      :tabTitle="intl.formatMessage({ id: 'device.hooks.menu.item.title' })"
-      :placeholder="intl.formatMessage({ id: 'device.hooks.select.to.manage' }, { type: 'sensor' })"
+      :tabTitle="hooksEnabled ? intl.formatMessage({ id: 'device.hooks.menu.item.title' }) : ''"
+      :placeholder="placeholder"
+      :disabled="!hooksEnabled"
     />
     <h2 v-else class="title">
       {{ intl.formatMessage({ id: 'device.sensors.empty' }) }}

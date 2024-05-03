@@ -19,6 +19,7 @@ const GET_HOOKS_TEMPLATES = 'getHooksTemplates'
 const CREATE_HOOK = 'createHook'
 const UPDATE_HOOK = 'updateHook'
 const DELETE_HOOK = 'deleteHook'
+const GET_FEATURES = 'getFeatures'
 const GET_METRICS = 'getMetrics'
 const EXPORT_SETTINGS = 'exportSettings'
 const IMPORT_SETTINGS = 'importSettings'
@@ -151,6 +152,13 @@ export const DeviceApi = {
       params: { observable, id },
       gateway
     })
+  },
+  async features(device, gateway) {
+    return (await deviceFetch({
+      device,
+      gateway,
+      command: GET_FEATURES
+    })).data
   },
   async metrics(device, gateway) {
     return (await deviceFetch({

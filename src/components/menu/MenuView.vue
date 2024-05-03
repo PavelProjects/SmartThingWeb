@@ -22,6 +22,10 @@ export default {
       type: String,
       default: () => "Select menu item"
     },
+    disabled: {
+      type: Boolean,
+      default: () => false
+    }
   },
   data() {
     return {
@@ -57,6 +61,9 @@ export default {
   },
   methods: {
     switchTab(name, forceRender = false) {
+      if (this.disabled) {
+        return
+      }
       if (this.currentTab == name || forceRender) {
         this.updateContent()
         return
