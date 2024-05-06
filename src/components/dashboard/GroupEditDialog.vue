@@ -10,6 +10,7 @@ import PlusSVG from 'vue-material-design-icons/Plus.vue'
 import { DashboardApi } from '../../api/gateway/DashboardApi'
 import { useGatewayStore } from '../../store/gatewayStore'
 import { storeToRefs } from 'pinia'
+import Container from '../base/Container.vue'
 
 export default {
   name: 'GroupEditDialog',
@@ -17,6 +18,7 @@ export default {
     PopUpDialog,
     InputField,
     LoadingButton,
+    Container,
     DeleteSVG,
     PlusSVG,
   },
@@ -83,11 +85,11 @@ export default {
 
 <template>
   <PopUpDialog v-bind="$props">
-    <div class="content">
+    <Container :vertical="true">
       <h2 class="title">
         {{ intl.formatMessage({ id: 'dashboard.group.edit.title' }, { name: device.name }) }}
       </h2>
-      <div class="table">
+      <Container class="table">
         <div class="row">
           <h2 v-for="column of ['type', 'name', 'units', '']" :key="column">
             {{ intl.formatMessage({ id: 'dashboard.group.edit.columns' }, { column }) }}
@@ -137,7 +139,7 @@ export default {
           />
           <PlusSVG @click="add"/>
         </div>
-      </div>
+      </Container>
       <InputField 
         :label="intl.formatMessage({ id: 'dashboard.group.edit.update.delay' })"
         v-model="config.updateDelay"
@@ -149,20 +151,12 @@ export default {
       >
         <h2>{{ intl.formatMessage({ id: 'dashboard.group.edit.save' }) }}</h2>
       </LoadingButton>
-    </div>
+    </Container>
   </PopUpDialog>
 </template>
 
 <style scoped>
-  .content {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-  }
   .table {
-    display: flex;
-    flex-direction: column;
-    gap: var(--default-gap);
     max-height: 50vh;
     overflow-y: auto;
     overflow-x: hidden;

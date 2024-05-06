@@ -7,13 +7,15 @@ import { useGatewayAuthStore } from '../../store/gatewayAuthStore.js'
 import { toast } from '../../utils/EventBus.js'
 import { useStompClientStore } from '../../store/stompClientStore.js'
 import { useIntl } from 'vue-intl'
+import Container from '../base/Container.vue'
 
 export default {
   name: 'GatewayAuthInfo',
   components: {
     InputField,
     LoadingButton,
-    GatewayAuthDialog
+    GatewayAuthDialog,
+    Container,
   },
   data() {
     const store = useGatewayAuthStore()
@@ -138,8 +140,8 @@ export default {
       </h2>
     </div>
     <div v-if="dialogVisible" class="overlay" @click.stop="dialogVisible = false">
-      <div class="dialog" @click.stop="() => {}">
-        <div v-if="store.gateway" class="list">
+      <Container class="dialog" @click.stop="() => {}" :vertical="true">
+        <Container v-if="store.gateway" :vertical="true">
           <h2 class="title">
             {{ intl.formatMessage({ id: 'gateway.cloud.info.identity' }) }}
           </h2>
@@ -155,8 +157,8 @@ export default {
             :title="store.gateway.description"
             :disabled="true"
           />
-        </div>
-        <div v-if="cloudConfig" class="list">
+        </Container>
+        <Container v-if="cloudConfig" :vertical="true">
           <h2 class="title">
             {{ intl.formatMessage({ id: 'gateway.cloud.config' }) }}
           </h2>
@@ -182,11 +184,11 @@ export default {
           <LoadingButton @click="logout">
             <h2>{{ intl.formatMessage({ id: 'log.out' }) }}</h2>
           </LoadingButton>
-        </div>
+        </Container>
         <button v-if="!cloudConfig" class="btn" @click="authDialogVisible = true">
           <h2>{{ intl.formatMessage({ id: 'gateway.cloud.add.token' }) }}</h2>
         </button>
-      </div>
+      </Container>
     </div>
     <GatewayAuthDialog v-if="authDialogVisible" @close="authDialogCloseHandle" />
   </div>
@@ -202,8 +204,6 @@ export default {
   position: absolute;
   top: var(--default-gap);
   right: var(--default-gap);
-  display: flex;
-  flex-direction: column;
   background-color: var(--color-background-mute);
   border-radius: var(--border-radius);
   padding: 5px;

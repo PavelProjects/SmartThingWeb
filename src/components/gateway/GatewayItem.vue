@@ -8,6 +8,7 @@ import InputField from '../fields/InputField.vue'
 import { useIntl } from 'vue-intl'
 import { router } from '../../routes'
 import ContextMenu from '../menu/ContextMenu.vue'
+import Container from '../base/Container.vue'
 
 export default {
   name: 'GatewayItem',
@@ -20,7 +21,8 @@ export default {
     PopUpDialog,
     GatewayEditDialog,
     InputField,
-    ContextMenu
+    ContextMenu,
+    Container,
   },
   data() {
     const intl = useIntl()
@@ -172,11 +174,11 @@ export default {
       @close="showEditDialog = false"
     />
     <PopUpDialog v-if="token" @close="token = undefined">
-      <div class="list">
+      <Container :vertical="true">
         <h1 class="title">
           {{ intl.formatMessage({ id: 'gateway.item.connection.token' }) }}
         </h1>
-        <div class="list">
+        <Container :vertical="true">
           <InputField
             :label="intl.formatMessage({ id: 'gateway.item.cloud.ip' })"
             v-model="tokenData.cloudIp"
@@ -192,9 +194,9 @@ export default {
             v-model="tokenData.token"
             :validationFailed="tokenData.token.length === 0"
           />
-        </div>
+        </Container>
         <p class="token-field">{{ token }}</p>
-      </div>
+      </Container>
     </PopUpDialog>
   </div>
 </template>

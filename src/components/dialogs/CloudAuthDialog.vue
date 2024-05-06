@@ -5,13 +5,15 @@ import { toast } from '../../utils/EventBus'
 import LoadingButton from '../controls/LoadingButton.vue'
 import InputField from '../fields/InputField.vue'
 import PopUpDialog from './PopUpDialog.vue'
+import Container from '../base/Container.vue'
 
 export default {
   name: 'CloudAuthDialog',
   components: {
     InputField,
     LoadingButton,
-    PopUpDialog
+    PopUpDialog,
+    Container,
   },
   data() {
     const intl = useIntl()
@@ -51,7 +53,7 @@ export default {
 
 <template>
   <PopUpDialog>
-    <div class="container">
+    <Container :vertical="true" style="padding: 5px;">
       <InputField :label="intl.formatMessage({ id: 'login' })" v-model="login" type="login" />
       <InputField
         :label="intl.formatMessage({ id: 'password' })"
@@ -61,15 +63,6 @@ export default {
       <LoadingButton :loading="loading" @click="auth">
         {{ intl.formatMessage({ id: 'log.in' }) }}
       </LoadingButton>
-    </div>
+    </Container>
   </PopUpDialog>
 </template>
-
-<style scoped>
-.container {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  padding: 5px;
-}
-</style>

@@ -13,6 +13,7 @@ import SaveSVG from 'vue-material-design-icons/ContentSave.vue'
 import CancelSVG from 'vue-material-design-icons/WindowClose.vue'
 import EditSVG from 'vue-material-design-icons/Pencil.vue'
 import { useIntl } from 'vue-intl'
+import Container from '../../base/Container.vue'
 
 const SYSTEM_FIELDS = ['id', 'type', 'readonly']
 
@@ -32,6 +33,7 @@ export default {
     ComboBoxField,
     LoadingButton,
     CheckBoxField,
+    Container,
     DeleteSVG,
     SaveSVG,
     CancelSVG,
@@ -210,26 +212,26 @@ export default {
 </script>
 
 <template>
-  <div class="hook">
-    <div class="header">
+  <Container class="hook" :vertical="true">
+    <Container>
       <h3 class="title" style="flex: 1 1 auto; text-align: start">
         [{{ hook.id }}] {{ hook.caption || systemNameToNormal(hook.type) }}
       </h3>
-      <div class="controls">
-        <div v-if="!hook.readonly" class="hook-view-controls">
-          <DeleteSVG v-if="!editing" :onClick="deleteHook" :loading="loading" />
-          <CancelSVG v-if="editing" :onClick="cancel" />
+      <Container>
+        <Container v-if="!hook.readonly">
           <EditSVG v-if="!editing" :onClick="() => (editing = true)" />
           <SaveSVG v-if="editing" :onClick="saveHook" :loading="loading" />
-        </div>
+          <DeleteSVG v-if="!editing" :onClick="deleteHook" :loading="loading" />
+          <CancelSVG v-if="editing" :onClick="cancel" />
+        </Container>
         <div v-else>
           <h3 style="text-align: center">
             {{ intl.formatMessage({ id: 'device.hook.readonly' }) }}
           </h3>
         </div>
-      </div>
-    </div>
-    <div class="list">
+      </Container>
+    </Container>
+    <Container :vertical="true">
       <InputField label="type" :modelValue="hook.type" :disabled="true" />
       <component
         v-for="{ key, label, value, render, required } in fieldsComponents"
@@ -242,36 +244,6 @@ export default {
         :validationFailed="validationFailed.includes(key)"
         @update:modelValue="(value) => setValue(key, value)"
       />
-    </div>
-  </div>
+    </Container>
+  </Container>
 </template>
-
-<style scoped>
-.hook {
-  padding: var(--padding-default);
-}
-.header {
-  display: flex;
-  flex-direction: row;
-  gap: var(--default-gap);
-  position: relative;
-}
-
-.controls {
-  display: flex;
-  flex-direction: row;
-  padding-top: var(--default-gap);
-  gap: var(--default-gap);
-}
-
-.controls * {
-  flex: 1 1 auto;
-}
-
-.hook-view-controls {
-  display: flex;
-  flex-direction: row-reverse;
-  column-gap: var(--default-gap);
-  margin-bottom: 5px;
-}
-</style>

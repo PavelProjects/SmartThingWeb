@@ -90,11 +90,6 @@ textarea {
 .field-label {
   text-align: center;
 }
-.list {
-  display: flex;
-  flex-direction: column;
-  row-gap: var(--default-gap);
-}
 .required {
   background-color: hsla(3, 100%, 37%, 0.2);
   color: black;

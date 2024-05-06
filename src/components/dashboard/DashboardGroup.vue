@@ -11,6 +11,7 @@ import { toast } from '../../utils/EventBus';
 import UpdateButton from '../controls/UpdateButton.vue';
 import { useGatewayStore } from '../../store/gatewayStore';
 import { storeToRefs } from 'pinia';
+import Container from '../base/Container.vue';
 
 export default {
   components: { 
@@ -18,7 +19,8 @@ export default {
     ContextMenu,
     GroupEditDialog,
     LoadingButton,
-    UpdateButton
+    UpdateButton,
+    Container,
   },
   name: 'DashboardGroup',
   emits: ['updateGroups'],
@@ -138,7 +140,7 @@ export default {
 
 <template>
   <div>
-    <div class="dashboard-group bordered">
+    <Container class="dashboard-group bordered" :vertical="true">
       <UpdateButton
         v-if="observables.length > 0"
         class="update"
@@ -160,7 +162,7 @@ export default {
           {{ intl.formatMessage({ id: 'dashboard.group.delete' }) }}
         </p>
       </ContextMenu>
-      <div class="values">
+      <Container class="values">
         <DashboardValue
           v-for="{ name, type, units }, index of observables"
           :key="index"
@@ -169,7 +171,7 @@ export default {
           :value="values[type+name] || 'Nan'"
           :units="units"
         />
-      </div>
+      </Container>
       <LoadingButton
         v-if="observables.length === 0"
         @click="editing = true"
@@ -178,7 +180,7 @@ export default {
           {{ intl.formatMessage({ id: 'dashboard.group.add.values' }) }}
         </h2>
       </LoadingButton>
-    </div>
+    </Container>
     <GroupEditDialog 
       v-if="editing"
       :group="group"
@@ -189,9 +191,6 @@ export default {
 
 <style scoped>
   .dashboard-group {
-    display: flex;
-    flex-direction: column;
-    gap: var(--default-gap);
     padding: 2px;
     position: relative;
   }
@@ -202,11 +201,6 @@ export default {
     position: absolute;
     top: 2px;
     left: 2px;
-  }
-  .values {
-    display: flex;
-    flex-direction: row;
-    gap: var(--default-gap);
   }
   .values * {
     border-right: 2px solid var(--color-border);

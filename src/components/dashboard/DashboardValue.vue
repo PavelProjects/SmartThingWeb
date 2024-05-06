@@ -1,6 +1,11 @@
 <script>
+import Container from '../base/Container.vue';
+
 export default {
   name: 'DashboardValue',
+  components: {
+    Container
+  },
   props: {
     type: String,
     name: String,
@@ -14,10 +19,10 @@ export default {
 </script>
 
 <template>
-  <div class="item">
+  <Container class="item" :vertical="true">
     <h2 :title="type">{{ name }}</h2>
     <h1 class="value">{{ value }} {{ units }}</h1>
-  </div>
+  </Container>
 </template>
 
 <style scoped>

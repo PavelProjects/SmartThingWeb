@@ -132,10 +132,10 @@ export default {
 .hooks-list-view {
   max-height: 80vh;
   overflow-y: auto;
-  padding: 2px;
   border-top: 1px solid var(--color-border);
 }
-.hooks-list-view * {
+.hooks-list-view .hook {
+  padding: 5px;
   border-bottom: 1px solid var(--color-border);
 }
 .hooks-list-view *:last-child {

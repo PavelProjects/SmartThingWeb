@@ -9,14 +9,16 @@ import { useIntl } from 'vue-intl';
 import { useGatewayStore } from '../../store/gatewayStore';
 import RiseLoader from 'vue-spinner/src/RiseLoader.vue'
 import { toast } from '../../utils/EventBus';
+import Container from '../base/Container.vue';
 
 export default {
   name: 'Dashboard',
   components: {
     DashboardGroup,
     GroupAddDialog,
+    Container,
     PlusSVG,
-    RiseLoader
+    RiseLoader,
   },
   data() {
     const intl = useIntl()
@@ -64,7 +66,7 @@ export default {
 
 <template>
   <div class="dashboard">
-    <div class="groups">
+    <Container class="groups">
       <RiseLoader v-if="loading" class="spinner" />
       <DashboardGroup
         v-for="group of groups"
@@ -72,7 +74,7 @@ export default {
         :group="group"
         @updateGroups="loadGroups"
       />
-      <div v-if="!loading" class="list">
+      <Container v-if="!loading" :vertical="true">
         <div v-if="!groups?.length">
           <h1 class="title">
             {{ intl.formatMessage({ id: 'dashboard.groups.empty' }) }}
@@ -84,8 +86,8 @@ export default {
           :size="40"
           @click.stop="addGroupDialog = true"
         />
-      </div>
-    </div>
+      </Container>
+    </Container>
     <GroupAddDialog 
       v-if="addGroupDialog"
       @close="handleAddClose"
@@ -100,10 +102,7 @@ export default {
   }
   .groups {
     margin: auto;
-    display: flex;
-    flex-direction: row;
     flex-wrap: wrap;
-    gap: var(--default-gap);
   }
   .spinner {
     padding-top: 30px;

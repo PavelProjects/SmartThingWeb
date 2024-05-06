@@ -1,8 +1,13 @@
 <script>
+import Container from '../base/Container.vue'
+
 const IMG_PATH = '/img/'
 
 export default {
   name: 'DeviceItem',
+  components: {
+    Container
+  },
   props: {
     device: {
       type: Object
@@ -38,22 +43,20 @@ export default {
 }
 </script>
 <template>
-  <div class="device-item" :style="style">
-    <div class="list" style="flex: 1 1 auto">
+  <Container class="device-item" :style="style">
+    <Container :vertical="true" style="flex: 1 1 auto">
       <h1 class="header">{{ header }}</h1>
       <h2>
         Ip <a :href="'http://' + device.ip" target="”_blank”">{{ device.ip }}</a>
       </h2>
-    </div>
+    </Container>
     <img v-if="imgSrc" :src="imgSrc" />
-  </div>
+  </Container>
 </template>
 
 <style scoped>
 .device-item {
   padding: var(--padding-default);
-  display: flex;
-  flex-direction: row;
 }
 .device-item:hover {
   transition: background-color 0.5s;

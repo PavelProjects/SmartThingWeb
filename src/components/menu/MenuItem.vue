@@ -30,12 +30,10 @@ export default {
 <style scoped>
   .menu-item {
     display: flex;
-    flex-direction: row;
     margin: var(--padding-default);
     transition: background-color 0.5s;
-    cursor: pointer;
-    padding: 2px;
     border-radius: var(--border-radius);
+    cursor: pointer;
   }
   .menu-item:hover {
     transition: background-color 0.5s;

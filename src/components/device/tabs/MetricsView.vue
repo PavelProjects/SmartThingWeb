@@ -42,8 +42,6 @@ export default {
   <div>
     <h1 class="title">Device metrics</h1>
     <sync-loader class="loading-spinner" :loading="loading"></sync-loader>
-    <div class="list">
-      <TreeList :values="metrics" />
-    </div>
+    <TreeList :values="metrics" />
   </div>
 </template>

@@ -2,13 +2,16 @@
 import { useIntl } from 'vue-intl'
 import { SearchApi } from '../../api/SearchDevicesApi'
 import { EventBus, REQUEST, toast } from '../../utils/EventBus'
+import Container from '../base/Container.vue'
 import UpdateButton from '../controls/UpdateButton.vue'
 import DeviceItem from './DeviceItem.vue'
 
 export default {
+  name: 'DevicesSearchView',
   components: {
     UpdateButton,
-    DeviceItem
+    DeviceItem,
+    Container
   },
   emits: ['select'],
   props: {
@@ -86,7 +89,7 @@ export default {
       <h1 class="title">{{ !!title ? title : intl.formatMessage({ id: 'devices.search' }) }}</h1>
       <UpdateButton class="update" :loading="loading" :onClick="search" />
     </div>
-    <div class="search-results">
+    <Container class="search-results" :vertical="true">
       <DeviceItem
         v-for="[ip, deviceInfo] of Object.entries(devices)"
         :key="ip"
@@ -97,7 +100,7 @@ export default {
       <h2 v-if="!loading && Object.keys(devices).length == 0" class="title">
         {{ intl.formatMessage({ id: 'devices.search.empty' }) }}
       </h2>
-    </div>
+    </Container>
   </div>
 </template>
 
@@ -114,9 +117,6 @@ export default {
   top: 5px;
 }
 .search-results {
-  display: flex;
-  flex-direction: column;
-  row-gap: var(--default-gap);
   height: fit-content;
   padding: 2px;
 }

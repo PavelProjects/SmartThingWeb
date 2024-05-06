@@ -9,6 +9,7 @@ import { useIntl } from 'vue-intl'
 import { useGatewayStore } from '../../../store/gatewayStore'
 import { storeToRefs } from 'pinia'
 import PopUpDialog from '../../dialogs/PopUpDialog.vue'
+import Container from '../../base/Container.vue'
 
 const MODE = {
   EXPORT: 'export',
@@ -21,7 +22,8 @@ export default {
     InputField,
     LoadingButton,
     DevicesSearchView,
-    PopUpDialog
+    PopUpDialog,
+    Container,
   },
   props: {
     settings: {
@@ -202,7 +204,7 @@ export default {
 
 <template>
   <div>
-    <div class="settings-editor">
+    <Container class="settings-editor" :vertical="true">
       <InputField
         :label="intl.formatMessage({ id: 'device.settings.editor.name' })"
         v-model="newSettings.name"
@@ -211,7 +213,7 @@ export default {
         {{ intl.formatMessage({ id: 'device.settings.editor.title' }) }}
       </h2>
       <textarea class="editor" v-model="newSettings.value"></textarea>
-      <div class="controls">
+      <Container class="controls">
         <LoadingButton @click="save" :loading="loading">
           <h2>
             {{
@@ -227,8 +229,8 @@ export default {
             {{ intl.formatMessage({ id: 'device.settings.editor.button' }, { action: 'delete' }) }}
           </h2>
         </LoadingButton>
-      </div>
-      <div class="controls">
+      </Container>
+      <Container class="controls">
         <button v-if="settings.name" class="btn" @click="handleExportBtn">
           <h2>
             {{ intl.formatMessage({ id: 'device.settings.editor.button' }, { action: 'export' }) }}
@@ -239,8 +241,8 @@ export default {
             {{ intl.formatMessage({ id: 'device.settings.editor.button' }, { action: 'import' }) }}
           </h2>
         </button>
-      </div>
-    </div>
+      </Container>
+    </Container>
     <PopUpDialog v-if="mode" @close="mode = undefined">
       <DevicesSearchView
         :title="intl.formatMessage({ id: 'device.settings.editor.select.device' })"
@@ -254,9 +256,6 @@ export default {
 .settings-editor {
   width: 50vw;
   padding: var(--padding-default);
-  display: flex;
-  flex-direction: column;
-  gap: var(--default-gap)
 }
 .settings-editor textarea{
   resize: none;
@@ -268,11 +267,7 @@ export default {
 .delete {
   background-color: var(--color-danger);
 }
-.controls {
-  display: flex;
-  flex-direction: row;
-  gap: var(--default-gap);
-}
+/* todo replace with stretch */
 .controls button {
   flex: 1 0 auto;
 }

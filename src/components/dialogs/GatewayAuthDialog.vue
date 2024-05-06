@@ -6,12 +6,14 @@ import { toast } from '../../utils/EventBus'
 import LoadingButton from '../controls/LoadingButton.vue'
 import InputField from '../fields/InputField.vue'
 import PopUpDialog from './PopUpDialog.vue'
+import Container from '../base/Container.vue'
 
 export default {
   components: {
     InputField,
     PopUpDialog,
-    LoadingButton
+    LoadingButton,
+    Container,
   },
   data() {
     const store = useGatewayAuthStore()
@@ -90,7 +92,7 @@ export default {
 
 <template>
   <PopUpDialog @close="$emit('close')">
-    <div class="gtw-auth-dialog">
+    <Container class="gtw-auth-dialog" :vertical="true">
       <h1 class="title">
         {{ intl.formatMessage({ id: 'gateway.cloud.auth.title' }) }}
       </h1>
@@ -100,7 +102,7 @@ export default {
         :validationFailed="cloudToken.length === 0"
         :errorMessage="errorMessage"
       />
-      <div v-if="parsedToken" class="list">
+      <Container v-if="parsedToken" :vertical="true">
         <InputField
           :label="intl.formatMessage({ id: 'gateway.cloud.auth.ip' })"
           v-model="parsedToken.cloudIp"
@@ -119,15 +121,13 @@ export default {
         <LoadingButton @click="authenticate">
           <h2>{{ intl.formatMessage({ id: 'gateway.cloud.auth.connect' }) }}</h2>
         </LoadingButton>
-      </div>
-    </div>
+      </Container>
+    </Container>
   </PopUpDialog>
 </template>
 
 <style scoped>
 .gtw-auth-dialog {
-  display: flex;
-  flex-direction: column;
   gap: calc(3 * var(--default-gap));
   padding: var(--default-gap);
   width: 500px;
