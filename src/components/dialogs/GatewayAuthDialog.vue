@@ -21,7 +21,6 @@ export default {
     return {
       loading: false,
       cloudToken: '',
-      errorMessage: '',
       parsedToken: undefined,
       store,
       intl
@@ -30,7 +29,6 @@ export default {
   emits: ['close'],
   watch: {
     cloudToken() {
-      this.errorMessage = ''
       if (!this.cloudToken) {
         this.parsedToken = undefined
         return
@@ -43,7 +41,6 @@ export default {
       }
 
       if (parsed.length !== 3) {
-        this.errorMessage = 'bad token'
         this.parsedToken = undefined
         return
       }
@@ -100,7 +97,6 @@ export default {
         :label="intl.formatMessage({ id: 'gateway.cloud.auth.conn.token' })"
         v-model="cloudToken"
         :validationFailed="cloudToken.length === 0"
-        :errorMessage="errorMessage"
       />
       <Container v-if="parsedToken" :vertical="true">
         <InputField

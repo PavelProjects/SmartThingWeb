@@ -1,5 +1,7 @@
 <script>
+import FieldContainer from './FieldContainer.vue'
 export default {
+  components: { FieldContainer },
   props: {
     label: String,
     modelValue: Boolean,
@@ -11,6 +13,10 @@ export default {
     validationFailed: {
       type: Boolean,
       default: false
+    },
+    vertical: {
+      type: Boolean,
+      default: () => true,
     }
   },
   emits: ['update:modelValue'],
@@ -23,21 +29,18 @@ export default {
 </script>
 
 <template>
-  <div class="field-container">
-    <h2 class="field-label">{{ label }}</h2>
+  <FieldContainer :label="label" :vertical="vertical">
     <input
       :checked="modelValue"
       @input="$emit('update:modelValue', $event.target.checked)"
       type="checkbox"
-      :class="{ legit: !validationFailed, required: validationFailed }"
+      :class="{ required: validationFailed }"
     />
-  </div>
+  </FieldContainer>
 </template>
 
 <style scoped>
 input {
-  margin: auto 0;
-  height: 20px;
-  width: 20px;
+  width: fit-content;
 }
 </style>

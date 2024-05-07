@@ -89,7 +89,7 @@ export default {
       <h2 class="title">
         {{ intl.formatMessage({ id: 'dashboard.group.edit.title' }, { name: device.name }) }}
       </h2>
-      <Container class="table">
+      <Container class="table" :vertical="true">
         <div class="row">
           <h2 v-for="column of ['type', 'name', 'units', '']" :key="column">
             {{ intl.formatMessage({ id: 'dashboard.group.edit.columns' }, { column }) }}

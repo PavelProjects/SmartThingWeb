@@ -24,7 +24,6 @@ a,
   border-color: transparent;
   border-radius: var(--border-radius);
   min-width: 90px;
-  min-height: 40px;
   color: black;
 }
 
@@ -44,7 +43,6 @@ a,
 
 input,
 select {
-  min-height: 40px;
   font-size: 18px;
   background-color: var(--color-background);
   color: var(--color-text);
@@ -86,9 +84,6 @@ textarea {
   display: grid;
   grid-template-columns: 50% 50%;
   border-radius: var(--border-radius);
-}
-.field-label {
-  text-align: center;
 }
 .required {
   background-color: hsla(3, 100%, 37%, 0.2);
