@@ -9,7 +9,7 @@ const messages = {
     'doc.device.settings': 'Device settings',
     'doc.device.logs': 'Device logs',
     gateway: 'Gateway: {gateway}',
-    'gateway.panel': 'Control panel {device}',
+    'gateway.panel': 'Control panel for {device}',
     'gateway.cloud.auth.title': 'Add cloud token',
     'gateway.cloud.auth.conn.token': 'Connection token',
     'gateway.cloud.auth.ip': 'Cloud ip',
@@ -150,6 +150,12 @@ const messages = {
     'device.hooks.select.to.manage': 'Select {type} to manage hooks',
     'device.hooks.title': 'Hooks',
     'device.hooks.button.add': 'Add hook of type ',
+    'device.metrics.updatime': `
+      {days, select, 0 {} other {{days} days}}
+      {hours, select, 0 {} other {{hours} hours}}
+      {minutes, select, 0 {} other {{minutes} minutes}}
+      {seconds, select, 0 {} other {{seconds} seconds}}
+    `,
     'hooks.disabled': 'Hooks feature disabled in this build',
     'device.hooks.empty': 'No hooks added yet',
     'device.hook.validation.error': 'Validation failed',
@@ -361,6 +367,12 @@ const messages = {
     } to manage hooks`,
     'device.hooks.title': 'Хуки',
     'device.hooks.button.add': 'Добавить хук типа ',
+    'device.metrics.updatime': `
+      {days, select, 0 {} other {{days} дней}}
+      {hours, select, 0 {} other {{hours} часов}}
+      {minutes, select, 0 {} other {{minutes} минут}}
+      {seconds, select, 0 {} other {{seconds} секунд}}
+    `,
     'hooks.disabled': 'Хуки отключены в данном билде',
     'device.hooks.empty': 'Нет добавленных хуков',
     'device.hook.validation.error': 'Ошибка валидации',

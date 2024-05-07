@@ -3,6 +3,7 @@ import { DeviceApi } from '../../../api/device/DeviceApi'
 import TreeList from '../../fields/TreeList.vue'
 import SyncLoader from 'vue-spinner/src/SyncLoader.vue'
 import { toast } from '../../../utils/EventBus'
+import { useIntl } from 'vue-intl'
 
 export default {
   name: 'MetricsView',
@@ -12,7 +13,9 @@ export default {
     SyncLoader
   },
   data() {
+    const intl = useIntl()
     return {
+      intl,
       loading: false,
       metrics: {}
     }
@@ -24,7 +27,10 @@ export default {
     async update() {
       this.loading = true
       try {
-        this.metrics = await DeviceApi.metrics(this.device, this.gateway)
+        this.metrics = await DeviceApi.metrics(this.device, this.gateway) || {}
+        if (this.metrics.uptime) {
+          this.metrics.uptime = this.millisToHumanReadable(this.metrics.uptime)
+        }
       } catch (error) {
         console.error(error)
         toast.error({
@@ -33,6 +39,14 @@ export default {
       } finally {
         this.loading = false
       }
+    },
+    millisToHumanReadable(ms) {
+      return this.intl.formatMessage({ id: 'device.metrics.updatime' }, { 
+        days: Math.floor(ms / 86400000),
+        hours: Math.floor(ms / 3600000) % 24,
+        minutes: Math.floor(ms / 60000) % 60,
+        seconds: Math.floor(ms / 1000) % 60,
+      })
     }
   }
 }
