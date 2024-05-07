@@ -66,13 +66,14 @@ export default {
 
 <template>
   <div class="dashboard">
-    <Container class="groups">
+    <Container class="groups" :vertical="true">
       <RiseLoader v-if="loading" class="spinner" />
       <DashboardGroup
         v-for="group of groups"
         :key="group.id"
         :group="group"
         @updateGroups="loadGroups"
+        style="margin: auto;"
       />
       <Container v-if="!loading" :vertical="true">
         <div v-if="!groups?.length">

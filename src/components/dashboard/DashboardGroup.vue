@@ -193,6 +193,7 @@ export default {
   .dashboard-group {
     padding: 2px;
     position: relative;
+    width: fit-content;
   }
   .dashboard-group .title {
     border-bottom: 2px solid var(--color-border);
