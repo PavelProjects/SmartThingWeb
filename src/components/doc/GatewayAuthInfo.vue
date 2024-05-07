@@ -150,12 +150,14 @@ export default {
             :modelValue="store.user.login"
             :title="store.user.id"
             :disabled="true"
+            :vertical="false"
           />
           <InputField
             :label="intl.formatMessage({ id: 'gateway.cloud.info.gateway' })"
             :modelValue="store.gateway.name"
             :title="store.gateway.description"
             :disabled="true"
+            :vertical="false"
           />
         </Container>
         <Container v-if="cloudConfig" :vertical="true">
@@ -166,11 +168,13 @@ export default {
             :label="intl.formatMessage({ id: 'gateway.cloud.config.ip' })"
             :modelValue="cloudConfig.cloudIp"
             :disabled="true"
+            :vertical="false"
           />
           <InputField
             :label="intl.formatMessage({ id: 'gateway.cloud.config.port' })"
             :modelValue="cloudConfig.cloudPort"
             :disabled="true"
+            :vertical="false"
           />
           <LoadingButton
             v-if="['CONNECTION_LOST', 'DISCONNECTED', 'FAILED_TO_CONNECT'].includes(status)"

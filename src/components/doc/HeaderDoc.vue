@@ -54,15 +54,12 @@ export default {
   <Container class="doc">
     <div class="menu">
       <MenuSvg />
-      <router-link to="/">
-        <h1 class="green">{{ intl.formatMessage({ id: 'doc.title' }) }}</h1>
-      </router-link>
       <div v-if="showGatewayRoutes" class="menu-items">
-        <router-link :to="addGatewayToPath('/dashboard')">
-          <h2>{{ intl.formatMessage({ id: 'doc.dashboard' }) }}</h2>
-        </router-link>
         <router-link :to="addGatewayToPath('/panel')">
           <h2>{{ intl.formatMessage({ id: 'doc.panel' }) }}</h2>
+        </router-link>
+        <router-link :to="addGatewayToPath('/dashboard')">
+          <h2>{{ intl.formatMessage({ id: 'doc.dashboard' }) }}</h2>
         </router-link>
         <router-link :to="addGatewayToPath('/settings')">
           <h2>{{ intl.formatMessage({ id: 'doc.device.settings' }) }}</h2>
@@ -72,6 +69,9 @@ export default {
         </router-link>
       </div>
     </div>
+    <router-link to="/">
+      <h1 class="green">{{ intl.formatMessage({ id: 'doc.title' }) }}</h1>
+    </router-link>
     <div v-if="gateway" class="gateway-info">
       <h1
         class="title"
@@ -93,7 +93,7 @@ export default {
 
 <style scoped>
 .doc {
-  width: auto;
+  width: 100%;
   height: var(--doc-height);
   background-color: var(--color-background-mute);
   padding-left: 15px;

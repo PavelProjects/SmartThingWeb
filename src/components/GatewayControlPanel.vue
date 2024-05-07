@@ -20,7 +20,7 @@ export default {
     const intl = useIntl()
     return {
       mode: import.meta.env.VITE_MODE,
-      searchExpanded: !device,
+      searchExpanded: !device?.ip,
       windowWidth: window.innerWidth,
       gateway,
       device,
