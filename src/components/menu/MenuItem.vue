@@ -30,7 +30,7 @@ export default {
 <style scoped>
   .menu-item {
     display: flex;
-    margin: var(--padding-default);
+    padding: 0px 2px;
     transition: background-color 0.5s;
     border-radius: var(--border-radius);
     cursor: pointer;

@@ -16,7 +16,8 @@ export default {
   emits: ['select'],
   props: {
     title: String,
-    gateway: Object
+    gateway: Object,
+    selected: Object,
   },
   data() {
     const intl = useIntl()
@@ -24,7 +25,7 @@ export default {
       intl,
       devices: {},
       loading: false,
-      selectedIp: undefined
+      selectedIp: this.selected?.ip
     }
   },
   watch: {
@@ -86,7 +87,7 @@ export default {
 <template>
   <div class="devices-search-view">
     <div style="position: relative">
-      <h1 class="title">{{ !!title ? title : intl.formatMessage({ id: 'devices.search' }) }}</h1>
+      <h2 class="title">{{ !!title ? title : intl.formatMessage({ id: 'devices.search' }) }}</h2>
       <UpdateButton class="update" :loading="loading" :onClick="search" />
     </div>
     <Container class="search-results" :vertical="true">
@@ -106,7 +107,7 @@ export default {
 
 <style scoped>
 .devices-search-view {
-  min-width: 340px;
+  width: 350px;
 }
 .devices-search-view .title{
   border-bottom: 1px solid var(--color-border);
@@ -114,7 +115,7 @@ export default {
 .devices-search-view .update {
   position: absolute;
   right: 0px;
-  top: 5px;
+  top: 0px;
 }
 .search-results {
   height: fit-content;

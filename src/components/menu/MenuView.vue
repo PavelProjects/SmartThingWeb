@@ -141,10 +141,10 @@ export default {
   }
   .menu-panel {
     display: flex;
-    gap: var(--default-gap);
   }
   .menu-items {
     display: flex;
+    gap: var(--default-gap);
     overflow: auto;
     padding: 2px;
   }

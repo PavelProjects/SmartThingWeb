@@ -23,9 +23,9 @@ export default {
     display: block;
   }
   .menu-items {
+    position: absolute;
     z-index: 999;
     display: none;
-    position: absolute;
     top: 5px;
     right: -100px;
     min-width: 100px;
