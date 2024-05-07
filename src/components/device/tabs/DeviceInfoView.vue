@@ -76,7 +76,11 @@ export default {
 <template>
   <div>
     <h1 class="title">{{ intl.formatMessage({ id: 'device.info.title' }) }}</h1>
-    <Container v-if="info" :vertical="true" style="padding: 5px;">
+    <Container
+      v-if="info"
+      class="fields-list"
+      :vertical="true"
+    >
       <InputField
         :label="intl.formatMessage({ id: 'device.info.name' })"
         :title="deviceName ? '' : intl.formatMessage({ id: 'device.info.name.error.empty' })"
@@ -111,3 +115,11 @@ export default {
     <sync-loader v-else class="loading-spinner" :loading="true"></sync-loader>
   </div>
 </template>
+
+<style scoped>
+  .fields-list {
+    padding: 5px;
+    width: 60%;
+    margin: auto;
+  }
+</style>

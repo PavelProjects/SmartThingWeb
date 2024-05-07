@@ -123,16 +123,16 @@ export default {
         <CheckBoxField v-if="type === 'boolean'" :label="caption" v-model="values[key]" />
         <InputField v-else :label="caption" :type="type" v-model="values[key]" />
       </div>
-      <Container class="controls-holder">
-        <LoadingButton class="delete" :loading="deleteLoading" @click="deleteAllValues">
-          <h2>{{ intl.formatMessage({ id: 'device.config.button.delete.all' }) }}</h2>
-        </LoadingButton>
-        <LoadingButton :loading="saveLoading" @click="saveConfig">
-          <h2>{{ intl.formatMessage({ id: 'device.config.button.save' }) }}</h2>
-        </LoadingButton>
-      </Container>
     </Container>
-    <h2 v-else class="title">
+    <Container class="controls-holder">
+      <LoadingButton class="delete" :loading="deleteLoading" @click="deleteAllValues">
+        <h2>{{ intl.formatMessage({ id: 'device.config.button.delete.all' }) }}</h2>
+      </LoadingButton>
+      <LoadingButton :loading="saveLoading" @click="saveConfig">
+        <h2>{{ intl.formatMessage({ id: 'device.config.button.save' }) }}</h2>
+      </LoadingButton>
+    </Container>
+    <h2 v-if="!haveConfigEntries" class="title">
       {{ intl.formatMessage({ id: 'device.config.empty.entries' }) }}
     </h2>
   </div>
@@ -152,6 +152,8 @@ h2 {
 }
 .config-inputs {
   padding-bottom: calc(40px + var(--default-gap));
+  width: 60%;
+  margin: auto;
 }
 .delete {
   background-color: var(--color-danger);
