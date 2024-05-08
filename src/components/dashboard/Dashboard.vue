@@ -1,6 +1,5 @@
 <script>
 import DashboardGroup from './DashboardGroup.vue';
-import { useDashboardStore } from '../../store/dashboardStore'
 import { storeToRefs } from 'pinia';
 import PlusSVG from 'vue-material-design-icons/Plus.vue'
 import GroupAddDialog from './GroupAddDialog.vue';
@@ -23,13 +22,10 @@ export default {
   data() {
     const intl = useIntl()
     const { gateway } = storeToRefs(useGatewayStore())
-    const store = useDashboardStore()
-    const { groups } = storeToRefs(store)
     return {
       intl,
-      groups,
-      store,
       gateway,
+      groups: [],
       loading: false,
       addGroupDialog: false
     }
@@ -91,6 +87,7 @@ export default {
     </Container>
     <GroupAddDialog 
       v-if="addGroupDialog"
+      :groups="groups"
       @close="handleAddClose"
     />
   </div>

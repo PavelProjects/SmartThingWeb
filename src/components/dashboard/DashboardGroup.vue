@@ -4,7 +4,6 @@ import DashboardValue from './DashboardValue.vue'
 import ContextMenu from '../menu/ContextMenu.vue';
 import GroupEditDialog from './GroupEditDialog.vue';
 import { useIntl } from 'vue-intl';
-import { useDashboardStore } from '../../store/dashboardStore';
 import LoadingButton from '../controls/LoadingButton.vue';
 import { DashboardApi } from '../../api/gateway/DashboardApi';
 import { toast } from '../../utils/EventBus';
@@ -32,20 +31,29 @@ export default {
     const intl = useIntl()
     return {
       intl,
+      gateway,
       updateDelay: this.group?.config?.updateDelay || 60,
       count: 0,
       loading: false,
-      values: {},
+      values: {
+        sensor: {},
+        state: {}
+      },
       intervalId: -1,
       editing: false,
-      gateway,
+      features: {},
       ...this.group
     }
   },
   mounted() {
-    this.countTimer()
-    this.firstFetch()
-    this.intervalId = setInterval(this.updateValues, this.updateDelay * 1000)
+    if (Object.keys(this.observables).length === 0) {
+      this.updateSensors()
+      this.updateStates()
+    } else {
+      this.countTimer()
+      this.updateValues()
+      this.intervalId = setInterval(this.updateValues, this.updateDelay * 1000)
+    }
   },
   unmounted() {
     clearInterval(this.intervalId)
@@ -62,19 +70,6 @@ export default {
     }
   },
   methods: {
-    async firstFetch() {
-      this.loading = true;
-      try {
-        const { updateDeviceConfig } = useDashboardStore()
-        updateDeviceConfig(this.group, {
-          sensors: Object.keys(await this.updateSensors()),
-          states: Object.keys(await this.updateStates()),
-        })
-      } finally {
-        this.count = 0
-        this.loading = false
-      }
-    },
     async updateValues() {
       this.loading = true
       try {
@@ -84,6 +79,7 @@ export default {
         if (this.observables.find(({ type }) => type === 'state')) {
           await this.updateStates()
         }
+        console.log(this.values)
         // todo catch error
       } finally {
         this.count = 0
@@ -99,18 +95,18 @@ export default {
     async updateSensors() {
       return DeviceApi.getDeviceSensors(this.device, this.gateway).then((sensors) => {
         Object.entries(sensors).forEach(([name, {value}]) => {
-          this.values['sensor' + name] = value
+          this.values['sensor'][name] = value
         })
         return sensors
-      })
+      }).catch(console.log)
     },
     async updateStates() {
       return DeviceApi.getDeviceStates(this.device, this.gateway).then((states) => {
         Object.entries(states).forEach(([name, value]) => {
-          this.values['state' + name] = value
+          this.values['state'][name] = value
         })
         return states
-      })
+      }).catch(console.log)
     },
     async deleteGroup() {
       if (confirm(this.intl.formatMessage({ id: 'dashboard.group.delete.confirm' }))) {
@@ -168,7 +164,7 @@ export default {
           :key="index"
           :type="type"
           :name="name"
-          :value="values[type+name] || 'Nan'"
+          :value="values[type]?.[name] ?? 'Nan'"
           :units="units"
         />
       </Container>
@@ -184,6 +180,8 @@ export default {
     <GroupEditDialog 
       v-if="editing"
       :group="group"
+      :sensors="Object.keys(values.sensor)"
+      :states="Object.keys(values.state)"
       @close="handleEditClose"
     />
   </div>

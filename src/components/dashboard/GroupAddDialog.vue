@@ -2,7 +2,6 @@
 import { storeToRefs } from 'pinia'
 import { useIntl } from 'vue-intl'
 import { DashboardApi } from '../../api/gateway/DashboardApi'
-import { useDashboardStore } from '../../store/dashboardStore'
 import { useGatewayStore } from '../../store/gatewayStore'
 import { toast } from '../../utils/EventBus'
 import DevicesSearchView from '../device/DevicesSearchView.vue'
@@ -11,6 +10,9 @@ import Container from '../base/Container.vue'
 export default {
   name: 'GroupAddDialog',
   components: { PopUpDialog, DevicesSearchView, Container },
+  props: {
+    groups: Array
+  },
   data() {
     const { gateway } = storeToRefs(useGatewayStore())
     const intl = useIntl()
@@ -18,8 +20,7 @@ export default {
   },
   methods: {
     async selectDevice(newDev) {
-      const { groups } = useDashboardStore()
-      const exists = groups.find(({ device }) => (
+      const exists = this.groups.find(({ device }) => (
         device.ip === newDev.ip && device.name === newDev.name
       ))
       if (exists) {

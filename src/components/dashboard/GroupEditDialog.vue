@@ -2,7 +2,6 @@
 import { useIntl } from 'vue-intl'
 import PopUpDialog from '../dialogs/PopUpDialog.vue'
 import InputField from '../fields/InputField.vue'
-import { useDashboardStore } from '../../store/dashboardStore'
 import LoadingButton from '../controls/LoadingButton.vue'
 import { toast } from '../../utils/EventBus'
 import DeleteSVG from 'vue-material-design-icons/Delete.vue'
@@ -23,12 +22,12 @@ export default {
     PlusSVG,
   },
   props: {
-    group: Object
+    group: Object,
+    sensors: Array,
+    states: Array,
   },
   data() {
     const { gateway } = storeToRefs(useGatewayStore())
-    const { deviceConfig } = useDashboardStore()
-    const { sensors, states } = deviceConfig[this.group.id] || {}
     const { device, observables, config } = JSON.parse(JSON.stringify(this.group))
 
     const intl = useIntl()
@@ -36,8 +35,6 @@ export default {
       device,
       observables,
       config,
-      sensors,
-      states,
       intl,
       gateway,
       loading: false,

@@ -143,7 +143,8 @@ h2 {
 }
 .controls-holder {
   position: absolute;
-  bottom: 5px;
+  bottom: 0px;
+  padding: 5px;
   width: 100%;
 }
 .controls-holder button {
