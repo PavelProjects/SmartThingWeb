@@ -203,7 +203,7 @@ export default {
 </script>
 
 <template>
-  <div>
+  <div style="padding: 5px;">
     <Container class="settings-editor" :vertical="true">
       <InputField
         :label="intl.formatMessage({ id: 'device.settings.editor.name' })"

@@ -67,6 +67,7 @@ export default {
       this.openTab = name
     }
   }
+  // todo create new impl of menu for this task
 }
 </script>
 
