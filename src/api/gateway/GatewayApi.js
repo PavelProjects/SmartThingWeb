@@ -105,7 +105,7 @@ const GatewayApi = {
     const response = await gatewayFetch({
       url: `${PATH_DEVICE_SETTINGS}/${name}`,
       method: HTTP_METHOD.DELETE,
-      data: { name, value },
+      data: { name },
       gateway
     })
     return response.status === 200
