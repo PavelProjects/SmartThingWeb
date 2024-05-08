@@ -70,12 +70,11 @@ export default {
     async saveConfig() {
       this.saveLoading = true
       try {
-        if (await DeviceApi.saveConfigValues(this.device, this.values, this.gateway)) {
-          toast.success({
-            caption: 'Config updated'
-          })
-          this.loadConfigValues()
-        }
+        await DeviceApi.saveConfigValues(this.device, this.values, this.gateway)
+        toast.success({
+          caption: 'Config updated'
+        })
+        this.loadConfigValues()
       } catch (error) {
         console.error(error)
         const { error: description } = await extractDataFromError(error)
@@ -144,7 +143,7 @@ h2 {
 }
 .controls-holder {
   position: absolute;
-  bottom: 0px;
+  bottom: 5px;
   width: 100%;
 }
 .controls-holder button {
