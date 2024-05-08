@@ -115,21 +115,21 @@ export default {
   min-width: 80vw;
   padding: var(--default-gap);
 }
-.log-message-container::v-deep {
+.log-message-container {
   display: grid;
   column-gap: calc(var(--default-gap) / 2);
   grid-template-columns: 200px 150px 200px 120px auto;
   text-align: center;
   padding: var(--padding-default);
 }
-.log-message-container::v-deep div,h2 {
+.log-message-container :deep(div),h2 {
   border-right: 2px solid var(--color-border);
   height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
-.log-message-container::v-deep div:last-child,h2:last-child {
+.log-message-container :deep(div:last-child),h2:last-child {
   border-right: none;
 }
 </style>
