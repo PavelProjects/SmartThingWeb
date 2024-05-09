@@ -20,3 +20,17 @@ export default {
     <pulse-loader :loading="loading"></pulse-loader>
   </button>
 </template>
+
+<style scoped>
+.btn {
+  background-color: hsla(160, 100%, 37%, 0.2);
+  border-color: transparent;
+  border-radius: var(--border-radius);
+  min-width: 90px;
+  color: black;
+}
+
+.btn:hover {
+  opacity: 0.5;
+}
+</style>

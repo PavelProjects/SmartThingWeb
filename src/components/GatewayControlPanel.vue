@@ -61,7 +61,7 @@ export default {
     <div v-if="mode === 'gateway' || !!gateway">
       <DevicesSearchView
         v-if="wideEnough"
-        class="search bordered"
+        class="search"
         :gateway="gateway"
         :selected="device"
         @select="handleDeviceSelect"
@@ -75,7 +75,6 @@ export default {
         @expand="(v) => searchExpanded = v"
       >
         <DevicesSearchView
-          class="bordered"
           :gateway="gateway"
           :selected="device"
           @select="handleDeviceSelect"
