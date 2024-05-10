@@ -95,6 +95,7 @@ const messages = {
       tag {Tag}
       other {{ column }}
     }`,
+    'device.unreachable': 'Device is unreachable',
     'device.tabs': `{
       tab, select,
       info {Information}
@@ -325,6 +326,7 @@ const messages = {
       tag {Тег}
       other {{ column }}
     }`,
+    'device.unreachable': 'Устройство не доступно',
     'device.tabs': `{
       tab, select,
       info {Информация}

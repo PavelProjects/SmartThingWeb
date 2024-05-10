@@ -19,8 +19,8 @@ export default {
     Container,
     PopUpDialog,
     AddDeviceDialog,
-    PlusSVG,
     ContextMenu,
+    PlusSVG,
   },
   emits: ['select'],
   props: {
@@ -36,8 +36,7 @@ export default {
       savedDevices: {},
       searching: false,
       loadingSaved: false,
-      addDeviceVisible: false,
-      selectedIp: this.selected?.ip
+      addDeviceVisible: false
     }
   },
   watch: {
@@ -172,7 +171,7 @@ export default {
           class="device-item saved-item"
         >
           <DeviceItem
-            :selected="selectedIp == ip"
+            :selected="selected?.ip == ip"
             :device="deviceInfo"
             @click="() => handleClick(ip, deviceInfo)"
           />
@@ -205,7 +204,7 @@ export default {
         <DeviceItem
           v-for="[ip, deviceInfo] of Object.entries(devices)"
           :key="ip"
-          :selected="selectedIp == ip"
+          :selected="selected?.ip == ip"
           :device="deviceInfo"
           @click="() => handleClick(ip, deviceInfo)"
         />

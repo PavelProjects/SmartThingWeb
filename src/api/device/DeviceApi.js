@@ -1,6 +1,7 @@
 import { toast } from '../../utils/EventBus'
 import { deviceFetch } from './DeviceFetch'
 
+const CHECK_HEALTH = 'health'
 const GET_INFO = 'getInfo'
 const GET_HOOKS = 'getHooks'
 const GET_ACTIONS = 'getActions'
@@ -31,6 +32,9 @@ export async function extractDataFromError(error) {
 }
 
 export const DeviceApi = {
+  async health(device, gateway) {
+    return (await deviceFetch({ device, command: CHECK_HEALTH, gateway})).data
+  },
   async getDeviceInfo(device, gateway) {
     return (await deviceFetch({ device, command: GET_INFO, gateway })).data
   },

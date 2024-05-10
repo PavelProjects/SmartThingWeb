@@ -5,8 +5,6 @@ export const useGatewayStore = defineStore({
   state: () => {
     return {
       gateway: undefined,
-      device: undefined,
-      features: {}
     }
   }
 })
