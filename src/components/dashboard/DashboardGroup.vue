@@ -1,5 +1,4 @@
 <script>
-import { DeviceApi } from '../../api/device/DeviceApi'
 import DashboardValue from './DashboardValue.vue'
 import ContextMenu from '../menu/ContextMenu.vue';
 import GroupEditDialog from './GroupEditDialog.vue';
@@ -11,6 +10,7 @@ import UpdateButton from '../controls/UpdateButton.vue';
 import { useGatewayStore } from '../../store/gatewayStore';
 import { storeToRefs } from 'pinia';
 import Container from '../base/Container.vue';
+import { useStompClientStore } from '../../store/stompClientStore';
 
 export default {
   components: { 
@@ -24,45 +24,58 @@ export default {
   name: 'DashboardGroup',
   emits: ['updateGroups'],
   props: {
+    gateway: Object,
     group: Object,
+    currentTime: Object,
   },
   data() {
-    const { gateway } = storeToRefs(useGatewayStore())
     const intl = useIntl()
     return {
       intl,
-      gateway,
-      updateDelay: this.group?.config?.updateDelay || 60,
-      count: 0,
+      updateDelay: this.group?.config?.updateDelay || 60000,
       loading: false,
-      values: {
-        sensor: {},
-        state: {}
-      },
-      intervalId: -1,
+      values: {},
       editing: false,
       features: {},
       ...this.group
     }
   },
-  mounted() {
-    if (Object.keys(this.observables).length === 0) {
-      this.updateSensors()
-      this.updateStates()
-    } else {
-      this.countTimer()
-      this.updateValues()
-      this.intervalId = setInterval(this.updateValues, this.updateDelay * 1000)
+  async mounted() {
+    const client = useStompClientStore()
+    try {
+      const topic = "/dashboard/" + this.id
+      client.subscribe(topic, (message) => {
+        if (!message?.body) {
+          console.error("Empty message body!")
+          return
+        }
+        this.values = JSON.parse(message.body)
+      }, topic)
+    } catch (error) {
+      console.log(error)
     }
+    this.loadValues()
   },
   unmounted() {
-    clearInterval(this.intervalId)
+    const client = useStompClientStore()
+    try {
+      client.unsubscribe("/dashboard/" + this.id)
+    } catch (error) {
+      console.log(error)
+    }
   },
   computed: {
-    updateTitle() {
+    updateButtonTitle() {
+      let count = -1
+      try {
+        const date = new Date(this.values.lastUpdate)
+        count = Math.round((this.currentTime - date) / 1000)
+      } catch (error) {
+        console.log(error)
+      }
       return this.intl.formatMessage(
         { id: 'dashboard.group.update.title' },
-        { updateDelay: this.updateDelay, count: this.count }
+        { updateDelay: this.updateDelay / 1000, count }
       )
     },
     deviceTitle() {
@@ -70,43 +83,31 @@ export default {
     }
   },
   methods: {
-    async updateValues() {
+    async loadValues() {
       this.loading = true
       try {
-        if (this.observables.find(({ type }) => type === 'sensor')) {
-          await this.updateSensors()
-        }
-        if (this.observables.find(({ type }) => type === 'state')) {
-          await this.updateStates()
-        }
-        console.log(this.values)
-        // todo catch error
+        this.values = await DashboardApi.getGroupValues(this.id, this.gateway)
+      } catch (error) {
+        console.log(error)
+        toast.error({
+          caption: this.intl.formatMessage({ id: 'dashboard.group.values.load.error' })
+        })
       } finally {
-        this.count = 0
         this.loading = false
       }
     },
-    countTimer() {
-      setTimeout(() => {
-        this.count += 2;
-        this.countTimer()
-      }, 2000)
-    },
-    async updateSensors() {
-      return DeviceApi.getDeviceSensors(this.device, this.gateway).then((sensors) => {
-        Object.entries(sensors).forEach(([name, {value}]) => {
-          this.values['sensor'][name] = value
+    async updateValues() {
+      this.loading = true
+      try {
+        this.values = await DashboardApi.updateGroupValues(this.id, this.gateway)
+      } catch (error) {
+        console.log(error)
+        toast.error({
+          caption: this.intl.formatMessage({ id: 'dashboard.group.values.load.error' })
         })
-        return sensors
-      }).catch(console.log)
-    },
-    async updateStates() {
-      return DeviceApi.getDeviceStates(this.device, this.gateway).then((states) => {
-        Object.entries(states).forEach(([name, value]) => {
-          this.values['state'][name] = value
-        })
-        return states
-      }).catch(console.log)
+      } finally {
+        this.loading = false
+      }
     },
     async deleteGroup() {
       if (confirm(this.intl.formatMessage({ id: 'dashboard.group.delete.confirm' }))) {
@@ -140,7 +141,7 @@ export default {
       <UpdateButton
         v-if="observables.length > 0"
         class="update"
-        :title="updateTitle"
+        :title="updateButtonTitle"
         :loading="loading"
         :onClick="updateValues"
       />
@@ -164,7 +165,7 @@ export default {
           :key="index"
           :type="type"
           :name="name"
-          :value="values[type]?.[name] ?? 'Nan'"
+          :value="values?.[type + 's']?.[name] ?? 'Nan'"
           :units="units"
         />
       </Container>
@@ -177,11 +178,10 @@ export default {
         </h2>
       </LoadingButton>
     </Container>
+    <!-- todo load sensors and states inside edit dialog -->
     <GroupEditDialog 
       v-if="editing"
       :group="group"
-      :sensors="Object.keys(values.sensor)"
-      :states="Object.keys(values.state)"
       @close="handleEditClose"
     />
   </div>

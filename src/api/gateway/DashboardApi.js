@@ -42,6 +42,20 @@ const DashboardApi = {
       gateway
     })
     return response.status === 200
+  },
+  async getGroupValues(groupId, gateway) {
+    return (await gatewayFetch({
+      url: '/dashboard/values/' + groupId,
+      method: HTTP_METHOD.GET,
+      gateway
+    })).data
+  },
+  async updateGroupValues(groupId, gateway) {
+    return (await gatewayFetch({
+      url: '/dashboard/values/' + groupId,
+      method: HTTP_METHOD.PUT,
+      gateway
+    })).data
   }
 }
 

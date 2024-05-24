@@ -9,6 +9,7 @@ import { useGatewayStore } from '../../store/gatewayStore';
 import RiseLoader from 'vue-spinner/src/RiseLoader.vue'
 import { toast } from '../../utils/EventBus';
 import Container from '../base/Container.vue';
+import { useStompClientStore } from '../../store/stompClientStore';
 
 export default {
   name: 'Dashboard',
@@ -27,8 +28,16 @@ export default {
       gateway,
       groups: [],
       loading: false,
-      addGroupDialog: false
+      addGroupDialog: false,
+      currentTime: new Date(),
+      timeUpdateInterval: -1,
     }
+  },
+  mounted() {
+    this.timeUpdateInterval = setInterval(() => this.currentTime = new Date(), 1000)
+  },
+  unmounted() {
+    clearInterval(this.timeUpdateInterval)
   },
   watch: {
     gateway() {
@@ -67,7 +76,9 @@ export default {
       <DashboardGroup
         v-for="group of groups"
         :key="group.id"
+        :gateway="gateway"
         :group="group"
+        :currentTime="currentTime"
         @updateGroups="loadGroups"
         style="margin: auto;"
       />

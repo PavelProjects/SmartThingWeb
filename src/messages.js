@@ -192,6 +192,7 @@ const messages = {
     'cloud.auth.info.user.id': 'id: {id}',
     'cloud.auth.info.user.login': 'login: {login}',
     'dashboard.load.error': 'Failed to load dashboard',
+    'dashboard.group.values.load.error': "Failed to load values",
     'dashboard.group.edit.title': 'Edit group {name}',
     'dashboard.groups.empty': 'No groups added yet',
     'dashboard.group.add.new': 'Add new group',
@@ -222,8 +223,10 @@ const messages = {
       state {state}
       other {{value}}
     }`,
-    'dashboard.group.edit.update.delay': 'Update delay (sec)',
+    'dashboard.group.edit.update.delay': 'Update delay (ms)',
     'dashboard.group.edit.save': 'Save',
+    'dashborad.group.edit.add.observables': 'Add sensors or states',
+    'dashborad.group.edit.validation.error': 'Please fill required fields',
     login: 'Login',
     password: 'Password',
     'log.in': 'Log in',
@@ -428,6 +431,7 @@ const messages = {
     'cloud.auth.info.user.id': 'id: {id}',
     'cloud.auth.info.user.login': 'логин: {login}',
     'dashboard.load.error': 'Ну удалось загрузить дашбоард',
+    'dashboard.group.values.load.error': "Не удалось загрузить значения",
     'dashboard.group.edit.title': 'Редактировать группу {name}',
     'dashboard.groups.empty': 'Пока еще не было добавлено групп',
     'dashboard.group.add.new': 'Добавить новую группу',
@@ -458,8 +462,10 @@ const messages = {
       state {состояние}
       other {{value}}
     }`,
-    'dashboard.group.edit.update.delay': 'Задержка обновлений (сек)',
+    'dashboard.group.edit.update.delay': 'Задержка обновлений (мс)',
     'dashboard.group.edit.save': 'Сохранить',
+    'dashborad.group.edit.add.observables': 'Добавить сенсоры или состояния',
+    'dashborad.group.edit.validation.error': 'Пожалуйста заполните требуемые поля',
     login: 'Логин',
     password: 'Пароль',
     'log.in': 'Войти',
