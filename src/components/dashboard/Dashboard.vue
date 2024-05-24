@@ -1,6 +1,5 @@
 <script>
 import DashboardGroup from './DashboardGroup.vue';
-import { useDashboardStore } from '../../store/dashboardStore'
 import { storeToRefs } from 'pinia';
 import PlusSVG from 'vue-material-design-icons/Plus.vue'
 import GroupAddDialog from './GroupAddDialog.vue';
@@ -9,28 +8,36 @@ import { useIntl } from 'vue-intl';
 import { useGatewayStore } from '../../store/gatewayStore';
 import RiseLoader from 'vue-spinner/src/RiseLoader.vue'
 import { toast } from '../../utils/EventBus';
+import Container from '../base/Container.vue';
+import { useStompClientStore } from '../../store/stompClientStore';
 
 export default {
   name: 'Dashboard',
   components: {
     DashboardGroup,
     GroupAddDialog,
+    Container,
     PlusSVG,
-    RiseLoader
+    RiseLoader,
   },
   data() {
     const intl = useIntl()
     const { gateway } = storeToRefs(useGatewayStore())
-    const store = useDashboardStore()
-    const { groups } = storeToRefs(store)
     return {
       intl,
-      groups,
-      store,
       gateway,
+      groups: [],
       loading: false,
-      addGroupDialog: false
+      addGroupDialog: false,
+      currentTime: new Date(),
+      timeUpdateInterval: -1,
     }
+  },
+  mounted() {
+    this.timeUpdateInterval = setInterval(() => this.currentTime = new Date(), 1000)
+  },
+  unmounted() {
+    clearInterval(this.timeUpdateInterval)
   },
   watch: {
     gateway() {
@@ -64,15 +71,18 @@ export default {
 
 <template>
   <div class="dashboard">
-    <div class="groups">
+    <Container class="groups" :vertical="true">
       <RiseLoader v-if="loading" class="spinner" />
       <DashboardGroup
         v-for="group of groups"
         :key="group.id"
+        :gateway="gateway"
         :group="group"
+        :currentTime="currentTime"
         @updateGroups="loadGroups"
+        style="margin: auto;"
       />
-      <div v-if="!loading" class="list">
+      <Container v-if="!loading" :vertical="true">
         <div v-if="!groups?.length">
           <h1 class="title">
             {{ intl.formatMessage({ id: 'dashboard.groups.empty' }) }}
@@ -84,10 +94,11 @@ export default {
           :size="40"
           @click.stop="addGroupDialog = true"
         />
-      </div>
-    </div>
+      </Container>
+    </Container>
     <GroupAddDialog 
       v-if="addGroupDialog"
+      :groups="groups"
       @close="handleAddClose"
     />
   </div>
@@ -100,10 +111,7 @@ export default {
   }
   .groups {
     margin: auto;
-    display: flex;
-    flex-direction: row;
     flex-wrap: wrap;
-    gap: var(--default-gap);
   }
   .spinner {
     padding-top: 30px;

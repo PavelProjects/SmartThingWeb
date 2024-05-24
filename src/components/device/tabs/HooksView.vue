@@ -108,6 +108,7 @@ export default {
       <ComboBoxField
         :label="intl.formatMessage({ id: 'device.hooks.button.add' })"
         :items="hookTypes"
+        :vertical="false"
         @update:modelValue="(v) => addHook(v)"
       />
       <div v-if="hooks.length > 0" class="hooks-list-view list">
@@ -129,14 +130,17 @@ export default {
 </template>
 
 <style scoped>
+.field-label {
+  text-align: center;
+}
 .hooks-list-view {
   max-height: 80vh;
   overflow-y: auto;
-  padding: 2px;
-  border-top: 1px solid var(--color-border);
+  border-top: 2px solid var(--color-border);
 }
-.hooks-list-view * {
-  border-bottom: 1px solid var(--color-border);
+.hooks-list-view .hook {
+  padding: 5px;
+  border-bottom: 2px solid var(--color-border);
 }
 .hooks-list-view *:last-child {
   border-bottom: none;

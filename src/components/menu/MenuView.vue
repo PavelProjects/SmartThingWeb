@@ -2,12 +2,14 @@
 import { h } from 'vue'
 import UpdateButton from '../controls/UpdateButton.vue'
 import MenuItem from './MenuItem.vue'
+import Container from '../base/Container.vue'
 
 export default {
   name: 'MenuView',
   components: {
     UpdateButton,
-    MenuItem
+    MenuItem,
+    Container
   },
   props: {
     tabs: Object,
@@ -97,7 +99,7 @@ export default {
 </script>
 
 <template>
-  <div class="list">
+  <Container :vertical="true">
     <h1 v-if="header" class="title">{{ header }}</h1>
     <div v-if="tabs" class="menu-panel" :style="panelStyle">
       <div class="menu-items" :class="itemsListClass">
@@ -128,7 +130,7 @@ export default {
         </h2>
       </div>
     </div>
-  </div>
+  </Container>
 </template>
 
 <style scoped>
@@ -139,11 +141,12 @@ export default {
   }
   .menu-panel {
     display: flex;
-    gap: var(--default-gap);
   }
   .menu-items {
     display: flex;
+    gap: var(--default-gap);
     overflow: auto;
+    padding: 2px;
   }
   .menu-item-content {
     position: relative;

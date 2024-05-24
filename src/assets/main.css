@@ -19,12 +19,12 @@ a,
   color: var(--color-positive);
 }
 
+/* todo remove */
 .btn {
   background-color: hsla(160, 100%, 37%, 0.2);
   border-color: transparent;
   border-radius: var(--border-radius);
   min-width: 90px;
-  min-height: 40px;
   color: black;
 }
 
@@ -44,7 +44,6 @@ a,
 
 input,
 select {
-  min-height: 40px;
   font-size: 18px;
   background-color: var(--color-background);
   color: var(--color-text);
@@ -86,14 +85,6 @@ textarea {
   display: grid;
   grid-template-columns: 50% 50%;
   border-radius: var(--border-radius);
-}
-.field-label {
-  text-align: center;
-}
-.list {
-  display: flex;
-  flex-direction: column;
-  row-gap: var(--default-gap);
 }
 .required {
   background-color: hsla(3, 100%, 37%, 0.2);
@@ -158,22 +149,4 @@ textarea {
 }
 .toast h2 h3 {
   text-align: center;
-}
-
-.log-message-container {
-  display: grid;
-  column-gap: calc(var(--default-gap) / 2);
-  grid-template-columns: 200px 150px 200px 120px auto;
-  text-align: center;
-  padding: var(--padding-default);
-}
-.log-message-container * {
-  border-right: 2px solid var(--color-border);
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-.log-message-container:last-child {
-  border-right: none;
 }

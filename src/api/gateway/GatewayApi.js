@@ -16,6 +16,7 @@ const PATH_CLOUD_CONNECTED = '/cloud/connection/status'
 const PATH_CLOUD_CONNECT = '/cloud/connection/connect'
 const PATH_CLOUD_DISCONNECT = '/cloud/connection/disconnect'
 const PATH_DEVICES_FOUND = '/device/found'
+const PATH_DEVICES_SAVED = '/device/saved'
 const PATH_DEVICE_API = '/device/api'
 const PATH_DEVICE_LOGS = '/device/logs'
 const PATH_DEVICE_SETTINGS = '/device/settings'
@@ -105,7 +106,7 @@ const GatewayApi = {
     const response = await gatewayFetch({
       url: `${PATH_DEVICE_SETTINGS}/${name}`,
       method: HTTP_METHOD.DELETE,
-      data: { name, value },
+      data: { name },
       gateway
     })
     return response.status === 200
@@ -113,6 +114,30 @@ const GatewayApi = {
   async getFoundDevices(gateway) {
     const response = await gatewayFetch({ gateway, url: PATH_DEVICES_FOUND, method: "GET" })
     return response.data
+  },
+  async getSavedDevices(gateway) {
+    return (await gatewayFetch({ gateway, url: PATH_DEVICES_SAVED, method: "GET" })).data
+  },
+  async addDevice(ip, gateway) {
+    return (await gatewayFetch({
+      gateway,
+      url: PATH_DEVICES_SAVED + "?ip=" + ip,
+      method: "POST"
+    })).data
+  },
+  async updateSavedDevice(ip, gateway) {
+    return (await gatewayFetch({
+      gateway,
+      url: PATH_DEVICES_SAVED + "?ip=" + ip,
+      method: "PUT"
+    })).data
+  },
+  async deleteSavedDevice(ip, gateway) {
+    await gatewayFetch({
+      gateway,
+      url: PATH_DEVICES_SAVED + "?ip=" + ip,
+      method: "DELETE"
+    })
   }
 }
 

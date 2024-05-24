@@ -1,16 +1,16 @@
 <script>
-import { DeviceApi } from '../../api/device/DeviceApi'
 import DashboardValue from './DashboardValue.vue'
 import ContextMenu from '../menu/ContextMenu.vue';
 import GroupEditDialog from './GroupEditDialog.vue';
 import { useIntl } from 'vue-intl';
-import { useDashboardStore } from '../../store/dashboardStore';
 import LoadingButton from '../controls/LoadingButton.vue';
 import { DashboardApi } from '../../api/gateway/DashboardApi';
 import { toast } from '../../utils/EventBus';
 import UpdateButton from '../controls/UpdateButton.vue';
 import { useGatewayStore } from '../../store/gatewayStore';
 import { storeToRefs } from 'pinia';
+import Container from '../base/Container.vue';
+import { useStompClientStore } from '../../store/stompClientStore';
 
 export default {
   components: { 
@@ -18,41 +18,64 @@ export default {
     ContextMenu,
     GroupEditDialog,
     LoadingButton,
-    UpdateButton
+    UpdateButton,
+    Container,
   },
   name: 'DashboardGroup',
   emits: ['updateGroups'],
   props: {
+    gateway: Object,
     group: Object,
+    currentTime: Object,
   },
   data() {
-    const { gateway } = storeToRefs(useGatewayStore())
     const intl = useIntl()
     return {
       intl,
-      updateDelay: this.group?.config?.updateDelay || 60,
-      count: 0,
+      updateDelay: this.group?.config?.updateDelay || 60000,
       loading: false,
       values: {},
-      intervalId: -1,
       editing: false,
-      gateway,
+      features: {},
       ...this.group
     }
   },
-  mounted() {
-    this.countTimer()
-    this.firstFetch()
-    this.intervalId = setInterval(this.updateValues, this.updateDelay * 1000)
+  async mounted() {
+    const client = useStompClientStore()
+    try {
+      const topic = "/dashboard/" + this.id
+      client.subscribe(topic, (message) => {
+        if (!message?.body) {
+          console.error("Empty message body!")
+          return
+        }
+        this.values = JSON.parse(message.body)
+      }, topic)
+    } catch (error) {
+      console.log(error)
+    }
+    this.loadValues()
   },
   unmounted() {
-    clearInterval(this.intervalId)
+    const client = useStompClientStore()
+    try {
+      client.unsubscribe("/dashboard/" + this.id)
+    } catch (error) {
+      console.log(error)
+    }
   },
   computed: {
-    updateTitle() {
+    updateButtonTitle() {
+      let count = -1
+      try {
+        const date = new Date(this.values.lastUpdate)
+        count = Math.round((this.currentTime - date) / 1000)
+      } catch (error) {
+        console.log(error)
+      }
       return this.intl.formatMessage(
         { id: 'dashboard.group.update.title' },
-        { updateDelay: this.updateDelay, count: this.count }
+        { updateDelay: this.updateDelay / 1000, count }
       )
     },
     deviceTitle() {
@@ -60,55 +83,31 @@ export default {
     }
   },
   methods: {
-    async firstFetch() {
-      this.loading = true;
+    async loadValues() {
+      this.loading = true
       try {
-        const { updateDeviceConfig } = useDashboardStore()
-        updateDeviceConfig(this.group, {
-          sensors: Object.keys(await this.updateSensors()),
-          states: Object.keys(await this.updateStates()),
+        this.values = await DashboardApi.getGroupValues(this.id, this.gateway)
+      } catch (error) {
+        console.log(error)
+        toast.error({
+          caption: this.intl.formatMessage({ id: 'dashboard.group.values.load.error' })
         })
       } finally {
-        this.count = 0
         this.loading = false
       }
     },
     async updateValues() {
       this.loading = true
       try {
-        if (this.observables.find(({ type }) => type === 'sensor')) {
-          await this.updateSensors()
-        }
-        if (this.observables.find(({ type }) => type === 'state')) {
-          await this.updateStates()
-        }
-        // todo catch error
+        this.values = await DashboardApi.updateGroupValues(this.id, this.gateway)
+      } catch (error) {
+        console.log(error)
+        toast.error({
+          caption: this.intl.formatMessage({ id: 'dashboard.group.values.load.error' })
+        })
       } finally {
-        this.count = 0
         this.loading = false
       }
-    },
-    countTimer() {
-      setTimeout(() => {
-        this.count += 2;
-        this.countTimer()
-      }, 2000)
-    },
-    async updateSensors() {
-      return DeviceApi.getDeviceSensors(this.device, this.gateway).then((sensors) => {
-        Object.entries(sensors).forEach(([name, {value}]) => {
-          this.values['sensor' + name] = value
-        })
-        return sensors
-      })
-    },
-    async updateStates() {
-      return DeviceApi.getDeviceStates(this.device, this.gateway).then((states) => {
-        Object.entries(states).forEach(([name, value]) => {
-          this.values['state' + name] = value
-        })
-        return states
-      })
     },
     async deleteGroup() {
       if (confirm(this.intl.formatMessage({ id: 'dashboard.group.delete.confirm' }))) {
@@ -138,11 +137,11 @@ export default {
 
 <template>
   <div>
-    <div class="dashboard-group bordered">
+    <Container class="dashboard-group bordered" :vertical="true">
       <UpdateButton
         v-if="observables.length > 0"
         class="update"
-        :title="updateTitle"
+        :title="updateButtonTitle"
         :loading="loading"
         :onClick="updateValues"
       />
@@ -160,16 +159,16 @@ export default {
           {{ intl.formatMessage({ id: 'dashboard.group.delete' }) }}
         </p>
       </ContextMenu>
-      <div class="values">
+      <Container class="values">
         <DashboardValue
           v-for="{ name, type, units }, index of observables"
           :key="index"
           :type="type"
           :name="name"
-          :value="values[type+name] || 'Nan'"
+          :value="values?.[type + 's']?.[name] ?? 'Nan'"
           :units="units"
         />
-      </div>
+      </Container>
       <LoadingButton
         v-if="observables.length === 0"
         @click="editing = true"
@@ -178,7 +177,8 @@ export default {
           {{ intl.formatMessage({ id: 'dashboard.group.add.values' }) }}
         </h2>
       </LoadingButton>
-    </div>
+    </Container>
+    <!-- todo load sensors and states inside edit dialog -->
     <GroupEditDialog 
       v-if="editing"
       :group="group"
@@ -189,11 +189,9 @@ export default {
 
 <style scoped>
   .dashboard-group {
-    display: flex;
-    flex-direction: column;
-    gap: var(--default-gap);
     padding: 2px;
     position: relative;
+    width: fit-content;
   }
   .dashboard-group .title {
     border-bottom: 2px solid var(--color-border);
@@ -202,11 +200,6 @@ export default {
     position: absolute;
     top: 2px;
     left: 2px;
-  }
-  .values {
-    display: flex;
-    flex-direction: row;
-    gap: var(--default-gap);
   }
   .values * {
     border-right: 2px solid var(--color-border);

@@ -6,6 +6,7 @@ import SyncLoader from 'vue-spinner/src/SyncLoader.vue'
 import CheckBoxField from '../../fields/CheckBoxField.vue'
 import { useIntl } from 'vue-intl'
 import { toast } from '../../../utils/EventBus.js'
+import Container from '../../base/Container.vue'
 
 export default {
   name: 'ConfigView',
@@ -14,6 +15,7 @@ export default {
     InputField,
     CheckBoxField,
     LoadingButton,
+    Container,
     SyncLoader
   },
   data() {
@@ -68,12 +70,11 @@ export default {
     async saveConfig() {
       this.saveLoading = true
       try {
-        if (await DeviceApi.saveConfigValues(this.device, this.values, this.gateway)) {
-          toast.success({
-            caption: 'Config updated'
-          })
-          this.loadConfigValues()
-        }
+        await DeviceApi.saveConfigValues(this.device, this.values, this.gateway)
+        toast.success({
+          caption: 'Config updated'
+        })
+        this.loadConfigValues()
       } catch (error) {
         console.error(error)
         const { error: description } = await extractDataFromError(error)
@@ -116,21 +117,21 @@ export default {
       {{ intl.formatMessage({ id: 'device.config.title' }) }}
     </h1>
     <sync-loader class="loading-spinner" :loading="loading"></sync-loader>
-    <div v-if="haveConfigEntries" class="config-inputs list">
+    <Container v-if="haveConfigEntries" class="config-inputs" :vertical="true">
       <div v-for="[key, { caption, type }] of Object.entries(this.configInfo)" :key="key">
         <CheckBoxField v-if="type === 'boolean'" :label="caption" v-model="values[key]" />
         <InputField v-else :label="caption" :type="type" v-model="values[key]" />
       </div>
-      <div class="controls-holder">
-        <LoadingButton class="delete" :loading="deleteLoading" @click="deleteAllValues">
-          <h2>{{ intl.formatMessage({ id: 'device.config.button.delete.all' }) }}</h2>
-        </LoadingButton>
-        <LoadingButton :loading="saveLoading" @click="saveConfig">
-          <h2>{{ intl.formatMessage({ id: 'device.config.button.save' }) }}</h2>
-        </LoadingButton>
-      </div>
-    </div>
-    <h2 v-else class="title">
+    </Container>
+    <Container class="controls-holder">
+      <LoadingButton class="delete" :loading="deleteLoading" @click="deleteAllValues">
+        <h2>{{ intl.formatMessage({ id: 'device.config.button.delete.all' }) }}</h2>
+      </LoadingButton>
+      <LoadingButton :loading="saveLoading" @click="saveConfig">
+        <h2>{{ intl.formatMessage({ id: 'device.config.button.save' }) }}</h2>
+      </LoadingButton>
+    </Container>
+    <h2 v-if="!haveConfigEntries" class="title">
       {{ intl.formatMessage({ id: 'device.config.empty.entries' }) }}
     </h2>
   </div>
@@ -143,16 +144,16 @@ h2 {
 .controls-holder {
   position: absolute;
   bottom: 0px;
+  padding: 5px;
   width: 100%;
-  display: flex;
-  flex-direction: row;
-  gap: var(--default-gap);
 }
 .controls-holder button {
   width: 50%;
 }
 .config-inputs {
   padding-bottom: calc(40px + var(--default-gap));
+  width: 60%;
+  margin: auto;
 }
 .delete {
   background-color: var(--color-danger);

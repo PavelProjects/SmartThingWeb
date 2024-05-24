@@ -7,6 +7,7 @@ import { useGatewayStore } from '../../store/gatewayStore'
 import { useIntl } from 'vue-intl'
 import { router } from '../../routes'
 import GatewaySelector from '../gateway/GatewaySelector.vue'
+import Container from '../base/Container.vue'
 
 export default {
   name: 'HeaderDoc',
@@ -14,7 +15,8 @@ export default {
     GatewayAuthInfo,
     MenuSvg,
     UserAuthInfo,
-    GatewaySelector
+    GatewaySelector,
+    Container,
   },
   data() {
     const mode = import.meta.env.VITE_MODE
@@ -49,18 +51,15 @@ export default {
 </script>
 
 <template>
-  <div class="doc">
+  <Container class="doc">
     <div class="menu">
       <MenuSvg />
-      <router-link to="/">
-        <h1 class="green">{{ intl.formatMessage({ id: 'doc.title' }) }}</h1>
-      </router-link>
       <div v-if="showGatewayRoutes" class="menu-items">
-        <router-link :to="addGatewayToPath('/dashboard')">
-          <h2>{{ intl.formatMessage({ id: 'doc.dashboard' }) }}</h2>
-        </router-link>
         <router-link :to="addGatewayToPath('/panel')">
           <h2>{{ intl.formatMessage({ id: 'doc.panel' }) }}</h2>
+        </router-link>
+        <router-link :to="addGatewayToPath('/dashboard')">
+          <h2>{{ intl.formatMessage({ id: 'doc.dashboard' }) }}</h2>
         </router-link>
         <router-link :to="addGatewayToPath('/settings')">
           <h2>{{ intl.formatMessage({ id: 'doc.device.settings' }) }}</h2>
@@ -70,6 +69,9 @@ export default {
         </router-link>
       </div>
     </div>
+    <router-link to="/">
+      <h1 class="green">{{ intl.formatMessage({ id: 'doc.title' }) }}</h1>
+    </router-link>
     <div v-if="gateway" class="gateway-info">
       <h1
         class="title"
@@ -86,17 +88,14 @@ export default {
       v-if="mode === 'cloud' && gatewaySelectorVisible"
       @close="gatewaySelectorVisible = false"
     />
-  </div>
+  </Container>
 </template>
 
 <style scoped>
 .doc {
-  width: auto;
+  width: 100%;
   height: var(--doc-height);
   background-color: var(--color-background-mute);
-  display: flex;
-  flex-direction: row;
-  column-gap: var(--default-gap);
   padding-left: 15px;
   padding-right: 15px;
   align-items: center;

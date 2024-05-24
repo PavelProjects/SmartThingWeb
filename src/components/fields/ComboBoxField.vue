@@ -1,6 +1,9 @@
 <script>
+import FieldContainer from './FieldContainer.vue'
+
 export default {
   name: 'ComboBoxField',
+  components: { FieldContainer },
   props: {
     testId: String,
     label: String,
@@ -17,6 +20,10 @@ export default {
     validationFailed: {
       type: Boolean,
       default: false
+    },
+    vertical: {
+      type: Boolean,
+      default: () => true,
     }
   },
   emits: ['update:modelValue'],
@@ -54,13 +61,14 @@ export default {
 </script>
 
 <template>
-  <div class="field-container">
-    <h2 class="field-label">{{ label || 'Select:' }}</h2>
+  <FieldContainer :label="label || 'Select:'" :vertical="vertical">
     <select
+      class="combo-box-field"
       :id="testId"
       :value="modelValue"
       :disabled="disabled"
-      :class="{ legit: !validationFailed, required: validationFailed }"
+      :class="{ required: validationFailed }"
+      style="flex: 1 0 auto"
       @input="$emit('update:modelValue', $event.target.value)"
     >
       <option v-if="!notBlank"></option>
@@ -68,5 +76,5 @@ export default {
         {{ caption }}
       </option>
     </select>
-  </div>
+  </FieldContainer>
 </template>

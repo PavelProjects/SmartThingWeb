@@ -6,11 +6,13 @@ import { useStompClientStore } from '../../../store/stompClientStore'
 import { toast } from '../../../utils/EventBus'
 import LogMessage from './LogMessage.vue'
 import { useGatewayStore } from '../../../store/gatewayStore'
+import Container from '../../base/Container.vue'
 
 export default {
   name: 'DeviceLogs',
   components: {
-    LogMessage
+    LogMessage,
+    Container,
   },
   data() {
     const intl = useIntl()
@@ -90,7 +92,7 @@ export default {
 </script>
 
 <template>
-  <div class="logs-view">
+  <Container class="logs-view" :vertical="true">
     <div class="log-message-container bordered">
       <h2 v-for="column of ['device', 'date', 'tag', 'level', 'msg']" :key="column">
         {{ intl.formatMessage({ id: 'device.logs.columns' }, { column }) }}
@@ -102,17 +104,32 @@ export default {
       :log="message"
       :color="colorByIp(message)"
     />
-  </div>
+  </Container>
 </template>
 
 <style scoped>
 .logs-view {
-  display: flex;
-  flex-direction: column;
   row-gap: var(--default-gap);
   max-height: calc(100vh - var(--doc-height));
   overflow-y: auto;
   min-width: 80vw;
   padding: var(--default-gap);
+}
+.log-message-container {
+  display: grid;
+  column-gap: calc(var(--default-gap) / 2);
+  grid-template-columns: 200px 150px 200px 120px auto;
+  text-align: center;
+  padding: var(--padding-default);
+}
+.log-message-container :deep(div),h2 {
+  border-right: 2px solid var(--color-border);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.log-message-container :deep(div:last-child),h2:last-child {
+  border-right: none;
 }
 </style>

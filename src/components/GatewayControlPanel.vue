@@ -1,11 +1,14 @@
 <script>
 import DevicesSearchView from './device/DevicesSearchView.vue'
 import DeviceControlPanel from './device/DeviceControlPanel.vue'
-import { CloudApi } from '../api/CloudApi'
 import { useGatewayStore } from '../store/gatewayStore'
 import { storeToRefs } from 'pinia'
 import { useIntl } from 'vue-intl'
 import GatewaySelector from './gateway/GatewaySelector.vue'
+import DropdownMenu from './menu/DropdownMenu.vue'
+import { DeviceApi } from '../api/device/DeviceApi'
+import { toast } from '../utils/EventBus'
+import RiseLoader from 'vue-spinner/src/RiseLoader.vue'
 
 export default {
   name: 'DevicesMain',
@@ -13,19 +16,64 @@ export default {
     DevicesSearchView,
     DeviceControlPanel,
     GatewaySelector,
+    DropdownMenu,
+    RiseLoader,
   },
   data() {
-    const { gateway, device } = storeToRefs(useGatewayStore())
+    const { gateway } = useGatewayStore()
     const intl = useIntl()
     return {
       mode: import.meta.env.VITE_MODE,
+      windowWidth: window.innerWidth,
+      searchExpanded: true,
+      loadingDevice: false,
+      device: undefined,
+      features: undefined,
       gateway,
-      device,
       intl,
     }
   },
+  mounted() {
+    this.$nextTick(() => {
+      window.addEventListener('resize', this.onResize)
+    })
+  },
+  unmounted() { 
+    window.removeEventListener('resize', this.onResize); 
+  },
+  computed: {
+    wideEnough() {
+      return (this.windowWidth - 800) / 2 > 350
+    }
+  },
+  methods: {
+    onResize() {
+      this.windowWidth = window.innerWidth
+    },
+    async handleDeviceSelect(selected) {
+      if (this.device === selected) {
+        return
+      }
+      this.device = undefined
+      this.features = undefined
+
+      this.loadingDevice = true
+      try {
+        await DeviceApi.health(selected, this.gateway)
+        this.features = await DeviceApi.features(selected, this.gateway).catch((e) => console.log(e)) || {}
+        this.device = selected
+        this.searchExpanded = false
+      } catch (error) {
+        console.log(error)
+        toast.error({
+          caption: this.intl.formatMessage({ id: 'device.unreachable' })
+        })
+      } finally {
+        this.loadingDevice = false
+      }
+    }
+  }
   // todo select device from path
-  // todo gateway select if gateway offline (handle logout events)
 }
 </script>
 
@@ -33,20 +81,40 @@ export default {
   <div class="devices-table">
     <div v-if="mode === 'gateway' || !!gateway">
       <DevicesSearchView
-        class="search bordered"
+        v-if="wideEnough"
+        class="search"
         :gateway="gateway"
-        @select="(deviceInfo) => (device = deviceInfo)"
+        :selected="device"
+        @select="handleDeviceSelect"
       />
+      <DropdownMenu
+        v-else
+        class="search"
+        placeholder="Devices"
+        :vertical="false"
+        :expanded="searchExpanded"
+        @expand="(v) => searchExpanded = v"
+      >
+        <DevicesSearchView
+          :gateway="gateway"
+          :selected="device"
+          @select="handleDeviceSelect"
+        />
+      </DropdownMenu>
+      <RiseLoader v-if="loadingDevice" class="rise-loader"/>
       <div v-if="device">
-        <h1 class="title">{{ intl.formatMessage({ id: 'gateway.panel' }) }}</h1>
+        <h1 class="title">{{ intl.formatMessage({ id: 'gateway.panel' }, {device: device.name}) }}</h1>
         <KeepAlive>
-          <Suspense>
-            <DeviceControlPanel :key="device.ip" :device="device" :gateway="gateway"/>
-          </Suspense>
+          <DeviceControlPanel
+            :key="device.ip" 
+            :device="device"
+            :gateway="gateway"
+            :features="features"
+          />
         </KeepAlive>
       </div>
     </div>
-    <div v-else style="color: red">
+    <div v-else style="color: red; text-align: center;">
       <h1>{{ intl.formatMessage({ id: 'error' }, { type: 'access_denied' }) }}</h1>
     </div>
   </div>
@@ -60,6 +128,8 @@ export default {
   position: absolute;
   top: var(--default-gap);
   left: var(--default-gap);
-  min-width: 350px;
+}
+.rise-loader {
+  padding-top: 40px;
 }
 </style>

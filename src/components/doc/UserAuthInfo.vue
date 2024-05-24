@@ -4,7 +4,11 @@ import { useCloudAuthStore } from '../../store/cloudAuthStore'
 import { CloudApi } from '../../api/CloudApi'
 import { useIntl } from 'vue-intl'
 import { toast } from '../../utils/EventBus'
+import Container from '../base/Container.vue'
 export default {
+  components: {
+    Container
+  },
   data() {
     const intl = useIntl()
     const cloudAuthStore = useCloudAuthStore()
@@ -38,18 +42,19 @@ export default {
 </script>
 
 <template>
+  <!-- todo rework -->
   <div>
     <h2 class="status title" @click.stop="openDialog = !openDialog">
       {{ login }}
     </h2>
     <div v-if="openDialog && login" class="overlay" @click.stop="openDialog = false">
-      <div class="dialog" @click.stop="() => {}">
+      <Container class="dialog" @click.stop="() => {}" :vertical="true">
         <h2>{{ intl.formatMessage({ id: 'cloud.auth.info.user.id' }, { id }) }}</h2>
         <h2>{{ intl.formatMessage({ id: 'cloud.auth.info.user.login' }, { login }) }}</h2>
         <button class="btn" @click.stop="logout">
           {{ intl.formatMessage({ id: 'log.out' }) }}
         </button>
-      </div>
+      </Container>
     </div>
   </div>
 </template>
@@ -60,9 +65,6 @@ export default {
   user-select: none;
 }
 .dialog {
-  display: flex;
-  flex-direction: column;
-  gap: var(--default-gap);
   position: absolute;
   top: var(--default-gap);
   right: var(--default-gap);

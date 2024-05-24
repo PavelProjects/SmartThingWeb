@@ -5,13 +5,15 @@ import InputField from '../../fields/InputField.vue'
 import LoadingButton from '../../controls/LoadingButton.vue'
 import { EventBus, toast } from '../../../utils/EventBus.js'
 import { useIntl } from 'vue-intl'
+import Container from '../../base/Container.vue'
 
 export default {
   name: 'DeviceInfoView',
   components: {
     SyncLoader,
     InputField,
-    LoadingButton
+    LoadingButton,
+    Container,
   },
   inject: ['device', 'gateway'],
   data() {
@@ -74,7 +76,11 @@ export default {
 <template>
   <div>
     <h1 class="title">{{ intl.formatMessage({ id: 'device.info.title' }) }}</h1>
-    <div v-if="info" class="list">
+    <Container
+      v-if="info"
+      class="fields-list"
+      :vertical="true"
+    >
       <InputField
         :label="intl.formatMessage({ id: 'device.info.name' })"
         :title="deviceName ? '' : intl.formatMessage({ id: 'device.info.name.error.empty' })"
@@ -105,7 +111,15 @@ export default {
         :modelValue="info.chip_revision"
         :disabled="true"
       />
-    </div>
+    </Container>
     <sync-loader v-else class="loading-spinner" :loading="true"></sync-loader>
   </div>
 </template>
+
+<style scoped>
+  .fields-list {
+    padding: 5px;
+    width: 60%;
+    margin: auto;
+  }
+</style>

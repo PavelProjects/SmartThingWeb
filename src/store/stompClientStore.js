@@ -72,19 +72,23 @@ export const useStompClientStore = defineStore({
   },
   actions: {
     async subscribe(topic, callback) {
-      if (!this.client.connected) {
+        if (!this.client.connected) {
         let promiseResolver
         const promise = new Promise((resolve) => (promiseResolver = resolve))
         EventBus.on(WS_CONNECTED, () => promiseResolver())
+        console.debug("Waiting for stomp connection (topic " + topic + ")")
         await promise
       }
       this.client.subscribe(topic, callback, { id: topic + '_topic' })
+      console.debug("Subscribed to topic " + topic)
     },
     unsubscribe(topic) {
       if (!this.client.connected) {
+        console.debug("No stomp connection")
         return
       }
       this.client.unsubscribe(topic + '_topic')
+      console.debug("Unsubscribed from topic " + topic)
     }
   }
 })

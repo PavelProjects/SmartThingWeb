@@ -9,7 +9,7 @@ const messages = {
     'doc.device.settings': 'Device settings',
     'doc.device.logs': 'Device logs',
     gateway: 'Gateway: {gateway}',
-    'gateway.panel': 'Control panel',
+    'gateway.panel': 'Control panel for {device}',
     'gateway.cloud.auth.title': 'Add cloud token',
     'gateway.cloud.auth.conn.token': 'Connection token',
     'gateway.cloud.auth.ip': 'Cloud ip',
@@ -95,6 +95,7 @@ const messages = {
       tag {Tag}
       other {{ column }}
     }`,
+    'device.unreachable': 'Device is unreachable',
     'device.tabs': `{
       tab, select,
       info {Information}
@@ -150,6 +151,12 @@ const messages = {
     'device.hooks.select.to.manage': 'Select {type} to manage hooks',
     'device.hooks.title': 'Hooks',
     'device.hooks.button.add': 'Add hook of type ',
+    'device.metrics.updatime': `
+      {days, select, 0 {} other {{days} days}}
+      {hours, select, 0 {} other {{hours} hours}}
+      {minutes, select, 0 {} other {{minutes} minutes}}
+      {seconds, select, 0 {} other {{seconds} seconds}}
+    `,
     'hooks.disabled': 'Hooks feature disabled in this build',
     'device.hooks.empty': 'No hooks added yet',
     'device.hook.validation.error': 'Validation failed',
@@ -162,11 +169,30 @@ const messages = {
     'device.states.empty': 'No states configured',
     'devices.search': 'Found devices',
     'devices.search.empty': 'No devices found',
+    'devices.search.in.progress': 'Searching...',
+    'devices.saved': 'Saved devices',
+    'devices.saved.empty': 'No devices added yet',
+    'devices.saved.load.error': 'Failed to load saved devices',
+    'devices.saved.menu.update': 'Update',
+    'devices.saved.menu.delete': 'Delete',
+    'devices.saved.menu.delete.confirm': 'Are you sure?',
+    'devices.saved.menu.update.success': 'Device info updated!',
+    'devices.saved.menu.delete.success': 'Device deleted!',
+    'devices.saved.menu.update.error': 'Failed to update saved device info',
+    'devices.saved.menu.delete.error': 'Failed to delete device',
+    'devices.saved.plus.title': 'Add device by ip',
+    'devices.saved.add.title': 'Add device',
+    'devices.saved.add.button': 'add',
+    'devices.saved.add.input.ip': 'Device ip',
+    'devices.saved.add.success': 'Added new device!',
+    'devices.saved.add.success.desc': 'Name: {name}, type: {type}',
+    'devices.saved.add.error': 'Failed to add device',
     'cloud.auth.lprequired': 'Login and password are required!',
     'cloud.auth.logout.confirm': 'Are you sure?',
     'cloud.auth.info.user.id': 'id: {id}',
     'cloud.auth.info.user.login': 'login: {login}',
     'dashboard.load.error': 'Failed to load dashboard',
+    'dashboard.group.values.load.error': "Failed to load values",
     'dashboard.group.edit.title': 'Edit group {name}',
     'dashboard.groups.empty': 'No groups added yet',
     'dashboard.group.add.new': 'Add new group',
@@ -197,8 +223,10 @@ const messages = {
       state {state}
       other {{value}}
     }`,
-    'dashboard.group.edit.update.delay': 'Update delay (sec)',
+    'dashboard.group.edit.update.delay': 'Update delay (ms)',
     'dashboard.group.edit.save': 'Save',
+    'dashborad.group.edit.add.observables': 'Add sensors or states',
+    'dashborad.group.edit.validation.error': 'Please fill required fields',
     login: 'Login',
     password: 'Password',
     'log.in': 'Log in',
@@ -215,7 +243,7 @@ const messages = {
     'doc.device.settings': 'Настройки устройств',
     'doc.device.logs': 'Логи устройств',
     gateway: 'Маршрутизатор: {gateway}',
-    'gateway.panel': 'Панель управления',
+    'gateway.panel': 'Панель управления {device}',
     'gateway.cloud.auth.title': 'Добавить токен облака',
     'gateway.cloud.auth.conn.token': 'Токен подключения',
     'gateway.cloud.auth.ip': 'Ip облакак',
@@ -301,6 +329,7 @@ const messages = {
       tag {Тег}
       other {{ column }}
     }`,
+    'device.unreachable': 'Устройство не доступно',
     'device.tabs': `{
       tab, select,
       info {Информация}
@@ -361,6 +390,12 @@ const messages = {
     } to manage hooks`,
     'device.hooks.title': 'Хуки',
     'device.hooks.button.add': 'Добавить хук типа ',
+    'device.metrics.updatime': `
+      {days, select, 0 {} other {{days} дней}}
+      {hours, select, 0 {} other {{hours} часов}}
+      {minutes, select, 0 {} other {{minutes} минут}}
+      {seconds, select, 0 {} other {{seconds} секунд}}
+    `,
     'hooks.disabled': 'Хуки отключены в данном билде',
     'device.hooks.empty': 'Нет добавленных хуков',
     'device.hook.validation.error': 'Ошибка валидации',
@@ -373,11 +408,30 @@ const messages = {
     'device.states.empty': 'Нет настроенных состояний',
     'devices.search': 'Устройства',
     'devices.search.empty': 'Устройства не найдены!',
+    'devices.search.in.progress': 'Поиск...',
+    'devices.saved': 'Сохраненные устройства',
+    'devices.saved.empty': 'Нет сохраненных устройств',
+    'devices.saved.load.error': 'Не удалось загрузить сохраненные устройства',
+    'devices.saved.menu.update': 'Обновить',
+    'devices.saved.menu.delete': 'Удалить',
+    'devices.saved.menu.delete.confirm': 'Вы уверены?',
+    'devices.saved.menu.update.success': 'Информация об устройстве обновлена!',
+    'devices.saved.menu.delete.success': 'Устройство удалено',
+    'devices.saved.menu.update.error': 'Не удалось обновить инфомарцию об устройстве',
+    'devices.saved.menu.delete.error': 'Не удалось удалить устройство',
+    'devices.saved.plus.title': 'Добавить устройство по ip',
+    'devices.saved.add.title': 'Добавить устройство',
+    'devices.saved.add.button': 'добавить',
+    'devices.saved.add.input.ip': 'Ip устройство',
+    'devices.saved.add.success': 'Добавлено новое устройство!',
+    'devices.saved.add.success.desc': 'Имя: {name}, тип: {type}',
+    'devices.saved.add.error': 'Не удалось добавить новое устройство',
     'cloud.auth.lprequired': 'Введите логин и пароль!',
     'cloud.auth.logout.confirm': 'Вы уверены?',
     'cloud.auth.info.user.id': 'id: {id}',
     'cloud.auth.info.user.login': 'логин: {login}',
     'dashboard.load.error': 'Ну удалось загрузить дашбоард',
+    'dashboard.group.values.load.error': "Не удалось загрузить значения",
     'dashboard.group.edit.title': 'Редактировать группу {name}',
     'dashboard.groups.empty': 'Пока еще не было добавлено групп',
     'dashboard.group.add.new': 'Добавить новую группу',
@@ -408,8 +462,10 @@ const messages = {
       state {состояние}
       other {{value}}
     }`,
-    'dashboard.group.edit.update.delay': 'Задержка обновлений (сек)',
+    'dashboard.group.edit.update.delay': 'Задержка обновлений (мс)',
     'dashboard.group.edit.save': 'Сохранить',
+    'dashborad.group.edit.add.observables': 'Добавить сенсоры или состояния',
+    'dashborad.group.edit.validation.error': 'Пожалуйста заполните требуемые поля',
     login: 'Логин',
     password: 'Пароль',
     'log.in': 'Войти',

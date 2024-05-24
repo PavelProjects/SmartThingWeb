@@ -19,6 +19,7 @@ export default {
   props: {
     device: Object,
     gateway: Object,
+    features: Object,
   },
   provide() {
     return {
@@ -27,18 +28,11 @@ export default {
       features: this.features,
     }
   },
-  async setup(props) {
-    const features = await DeviceApi.features(props.device, props.gateway).catch((e) => console.log(e)) || {}
-    return {
-      features
-    }
-  },
   data() {
     const intl = useIntl()
 
     return {
       intl,
-      features: {},
       tabs: undefined,
       defaultTabs: {
         info: {

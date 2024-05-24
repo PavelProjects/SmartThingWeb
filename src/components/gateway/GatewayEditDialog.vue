@@ -4,6 +4,7 @@ import { toast } from '../../utils/EventBus'
 import LoadingButton from '../controls/LoadingButton.vue'
 import PopUpDialog from '../dialogs/PopUpDialog.vue'
 import InputField from '../fields/InputField.vue'
+import Container from '../base/Container.vue'
 
 const NAME_MAX_LENGTH = 32
 
@@ -12,7 +13,8 @@ export default {
   components: {
     PopUpDialog,
     InputField,
-    LoadingButton
+    LoadingButton,
+    Container,
   },
   props: {
     gateway: Object
@@ -61,7 +63,7 @@ export default {
 
 <template>
   <PopUpDialog @close="$emit('close')">
-    <div class="container">
+    <Container style="padding: 5px;" :vertical="true">
       <InputField :label="intl.formatMessage({ id: 'gateway.edit.name' })" v-model="name" />
       <InputField
         :label="intl.formatMessage({ id: 'gateway.edit.description' })"
@@ -70,15 +72,6 @@ export default {
       <LoadingButton @click="handleSave">
         <h2>{{ buttonTitle }}</h2>
       </LoadingButton>
-    </div>
+    </Container>
   </PopUpDialog>
 </template>
-
-<style scoped>
-.container {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  padding: 5px;
-}
-</style>
