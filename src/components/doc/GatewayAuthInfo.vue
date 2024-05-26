@@ -153,10 +153,20 @@ export default {
             :vertical="false"
           />
           <InputField
-            :label="intl.formatMessage({ id: 'gateway.cloud.info.gateway' })"
-            :modelValue="store.gateway.name"
-            :title="store.gateway.description"
+            :label="intl.formatMessage({ id: 'gateway.cloud.info.gateway.id' })"
+            :modelValue="store.gateway.id"
             :disabled="true"
+            :vertical="false"
+          />
+          <InputField
+            :label="intl.formatMessage({ id: 'gateway.cloud.info.gateway.name' })"
+            :modelValue="store.gateway.name"
+            :disabled="true"
+            :vertical="false"
+          />
+          <InputField
+            :label="intl.formatMessage({ id: 'gateway.cloud.info.gateway.description' })"
+            :modelValue="store.gateway.description"
             :vertical="false"
           />
         </Container>
@@ -177,7 +187,7 @@ export default {
             :vertical="false"
           />
           <LoadingButton
-            v-if="['CONNECTION_LOST', 'DISCONNECTED', 'FAILED_TO_CONNECT'].includes(status)"
+          v-if="['CONNECTION_LOST', 'DISCONNECTED', 'FAILED_TO_CONNECT', 'NOT_CONNECTED'].includes(status)"
             @click="connect"
           >
             <h2>{{ intl.formatMessage({ id: 'gateway.cloud.reconnect' }) }}</h2>

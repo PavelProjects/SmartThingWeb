@@ -71,6 +71,7 @@ export default {
       <LoadingButton
         v-for="[name, caption] of actions"
         :key="name"
+        :title="name"
         :loading="loadingAction"
         @click="sendAction(name)"
       >

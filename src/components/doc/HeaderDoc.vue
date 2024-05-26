@@ -45,7 +45,7 @@ export default {
         return
       }
       return `/${this.gateway.id}${path}`
-    }
+    },
   }
 }
 </script>
@@ -76,7 +76,7 @@ export default {
       <h1
         class="title"
         style="cursor: pointer;"
-        :title="'id: ' + gateway.description"
+        :title="`Gateway id: ${gateway.id ?? 'ID_MSSING'}`"
         @click.stop="gatewaySelectorVisible = true"
       >
         {{ intl.formatMessage({ id: 'gateway' }, { gateway: gateway.name }) }}

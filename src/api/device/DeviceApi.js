@@ -157,6 +157,9 @@ export const DeviceApi = {
       gateway
     })
   },
+  async testHook() {
+    //todo
+  },
   async features(device, gateway) {
     return (await deviceFetch({
       device,
@@ -194,5 +197,5 @@ export const DeviceApi = {
       gateway,
       command: RESTART
     })
-  }
+  },
 }
