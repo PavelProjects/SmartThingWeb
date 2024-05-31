@@ -67,6 +67,8 @@ export default {
 
 <template>
   <div>
-    <slot></slot>
+    <div v-if="gateway">
+      <slot></slot>
+    </div>
   </div>
 </template>

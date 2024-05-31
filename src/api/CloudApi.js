@@ -61,6 +61,13 @@ const CloudApi = {
   async deleteGateway(gateway) {
     await axiosInstance.delete(URL_GATEWAY_DELETE + '/' + gateway.id)
   },
+  async sendGatewayRequest(gateway, url, method, data) {
+    return await axiosInstance.post(URL_GATEWAY_REQUEST + "/" + gateway.id, {
+      url,
+      method,
+      data
+    })
+  },
   async sendGatewayCommand(gateway, command, parameters) {
     return await axiosInstance.post(URL_GATEWAY_REQUEST + '/command', {
       gatewayId: gateway.id,

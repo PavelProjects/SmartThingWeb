@@ -22,14 +22,14 @@ const axiosInstance = axios.create({
 
 async function gatewayFetchLocal({ url, method, data }) {
   if (!url || !method) {
-    throw new Error('Url and method is required in device api call!')
+    throw new Error('Url and method is required in api call!')
   }
   return axiosInstance.request({ url, method, data })
 }
 
 async function gatewayFetchCloud({ gateway, url, method, data }) {
   if (!gateway || !url || !method) {
-    throw new Error('Gateway, url and method is required in device api call!')
+    throw new Error('Gateway, url and method is required in api call!')
   }
   if (!gateway?.online) {
     toast.error({
@@ -37,7 +37,7 @@ async function gatewayFetchCloud({ gateway, url, method, data }) {
     })
     return
   }
-  return await CloudApi.sendGatewayCommand(gateway, 'REQUEST', { url, method, data })
+  return await CloudApi.sendGatewayRequest(gateway, url, method, data)
 }
 
 const gatewayFetch = mode === 'gateway' ? gatewayFetchLocal : gatewayFetchCloud
