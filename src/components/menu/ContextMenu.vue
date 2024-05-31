@@ -5,27 +5,51 @@ export default {
   name: 'ContextMenu',
   components: {
     DotsVertical
+  },
+  data() {
+    return {
+      hover: false,
+      clicked: false
+    }
+  },
+  computed: {
+    itemsStyle() {
+      if (this.clicked) {
+        return {
+          display: "inherit"
+        }
+      }
+      return {
+        display: this.hover ? "inherit" : "none"
+      }
+    }
   }
 }
 </script>
 
 <template>
   <div class="menu" @click.stop="() => {}">
-    <DotsVertical class="menu-icon" />
-    <div class="menu-items">
+    <DotsVertical
+      class="menu-icon"
+      @click="() => clicked = !clicked"
+      @mouseover="() => hover = true"
+      @mouseleave="() => hover = false"
+    />
+    <div
+      class="menu-items"
+      :style="itemsStyle" 
+      @mouseover="() => hover = true"
+      @mouseleave="() => hover = false"
+    >
       <slot></slot>
     </div>
   </div>
 </template>
 
 <style scoped>
-  .menu:hover .menu-items {
-    display: block;
-  }
   .menu-items {
     position: absolute;
     z-index: 999;
-    display: none;
     top: 5px;
     right: -100px;
     min-width: 100px;

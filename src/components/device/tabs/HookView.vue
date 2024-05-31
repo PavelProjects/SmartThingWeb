@@ -12,8 +12,11 @@ import DeleteSVG from 'vue-material-design-icons/Delete.vue'
 import SaveSVG from 'vue-material-design-icons/ContentSave.vue'
 import CancelSVG from 'vue-material-design-icons/WindowClose.vue'
 import EditSVG from 'vue-material-design-icons/Pencil.vue'
+import TestTubeSvg from 'vue-material-design-icons/TestTube.vue'
 import { useIntl } from 'vue-intl'
 import Container from '../../base/Container.vue'
+import ContextMenu from '../../menu/ContextMenu.vue'
+import PopUpDialog from '../../dialogs/PopUpDialog.vue'
 
 const SYSTEM_FIELDS = ['id', 'type', 'readonly']
 
@@ -34,10 +37,13 @@ export default {
     LoadingButton,
     CheckBoxField,
     Container,
+    ContextMenu,
     DeleteSVG,
     SaveSVG,
     CancelSVG,
-    EditSVG
+    EditSVG,
+    TestTubeSvg,
+    PopUpDialog,
   },
   data() {
     const intl = useIntl()
@@ -47,7 +53,10 @@ export default {
       editing: this.hookProp.id == NEW_HOOK_ID,
       haveChanges: this.hookProp.id == NEW_HOOK_ID,
       validationFailed: [],
-      loading: false
+      loading: false,
+      testLoading: false,
+      testDialogVisible: false,
+      testValue: "",
     }
   },
   computed: {
@@ -161,6 +170,23 @@ export default {
         }
       }
     },
+    async testCall() {
+      try {
+        this.testLoading = true
+        await DeviceApi.testHook(this.device, this.observable, this.hook.id, this.testValue, this.gateway)
+        toast.success({
+          caption: this.intl.formatMessage({ id: 'device.hook.test.success' })
+        })
+        this.testDialogVisible = false
+      } catch (error) {
+        console.log(error)
+        toast.error({
+          caption: this.intl.formatMessage({ id: 'device.hook.test.error' })
+        })
+      } finally {
+        this.testLoading = false
+      }
+    },
     cancel() {
       this.validationFailed = []
       this.editing = false
@@ -219,10 +245,20 @@ export default {
       </h3>
       <Container>
         <Container v-if="!hook.readonly">
-          <EditSVG v-if="!editing" :onClick="() => (editing = true)" />
-          <SaveSVG v-if="editing" :onClick="saveHook" :loading="loading" />
-          <DeleteSVG v-if="!editing" :onClick="deleteHook" :loading="loading" />
-          <CancelSVG v-if="editing" :onClick="cancel" />
+          <Container v-if="editing">
+            <SaveSVG class="icon" :onClick="saveHook" :loading="loading" />
+            <CancelSVG class="icon" :onClick="cancel" />
+          </Container>
+          <Container v-else>
+            <EditSVG class="icon" :onClick="() => (editing = true)" />
+            <DeleteSVG class="icon" :onClick="deleteHook" :loading="loading" />
+            <TestTubeSvg
+              v-if="!editing"
+              class="icon"
+              :title="intl.formatMessage({ id: 'device.hook.test.it' })"
+              @click="() => testDialogVisible = true"
+            />
+          </Container>
         </Container>
         <div v-else>
           <h3 style="text-align: center">
@@ -245,5 +281,25 @@ export default {
         @update:modelValue="(value) => setValue(key, value)"
       />
     </Container>
+    <PopUpDialog v-if="testDialogVisible" @close="testDialogVisible = false">
+      <Container :vertical="true" style="padding: 2px;">
+        <InputField 
+          :label="intl.formatMessage({ id: 'device.hook.test.label' })"
+          :type="observable.type === 'sensor' ? 'number' : 'text'"
+          v-model="testValue"
+        />
+        <LoadingButton @click="testCall" :loading="testLoading">
+          <h2>
+            {{ intl.formatMessage({ id: 'device.hook.test.button' }) }}
+          </h2>
+        </LoadingButton>
+      </Container>
+    </PopUpDialog>
   </Container>
 </template>
+
+<style scoped>
+  .icon {
+    cursor: pointer;
+  }
+</style>

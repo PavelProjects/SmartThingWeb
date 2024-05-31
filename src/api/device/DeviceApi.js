@@ -17,6 +17,7 @@ const GET_STATES = 'getStates'
 const GET_ALL_HOOKS = 'getAllHooks'
 const GET_HOOK_BY_ID = 'getHookById'
 const GET_HOOKS_TEMPLATES = 'getHooksTemplates'
+const TEST_HOOK = 'testHook'
 const CREATE_HOOK = 'createHook'
 const UPDATE_HOOK = 'updateHook'
 const DELETE_HOOK = 'deleteHook'
@@ -157,8 +158,17 @@ export const DeviceApi = {
       gateway
     })
   },
-  async testHook() {
-    //todo
+  async testHook(device, observable, id, value, gateway) {
+    return deviceFetch({
+      device,
+      command: TEST_HOOK,
+      params: {
+        observable,
+        id,
+        value
+      },
+      gateway
+    })
   },
   async features(device, gateway) {
     return (await deviceFetch({
