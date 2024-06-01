@@ -19,7 +19,7 @@ const PATH_DEVICES_FOUND = '/devices/found'
 const PATH_DEVICES_SAVED = '/devices/saved'
 const PATH_DEVICE_API = '/device/api'
 const PATH_DEVICE_LOGS = '/devices/logs'
-const PATH_DEVICE_SETTINGS = '/device/settings'
+const PATH_DEVICE_SETTINGS = '/devices/settings'
 
 const axiosInstance = axios.create({
   baseURL: GATEWAY_URL,
