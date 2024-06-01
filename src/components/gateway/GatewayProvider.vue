@@ -9,11 +9,17 @@ import { EVENT, EventBus, GATEWAY_EVENT, toast } from '../../utils/EventBus'
 export default {
   name: 'GatewayProvider',
   data() {
-    const { gateway } = storeToRefs(useGatewayStore())
+    const store = useGatewayStore()
     return {
       mode: import.meta.env.VITE_MODE,
       gatewayId: this.$route.params.gateway,
-      gateway
+      gateway: undefined,
+      store
+    }
+  },
+  watch: {
+    gateway(value) {
+      this.store.gateway = value
     }
   },
   mounted() {
