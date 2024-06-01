@@ -18,6 +18,7 @@ export default {
     }
   },
   mounted() {
+    console.log(this.currentPath)
     this.loadGateway()
     EventBus.on(EVENT, this.handleGatewayEvent)
   },
@@ -68,8 +69,8 @@ export default {
 
 <template>
   <div>
-    <div v-if="gateway || currentPath === '/gateways'">
+    <!-- <div v-if="gateway || currentPath === '/gateways'"> -->
       <slot></slot>
-    </div>
+    <!-- </div> -->
   </div>
 </template>
