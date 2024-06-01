@@ -9,17 +9,12 @@ import { EVENT, EventBus, GATEWAY_EVENT, toast } from '../../utils/EventBus'
 export default {
   name: 'GatewayProvider',
   data() {
-    const store = useGatewayStore()
+    const { gateway } = storeToRefs(useGatewayStore())
     return {
       mode: import.meta.env.VITE_MODE,
       gatewayId: this.$route.params.gateway,
-      gateway: undefined,
-      store
-    }
-  },
-  watch: {
-    gateway(value) {
-      this.store.gateway = value
+      currentPath: this.$route.path,
+      gateway
     }
   },
   mounted() {
@@ -73,7 +68,7 @@ export default {
 
 <template>
   <div>
-    <div v-if="gateway">
+    <div v-if="gateway || currentPath === '/gateways'">
       <slot></slot>
     </div>
   </div>
