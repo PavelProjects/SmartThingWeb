@@ -15,10 +15,10 @@ const PATH_CLOUD_CONFIG = '/cloud/config'
 const PATH_CLOUD_CONNECTED = '/cloud/connection/status'
 const PATH_CLOUD_CONNECT = '/cloud/connection/connect'
 const PATH_CLOUD_DISCONNECT = '/cloud/connection/disconnect'
-const PATH_DEVICES_FOUND = '/device/found'
-const PATH_DEVICES_SAVED = '/device/saved'
+const PATH_DEVICES_FOUND = '/devices/found'
+const PATH_DEVICES_SAVED = '/devices/saved'
 const PATH_DEVICE_API = '/device/api'
-const PATH_DEVICE_LOGS = '/device/logs'
+const PATH_DEVICE_LOGS = '/devices/logs'
 const PATH_DEVICE_SETTINGS = '/device/settings'
 
 const axiosInstance = axios.create({
