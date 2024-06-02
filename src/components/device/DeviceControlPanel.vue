@@ -7,7 +7,6 @@ import ConfigView from './tabs/ConfigView.vue'
 import MetricsViewVue from './tabs/MetricsView.vue'
 import MenuView from '../menu/MenuView.vue'
 import { useIntl } from 'vue-intl'
-import { DeviceApi } from '../../api/device/DeviceApi'
 import RiseLoader from 'vue-spinner/src/RiseLoader.vue'
 
 export default {
@@ -20,12 +19,14 @@ export default {
     device: Object,
     gateway: Object,
     features: Object,
+    apiMethods: Array,
   },
   provide() {
     return {
       device: this.device,
       gateway: this.gateway,
       features: this.features,
+      apiMethods: this.apiMethods,
     }
   },
   data() {

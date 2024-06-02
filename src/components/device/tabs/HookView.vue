@@ -2,7 +2,7 @@
 import { systemNameToNormal } from '../../../utils/StringUtils.js'
 import InputField from '../../fields/InputField.vue'
 import ComboBoxField from '../../fields/ComboBoxField.vue'
-import { DeviceApi, extractDataFromError } from '../../../api/device/DeviceApi.js'
+import { DeviceApi, DeviceApiMethods, extractDataFromError } from '../../../api/device/DeviceApi.js'
 import { NEW_HOOK_ID } from './HooksView.vue'
 import { h } from 'vue'
 import { toast } from '../../../utils/EventBus.js'
@@ -29,7 +29,7 @@ export default {
     observable: Object,
     template: Object
   },
-  inject: ['device', 'gateway'],
+  inject: ['device', 'gateway', 'apiMethods'],
   emits: ['updateHooks', 'removeHook'],
   components: {
     InputField,
@@ -47,8 +47,10 @@ export default {
   },
   data() {
     const intl = useIntl()
+    const testEnabled = !!this.apiMethods.find(({ name }) => name === DeviceApiMethods.TEST_HOOK)
     return {
       intl,
+      testEnabled,
       hook: this.hookProp,
       editing: this.hookProp.id == NEW_HOOK_ID,
       haveChanges: this.hookProp.id == NEW_HOOK_ID,
@@ -253,7 +255,7 @@ export default {
             <EditSVG class="icon" :onClick="() => (editing = true)" />
             <DeleteSVG class="icon" :onClick="deleteHook" :loading="loading" />
             <TestTubeSvg
-              v-if="!editing"
+              v-if="testEnabled && !editing"
               class="icon"
               :title="intl.formatMessage({ id: 'device.hook.test.it' })"
               @click="() => testDialogVisible = true"

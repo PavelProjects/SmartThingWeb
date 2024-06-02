@@ -1,67 +1,68 @@
-import { toast } from '../../utils/EventBus'
 import { deviceFetch } from './DeviceFetch'
-
-const CHECK_HEALTH = 'health'
-const GET_INFO = 'getInfo'
-const GET_HOOKS = 'getHooks'
-const GET_ACTIONS = 'getActions'
-const SAVE_NAME = 'saveName'
-const CALL_ACTION = 'callAction'
-const GET_CONFIG_INFO = 'getConfigInfo'
-const GET_CONFIG_VALUES = 'getConfigValues'
-const SAVE_CONFIG_VALUES = 'saveConfigValues'
-const DELETE_CONFIG_VALUE = 'deleteConfigValue'
-const DELETE_ALL_CONFIG_VALUES = 'deleteAllConfigValues'
-const GET_SENSORS = 'getSensors'
-const GET_STATES = 'getStates'
-const GET_ALL_HOOKS = 'getAllHooks'
-const GET_HOOK_BY_ID = 'getHookById'
-const GET_HOOKS_TEMPLATES = 'getHooksTemplates'
-const TEST_HOOK = 'testHook'
-const CREATE_HOOK = 'createHook'
-const UPDATE_HOOK = 'updateHook'
-const DELETE_HOOK = 'deleteHook'
-const GET_FEATURES = 'getFeatures'
-const GET_METRICS = 'getMetrics'
-const EXPORT_SETTINGS = 'exportSettings'
-const IMPORT_SETTINGS = 'importSettings'
-const RESTART = 'restart'
 
 export async function extractDataFromError(error) {
   const { response } = error || {}
   return (await response.data) || {}
 }
 
+export const DeviceApiMethods = {
+  CHECK_HEALTH: 'health',
+  GET_INFO: 'getInfo',
+  GET_HOOKS: 'getHooks',
+  GET_ACTIONS: 'getActions',
+  SAVE_NAME: 'saveName',
+  CALL_ACTION: 'callAction',
+  GET_CONFIG_INFO: 'getConfigInfo',
+  GET_CONFIG_VALUES: 'getConfigValues',
+  SAVE_CONFIG_VALUES: 'saveConfigValues',
+  DELETE_CONFIG_VALUE: 'deleteConfigValue',
+  DELETE_ALL_CONFIG_VALUES: 'deleteAllConfigValues',
+  GET_SENSORS: 'getSensors',
+  GET_STATES: 'getStates',
+  GET_ALL_HOOKS: 'getAllHooks',
+  GET_HOOK_BY_ID: 'getHookById',
+  GET_HOOKS_TEMPLATES: 'getHooksTemplates',
+  TEST_HOOK: 'testHook',
+  CREATE_HOOK: 'createHook',
+  UPDATE_HOOK: 'updateHook',
+  DELETE_HOOK: 'deleteHook',
+  GET_FEATURES: 'getFeatures',
+  GET_METRICS: 'getMetrics',
+  EXPORT_SETTINGS: 'exportSettings',
+  IMPORT_SETTINGS: 'importSettings',
+  RESTART: 'restart',
+}
+
 export const DeviceApi = {
   async health(device, gateway) {
-    return (await deviceFetch({ device, command: CHECK_HEALTH, gateway})).data
+    return (await deviceFetch({ device, command: DeviceApiMethods.CHECK_HEALTH, gateway})).data
   },
   async getDeviceInfo(device, gateway) {
-    return (await deviceFetch({ device, command: GET_INFO, gateway })).data
+    return (await deviceFetch({ device, command: DeviceApiMethods.GET_INFO, gateway })).data
   },
   async getDeviceActionsInfo(device, gateway) {
-    return (await deviceFetch({ device, command: GET_ACTIONS, gateway })).data
+    return (await deviceFetch({ device, command: DeviceApiMethods.GET_ACTIONS, gateway })).data
   },
   async getDeviceConfigInfo(device, gateway) {
-    return (await deviceFetch({ device, command: GET_CONFIG_INFO, gateway })).data
+    return (await deviceFetch({ device, command: DeviceApiMethods.GET_CONFIG_INFO, gateway })).data
   },
   async saveName(device, name, gateway) {
     await deviceFetch({
       device,
       gateway,
-      command: SAVE_NAME,
+      command: DeviceApiMethods.SAVE_NAME,
       params: {
         name
       }
     })
   },
   async getConfig(device, gateway) {
-    return (await deviceFetch({ device, command: GET_CONFIG_VALUES, gateway })).data
+    return (await deviceFetch({ device, command: DeviceApiMethods.GET_CONFIG_VALUES, gateway })).data
   },
   async saveConfigValues(device, values, gateway) {
     await deviceFetch({
       device,
-      command: SAVE_CONFIG_VALUES,
+      command: DeviceApiMethods.SAVE_CONFIG_VALUES,
       params: { values },
       gateway
     })
@@ -69,7 +70,7 @@ export const DeviceApi = {
   async deleteConfigValue(device, key, gateway) {
     await deviceFetch({
       device,
-      command: DELETE_CONFIG_VALUE,
+      command: DeviceApiMethods.DELETE_CONFIG_VALUE,
       params: {
         name: key
       },
@@ -79,14 +80,14 @@ export const DeviceApi = {
   async deleteAllConfigValues(device, gateway) {
     await deviceFetch({
       device,
-      command: DELETE_ALL_CONFIG_VALUES,
+      command: DeviceApiMethods.DELETE_ALL_CONFIG_VALUES,
       gateway
     })
   },
   async executeDeviceAcion(device, action, gateway) {
     await deviceFetch({
       device,
-      command: CALL_ACTION,
+      command: DeviceApiMethods.CALL_ACTION,
       params: {
         action
       },
@@ -94,18 +95,18 @@ export const DeviceApi = {
     })
   },
   async getDeviceSensors(device, gateway) {
-    return (await deviceFetch({ device, command: GET_SENSORS, gateway })).data
+    return (await deviceFetch({ device, command: DeviceApiMethods.GET_SENSORS, gateway })).data
   },
   async getDeviceStates(device, gateway) {
-    return (await deviceFetch({ device, command: GET_STATES, gateway })).data
+    return (await deviceFetch({ device, command: DeviceApiMethods.GET_STATES, gateway })).data
   },
   async getAllHooks(device, gateway) {
-    return (await deviceFetch({ device, command: GET_ALL_HOOKS, gateway })).data
+    return (await deviceFetch({ device, command: DeviceApiMethods.GET_ALL_HOOKS, gateway })).data
   },
   async getHooks(device, observable, gateway) {
     return (await deviceFetch({
       device,
-      command: GET_HOOKS,
+      command: DeviceApiMethods.GET_HOOKS,
       params: {
         observable
       },
@@ -115,7 +116,7 @@ export const DeviceApi = {
   async getHookById(device, observable, id, gateway) {
     return (await deviceFetch({
       device,
-      command: GET_HOOK_BY_ID,
+      command: DeviceApiMethods.GET_HOOK_BY_ID,
       params: { observable, id },
       gateway
     })).data
@@ -123,7 +124,7 @@ export const DeviceApi = {
   async getHooksTemplates(device, type, gateway) {
     return (await deviceFetch({
       device,
-      command: GET_HOOKS_TEMPLATES,
+      command: DeviceApiMethods.GET_HOOKS_TEMPLATES,
       gateway,
       params: { type }
     })).data
@@ -131,7 +132,7 @@ export const DeviceApi = {
   async createHook(device, observable, hook, gateway) {
     await deviceFetch({
       device,
-      command: CREATE_HOOK,
+      command: DeviceApiMethods.CREATE_HOOK,
       params: {
         observable,
         hook
@@ -142,7 +143,7 @@ export const DeviceApi = {
   async updateHook(device, observable, hook, gateway) {
     await deviceFetch({
       device,
-      command: UPDATE_HOOK,
+      command: DeviceApiMethods.UPDATE_HOOK,
       params: {
         observable,
         hook
@@ -153,7 +154,7 @@ export const DeviceApi = {
   async deleteHook(device, observable, id, gateway) {
     await deviceFetch({
       device,
-      command: DELETE_HOOK,
+      command: DeviceApiMethods.DELETE_HOOK,
       params: { observable, id },
       gateway
     })
@@ -161,7 +162,7 @@ export const DeviceApi = {
   async testHook(device, observable, id, value, gateway) {
     return deviceFetch({
       device,
-      command: TEST_HOOK,
+      command: DeviceApiMethods.TEST_HOOK,
       params: {
         observable,
         id,
@@ -174,28 +175,28 @@ export const DeviceApi = {
     return (await deviceFetch({
       device,
       gateway,
-      command: GET_FEATURES
+      command: DeviceApiMethods.GET_FEATURES
     })).data
   },
   async metrics(device, gateway) {
     return (await deviceFetch({
       device,
       gateway,
-      command: GET_METRICS
+      command: DeviceApiMethods.GET_METRICS
     })).data
   },
   async exportSettings(device, gateway) {
     return (await deviceFetch({
       device,
       gateway,
-      command: EXPORT_SETTINGS
+      command: DeviceApiMethods.EXPORT_SETTINGS
     })).data
   },
   async importSettings(device, gateway, settings) {
     await deviceFetch({
         device,
         gateway,
-        command: IMPORT_SETTINGS,
+        command: DeviceApiMethods.IMPORT_SETTINGS,
         params: {
           settings
         }
@@ -205,7 +206,7 @@ export const DeviceApi = {
     await deviceFetch({
       device,
       gateway,
-      command: RESTART
+      command: DeviceApiMethods.RESTART
     })
   },
 }

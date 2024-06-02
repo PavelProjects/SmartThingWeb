@@ -9,6 +9,7 @@ import DropdownMenu from './menu/DropdownMenu.vue'
 import { DeviceApi } from '../api/device/DeviceApi'
 import { toast } from '../utils/EventBus'
 import RiseLoader from 'vue-spinner/src/RiseLoader.vue'
+import { GatewayApi } from '../api/gateway/GatewayApi'
 
 export default {
   name: 'DevicesMain',
@@ -29,6 +30,7 @@ export default {
       loadingDevice: false,
       device: undefined,
       features: undefined,
+      apiMethods: undefined,
       gateway,
       intl,
     }
@@ -59,8 +61,9 @@ export default {
 
       this.loadingDevice = true
       try {
-        await DeviceApi.health(selected, this.gateway)
+        // await DeviceApi.health(selected, this.gateway)
         this.features = await DeviceApi.features(selected, this.gateway).catch((e) => console.log(e)) || {}
+        this.apiMethods = await GatewayApi.getDeviceApiMethods({ device: selected }) ?? []
         this.device = selected
         this.searchExpanded = false
       } catch (error) {
@@ -110,6 +113,7 @@ export default {
             :device="device"
             :gateway="gateway"
             :features="features"
+            :apiMethods="apiMethods"
           />
         </KeepAlive>
       </div>
