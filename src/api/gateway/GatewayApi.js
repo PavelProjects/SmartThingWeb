@@ -39,9 +39,6 @@ const GatewayApi = {
       params
     })
   },
-  async getDeviceApiMethods({ device: { name, ip } }) {
-    return (await axiosInstance.get(`${PATH_DEVICE_API}/methods?name=${name}&ip=${ip}`)).data
-  },
   async getCloudAuthentication() {
     const response = await axiosInstance.get(PATH_AUTHENTICATION)
     return response.data
@@ -69,6 +66,14 @@ const GatewayApi = {
   async cloudDisconnect() {
       const response = await axiosInstance.put(PATH_CLOUD_DISCONNECT)
       return response.status === 200
+  },
+  // todo move to device api?
+  async getDeviceApiMethods({ device: { name, ip }, gateway }) {
+    return (await gatewayFetch({
+      url: `${PATH_DEVICE_API}/methods?name=${name}&ip=${ip}`,
+      method: HTTP_METHOD.GET,
+      gateway
+    })).data
   },
   // Cloud supported methods
   async getLogs(gateway) {

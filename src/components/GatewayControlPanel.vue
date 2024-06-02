@@ -63,7 +63,7 @@ export default {
       try {
         // await DeviceApi.health(selected, this.gateway)
         this.features = await DeviceApi.features(selected, this.gateway).catch((e) => console.log(e)) || {}
-        this.apiMethods = await GatewayApi.getDeviceApiMethods({ device: selected }) ?? []
+        this.apiMethods = await GatewayApi.getDeviceApiMethods({ device: selected, gateway: this.gateway }) ?? []
         this.device = selected
         this.searchExpanded = false
       } catch (error) {
