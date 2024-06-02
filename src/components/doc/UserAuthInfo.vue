@@ -31,7 +31,7 @@ export default {
         this.openDialog = false
         this.cloudAuthStore.setAuthentication()
       } catch (error) {
-        console.log(error)
+        console.error(error)
         toast.error({
           caption: 'Failed to logout'
         })

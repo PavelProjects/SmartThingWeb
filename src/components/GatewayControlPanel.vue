@@ -64,7 +64,7 @@ export default {
         this.device = selected
         this.searchExpanded = false
       } catch (error) {
-        console.log(error)
+        console.error(error)
         toast.error({
           caption: this.intl.formatMessage({ id: 'device.unreachable' })
         })

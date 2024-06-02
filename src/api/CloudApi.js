@@ -1,11 +1,8 @@
 import axios from 'axios'
-import { toast } from '../utils/EventBus'
 
 export const CLOUD_IP = import.meta.env.VITE_CLOUD_IP || document.location.hostname
 export const CLOUD_PORT = import.meta.env.VITE_CLOUD_PORT
-const CLOUD_BROKER_PATH = import.meta.env.VITE_CLOUD_WS
-
-export const CLOUD_BROKER_URL = `ws://${CLOUD_IP}:${CLOUD_PORT}/${CLOUD_BROKER_PATH}`
+export const CLOUD_BROKER_URL = `ws://${CLOUD_IP}:${CLOUD_PORT}/smt-ws`
 
 const URL_AUTH = '/auth'
 const URL_AUTH_USER = '/auth/user'

@@ -103,7 +103,7 @@ export default {
           return acc
         }, {})
       } catch (error) {
-        console.log(error)
+        console.error(error)
         toast.error({
           caption: this.intl.formatMessage({ id: 'devices.saved.load.error' })
         })
@@ -120,7 +120,7 @@ export default {
         })
         await this.loadSavedDevices()
       } catch (error) {
-        console.log(error)
+        console.error(error)
         toast.error({
           caption: this.intl.formatMessage({ id: 'devices.saved.menu.update.error' })
         })
@@ -140,7 +140,7 @@ export default {
         })
         await this.loadSavedDevices()
       } catch (error) {
-        console.log(error)
+        console.error(error)
         toast.error({
           caption: this.intl.formatMessage({ id: 'devices.saved.menu.delete.error' })
         })

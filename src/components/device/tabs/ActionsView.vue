@@ -31,7 +31,7 @@ export default {
         const response = (await DeviceApi.getDeviceActionsInfo(this.device, this.gateway)) || {}
         this.actions = Object.entries(response)
       } catch (error) {
-        console.log(error)
+        console.error(error)
         toast.error({
           caption: 'Failed to fetch device actions'
         })

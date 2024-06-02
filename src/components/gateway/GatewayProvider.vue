@@ -5,7 +5,6 @@ import { useGatewayStore } from '../../store/gatewayStore'
 import { router } from '../../routes'
 import { EVENT, EventBus, GATEWAY_EVENT, toast } from '../../utils/EventBus'
 
-// todo loader
 export default {
   name: 'GatewayProvider',
   data() {
@@ -42,7 +41,7 @@ export default {
           this.gateway = gtw
         }
       } catch (error) {
-        console.log(error)
+        console.error(error)
         toast.error({
           caption: 'Failed to load gateway ' + this.gatewayId
         })

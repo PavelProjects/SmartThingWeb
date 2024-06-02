@@ -77,7 +77,7 @@ export default {
       try {
         this.store.setAuthentication(await GatewayApi.getCloudAuthentication())
       } catch (error) {
-        console.log(error)
+        console.error(error)
         toast.error({
           caption: 'Failed to fetch cloud authentication info'
         })
@@ -98,7 +98,7 @@ export default {
         try {
           await GatewayApi.cloudDisconnect()
         } catch (error) {
-          console.log(error)
+          console.error(error)
           toast.error({
             caption: this.intl.formatMessage({ id: 'gateway.cloud.disconnect.failed' })
           })

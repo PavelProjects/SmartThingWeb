@@ -37,7 +37,7 @@ export default {
         this.info = (await DeviceApi.getDeviceInfo(this.device, this.gateway)) || {}
         this.deviceName = this.info['name'] || ''
       } catch (error) {
-        console.log(error)
+        console.error(error)
         toast.error({
           caption: 'Failed to fetch device info'
         })

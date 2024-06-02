@@ -71,7 +71,7 @@ export default {
         this.loadGateways()
         this.showCreateDialog = false
       } catch (error) {
-        console.log(error)
+        console.error(error)
         if (error?.response?.status == 400) {
           toast.error({
             caption: error.response.data

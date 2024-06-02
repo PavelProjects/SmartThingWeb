@@ -54,7 +54,7 @@ export default {
         this.$emit('gatewaysUpdate')
         this.showEditDialog = false
       } catch (error) {
-        console.log(error)
+        console.error(error)
         if (error.response.status == 400) {
           toast.error({
             caption: error.response.data
@@ -102,7 +102,7 @@ export default {
         this.tokenData.token = token
         this.$emit('gatewaysUpdate')
       } catch (error) {
-        console.log(error)
+        console.error(error)
         toast.error({
           caption: this.intl.formatMessage({ id: 'gateway.item.token.gen.error' })
         })
@@ -130,7 +130,7 @@ export default {
         })
         this.$emit('gatewaysUpdate')
       } catch (error) {
-        console.log(error)
+        console.error(error)
         toast.error({
           caption: this.intl.formatMessage({ id: 'gateway.item.token.delete.error' })
         })

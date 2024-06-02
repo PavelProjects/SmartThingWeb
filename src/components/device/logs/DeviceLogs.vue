@@ -40,8 +40,6 @@ export default {
     }
     this.messages.reverse()
 
-    // todo proxy through cloud?
-    this.stompClient.unsubscribe('/devices/logs')
     this.stompClient.subscribe('/devices/logs', (message) => {
       if (message && message.body) {
         console.debug(`Device log  message: ${message.body}`)
@@ -54,10 +52,9 @@ export default {
         this.messages.unshift(parsed)
       }
     })
-    console.debug('Subscribed to the logs topic')
   },
   unmounted() {
-    this.stompClient.unsubscribe('logs')
+    this.stompClient.unsubscribe('/devices/logs')
   },
   methods: {
     generateColorByIp(ip) {

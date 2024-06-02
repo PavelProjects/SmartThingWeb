@@ -40,7 +40,7 @@ export default {
         })
         this.$emit("added")
       } catch (error) {
-        console.log(error)
+        console.error(error)
         const { response } = error || {}
         const { message } = await response?.data || {}
         toast.error({

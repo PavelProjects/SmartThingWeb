@@ -4,14 +4,20 @@ import { GATEWAY_BROKER_URL } from '../api/gateway/GatewayApi'
 import { CLOUD_BROKER_URL } from '../api/CloudApi'
 import { EVENT, EventBus, LOGGED_IN, LOGGED_OUT, TOAST, WS_CONNECTED } from '../utils/EventBus'
 
+const mode = import.meta.env.VITE_MODE
+
+const NOTIFICATION_TOPIC = '/notifications'
+const EVENT_TOPIC = '/events'
+
+const fixTopicName = (topic) => {
+  return `${mode === 'cloud' ? '/secured' : ''}${topic}`
+}
+
 export const useStompClientStore = defineStore({
   id: 'stomp_client',
   state: () => {
-    const env = import.meta.env
-    const mode = env.VITE_MODE
     const brokerURL = mode === 'gateway' ? GATEWAY_BROKER_URL : CLOUD_BROKER_URL
-    const notifyTopic =
-      mode === 'gateway' ? env.VITE_GATEWAY_NOTIFCATION_TOPIC : env.VITE_CLOUD_NOTIFCATION_TOPIC
+    const notifyTopic = fixTopicName(NOTIFICATION_TOPIC)
 
     const client = new Client({ brokerURL })
     console.debug(`WebSocket broker url: ${brokerURL}`)
@@ -42,18 +48,17 @@ export const useStompClientStore = defineStore({
       )
       console.debug('Subscribed to notification topic: ' + notifyTopic)
 
-      if (mode === 'cloud') {
-        client.subscribe('/secured/topic/event', (message) => {
-          if (!message?.body) {
-            console.error("Empty event message")
-            return
-          }
-          const { gateway, event } = JSON.parse(message.body)
-          console.debug(`Got event=${event} from ${gateway?.name}`)
-          EventBus.emit(EVENT, { gateway, event })
-        })
-        console.debug('Subscribed to event topic')
-      }
+      const eventTopic = fixTopicName(EVENT_TOPIC)
+      client.subscribe(eventTopic, (message) => {
+        if (!message?.body) {
+          console.error("Empty event message")
+          return
+        }
+        const { gateway, event } = JSON.parse(message.body)
+        console.debug(`Got event=${event} from ${gateway?.name}`)
+        EventBus.emit(EVENT, { gateway, event })
+      })
+      console.debug('Subscribed to event topic: ' + eventTopic)
     }
 
     if (mode === 'gateway') {
@@ -79,8 +84,9 @@ export const useStompClientStore = defineStore({
         console.debug("Waiting for stomp connection (topic " + topic + ")")
         await promise
       }
-      this.client.subscribe(topic, callback, { id: topic + '_topic' })
-      console.debug("Subscribed to topic " + topic)
+      const fixedTopic = fixTopicName(topic)
+      this.client.subscribe(fixedTopic, callback, { id: topic + '_topic' })
+      console.debug("Subscribed to topic " + fixedTopic)
     },
     unsubscribe(topic) {
       if (!this.client.connected) {

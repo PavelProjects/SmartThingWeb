@@ -51,7 +51,7 @@ export default {
       try {
         this.groups = await DashboardApi.getGroups(this.gateway)
       } catch (error) {
-        console.log(error)
+        console.error(error)
         toast.error({ 
           caption: this.intl.formatMessage({ id: 'dashboard.load.error' })
         })

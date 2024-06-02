@@ -179,7 +179,7 @@ export default {
         })
         this.testDialogVisible = false
       } catch (error) {
-        console.log(error)
+        console.error(error)
         toast.error({
           caption: this.intl.formatMessage({ id: 'device.hook.test.error' })
         })

@@ -52,7 +52,7 @@ export default {
         this.values = JSON.parse(message.body)
       }, topic)
     } catch (error) {
-      console.log(error)
+      console.error(error)
     }
     this.loadValues()
   },
@@ -61,7 +61,7 @@ export default {
     try {
       client.unsubscribe("/dashboard/" + this.id)
     } catch (error) {
-      console.log(error)
+      console.error(error)
     }
   },
   computed: {
@@ -71,7 +71,7 @@ export default {
         const date = new Date(this.values.lastUpdate)
         count = Math.round((this.currentTime - date) / 1000)
       } catch (error) {
-        console.log(error)
+        console.error(error)
       }
       return this.intl.formatMessage(
         { id: 'dashboard.group.update.title' },
@@ -88,7 +88,7 @@ export default {
       try {
         this.values = await DashboardApi.getGroupValues(this.id, this.gateway)
       } catch (error) {
-        console.log(error)
+        console.error(error)
         toast.error({
           caption: this.intl.formatMessage({ id: 'dashboard.group.values.load.error' })
         })
@@ -101,7 +101,7 @@ export default {
       try {
         this.values = await DashboardApi.updateGroupValues(this.id, this.gateway)
       } catch (error) {
-        console.log(error)
+        console.error(error)
         toast.error({
           caption: this.intl.formatMessage({ id: 'dashboard.group.values.load.error' })
         })
@@ -118,7 +118,7 @@ export default {
           })
           this.$emit('updateGroups')
         } catch (error) {
-          console.log(error)
+          console.error(error)
           toast.error({
             caption: this.intl.formatMessage({ id: 'dashboard.group.delete.error' })
           })

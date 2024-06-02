@@ -36,7 +36,7 @@ export default {
           caption: this.intl.formatMessage({ id: 'dashboard.group.create.success' }, { name: newDev.name })
         })
       } catch (error) {
-        console.log(error)
+        console.error(error)
         toast.error({
           caption: this.intl.formatMessage({ id: 'dashboard.group.create.error' })
         })
