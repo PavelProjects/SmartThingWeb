@@ -19,10 +19,16 @@ export const useStompClientStore = defineStore({
     const brokerURL = mode === 'gateway' ? GATEWAY_BROKER_URL : CLOUD_BROKER_URL
     const notifyTopic = fixTopicName(NOTIFICATION_TOPIC)
 
-    const client = new Client({ brokerURL })
-    console.debug(`WebSocket broker url: ${brokerURL}`)
+    const client = new Client({ 
+      brokerURL,
+      onWebSocketClose: () => console.debug("Web socket were closed"),
+      onDisconnect: () => console.debug("Stomp client disconnected"),
+      heartbeatOutgoing: 10000,
+    })
+
+    console.debug(`Using stomp broker url: ${brokerURL}`)
     client.onConnect = () => {
-      console.debug('Connected to web socket')
+      console.debug('Stomp client connected')
       EventBus.emit(WS_CONNECTED)
 
       client.subscribe(

@@ -67,7 +67,7 @@ const GatewayApi = {
       const response = await axiosInstance.put(PATH_CLOUD_DISCONNECT)
       return response.status === 200
   },
-  // todo move to device api?
+  // todo move to device api (get methods)
   async getDeviceApiMethods({ device: { name, ip }, gateway }) {
     return (await gatewayFetch({
       url: `${PATH_DEVICE_API}/methods?name=${name}&ip=${ip}`,
