@@ -61,7 +61,9 @@ export default {
         type="password"
       />
       <LoadingButton :loading="loading" @click="auth">
-        {{ intl.formatMessage({ id: 'log.in' }) }}
+        <h2>
+          {{ intl.formatMessage({ id: 'log.in' }) }}
+        </h2>
       </LoadingButton>
     </Container>
   </PopUpDialog>
