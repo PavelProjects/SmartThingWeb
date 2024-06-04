@@ -253,7 +253,7 @@ const messages = {
     'gateway.panel': 'Панель управления {device}',
     'gateway.cloud.auth.title': 'Добавить токен облака',
     'gateway.cloud.auth.conn.token': 'Токен подключения',
-    'gateway.cloud.auth.ip': 'Ip облакак',
+    'gateway.cloud.auth.ip': 'Ip облака',
     'gateway.cloud.auth.port': 'Порт облака',
     'gateway.cloud.auth.token': 'Авторизационный токен',
     'gateway.cloud.auth.connect': 'Подключиться',

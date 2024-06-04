@@ -54,6 +54,7 @@ export default {
       <DevicesSearchView
         :title="intl.formatMessage({ id: 'dashboard.group.create.select.device' })"
         :style="{ 'width': '350px' }"
+        :gateway="gateway"
         @select="selectDevice"
       />
     </Container>

@@ -52,7 +52,9 @@ export default {
         <h2>{{ intl.formatMessage({ id: 'cloud.auth.info.user.id' }, { id }) }}</h2>
         <h2>{{ intl.formatMessage({ id: 'cloud.auth.info.user.login' }, { login }) }}</h2>
         <button class="btn" @click.stop="logout">
-          {{ intl.formatMessage({ id: 'log.out' }) }}
+          <h2>
+            {{ intl.formatMessage({ id: 'log.out' }) }}
+          </h2>
         </button>
       </Container>
     </div>
@@ -69,7 +71,7 @@ export default {
   top: var(--default-gap);
   right: var(--default-gap);
   padding: var(--default-gap);
-  background-color: var(--color-background-soft);
+  background-color: var(--color-background-mute);
   border-radius: var(--border-radius);
 }
 </style>

@@ -53,7 +53,7 @@ export default {
 
 <template>
   <PopUpDialog>
-    <Container :vertical="true" style="padding: 5px;">
+    <Container :vertical="true" style="padding: 5px;" :gap="'5px'">
       <InputField :label="intl.formatMessage({ id: 'login' })" v-model="login" type="login" />
       <InputField
         :label="intl.formatMessage({ id: 'password' })"
