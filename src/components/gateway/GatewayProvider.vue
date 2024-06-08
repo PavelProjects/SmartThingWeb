@@ -67,7 +67,7 @@ export default {
 
 <template>
   <div>
-    <div v-if="gateway || currentPath === '/gateways'">
+    <div v-if="mode === 'gateway' || gateway || currentPath === '/gateways'">
       <slot></slot>
     </div>
   </div>

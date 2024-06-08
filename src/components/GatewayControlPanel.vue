@@ -2,7 +2,6 @@
 import DevicesSearchView from './device/DevicesSearchView.vue'
 import DeviceControlPanel from './device/DeviceControlPanel.vue'
 import { useGatewayStore } from '../store/gatewayStore'
-import { storeToRefs } from 'pinia'
 import { useIntl } from 'vue-intl'
 import GatewaySelector from './gateway/GatewaySelector.vue'
 import DropdownMenu from './menu/DropdownMenu.vue'
