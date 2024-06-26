@@ -1,5 +1,4 @@
 import { defineStore } from 'pinia'
-import { useGatewayStore } from './gatewayStore'
 
 export const useGatewayAuthStore = defineStore({
   id: 'gateway_auth_store',
@@ -8,6 +7,7 @@ export const useGatewayAuthStore = defineStore({
     gateway: undefined
   }),
   actions: {
+    // move to gateway provider
     setAuthentication(authInfo) {
       if (authInfo) {
         const { user, gateway } = authInfo
@@ -17,8 +17,6 @@ export const useGatewayAuthStore = defineStore({
         this.user = undefined
         this.gateway = undefined
       }
-      const gatewayStore = useGatewayStore()
-      gatewayStore.gateway = this.gateway
     }
   }
 })

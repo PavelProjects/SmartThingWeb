@@ -6,8 +6,6 @@ import LoadingButton from '../controls/LoadingButton.vue'
 import { toast } from '../../utils/EventBus'
 import DeleteSVG from 'vue-material-design-icons/Delete.vue'
 import { DashboardApi } from '../../api/gateway/DashboardApi'
-import { useGatewayStore } from '../../store/gatewayStore'
-import { storeToRefs } from 'pinia'
 import Container from '../base/Container.vue'
 import { DeviceApi } from '../../api/device/DeviceApi'
 
@@ -23,8 +21,8 @@ export default {
   props: {
     group: Object,
   },
+  inject: ['gateway'],
   data() {
-    const { gateway } = storeToRefs(useGatewayStore())
     const { device, observables, config } = JSON.parse(JSON.stringify(this.group))
 
     const intl = useIntl()
@@ -35,7 +33,6 @@ export default {
       observables,
       config,
       intl,
-      gateway,
       loading: false,
       loadingObservables: false,
       requiredFields: {},

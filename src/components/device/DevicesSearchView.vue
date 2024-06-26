@@ -86,7 +86,7 @@ export default {
             foundDevices.push(deviceInfo.ip)
             console.debug(`Found new device: ${deviceInfo.name}`)
           }
-        })
+        }, this.gateway)
       } catch (error) {
         console.error(error)
         toast.error({

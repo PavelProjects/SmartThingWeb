@@ -1,11 +1,9 @@
 <script>
-import { storeToRefs } from 'pinia'
 import { useIntl } from 'vue-intl'
 import { GatewayApi } from '../../../api/gateway/GatewayApi'
 import { useStompClientStore } from '../../../store/stompClientStore'
 import { toast } from '../../../utils/EventBus'
 import LogMessage from './LogMessage.vue'
-import { useGatewayStore } from '../../../store/gatewayStore'
 import Container from '../../base/Container.vue'
 
 export default {
@@ -14,14 +12,13 @@ export default {
     LogMessage,
     Container,
   },
+  inject: ['gateway'],
   data() {
     const intl = useIntl()
     const stompClient = useStompClientStore()
-    const { gateway } = storeToRefs(useGatewayStore())
 
     return {
       intl,
-      gateway,
       messages: [],
       colors: {},
       stompClient,

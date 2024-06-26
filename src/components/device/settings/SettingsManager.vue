@@ -4,20 +4,17 @@ import SettingsEditor from './SettingsEditor.vue'
 import MenuView from '../../menu/MenuView.vue'
 import { useIntl } from 'vue-intl'
 import { toast } from '../../../utils/EventBus'
-import { storeToRefs } from 'pinia'
-import { useGatewayStore } from '../../../store/gatewayStore'
 
 export default {
   name: 'SettingsManager',
   components: {
     MenuView
   },
+  inject: ['gateway'],
   data() {
-    const { gateway } = storeToRefs(useGatewayStore())
     const intl = useIntl()
     return {
       intl,
-      gateway,
       loading: false,
       selected: undefined,
       tabs: {},

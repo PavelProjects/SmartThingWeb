@@ -52,12 +52,12 @@ export default {
 <template>
   <div>
     <router-view v-if="isAuthenticated" :key="$route.fullPath" v-slot="{ Component, path }">
-      <HeaderDoc class="doc" />
-      <CloudAuthDialog
-        v-if="!isAuthenticated"
-        @authenticated="({ user }) => authStore.setAuthentication(user)"
-      />
       <GatewayProvider>
+        <HeaderDoc class="doc" />
+        <CloudAuthDialog
+          v-if="!isAuthenticated"
+          @authenticated="({ user }) => authStore.setAuthentication(user)"
+        />
           <!-- <keep-alive>
             <component :is="Component" :key="path" />
           </keep-alive> -->

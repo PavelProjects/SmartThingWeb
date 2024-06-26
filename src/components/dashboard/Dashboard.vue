@@ -5,11 +5,9 @@ import PlusSVG from 'vue-material-design-icons/Plus.vue'
 import GroupAddDialog from './GroupAddDialog.vue';
 import { DashboardApi } from '../../api/gateway/DashboardApi';
 import { useIntl } from 'vue-intl';
-import { useGatewayStore } from '../../store/gatewayStore';
 import RiseLoader from 'vue-spinner/src/RiseLoader.vue'
 import { toast } from '../../utils/EventBus';
 import Container from '../base/Container.vue';
-import { useStompClientStore } from '../../store/stompClientStore';
 
 export default {
   name: 'Dashboard',
@@ -20,12 +18,11 @@ export default {
     PlusSVG,
     RiseLoader,
   },
+  inject: ['gateway'],
   data() {
     const intl = useIntl()
-    const { gateway } = storeToRefs(useGatewayStore())
     return {
       intl,
-      gateway,
       groups: [],
       loading: false,
       addGroupDialog: false,

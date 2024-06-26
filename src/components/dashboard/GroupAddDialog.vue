@@ -1,8 +1,6 @@
 <script>
-import { storeToRefs } from 'pinia'
 import { useIntl } from 'vue-intl'
 import { DashboardApi } from '../../api/gateway/DashboardApi'
-import { useGatewayStore } from '../../store/gatewayStore'
 import { toast } from '../../utils/EventBus'
 import DevicesSearchView from '../device/DevicesSearchView.vue'
 import PopUpDialog from '../dialogs/PopUpDialog.vue'
@@ -13,10 +11,10 @@ export default {
   props: {
     groups: Array
   },
+  inject: ['gateway'],
   data() {
-    const { gateway } = storeToRefs(useGatewayStore())
     const intl = useIntl()
-    return { intl, gateway }
+    return { intl }
   },
   methods: {
     async selectDevice(newDev) {

@@ -5,7 +5,6 @@ import { EVENT, EventBus, GATEWAY_EVENT, toast } from '../../utils/EventBus'
 import GatewayItem from './GatewayItem.vue'
 import GatewayEditDialog from './GatewayEditDialog.vue'
 import UpdateButton from '../controls/UpdateButton.vue'
-import { useGatewayStore } from '../../store/gatewayStore'
 import { useIntl } from 'vue-intl'
 import PopUpDialog from '../dialogs/PopUpDialog.vue'
 import Container from '../base/Container.vue'
@@ -21,10 +20,8 @@ export default {
   },
   data() {
     const intl = useIntl()
-    const gatewayStore = useGatewayStore()
     return {
       intl,
-      gatewayStore,
       gateways: [],
       loading: false,
       showCreateDialog: false
@@ -40,7 +37,6 @@ export default {
   methods: {
     handleGatewayClick(gateway) {
       if (gateway.online) {
-        this.gatewayStore.gateway = gateway
         router.push(`/${gateway.id}/panel`)
       } else {
         toast.error({

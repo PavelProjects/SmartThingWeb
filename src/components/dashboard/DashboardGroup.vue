@@ -7,8 +7,6 @@ import LoadingButton from '../controls/LoadingButton.vue';
 import { DashboardApi } from '../../api/gateway/DashboardApi';
 import { toast } from '../../utils/EventBus';
 import UpdateButton from '../controls/UpdateButton.vue';
-import { useGatewayStore } from '../../store/gatewayStore';
-import { storeToRefs } from 'pinia';
 import Container from '../base/Container.vue';
 import { useStompClientStore } from '../../store/stompClientStore';
 

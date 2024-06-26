@@ -2,12 +2,11 @@
 import GatewayAuthInfo from './GatewayAuthInfo.vue'
 import MenuSvg from 'vue-material-design-icons/Menu.vue'
 import UserAuthInfo from './UserAuthInfo.vue'
-import { storeToRefs } from 'pinia'
-import { useGatewayStore } from '../../store/gatewayStore'
 import { useIntl } from 'vue-intl'
 import { router } from '../../routes'
 import GatewaySelector from '../gateway/GatewaySelector.vue'
 import Container from '../base/Container.vue'
+import { useGatewayAuthStore } from '../../store/gatewayAuthStore'
 
 export default {
   name: 'HeaderDoc',
@@ -18,21 +17,27 @@ export default {
     GatewaySelector,
     Container,
   },
+  inject: ['gateway'],
   data() {
     const mode = import.meta.env.VITE_MODE
     const intl = useIntl()
-    const { gateway } = storeToRefs(useGatewayStore())
+    const gatewayAuthStore = useGatewayAuthStore()
     return { 
       mode,
       intl,
-      gateway,
-      gatewaySelectorVisible: false,
-      showGatewayRoutes: this.mode === 'gateway' || !!this.gateway
+      gatewayAuthStore,
     }
   },
-  watch: {
-    gateway() {
-      this.showGatewayRoutes = this.mode === 'gateway' || !!this.gateway
+  computed: {
+    gatewayRoutesEnabled() {
+      return this.mode === 'gateway' || !!this.gateway
+    },
+    gatewayName() {
+      if (this.mode === 'gateway') {
+        return this.gatewayAuthStore.gateway?.name ?? ''
+      } else {
+        return this.gateway?.name ?? ''
+      }
     }
   },
   methods: {
@@ -54,7 +59,7 @@ export default {
   <Container class="doc">
     <div class="menu">
       <MenuSvg />
-      <div v-if="showGatewayRoutes" class="menu-items">
+      <div v-if="gatewayRoutesEnabled" class="menu-items">
         <router-link :to="addGatewayToPath('/panel')">
           <h2>{{ intl.formatMessage({ id: 'doc.panel' }) }}</h2>
         </router-link>
@@ -79,7 +84,7 @@ export default {
         :title="`Gateway id: ${gateway.id ?? 'ID_MSSING'}`"
         @click.stop="gatewaySelectorVisible = true"
       >
-        {{ intl.formatMessage({ id: 'gateway' }, { gateway: gateway.name }) }}
+        {{ intl.formatMessage({ id: 'gateway' }, { gateway: gatewayName }) }}
       </h1>
     </div>
     <UserAuthInfo v-if="mode === 'cloud'" class="log-in-info" />

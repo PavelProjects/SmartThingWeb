@@ -1,4 +1,3 @@
-import { useGatewayStore } from '../store/gatewayStore'
 import { useStompClientStore } from '../store/stompClientStore'
 import { EventBus, REQUEST } from '../utils/EventBus'
 import { GatewayApi } from './gateway/GatewayApi'
@@ -7,11 +6,7 @@ const SEARCH_TIME = 10000
 const SEARCH_TOPIC = '/devices/search'
 
 const GatewaySearhApi = {
-  async searchDevices(
-    onDeviceFound = (device) => {
-      console.log(device)
-    }
-  ) {
+  async searchDevices(onDeviceFound) {
     const { subscribe, unsubscribe } = useStompClientStore()
 
     EventBus.emit(REQUEST, { id: 'search', loading: true })
@@ -35,8 +30,7 @@ const GatewaySearhApi = {
 }
 
 const CloudSearchApi = {
-  async searchDevices(onDeviceFound = () => {}) {
-    const { gateway } = useGatewayStore()
+  async searchDevices(onDeviceFound, gateway) {
     EventBus.emit(REQUEST, { id: 'search', loading: true })
 
     const response = await GatewayApi.getFoundDevices(gateway)

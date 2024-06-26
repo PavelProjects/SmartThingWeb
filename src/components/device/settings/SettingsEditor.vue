@@ -6,8 +6,6 @@ import InputField from '../../fields/InputField.vue'
 import { DeviceApi, extractDataFromError } from '../../../api/device/DeviceApi'
 import DevicesSearchView from '../DevicesSearchView.vue'
 import { useIntl } from 'vue-intl'
-import { useGatewayStore } from '../../../store/gatewayStore'
-import { storeToRefs } from 'pinia'
 import PopUpDialog from '../../dialogs/PopUpDialog.vue'
 import Container from '../../base/Container.vue'
 
@@ -30,8 +28,8 @@ export default {
       type: Object
     }
   },
+  inject: ['gateway'],
   data() {
-    const { gateway } = storeToRefs(useGatewayStore())
     const intl = useIntl()
     const { name, value } = this.settings
     return {
@@ -42,7 +40,6 @@ export default {
       devices: [],
       selectedDevice: undefined,
       mode: undefined,
-      gateway
     }
   },
   methods: {

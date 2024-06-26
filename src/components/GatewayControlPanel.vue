@@ -1,7 +1,6 @@
 <script>
 import DevicesSearchView from './device/DevicesSearchView.vue'
 import DeviceControlPanel from './device/DeviceControlPanel.vue'
-import { useGatewayStore } from '../store/gatewayStore'
 import { useIntl } from 'vue-intl'
 import GatewaySelector from './gateway/GatewaySelector.vue'
 import DropdownMenu from './menu/DropdownMenu.vue'
@@ -19,8 +18,8 @@ export default {
     DropdownMenu,
     RiseLoader,
   },
+  inject: ['gateway'],
   data() {
-    const { gateway } = useGatewayStore()
     const intl = useIntl()
     return {
       mode: import.meta.env.VITE_MODE,
@@ -30,7 +29,6 @@ export default {
       device: undefined,
       features: undefined,
       apiMethods: undefined,
-      gateway,
       intl,
     }
   },

@@ -1,20 +1,22 @@
 <script>
-import { storeToRefs } from 'pinia'
 import { CloudApi } from '../../api/CloudApi'
-import { useGatewayStore } from '../../store/gatewayStore'
 import { router } from '../../routes'
 import { EVENT, EventBus, GATEWAY_EVENT, toast } from '../../utils/EventBus'
+import { computed } from 'vue'
 
+// used in cloud mode to load gateway from path
 export default {
   name: 'GatewayProvider',
   data() {
-    const { gateway } = storeToRefs(useGatewayStore())
     return {
       mode: import.meta.env.VITE_MODE,
       gatewayId: this.$route.params.gateway,
       currentPath: this.$route.path,
-      gateway
+      gateway: undefined
     }
+  },
+  provide() {
+    return { gateway: computed(() => this.gateway) }
   },
   mounted() {
     this.loadGateway()
