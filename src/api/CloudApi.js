@@ -4,8 +4,11 @@ export const CLOUD_IP = import.meta.env.VITE_CLOUD_IP || document.location.hostn
 export const CLOUD_PORT = import.meta.env.VITE_CLOUD_PORT
 export const CLOUD_BROKER_URL = `ws://${CLOUD_IP}:${CLOUD_PORT}/smt-ws`
 
+const REFRESH_TOKEN_KEY = "refresh-token"
+
 const URL_AUTH = '/auth'
 const URL_AUTH_USER = '/auth/user'
+const URL_REFRESH_USER = '/auth/user/refresh'
 const URL_AUTH_GATEWAY = '/auth/gateway'
 const URL_LOGOUT_USER = '/auth/user/logout'
 const URL_LOGOUT_GATEWAY = '/auth/gateway/logout'
@@ -19,15 +22,48 @@ const URL_GATEWAY_DELETE = '/gateway/management/delete'
 const axiosInstance = axios.create({
   baseURL: `http://${CLOUD_IP}:${CLOUD_PORT}`,
   timeout: 5000,
-  withCredentials: true
+  withCredentials: true,
 })
 
+// todo smh made this global for all requests
+const refreshToken = async () => {
+  console.debug("Token died, trying to refresh")
+  const localRefresh = localStorage.getItem(REFRESH_TOKEN_KEY)
+  if (!localRefresh) {
+    console.debug("No refresh token")
+    return
+  }
+  try {
+    const { refresh } = (await axiosInstance.post(URL_REFRESH_USER, { refreshToken: localRefresh })).data
+    localStorage.setItem(REFRESH_TOKEN_KEY, refresh)
+    console.debug("Token refreshed")
+    return true
+  } catch (error) {
+    console.error("Failed to refresh token", error)
+  }
+}
+
+axiosInstance.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const { status, url } = error?.response ?? {}
+    if (status === 401 && ![URL_AUTH, URL_REFRESH_USER].includes(url)) {
+      if (await refreshToken()) {
+        console.debug("Trying to send request again")
+        return axiosInstance.request(error.config)
+      }
+    }
+    return Promise.reject(error);
+  }
+)
+
 const CloudApi = {
+  async authUser(login, password) {
+    const { refresh } = (await axiosInstance.post(URL_AUTH_USER, { login, password })).data
+    localStorage.setItem(REFRESH_TOKEN_KEY, refresh)
+  },
   async getAuthentication() {
     return (await axiosInstance.get(URL_AUTH)).data
-  },
-  async authUser(login, password) {
-    return (await axiosInstance.post(URL_AUTH_USER, { login, password })).data
   },
   async authGateway(gateway) {
     return (await axiosInstance.post(URL_AUTH_GATEWAY, {

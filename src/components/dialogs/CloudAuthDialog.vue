@@ -34,7 +34,8 @@ export default {
       }
       this.loading = true
       try {
-        const auth = (await CloudApi.authUser(this.login, this.password)) ?? {}
+        await CloudApi.authUser(this.login, this.password)
+        const auth = await CloudApi.getAuthentication()
         toast.success({ caption: 'Welcome, ' + this.login })
         this.$emit('authenticated', auth)
       } catch (error) {
