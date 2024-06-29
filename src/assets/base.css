@@ -34,6 +34,7 @@
   --border-radius: 10px;
   --section-gap: 160px;
   --default-gap: 2px;
+  --default-padding: 2px;
 
   --toast-width: 300px;
   --toast-min-height: 50px;

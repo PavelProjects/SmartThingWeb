@@ -252,7 +252,7 @@ export default {
 <style scoped>
 .settings-editor {
   width: 50vw;
-  padding: var(--padding-default);
+  padding: var(--default-padding);
 }
 .settings-editor textarea{
   resize: none;

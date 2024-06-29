@@ -195,7 +195,10 @@ export default {
             :validationFailed="tokenData.token.length === 0"
           />
         </Container>
-        <p class="token-field">{{ token }}</p>
+        <Container :vertical="true">
+          <h3>{{ intl.formatMessage({ id: 'gateway.item.auth.connection.token'} ) }}</h3>
+          <p class="token-field">{{ token }}</p>
+        </Container>
       </Container>
     </PopUpDialog>
   </div>
@@ -207,14 +210,14 @@ export default {
 }
 .gateway-item {
   background-color: var(--color-background);
-  padding: var(--padding-default);
+  padding: var(--default-padding);
   text-align: center;
   position: relative;
 }
 .status {
   position: absolute;
-  top: var(--padding-default);
-  left: var(--padding-default);
+  top: var(--default-padding);
+  left: var(--default-padding);
   width: 20px;
   height: 20px;
   border-radius: 50%;
@@ -228,5 +231,7 @@ export default {
   padding: 5px;
   width: 50vw;
   word-wrap: break-word;
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
 }
 </style>

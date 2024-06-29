@@ -88,7 +88,7 @@ export default {
 <style scoped>
 #control-panel {
   margin: 0 auto;
-  padding: var(--padding-default);
+  padding: var(--default-padding);
   width: 800px;
 }
 </style>

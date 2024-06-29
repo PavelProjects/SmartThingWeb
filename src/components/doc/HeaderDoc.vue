@@ -124,7 +124,7 @@ export default {
   position: absolute;
   top: var(--doc-height);
   left: var(--default-gap);
-  padding: var(--padding-default);
+  padding: var(--default-padding);
   background-color: var(--color-background-mute);
   border: solid 1px var(--color-border);
   border-radius: var(--border-radius);

@@ -63,7 +63,7 @@ export default {
 
 <template>
   <PopUpDialog @close="$emit('close')">
-    <Container style="padding: 5px;" :vertical="true">
+    <Container :vertical="true">
       <InputField :label="intl.formatMessage({ id: 'gateway.edit.name' })" v-model="name" />
       <InputField
         :label="intl.formatMessage({ id: 'gateway.edit.description' })"

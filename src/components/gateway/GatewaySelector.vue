@@ -119,7 +119,7 @@ export default {
         v-if="showCreateDialog"
         :gateway="{}"
         @save="createGateway"
-        @close="gatewayToEdit = undefined"
+        @close="showCreateDialog = false"
       />
     </div>
   </PopUpDialog>

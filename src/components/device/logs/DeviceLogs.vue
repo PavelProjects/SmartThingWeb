@@ -114,7 +114,7 @@ export default {
   column-gap: calc(var(--default-gap) / 2);
   grid-template-columns: 200px 150px 200px 120px auto;
   text-align: center;
-  padding: var(--padding-default);
+  padding: var(--default-padding);
 }
 .log-message-container :deep(div),h2 {
   border-right: 2px solid var(--color-border);

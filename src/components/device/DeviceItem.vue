@@ -56,7 +56,7 @@ export default {
 
 <style scoped>
 .device-item {
-  padding: var(--padding-default);
+  padding: var(--default-padding);
 }
 .device-item:hover {
   transition: background-color 0.5s;

@@ -73,6 +73,7 @@ const CloudApi = {
   },
   async logoutUser() {
     await axiosInstance.post(URL_LOGOUT_USER, {})
+    localStorage.removeItem(REFRESH_TOKEN_KEY)
   },
   async logoutGateway(gateway) {
     await axiosInstance.post(URL_LOGOUT_GATEWAY, {

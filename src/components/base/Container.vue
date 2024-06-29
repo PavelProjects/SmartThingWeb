@@ -9,6 +9,10 @@ export default {
     gap: {
       type: String,
       default: () => 'var(--default-gap)',
+    },
+    padding: {
+      type: String,
+      default: () => 'var(--default-padding)',
     }
   },
   computed: {
@@ -17,6 +21,7 @@ export default {
         'display': 'flex',
         'flex-direction': this.vertical ? 'column' : 'vertical',
         'gap': this.gap,
+        'padding': this.padding
       }
     }
   }
