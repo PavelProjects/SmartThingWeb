@@ -330,7 +330,7 @@ const messages = {
     'gateway.create.success': 'Маршрутизатор создан',
     'gateway.create.error': 'Не удалось создать маршрутизатор',
     'gateway.create.button': 'Создать маршрутизатор',
-    'gateway.selector.title': 'ВЫберите аршрутизатор',
+    'gateway.selector.title': 'Маршрутизаторы',
     'device.logs.columns': `{
       column, select,
       device {Устройство}
