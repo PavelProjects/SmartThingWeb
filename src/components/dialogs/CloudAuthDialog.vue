@@ -36,13 +36,16 @@ export default {
       try {
         await CloudApi.authUser(this.login, this.password)
         const auth = await CloudApi.getAuthentication()
+        if (!auth) {
+          throw new Error("Failed to get authentication")
+        }
         toast.success({ caption: 'Welcome, ' + this.login })
         this.$emit('authenticated', auth)
       } catch (error) {
         console.error(error)
         toast.error({
           caption: 'Failed to authenticate!',
-          description: error.response.status == 401 ? 'Wrong login/password' : 'Service error'
+          description: error?.response?.status == 401 ? 'Wrong login/password' : 'Service error'
         })
       } finally {
         this.loading = false
@@ -55,12 +58,22 @@ export default {
 <template>
   <PopUpDialog>
     <Container :vertical="true" style="padding: 5px;" :gap="'5px'">
-      <InputField :label="intl.formatMessage({ id: 'login' })" v-model="login" type="login" />
-      <InputField
-        :label="intl.formatMessage({ id: 'password' })"
-        v-model="password"
-        type="password"
-      />
+      <form>
+        <InputField
+          :label="intl.formatMessage({ id: 'login' })"
+          v-model="login"
+          type="login"    
+          autocomplete="login"
+          @enter="auth"
+        />
+        <InputField
+          :label="intl.formatMessage({ id: 'password' })"
+          v-model="password"
+          type="password"
+          autocomplete="password"
+          @enter="auth"
+        />
+      </form>
       <LoadingButton :loading="loading" @click="auth">
         <h2>
           {{ intl.formatMessage({ id: 'log.in' }) }}

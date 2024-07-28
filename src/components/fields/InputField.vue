@@ -21,8 +21,9 @@ export default {
       type: Boolean,
       default: false
     },
+    autocomplete: String
   },
-  emits: ['update:modelValue'],
+  emits: ['update:modelValue', 'enter'],
   methods: {
     emitUpdate(value) {
       let v = value
@@ -45,7 +46,9 @@ export default {
         :disabled="disabled"
         :type="type"
         :class="{ required: validationFailed  }"
+        :autocomplete="autocomplete"
         @input="emitUpdate($event.target.value)"
+        @keypress.enter="() => $emit('enter')"
       />
       <slot></slot>
     </Container>

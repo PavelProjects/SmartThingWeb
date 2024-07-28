@@ -19,13 +19,13 @@ const URL_GATEWAY_CREATE = '/gateway/management/create'
 const URL_GATEWAY_UPDATE = '/gateway/management/update'
 const URL_GATEWAY_DELETE = '/gateway/management/delete'
 
-const axiosInstance = axios.create({
+const axiosConfig = {
   baseURL: `http://${CLOUD_IP}:${CLOUD_PORT}`,
   timeout: 5000,
   withCredentials: true,
-})
+}
+const axiosInstance = axios.create(axiosConfig)
 
-// todo smh made this global for all requests
 const refreshToken = async () => {
   console.debug("Token died, trying to refresh")
   const localRefresh = localStorage.getItem(REFRESH_TOKEN_KEY)
@@ -48,9 +48,13 @@ axiosInstance.interceptors.response.use(
   async (error) => {
     const { status, url } = error?.response ?? {}
     if (status === 401 && ![URL_AUTH, URL_REFRESH_USER].includes(url)) {
+      if (error?.config?.retry) {
+        console.debug("Failed to retry request")
+        return error
+      }
       if (await refreshToken()) {
         console.debug("Trying to send request again")
-        return axiosInstance.request(error.config)
+        return axiosInstance.request({ ...error.config, retry: true })
       }
     }
     return Promise.reject(error);
@@ -59,7 +63,8 @@ axiosInstance.interceptors.response.use(
 
 const CloudApi = {
   async authUser(login, password) {
-    const { refresh } = (await axiosInstance.post(URL_AUTH_USER, { login, password })).data
+    localStorage.removeItem(REFRESH_TOKEN_KEY)
+    const { refresh } = (await axios.post(URL_AUTH_USER, { login, password }, axiosConfig)).data
     localStorage.setItem(REFRESH_TOKEN_KEY, refresh)
   },
   async getAuthentication() {
