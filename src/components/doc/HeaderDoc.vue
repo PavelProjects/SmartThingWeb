@@ -26,6 +26,7 @@ export default {
       mode,
       intl,
       gatewayAuthStore,
+      menuItemsVisible: false
     }
   },
   computed: {
@@ -37,6 +38,11 @@ export default {
         return this.gatewayAuthStore.gateway?.name ?? ''
       } else {
         return this.gateway?.name ?? ''
+      }
+    },
+    menuItemsStyle() {
+      return {
+        display: this.menuItemsVisible ? 'unset' : 'none'
       }
     }
   },
@@ -58,8 +64,8 @@ export default {
 <template>
   <Container class="doc">
     <div class="menu">
-      <MenuSvg />
-      <div v-if="gatewayRoutesEnabled" class="menu-items">
+      <MenuSvg @click="() => menuItemsVisible = !menuItemsVisible"/>
+      <div v-if="gatewayRoutesEnabled" class="menu-items" :style="menuItemsStyle">
         <router-link :to="addGatewayToPath('/panel')">
           <h2>{{ intl.formatMessage({ id: 'doc.panel' }) }}</h2>
         </router-link>
@@ -104,6 +110,7 @@ export default {
   padding-left: 15px;
   padding-right: 15px;
   align-items: center;
+  text-align: center
 }
 
 .menu {
@@ -113,6 +120,10 @@ export default {
   gap: var(--default-gap);
 }
 
+.menu-icon {
+  cursor: pointer;
+}
+
 .menu:hover .menu-items {
   display: block;
 }
@@ -120,7 +131,6 @@ export default {
 .menu-items {
   min-width: 200px;
   text-align: center;
-  display: none;
   position: absolute;
   top: var(--doc-height);
   left: var(--default-gap);
