@@ -94,18 +94,6 @@ textarea {
   text-align: center;
 }
 
-.controls-holder {
-  position: absolute;
-  bottom: 0px;
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  gap: var(--default-gap);
-}
-.controls-holder button {
-  width: 100%;
-}
-
 .hook-title {
   flex: 1 1 auto;
   text-align: start;

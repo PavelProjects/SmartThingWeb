@@ -112,7 +112,7 @@ export default {
 </script>
 
 <template>
-  <div>
+  <Container :vertical="true">
     <h1 class="title">
       {{ intl.formatMessage({ id: 'device.config.title' }) }}
     </h1>
@@ -123,7 +123,7 @@ export default {
         <InputField v-else :label="caption" :type="type" v-model="values[key]" />
       </div>
     </Container>
-    <Container class="controls-holder">
+    <Container class="controls-holder" :gap="'10px'">
       <LoadingButton class="delete" :loading="deleteLoading" @click="deleteAllValues">
         <h2>{{ intl.formatMessage({ id: 'device.config.button.delete.all' }) }}</h2>
       </LoadingButton>
@@ -134,7 +134,7 @@ export default {
     <h2 v-if="!haveConfigEntries" class="title">
       {{ intl.formatMessage({ id: 'device.config.empty.entries' }) }}
     </h2>
-  </div>
+  </Container>
 </template>
 
 <style scoped>
@@ -142,10 +142,7 @@ h2 {
   text-align: center;
 }
 .controls-holder {
-  position: absolute;
-  bottom: 0px;
-  padding: 5px;
-  width: 100%;
+  flex: 1 0 auto;
 }
 .controls-holder button {
   width: 50%;
