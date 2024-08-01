@@ -1,8 +1,10 @@
 import axios from 'axios'
 
-export const CLOUD_IP = import.meta.env.VITE_CLOUD_IP || document.location.hostname
-export const CLOUD_PORT = import.meta.env.VITE_CLOUD_PORT
-export const CLOUD_BROKER_URL = `ws://${CLOUD_IP}:${CLOUD_PORT}/smt-ws`
+const { hostname, protocol } = document.location;
+
+export const CLOUD_IP = import.meta.env.VITE_CLOUD_IP || hostname
+export const CLOUD_URL_PREFIX = import.meta.env.VITE_CLOUD_URL_PREFIX
+export const CLOUD_BROKER_URL = `${protocol === 'https:' ? 'wss' : 'ws'}://${CLOUD_IP}${CLOUD_URL_PREFIX}/smt-ws`
 
 const REFRESH_TOKEN_KEY = "refresh-token"
 
@@ -20,7 +22,7 @@ const URL_GATEWAY_UPDATE = '/gateway/management/update'
 const URL_GATEWAY_DELETE = '/gateway/management/delete'
 
 const axiosConfig = {
-  baseURL: `http://${CLOUD_IP}:${CLOUD_PORT}`,
+  baseURL: `${protocol}//${CLOUD_IP}${CLOUD_URL_PREFIX}`,
   timeout: 5000,
   withCredentials: true,
 }

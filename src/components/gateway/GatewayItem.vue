@@ -1,7 +1,7 @@
 <script>
 import DotsVertical from 'vue-material-design-icons/DotsVertical.vue'
 import PopUpDialog from '../dialogs/PopUpDialog.vue'
-import { CLOUD_IP, CLOUD_PORT, CloudApi } from '../../api/CloudApi'
+import { CLOUD_IP, CLOUD_URL_PREFIX, CloudApi } from '../../api/CloudApi'
 import { toast } from '../../utils/EventBus'
 import GatewayEditDialog from './GatewayEditDialog.vue'
 import InputField from '../fields/InputField.vue'
@@ -32,7 +32,7 @@ export default {
       showEditDialog: false,
       tokenData: {
         cloudIp: CLOUD_IP,
-        cloudPort: CLOUD_PORT
+        cloudPort: CLOUD_URL_PREFIX // todo
       }
     }
   },
