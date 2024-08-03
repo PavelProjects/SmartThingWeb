@@ -1,7 +1,7 @@
 import { Client } from '@stomp/stompjs'
 import { defineStore } from 'pinia'
-import { GATEWAY_BROKER_URL } from '../api/gateway/GatewayApi'
-import { CLOUD_BROKER_URL } from '../api/CloudApi'
+import { GATEWAY_WS_URL } from '../api/gateway/GatewayApi'
+import { CLOUD_WS_URL } from '../api/CloudApi'
 import { EVENT, EventBus, LOGGED_IN, LOGGED_OUT, TOAST, WS_CONNECTED } from '../utils/EventBus'
 
 const mode = import.meta.env.VITE_MODE
@@ -16,7 +16,7 @@ const fixTopicName = (topic) => {
 export const useStompClientStore = defineStore({
   id: 'stomp_client',
   state: () => {
-    const brokerURL = mode === 'gateway' ? GATEWAY_BROKER_URL : CLOUD_BROKER_URL
+    const brokerURL = mode === 'gateway' ? GATEWAY_WS_URL : CLOUD_WS_URL
     const notifyTopic = fixTopicName(NOTIFICATION_TOPIC)
 
     const client = new Client({ 
