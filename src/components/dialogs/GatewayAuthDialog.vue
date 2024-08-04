@@ -98,7 +98,7 @@ export default {
       />
       <Container v-if="parsedToken" :vertical="true">
         <InputField
-          :label="intl.formatMessage({ id: 'gateway.cloud.auth.ip' })"
+          :label="intl.formatMessage({ id: 'gateway.cloud.auth.url' })"
           v-model="parsedToken.cloudUrl"
           :validationFailed="parsedToken.cloudUrl.length === 0"
         />

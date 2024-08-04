@@ -114,7 +114,7 @@ export default {
       }
       const { cloudUrl, token } = this.tokenData
       if (!cloudUrl) {
-        this.token = this.intl.formatMessage({ id: 'gateway.item.token.validation.ip.blank' })
+        this.token = this.intl.formatMessage({ id: 'gateway.item.token.validation.url.blank' })
         return
       }
       this.token = btoa(`${cloudUrl}|${token}`)
