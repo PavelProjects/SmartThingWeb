@@ -1,7 +1,7 @@
 <script>
 import DotsVertical from 'vue-material-design-icons/DotsVertical.vue'
 import PopUpDialog from '../dialogs/PopUpDialog.vue'
-import { CLOUD_IP, CLOUD_URL_PREFIX, CloudApi } from '../../api/CloudApi'
+import { CLOUD_API_URL, CloudApi } from '../../api/CloudApi'
 import { toast } from '../../utils/EventBus'
 import GatewayEditDialog from './GatewayEditDialog.vue'
 import InputField from '../fields/InputField.vue'
@@ -28,11 +28,11 @@ export default {
     const intl = useIntl()
     return {
       intl,
-      token: undefined,
+      token: undefined, // todo rename
       showEditDialog: false,
       tokenData: {
-        cloudIp: CLOUD_IP,
-        cloudPort: CLOUD_URL_PREFIX // todo
+        cloudUrl: CLOUD_API_URL,
+        token: undefined
       }
     }
   },
@@ -112,12 +112,12 @@ export default {
       if (!this.tokenData) {
         return
       }
-      const { cloudIp, cloudPort, token } = this.tokenData
-      if (!cloudIp) {
-        this.token = this.intl.formatMessage({ id: 'gateway.item.token.validation.ip.blank' })
+      const { cloudUrl, token } = this.tokenData
+      if (!cloudUrl) {
+        this.token = this.intl.formatMessage({ id: 'gateway.item.token.validation.url.blank' })
         return
       }
-      this.token = btoa(`${cloudIp}|${cloudPort}|${token}`)
+      this.token = btoa(`${cloudUrl}|${token}`)
     },
     async deleteToken() {
       if (!confirm(this.intl.formatMessage({ id: 'gateway.item.token.delete.confirm' }))) {
@@ -180,14 +180,9 @@ export default {
         </h1>
         <Container :vertical="true">
           <InputField
-            :label="intl.formatMessage({ id: 'gateway.item.cloud.ip' })"
-            v-model="tokenData.cloudIp"
-            :validationFailed="tokenData.cloudIp.length === 0"
-          />
-          <InputField
-            :label="intl.formatMessage({ id: 'gateway.item.cloud.port' })"
-            type="number"
-            v-model="tokenData.cloudPort"
+            :label="intl.formatMessage({ id: 'gateway.item.cloud.url' })"
+            v-model="tokenData.cloudUrl"
+            :validationFailed="tokenData.cloudUrl.length === 0"
           />
           <InputField
             :label="intl.formatMessage({ id: 'gateway.item.auth.token' })"

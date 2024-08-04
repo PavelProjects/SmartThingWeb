@@ -175,14 +175,8 @@ export default {
             {{ intl.formatMessage({ id: 'gateway.cloud.config' }) }}
           </h2>
           <InputField
-            :label="intl.formatMessage({ id: 'gateway.cloud.config.ip' })"
-            :modelValue="cloudConfig.cloudIp"
-            :disabled="true"
-            :vertical="false"
-          />
-          <InputField
-            :label="intl.formatMessage({ id: 'gateway.cloud.config.port' })"
-            :modelValue="cloudConfig.cloudPort"
+            :label="intl.formatMessage({ id: 'gateway.cloud.config.url' })"
+            :modelValue="cloudConfig.cloudUrl"
             :disabled="true"
             :vertical="false"
           />
