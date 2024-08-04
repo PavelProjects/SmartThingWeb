@@ -40,14 +40,13 @@ export default {
         console.debug(`Token parse error: ${error}`)
       }
 
-      if (parsed.length !== 3) {
+      if (parsed.length !== 2) {
         this.parsedToken = undefined
         return
       }
       this.parsedToken = {
-        cloudIp: parsed[0],
-        cloudPort: parsed[1],
-        token: parsed[2]
+        cloudUrl: parsed[0],
+        token: parsed[1]
       }
     }
   },
@@ -58,9 +57,8 @@ export default {
       }
       this.loading = true
       try {
-        this.store.setAuthentication(
-          await GatewayApi.cloudLogin(this.parsedToken).finally(() => (this.loading = false))
-        )
+        // todo gateway api rework
+        this.store.setAuthentication(await GatewayApi.cloudLogin(this.parsedToken))
         toast.success({
           caption: 'Successfuly authenticated in cloud'
         })
@@ -72,7 +70,7 @@ export default {
         let description = ''
         if (status == 403) {
           description = 'Access denied. Wrong token?'
-        } else if (status == 503) {
+        } else if (status == 503 || status === 502) {
           description = 'Cloud is unavailable'
         }
         toast.error({
@@ -101,20 +99,15 @@ export default {
       <Container v-if="parsedToken" :vertical="true">
         <InputField
           :label="intl.formatMessage({ id: 'gateway.cloud.auth.ip' })"
-          v-model="parsedToken.cloudIp"
-          :validationFailed="parsedToken.cloudIp.length === 0"
-        />
-        <InputField
-          :label="intl.formatMessage({ id: 'gateway.cloud.auth.port' })"
-          type="number"
-          v-model="parsedToken.cloudPort"
+          v-model="parsedToken.cloudUrl"
+          :validationFailed="parsedToken.cloudUrl.length === 0"
         />
         <InputField
           :label="intl.formatMessage({ id: 'gateway.cloud.auth.token' })"
           v-model="parsedToken.token"
           :validationFailed="parsedToken.token.length === 0"
         />
-        <LoadingButton @click="authenticate">
+        <LoadingButton :loading="loading" @click="authenticate">
           <h2>{{ intl.formatMessage({ id: 'gateway.cloud.auth.connect' }) }}</h2>
         </LoadingButton>
       </Container>
