@@ -32,14 +32,10 @@ export default {
   },
   mounted() {
     this.timeUpdateInterval = setInterval(() => this.currentTime = new Date(), 1000)
+    this.loadGroups()
   },
   unmounted() {
     clearInterval(this.timeUpdateInterval)
-  },
-  watch: {
-    gateway() {
-      this.loadGroups()
-    }
   },
   methods: {
     async loadGroups() {
