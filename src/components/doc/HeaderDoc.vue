@@ -117,8 +117,8 @@ export default {
   text-align: center;
   display: none;
   position: absolute;
-  top: var(--doc-height);
-  left: var(--default-gap);
+  top: calc(var(--doc-height) - 5px);
+  left: calc(var(--default-gap) - 5px);;
   padding: var(--default-padding);
   background-color: var(--color-background-mute);
   border: solid 1px var(--color-border);
