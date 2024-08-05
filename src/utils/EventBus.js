@@ -1,6 +1,7 @@
 import mitt from 'mitt'
 
 export const EventBus = mitt()
+
 export const TOAST = 'toast'
 export const REQUEST = 'request'
 export const EVENT = 'event'

@@ -6,7 +6,6 @@ import { useIntl } from 'vue-intl'
 import { router } from '../../routes'
 import GatewaySelector from '../gateway/GatewaySelector.vue'
 import Container from '../base/Container.vue'
-import { useGatewayAuthStore } from '../../store/gatewayAuthStore'
 
 export default {
   name: 'HeaderDoc',
@@ -21,11 +20,9 @@ export default {
   data() {
     const mode = import.meta.env.VITE_MODE
     const intl = useIntl()
-    const gatewayAuthStore = useGatewayAuthStore()
     return { 
       mode,
       intl,
-      gatewayAuthStore,
     }
   },
   computed: {
@@ -33,10 +30,8 @@ export default {
       return this.mode === 'gateway' || !!this.gateway
     },
     gatewayName() {
-      if (this.mode === 'gateway') {
-        return this.gatewayAuthStore.gateway?.name ?? ''
-      } else {
-        return this.gateway?.name ?? ''
+      if (this.mode !== 'gateway') {
+        return this.gateway?.name
       }
     }
   },
@@ -77,7 +72,7 @@ export default {
     <router-link to="/">
       <h1 class="green">{{ intl.formatMessage({ id: 'doc.title' }) }}</h1>
     </router-link>
-    <div v-if="gateway" class="gateway-info">
+    <div v-if="gatewayName" class="gateway-info">
       <h1
         class="title"
         style="cursor: pointer;"

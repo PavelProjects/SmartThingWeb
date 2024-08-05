@@ -1,7 +1,6 @@
 <script>
 import { useIntl } from 'vue-intl'
 import { GatewayApi } from '../../api/gateway/GatewayApi'
-import { useGatewayAuthStore } from '../../store/gatewayAuthStore'
 import { toast } from '../../utils/EventBus'
 import LoadingButton from '../controls/LoadingButton.vue'
 import InputField from '../fields/InputField.vue'
@@ -16,13 +15,11 @@ export default {
     Container,
   },
   data() {
-    const store = useGatewayAuthStore()
     const intl = useIntl()
     return {
       loading: false,
       cloudToken: '',
       parsedToken: undefined,
-      store,
       intl
     }
   },
@@ -57,8 +54,7 @@ export default {
       }
       this.loading = true
       try {
-        // todo gateway api rework
-        this.store.setAuthentication(await GatewayApi.cloudLogin(this.parsedToken))
+        await GatewayApi.cloudLogin(this.parsedToken)
         toast.success({
           caption: 'Successfuly authenticated in cloud'
         })

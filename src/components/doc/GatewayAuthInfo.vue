@@ -3,7 +3,6 @@ import { GatewayApi } from '../../api/gateway/GatewayApi.js'
 import InputField from '../fields/InputField.vue'
 import LoadingButton from '../controls/LoadingButton.vue'
 import GatewayAuthDialog from '../dialogs/GatewayAuthDialog.vue'
-import { useGatewayAuthStore } from '../../store/gatewayAuthStore.js'
 import { toast } from '../../utils/EventBus.js'
 import { useStompClientStore } from '../../store/stompClientStore.js'
 import { useIntl } from 'vue-intl'
@@ -18,17 +17,17 @@ export default {
     Container,
   },
   data() {
-    const store = useGatewayAuthStore()
     const stompClient = useStompClientStore()
     const intl = useIntl()
 
     return {
-      store,
       intl,
       stompClient,
       dialogVisible: false,
       authDialogVisible: false,
-      status: ''
+      status: '',
+      gateway: undefined,
+      user: undefined,
     }
   },
   mounted() {
@@ -48,7 +47,6 @@ export default {
   },
   computed: {
     connectionStatus() {
-      const mappedStatus = this.intl.formatMessage
       return this.intl.formatMessage(
         { id: 'gateway.cloud.conn.status' },
         { status: this.status }
@@ -75,7 +73,9 @@ export default {
     },
     async loadAuthentication() {
       try {
-        this.store.setAuthentication(await GatewayApi.getCloudAuthentication())
+        const auth = await GatewayApi.getCloudAuthentication() ?? {}
+        this.gateway = auth.gateway
+        this.user = auth.user
       } catch (error) {
         console.error(error)
         toast.error({
@@ -112,8 +112,10 @@ export default {
           toast.success({
             caption: this.intl.formatMessage({ id: 'gateway.cloud.logout.success' })
           })
-          this.loadCloudConfig()
           this.dialogVisible = false
+          
+          this.loadAuthentication()
+          this.loadCloudConfig()
         } catch (error) {
           toast.error({
             caption: this.intl.formatMessage({ id: 'gateway.cloud.logout.error' })
@@ -121,9 +123,10 @@ export default {
         }
       }
     },
-    authDialogCloseHandle() {
+    async authDialogCloseHandle() {
       this.authDialogVisible = false
-      if (this.store.gateway) {
+      await this.loadAuthentication()
+      if (this.gateway) {
         this.loadCloudConfig()
         this.connect()
       }
@@ -141,32 +144,32 @@ export default {
     </div>
     <div v-if="dialogVisible" class="overlay" @click.stop="dialogVisible = false">
       <Container class="dialog" @click.stop="() => {}" :vertical="true">
-        <Container v-if="store.gateway" :vertical="true">
+        <Container v-if="gateway" :vertical="true">
           <h2 class="title">
-            {{ intl.formatMessage({ id: 'gateway.cloud.info.identity' }) }}
+            {{ intl.formatMessage({ id: 'gateway.cloud.info' }) }}
           </h2>
           <InputField
             :label="intl.formatMessage({ id: 'gateway.cloud.info.user' })"
-            :modelValue="store.user.login"
-            :title="store.user.id"
+            :modelValue="user.login"
+            :title="user.id"
             :disabled="true"
             :vertical="false"
           />
           <InputField
             :label="intl.formatMessage({ id: 'gateway.cloud.info.gateway.id' })"
-            :modelValue="store.gateway.id"
+            :modelValue="gateway.id"
             :disabled="true"
             :vertical="false"
           />
           <InputField
             :label="intl.formatMessage({ id: 'gateway.cloud.info.gateway.name' })"
-            :modelValue="store.gateway.name"
+            :modelValue="gateway.name"
             :disabled="true"
             :vertical="false"
           />
           <InputField
             :label="intl.formatMessage({ id: 'gateway.cloud.info.gateway.description' })"
-            :modelValue="store.gateway.description"
+            :modelValue="gateway.description"
             :vertical="false"
           />
         </Container>
