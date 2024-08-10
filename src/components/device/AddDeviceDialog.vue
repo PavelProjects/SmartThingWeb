@@ -15,6 +15,7 @@ export default {
     PopUpDialog,
     LoadingButton,
   },
+  inject: ['gateway'],
   data() {
     const intl = useIntl()
     return {
@@ -33,7 +34,7 @@ export default {
       }
       this.loading = true
       try {
-        const { name, type } = await GatewayApi.addDevice(this.ip)
+        const { name, type } = await GatewayApi.addDevice(this.ip, this.gateway)
         toast.info({
           caption: this.intl.formatMessage({ id: 'devices.saved.add.success' }),
           description: this.intl.formatMessage({ id: 'devices.saved.add.success.desc' }, { name, type })

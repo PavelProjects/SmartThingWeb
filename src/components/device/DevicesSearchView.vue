@@ -114,7 +114,7 @@ export default {
     async updateSavedDevice(ip) {
       this.loadingSaved = true
       try {
-        await GatewayApi.updateSavedDevice(ip)
+        await GatewayApi.updateSavedDevice(ip, this.gateway)
         toast.success({
           caption: this.intl.formatMessage({ id: 'devices.saved.menu.update.success' })
         })
@@ -134,7 +134,7 @@ export default {
       }
       this.loadingSaved = true
       try {
-        await GatewayApi.deleteSavedDevice(ip)
+        await GatewayApi.deleteSavedDevice(ip, this.gateway)
         toast.success({
           caption: this.intl.formatMessage({ id: 'devices.saved.menu.delete.success' })
         })
