@@ -1,9 +1,9 @@
 <script>
-import { GatewayApi } from '../../../api/gateway/GatewayApi'
+import { GatewayApi } from '../../api/gateway/GatewayApi'
 import SettingsEditor from './SettingsEditor.vue'
-import MenuView from '../../menu/MenuView.vue'
+import MenuView from '../menu/MenuView.vue'
 import { useIntl } from 'vue-intl'
-import { toast } from '../../../utils/EventBus'
+import { toast } from '../../utils/EventBus'
 
 export default {
   name: 'SettingsManager',
@@ -21,11 +21,8 @@ export default {
       openTab: undefined
     }
   },
-  // todo is it really necessery?
-  watch: {
-    gateway() {
-      this.loadSettings()
-    }
+  mounted() {
+    this.loadSettings()
   },
   methods: {
     async loadSettings() {

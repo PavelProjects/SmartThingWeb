@@ -1,13 +1,13 @@
 <script>
-import { GatewayApi } from '../../../api/gateway/GatewayApi'
-import { toast } from '../../../utils/EventBus'
-import LoadingButton from '../../controls/LoadingButton.vue'
-import InputField from '../../fields/InputField.vue'
-import { DeviceApi, extractDataFromError } from '../../../api/device/DeviceApi'
-import DevicesSearchView from '../DevicesSearchView.vue'
+import { GatewayApi } from '../../api/gateway/GatewayApi'
+import { toast } from '../../utils/EventBus'
+import LoadingButton from '../controls/LoadingButton.vue'
+import InputField from '../fields/InputField.vue'
+import { DeviceApi, extractDataFromError } from '../../api/device/DeviceApi'
+import DevicesSearchView from '../device/DevicesSearchView.vue'
 import { useIntl } from 'vue-intl'
-import PopUpDialog from '../../dialogs/PopUpDialog.vue'
-import Container from '../../base/Container.vue'
+import PopUpDialog from '../dialogs/PopUpDialog.vue'
+import Container from '../base/Container.vue'
 
 const MODE = {
   EXPORT: 'export',
