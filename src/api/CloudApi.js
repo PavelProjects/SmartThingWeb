@@ -74,19 +74,14 @@ const CloudApi = {
     return (await axiosInstance.get(URL_AUTH)).data
   },
   async authGateway(gateway) {
-    return (await axiosInstance.post(URL_AUTH_GATEWAY, {
-      gatewayId: gateway.id,
-      days: 0
-    })).data
+    return (await axiosInstance.post(`${URL_AUTH_GATEWAY}/${gateway.id}`)).data
   },
   async logoutUser() {
     await axiosInstance.post(URL_LOGOUT_USER, {})
     localStorage.removeItem(REFRESH_TOKEN_KEY)
   },
   async logoutGateway(gateway) {
-    await axiosInstance.post(URL_LOGOUT_GATEWAY, {
-      gatewayId: gateway.id
-    })
+    await axiosInstance.post(`${URL_LOGOUT_GATEWAY}/${gateway.id}`)
   },
   async getGateway(id) {
     return (await axiosInstance.get(`${URL_GATEWAY_BY_ID}/${id}`)).data
