@@ -19,11 +19,11 @@ export const useStompClientStore = defineStore({
     const brokerURL = mode === 'gateway' ? GATEWAY_WS_URL : CLOUD_WS_URL
     const notifyTopic = fixTopicName(NOTIFICATION_TOPIC)
 
-    const client = new Client({ 
+    const client = new Client({
       brokerURL,
-      onWebSocketClose: () => console.debug("Web socket were closed"),
-      onDisconnect: () => console.debug("Stomp client disconnected"),
-      heartbeatOutgoing: 10000,
+      onWebSocketClose: () => console.debug('Web socket were closed'),
+      onDisconnect: () => console.debug('Stomp client disconnected'),
+      heartbeatOutgoing: 10000
     })
 
     console.debug(`Using stomp broker url: ${brokerURL}`)
@@ -57,7 +57,7 @@ export const useStompClientStore = defineStore({
       const eventTopic = fixTopicName(EVENT_TOPIC)
       client.subscribe(eventTopic, (message) => {
         if (!message?.body) {
-          console.error("Empty event message")
+          console.error('Empty event message')
           return
         }
         const { gateway, event } = JSON.parse(message.body)
@@ -83,24 +83,24 @@ export const useStompClientStore = defineStore({
   },
   actions: {
     async subscribe(topic, callback) {
-        if (!this.client.connected) {
+      if (!this.client.connected) {
         let promiseResolver
         const promise = new Promise((resolve) => (promiseResolver = resolve))
         EventBus.on(WS_CONNECTED, () => promiseResolver())
-        console.debug("Waiting for stomp connection (topic " + topic + ")")
+        console.debug('Waiting for stomp connection (topic ' + topic + ')')
         await promise
       }
       const fixedTopic = fixTopicName(topic)
       this.client.subscribe(fixedTopic, callback, { id: topic + '_topic' })
-      console.debug("Subscribed to topic " + fixedTopic)
+      console.debug('Subscribed to topic ' + fixedTopic)
     },
     unsubscribe(topic) {
       if (!this.client.connected) {
-        console.debug("No stomp connection")
+        console.debug('No stomp connection')
         return
       }
       this.client.unsubscribe(topic + '_topic')
-      console.debug("Unsubscribed from topic " + topic)
+      console.debug('Unsubscribed from topic ' + topic)
     }
   }
 })

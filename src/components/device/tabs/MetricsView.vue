@@ -27,7 +27,7 @@ export default {
     async update() {
       this.loading = true
       try {
-        this.metrics = await DeviceApi.metrics(this.device, this.gateway) || {}
+        this.metrics = (await DeviceApi.metrics(this.device, this.gateway)) || {}
         if (this.metrics.uptime) {
           this.metrics.uptime = this.millisToHumanReadable(this.metrics.uptime)
         }
@@ -41,12 +41,15 @@ export default {
       }
     },
     millisToHumanReadable(ms) {
-      return this.intl.formatMessage({ id: 'device.metrics.updatime' }, { 
-        days: Math.floor(ms / 86400000),
-        hours: Math.floor(ms / 3600000) % 24,
-        minutes: Math.floor(ms / 60000) % 60,
-        seconds: Math.floor(ms / 1000) % 60,
-      })
+      return this.intl.formatMessage(
+        { id: 'device.metrics.updatime' },
+        {
+          days: Math.floor(ms / 86400000),
+          hours: Math.floor(ms / 3600000) % 24,
+          minutes: Math.floor(ms / 60000) % 60,
+          seconds: Math.floor(ms / 1000) % 60
+        }
+      )
     }
   }
 }

@@ -14,7 +14,7 @@ export default {
     PopUpDialog,
     InputField,
     LoadingButton,
-    Container,
+    Container
   },
   props: {
     gateway: Object

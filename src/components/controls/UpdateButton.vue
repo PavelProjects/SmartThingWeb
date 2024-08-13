@@ -39,7 +39,7 @@ export default {
 </template>
 
 <style scoped>
-  .update-button {
-    cursor: pointer;
-  }
+.update-button {
+  cursor: pointer;
+}
 </style>

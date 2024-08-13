@@ -1,13 +1,12 @@
 <script>
-import DashboardGroup from './DashboardGroup.vue';
-import { storeToRefs } from 'pinia';
+import DashboardGroup from './DashboardGroup.vue'
 import PlusSVG from 'vue-material-design-icons/Plus.vue'
-import GroupAddDialog from './GroupAddDialog.vue';
-import { DashboardApi } from '../../api/gateway/DashboardApi';
-import { useIntl } from 'vue-intl';
+import GroupAddDialog from './GroupAddDialog.vue'
+import { DashboardApi } from '../../api/gateway/DashboardApi'
+import { useIntl } from 'vue-intl'
 import RiseLoader from 'vue-spinner/src/RiseLoader.vue'
-import { toast } from '../../utils/EventBus';
-import Container from '../base/Container.vue';
+import { toast } from '../../utils/EventBus'
+import Container from '../base/Container.vue'
 
 export default {
   name: 'Dashboard',
@@ -16,7 +15,7 @@ export default {
     GroupAddDialog,
     Container,
     PlusSVG,
-    RiseLoader,
+    RiseLoader
   },
   inject: ['gateway'],
   data() {
@@ -27,11 +26,11 @@ export default {
       loading: false,
       addGroupDialog: false,
       currentTime: new Date(),
-      timeUpdateInterval: -1,
+      timeUpdateInterval: -1
     }
   },
   mounted() {
-    this.timeUpdateInterval = setInterval(() => this.currentTime = new Date(), 1000)
+    this.timeUpdateInterval = setInterval(() => (this.currentTime = new Date()), 1000)
     this.loadGroups()
   },
   unmounted() {
@@ -45,7 +44,7 @@ export default {
         this.groups = await DashboardApi.getGroups(this.gateway)
       } catch (error) {
         console.error(error)
-        toast.error({ 
+        toast.error({
           caption: this.intl.formatMessage({ id: 'dashboard.load.error' })
         })
       } finally {
@@ -73,7 +72,7 @@ export default {
         :group="group"
         :currentTime="currentTime"
         @updateGroups="loadGroups"
-        style="margin: auto;"
+        style="margin: auto"
       />
       <Container v-if="!loading" :vertical="true">
         <div v-if="!groups?.length">
@@ -89,28 +88,24 @@ export default {
         />
       </Container>
     </Container>
-    <GroupAddDialog 
-      v-if="addGroupDialog"
-      :groups="groups"
-      @close="handleAddClose"
-    />
+    <GroupAddDialog v-if="addGroupDialog" :groups="groups" @close="handleAddClose" />
   </div>
 </template>
 
 <style scoped>
-  .dashboard {
-    display: flex;
-    padding: 10px;
-  }
-  .groups {
-    margin: auto;
-    flex-wrap: wrap;
-  }
-  .spinner {
-    padding-top: 30px;
-  }
-  .add {
-    margin: auto;
-    cursor: pointer;
-  }
+.dashboard {
+  display: flex;
+  padding: 10px;
+}
+.groups {
+  margin: auto;
+  flex-wrap: wrap;
+}
+.spinner {
+  padding-top: 30px;
+}
+.add {
+  margin: auto;
+  cursor: pointer;
+}
 </style>

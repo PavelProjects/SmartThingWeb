@@ -43,7 +43,7 @@ export default {
     CancelSVG,
     EditSVG,
     TestTubeSvg,
-    PopUpDialog,
+    PopUpDialog
   },
   data() {
     const intl = useIntl()
@@ -58,7 +58,7 @@ export default {
       loading: false,
       testLoading: false,
       testDialogVisible: false,
-      testValue: "",
+      testValue: ''
     }
   },
   computed: {
@@ -117,7 +117,6 @@ export default {
         })
         return
       }
-      let result = false
       this.loading = true
       try {
         if (this.hook.id !== NEW_HOOK_ID) {
@@ -126,7 +125,12 @@ export default {
             caption: 'Hook created'
           })
         } else {
-          await DeviceApi.createHook(this.device, this.observable, {id: undefined, ...this.hook}, this.gateway)
+          await DeviceApi.createHook(
+            this.device,
+            this.observable,
+            { id: undefined, ...this.hook },
+            this.gateway
+          )
           toast.success({
             caption: 'Hook updated'
           })
@@ -141,7 +145,7 @@ export default {
           caption: 'Failed to save hook',
           description
         })
-        } finally {
+      } finally {
         this.loading = false
       }
     },
@@ -164,7 +168,7 @@ export default {
           console.error(error)
           const { error: description } = await extractDataFromError(error)
           toast.error({
-            caption: `Failed to delete hook by id=${id}`,
+            caption: `Failed to delete hook by id=${this.hook.id}`,
             description
           })
         } finally {
@@ -175,7 +179,13 @@ export default {
     async testCall() {
       try {
         this.testLoading = true
-        await DeviceApi.testHook(this.device, this.observable, this.hook.id, this.testValue, this.gateway)
+        await DeviceApi.testHook(
+          this.device,
+          this.observable,
+          this.hook.id,
+          this.testValue,
+          this.gateway
+        )
         toast.success({
           caption: this.intl.formatMessage({ id: 'device.hook.test.success' })
         })
@@ -258,7 +268,7 @@ export default {
               v-if="testEnabled && !editing"
               class="icon"
               :title="intl.formatMessage({ id: 'device.hook.test.it' })"
-              @click="() => testDialogVisible = true"
+              @click="() => (testDialogVisible = true)"
             />
           </Container>
         </Container>
@@ -284,8 +294,8 @@ export default {
       />
     </Container>
     <PopUpDialog v-if="testDialogVisible" @close="testDialogVisible = false">
-      <Container :vertical="true" style="padding: 2px;">
-        <InputField 
+      <Container :vertical="true" style="padding: 2px">
+        <InputField
           :label="intl.formatMessage({ id: 'device.hook.test.label' })"
           :type="observable.type === 'sensor' ? 'number' : 'text'"
           v-model="testValue"
@@ -301,7 +311,7 @@ export default {
 </template>
 
 <style scoped>
-  .icon {
-    cursor: pointer;
-  }
+.icon {
+  cursor: pointer;
+}
 </style>

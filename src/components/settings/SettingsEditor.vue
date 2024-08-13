@@ -21,7 +21,7 @@ export default {
     LoadingButton,
     DevicesSearchView,
     PopUpDialog,
-    Container,
+    Container
   },
   props: {
     settings: {
@@ -39,7 +39,7 @@ export default {
       loadingDevices: false,
       devices: [],
       selectedDevice: undefined,
-      mode: undefined,
+      mode: undefined
     }
   },
   methods: {
@@ -143,7 +143,8 @@ export default {
     },
     async importFrom() {
       try {
-        const loadedSettings = (await DeviceApi.exportSettings(this.selectedDevice, this.gateway)) || {}
+        const loadedSettings =
+          (await DeviceApi.exportSettings(this.selectedDevice, this.gateway)) || {}
         this.newSettings.value = JSON.stringify(loadedSettings, null, 2)
         this.newSettings.name = `${this.selectedDevice.name}_${!!this.selectedDevice.type && this.selectedDevice.type}`
       } catch (error) {
@@ -153,7 +154,7 @@ export default {
           caption: 'Failed to export device settings',
           description
         })
-      } 
+      }
     },
     async exportTo() {
       let settings = {}
@@ -200,7 +201,7 @@ export default {
 </script>
 
 <template>
-  <div style="padding: 5px;">
+  <div style="padding: 5px">
     <Container class="settings-editor" :vertical="true">
       <InputField
         :label="intl.formatMessage({ id: 'device.settings.editor.name' })"
@@ -254,7 +255,7 @@ export default {
   width: 50vw;
   padding: var(--default-padding);
 }
-.settings-editor textarea{
+.settings-editor textarea {
   resize: none;
 }
 .editor {

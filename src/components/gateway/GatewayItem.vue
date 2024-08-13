@@ -1,5 +1,4 @@
 <script>
-import DotsVertical from 'vue-material-design-icons/DotsVertical.vue'
 import PopUpDialog from '../dialogs/PopUpDialog.vue'
 import { CLOUD_API_URL, CloudApi } from '../../api/CloudApi'
 import { toast } from '../../utils/EventBus'
@@ -17,12 +16,11 @@ export default {
   },
   emits: ['gatewaysUpdate', 'click'],
   components: {
-    DotsVertical,
     PopUpDialog,
     GatewayEditDialog,
     InputField,
     ContextMenu,
-    Container,
+    Container
   },
   data() {
     const intl = useIntl()
@@ -94,7 +92,7 @@ export default {
       try {
         const { token } = (await CloudApi.authGateway(this.gateway)) || {}
         if (!token) {
-          throw new Error("Empty token response")
+          throw new Error('Empty token response')
         }
         toast.info({
           caption: this.intl.formatMessage({ id: 'gateway.item.token.gen.success' })
@@ -191,7 +189,7 @@ export default {
           />
         </Container>
         <Container :vertical="true">
-          <h3>{{ intl.formatMessage({ id: 'gateway.item.auth.connection.token'} ) }}</h3>
+          <h3>{{ intl.formatMessage({ id: 'gateway.item.auth.connection.token' }) }}</h3>
           <p class="token-field">{{ token }}</p>
         </Container>
       </Container>

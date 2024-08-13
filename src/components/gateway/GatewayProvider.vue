@@ -32,13 +32,13 @@ export default {
         return
       }
       if (!this.gatewayId) {
-        router.push("/gateways")
+        router.push('/gateways')
         return
       }
       try {
         const gtw = await CloudApi.getGateway(this.gatewayId)
         if (!gtw || !gtw.online) {
-          router.push("/gateways")
+          router.push('/gateways')
         } else {
           this.gateway = gtw
         }
@@ -54,11 +54,11 @@ export default {
         return
       }
       if (event === GATEWAY_EVENT.CONNECTED) {
-        toast.info({ 
+        toast.info({
           caption: `Gateway ${gateway?.name} connected!`
         })
       } else if (event === GATEWAY_EVENT.DISCONNECTED) {
-        toast.error({ 
+        toast.error({
           caption: `Gateway ${gateway?.name} disconnected!`
         })
       }

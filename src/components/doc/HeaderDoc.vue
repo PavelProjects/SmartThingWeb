@@ -14,13 +14,13 @@ export default {
     MenuSvg,
     UserAuthInfo,
     GatewaySelector,
-    Container,
+    Container
   },
   inject: ['gateway'],
   data() {
     const mode = import.meta.env.VITE_MODE
     const intl = useIntl()
-    return { 
+    return {
       mode,
       intl,
       gatewaySelectorVisible: false
@@ -34,6 +34,7 @@ export default {
       if (this.mode !== 'gateway') {
         return this.gateway?.name
       }
+      return undefined
     }
   },
   methods: {
@@ -42,11 +43,11 @@ export default {
         return path
       }
       if (!this.gateway) {
-        router.push("/gateways")
+        router.push('/gateways')
         return
       }
       return `/${this.gateway.id}${path}`
-    },
+    }
   }
 }
 </script>
@@ -76,7 +77,7 @@ export default {
     <div v-if="gatewayName" class="gateway-info">
       <h1
         class="title"
-        style="cursor: pointer;"
+        style="cursor: pointer"
         :title="`Gateway id: ${gateway.id ?? 'ID_MSSING'}`"
         @click.stop="gatewaySelectorVisible = true"
       >
@@ -85,7 +86,7 @@ export default {
     </div>
     <UserAuthInfo v-if="mode === 'cloud'" class="log-in-info" />
     <GatewayAuthInfo v-if="mode === 'gateway'" class="log-in-info" />
-    <GatewaySelector 
+    <GatewaySelector
       v-if="mode === 'cloud' && gatewaySelectorVisible"
       @close="gatewaySelectorVisible = false"
     />
@@ -119,7 +120,7 @@ export default {
   display: none;
   position: absolute;
   top: calc(var(--doc-height) - 5px);
-  left: calc(var(--default-gap) - 5px);;
+  left: calc(var(--default-gap) - 5px);
   padding: var(--default-padding);
   background-color: var(--color-background-mute);
   border: solid 1px var(--color-border);

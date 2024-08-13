@@ -3,7 +3,7 @@ import ChevronRight from 'vue-material-design-icons/ChevronRight.vue'
 import ChevronLeft from 'vue-material-design-icons/ChevronLeft.vue'
 import ChevronUp from 'vue-material-design-icons/ChevronUp.vue'
 import ChevronDown from 'vue-material-design-icons/ChevronDown.vue'
-import Container from '../base/Container.vue';
+import Container from '../base/Container.vue'
 
 export default {
   name: 'DropdownMenu',
@@ -12,9 +12,9 @@ export default {
     ChevronRight,
     ChevronLeft,
     ChevronUp,
-    ChevronDown,
+    ChevronDown
   },
-  emits: ["expand"],
+  emits: ['expand'],
   props: {
     placeholder: String,
     expanded: Boolean,
@@ -27,7 +27,7 @@ export default {
     slotStyle() {
       return {
         'background-color': 'var(--color-background)',
-        'display': this.expanded ? 'unset' : 'none',
+        display: this.expanded ? 'unset' : 'none'
       }
     }
   },
@@ -42,42 +42,20 @@ export default {
 <template>
   <div class="dropdown-menu">
     <Container :vertical="vertical">
-      <ChevronDown
-        v-if="expanded && vertical"
-        title="Expand"
-        :size="35"
-      />
+      <ChevronDown v-if="expanded && vertical" title="Expand" :size="35" />
       <div :style="slotStyle">
         <slot></slot>
       </div>
-      <Container
-        style="cursor: pointer;"
-        @click.stop="handleClick"
-      >
+      <Container style="cursor: pointer" @click.stop="handleClick">
         <div v-if="expanded">
-          <ChevronUp  
-            v-if="vertical"
-            title="Hide"
-            :size="35"
-          />
-          <ChevronLeft  
-            v-else
-            title="Hide"
-            :size="35"
-          />
+          <ChevronUp v-if="vertical" title="Hide" :size="35" />
+          <ChevronLeft v-else title="Hide" :size="35" />
         </div>
         <Container v-else>
-          <h2 
-            v-if="placeholder"
-            class="title"
-          >
+          <h2 v-if="placeholder" class="title">
             {{ placeholder }}
           </h2>
-          <ChevronRight
-            v-if="!vertical"
-            title="Expand"
-            :size="35"
-          />
+          <ChevronRight v-if="!vertical" title="Expand" :size="35" />
         </Container>
       </Container>
     </Container>
@@ -85,7 +63,7 @@ export default {
 </template>
 
 <style scoped>
-  .dropdown-menu {
-    z-index: 997;
-  }
+.dropdown-menu {
+  z-index: 997;
+}
 </style>

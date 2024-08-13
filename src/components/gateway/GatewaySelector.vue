@@ -16,7 +16,7 @@ export default {
     GatewayEditDialog,
     UpdateButton,
     PopUpDialog,
-    Container,
+    Container
   },
   data() {
     const intl = useIntl()
@@ -83,13 +83,13 @@ export default {
       if (!gateway || !Object.values(GATEWAY_EVENT).includes(event)) {
         return
       }
-      this.gateways.forEach(({id}, index) => {
+      this.gateways.forEach(({ id }, index) => {
         if (gateway.id === id) {
           this.gateways[index].online = event === GATEWAY_EVENT.CONNECTED
           return
         }
       })
-    },
+    }
   }
 }
 </script>

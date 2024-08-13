@@ -66,7 +66,7 @@ const cloudRoutes = [
       {
         path: '/:gateway/settings',
         component: SettingsManager
-      },
+      }
     ]
   },
   unkownRoute

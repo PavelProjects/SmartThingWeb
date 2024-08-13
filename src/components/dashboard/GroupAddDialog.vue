@@ -18,9 +18,9 @@ export default {
   },
   methods: {
     async selectDevice(newDev) {
-      const exists = this.groups.find(({ device }) => (
-        device.ip === newDev.ip && device.name === newDev.name
-      ))
+      const exists = this.groups.find(
+        ({ device }) => device.ip === newDev.ip && device.name === newDev.name
+      )
       if (exists) {
         toast.error({
           caption: this.intl.formatMessage({ id: 'dashboard.group.create.error.exists' })
@@ -31,7 +31,10 @@ export default {
         await DashboardApi.createGroup({ device: newDev, observables: [] }, this.gateway)
         this.$emit('close', true)
         toast.success({
-          caption: this.intl.formatMessage({ id: 'dashboard.group.create.success' }, { name: newDev.name })
+          caption: this.intl.formatMessage(
+            { id: 'dashboard.group.create.success' },
+            { name: newDev.name }
+          )
         })
       } catch (error) {
         console.error(error)
@@ -45,13 +48,11 @@ export default {
 </script>
 
 <template>
-  <PopUpDialog
-    v-bind="$props"
-  >
+  <PopUpDialog v-bind="$props">
     <Container :vertical="true">
       <DevicesSearchView
         :title="intl.formatMessage({ id: 'dashboard.group.create.select.device' })"
-        :style="{ 'width': '350px' }"
+        :style="{ width: '350px' }"
         :gateway="gateway"
         @select="selectDevice"
       />

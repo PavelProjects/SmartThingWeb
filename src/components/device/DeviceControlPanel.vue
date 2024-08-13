@@ -19,14 +19,14 @@ export default {
     device: Object,
     gateway: Object,
     features: Object,
-    apiMethods: Array,
+    apiMethods: Array
   },
   provide() {
     return {
       device: this.device,
       gateway: this.gateway,
       features: this.features,
-      apiMethods: this.apiMethods,
+      apiMethods: this.apiMethods
     }
   },
   data() {
@@ -38,27 +38,27 @@ export default {
       defaultTabs: {
         info: {
           class: DeviceInfoView,
-          caption: intl.formatMessage({ id: 'device.tabs' }, { tab: 'info' }),
+          caption: intl.formatMessage({ id: 'device.tabs' }, { tab: 'info' })
         },
         actions: {
           class: ActionsView,
-          caption: intl.formatMessage({ id: 'device.tabs' }, { tab: 'actions' }),
+          caption: intl.formatMessage({ id: 'device.tabs' }, { tab: 'actions' })
         },
         sensors: {
           class: SensorsView,
-          caption: intl.formatMessage({ id: 'device.tabs' }, { tab: 'sensors' }),
+          caption: intl.formatMessage({ id: 'device.tabs' }, { tab: 'sensors' })
         },
         states: {
           class: StatesView,
-          caption: intl.formatMessage({ id: 'device.tabs' }, { tab: 'states' }),
+          caption: intl.formatMessage({ id: 'device.tabs' }, { tab: 'states' })
         },
         config: {
           class: ConfigView,
-          caption: intl.formatMessage({ id: 'device.tabs' }, { tab: 'config' }),
+          caption: intl.formatMessage({ id: 'device.tabs' }, { tab: 'config' })
         },
         metrics: {
           class: MetricsViewVue,
-          caption: intl.formatMessage({ id: 'device.tabs' }, { tab: 'metrics' }),
+          caption: intl.formatMessage({ id: 'device.tabs' }, { tab: 'metrics' })
         }
       }
     }
@@ -74,13 +74,13 @@ export default {
         return acc
       }, {})
     }
-  },
+  }
 }
 </script>
 
 <template>
   <div id="control-panel" class="bordered">
-    <RiseLoader v-if="!tabs"/>
+    <RiseLoader v-if="!tabs" />
     <MenuView v-else :tabs="tabs" tab="info" :vertical="true" />
   </div>
 </template>

@@ -16,10 +16,10 @@ export default {
     InputField,
     LoadingButton,
     Container,
-    DeleteSVG,
+    DeleteSVG
   },
   props: {
-    group: Object,
+    group: Object
   },
   inject: ['gateway'],
   data() {
@@ -35,7 +35,7 @@ export default {
       intl,
       loading: false,
       loadingObservables: false,
-      requiredFields: {},
+      requiredFields: {}
     }
   },
   mounted() {
@@ -45,17 +45,21 @@ export default {
     async loadStatesAndSensors() {
       this.loadingObservables = true
       try {
-        this.states = Object.keys(await DeviceApi.getDeviceStates(this.device, this.gateway).catch(() => {}) ?? {})
-        this.sensors = Object.keys(await DeviceApi.getDeviceSensors(this.device, this.gateway).catch(() => {}) ?? {})
+        this.states = Object.keys(
+          (await DeviceApi.getDeviceStates(this.device, this.gateway).catch(() => {})) ?? {}
+        )
+        this.sensors = Object.keys(
+          (await DeviceApi.getDeviceSensors(this.device, this.gateway).catch(() => {})) ?? {}
+        )
       } finally {
         this.loadingObservables = false
       }
     },
     add() {
       this.observables.push({
-        type: "sensor",
-        name: "",
-        units: ""
+        type: 'sensor',
+        name: '',
+        units: ''
       })
     },
     remove(index) {
@@ -73,7 +77,7 @@ export default {
           })
           return
         }
-        
+
         const updatedGroup = {
           ...this.group,
           observables: this.observables,
@@ -129,25 +133,19 @@ export default {
           </div>
         </Container>
         <Container v-if="!loadingObservables" class="table" :vertical="true">
-          <div
-            v-for="obs, index of observables"
-            :key="index"
-            class="row"
-          >
+          <div v-for="(obs, index) of observables" :key="index" class="row">
             <select
               class="column-input"
               v-model="obs.type"
-              @change="() => {
-                obs.name = '';
-                clearRequired(index, 'type')
-              }"
-              :class="{ 'required': requiredFields[index]?.type ?? false }"
+              @change="
+                () => {
+                  obs.name = ''
+                  clearRequired(index, 'type')
+                }
+              "
+              :class="{ required: requiredFields[index]?.type ?? false }"
             >
-              <option
-                v-for="value of ['sensor', 'state']"
-                :key="value"
-                :value="value"
-              >
+              <option v-for="value of ['sensor', 'state']" :key="value" :value="value">
                 {{ intl.formatMessage({ id: 'dashboard.group.edit.types' }, { value }) }}
               </option>
             </select>
@@ -155,21 +153,14 @@ export default {
               class="column-input"
               v-model="obs.name"
               @change="clearRequired(index, 'name')"
-              :class="{ 'required': requiredFields[index]?.name ?? false }"
+              :class="{ required: requiredFields[index]?.name ?? false }"
             >
-              <option
-                v-for="obs of obs.type === 'sensor' ? sensors : states"
-                :key="obs"
-              >
+              <option v-for="obs of obs.type === 'sensor' ? sensors : states" :key="obs">
                 {{ obs }}
               </option>
             </select>
-            <input
-              class="column-input"
-              type="text"
-              v-model="obs.units"
-            />
-            <DeleteSVG @click="remove(index)"/>
+            <input class="column-input" type="text" v-model="obs.units" />
+            <DeleteSVG @click="remove(index)" />
           </div>
         </Container>
       </Container>
@@ -178,15 +169,12 @@ export default {
           {{ intl.formatMessage({ id: 'dashborad.group.edit.add.observables' }) }}
         </h2>
       </LoadingButton>
-      <InputField 
+      <InputField
         :label="intl.formatMessage({ id: 'dashboard.group.edit.update.delay' })"
         v-model="config.updateDelay"
         type="number"
       />
-      <LoadingButton
-        :loading="loading"
-        @click="save"
-      >
+      <LoadingButton :loading="loading" @click="save">
         <h2>{{ intl.formatMessage({ id: 'dashboard.group.edit.save' }) }}</h2>
       </LoadingButton>
     </Container>
@@ -194,38 +182,38 @@ export default {
 </template>
 
 <style scoped>
-  .table {
-    max-height: 50vh;
-    overflow-y: auto;
-    overflow-x: hidden;
-    border-top: 1px solid var(--color-border);
-  }
-  .row {
-    display: grid;
-    grid-template-columns: 100px 200px 100px 50px;
-    text-align: center;
-    border-bottom: 1px solid var(--color-border);
-    word-wrap: break-word;
-  }
-  .row * {
-    border-right: 1px solid var(--color-border);
-  }
-  .row *:last-child {
-    border-right: none;
-  }
-  .column-input {
-    text-align: center;
-    border: none;
-    border-radius: 0px;
-    border-right: 1px solid var(--color-border);
-  }
-  .material-design-icon {
-    width: fit-content;
-    height: fit-content;
-    margin: auto;
-    cursor: pointer;
-  }
-  .required {
-    background-color: var(--color-danger);
-  }
+.table {
+  max-height: 50vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  border-top: 1px solid var(--color-border);
+}
+.row {
+  display: grid;
+  grid-template-columns: 100px 200px 100px 50px;
+  text-align: center;
+  border-bottom: 1px solid var(--color-border);
+  word-wrap: break-word;
+}
+.row * {
+  border-right: 1px solid var(--color-border);
+}
+.row *:last-child {
+  border-right: none;
+}
+.column-input {
+  text-align: center;
+  border: none;
+  border-radius: 0px;
+  border-right: 1px solid var(--color-border);
+}
+.material-design-icon {
+  width: fit-content;
+  height: fit-content;
+  margin: auto;
+  cursor: pointer;
+}
+.required {
+  background-color: var(--color-danger);
+}
 </style>

@@ -1,13 +1,13 @@
 import axios from 'axios'
 
-const { protocol, host, pathname } = document.location;
+const { protocol, host, pathname } = document.location
 
 const CLOUD_API_PATH = import.meta.env.VITE_CLOUD_API_PATH
 const CLOUD_ADRESS = import.meta.env.VITE_CLOUD_ADRESS ?? `${host}${pathname}${CLOUD_API_PATH}`
 const CLOUD_WS_URL = `${protocol === 'https:' ? 'wss' : 'ws'}://${CLOUD_ADRESS}/smt-ws`
 const CLOUD_API_URL = `${protocol}//${CLOUD_ADRESS}`
 
-const REFRESH_TOKEN_KEY = "refresh-token"
+const REFRESH_TOKEN_KEY = 'refresh-token'
 
 const URL_AUTH = '/auth'
 const URL_AUTH_USER = '/auth/user'
@@ -25,24 +25,25 @@ const URL_GATEWAY_DELETE = '/gateway/management/delete'
 const axiosConfig = {
   baseURL: CLOUD_API_URL,
   timeout: 5000,
-  withCredentials: true,
+  withCredentials: true
 }
 const axiosInstance = axios.create(axiosConfig)
 
 const refreshToken = async () => {
-  console.debug("Token died, trying to refresh")
+  console.debug('Token died, trying to refresh')
   const localRefresh = localStorage.getItem(REFRESH_TOKEN_KEY)
   if (!localRefresh) {
-    console.debug("No refresh token")
+    console.debug('No refresh token')
     return
   }
   try {
-    const { refresh } = (await axiosInstance.post(URL_REFRESH_USER, { refreshToken: localRefresh })).data
+    const { refresh } = (await axiosInstance.post(URL_REFRESH_USER, { refreshToken: localRefresh }))
+      .data
     localStorage.setItem(REFRESH_TOKEN_KEY, refresh)
-    console.debug("Token refreshed")
+    console.debug('Token refreshed')
     return true
   } catch (error) {
-    console.error("Failed to refresh token", error)
+    console.error('Failed to refresh token', error)
   }
 }
 
@@ -52,15 +53,15 @@ axiosInstance.interceptors.response.use(
     const { status, url } = error?.response ?? {}
     if (status === 401 && ![URL_AUTH, URL_REFRESH_USER].includes(url)) {
       if (error?.config?.retry) {
-        console.debug("Failed to retry request")
+        console.debug('Failed to retry request')
         return error
       }
       if (await refreshToken()) {
-        console.debug("Trying to send request again")
+        console.debug('Trying to send request again')
         return axiosInstance.request({ ...error.config, retry: true })
       }
     }
-    return Promise.reject(error);
+    return Promise.reject(error)
   }
 )
 
@@ -99,7 +100,7 @@ const CloudApi = {
     await axiosInstance.delete(URL_GATEWAY_DELETE + '/' + gateway.id)
   },
   async sendGatewayRequest(gateway, url, method, data) {
-    return await axiosInstance.post(URL_GATEWAY_REQUEST + "/" + gateway.id, {
+    return await axiosInstance.post(URL_GATEWAY_REQUEST + '/' + gateway.id, {
       url,
       method,
       data
@@ -117,7 +118,7 @@ const CloudApi = {
       gatewayId: gateway.id,
       device,
       command,
-      params,
+      params
     })
   }
 }

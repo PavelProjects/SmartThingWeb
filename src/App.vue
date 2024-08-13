@@ -22,7 +22,7 @@ export default {
       mode: import.meta.env.VITE_MODE,
       id,
       login,
-      authStore,
+      authStore
     }
   },
   computed: {
@@ -45,7 +45,7 @@ export default {
     } catch (error) {
       console.error(error)
     }
-  },
+  }
 }
 </script>
 
@@ -58,7 +58,7 @@ export default {
           v-if="!isAuthenticated"
           @authenticated="({ user }) => authStore.setAuthentication(user)"
         />
-          <!-- <keep-alive>
+        <!-- <keep-alive>
             <component :is="Component" :key="path" />
           </keep-alive> -->
         <component :is="Component" :key="path" />

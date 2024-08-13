@@ -79,8 +79,8 @@ export default {
       </LoadingButton>
     </div>
     <div v-else class="title">
-        <h3>{{ intl.formatMessage({ id: 'device.actions.empty' }) }}</h3>
-      </div>
+      <h3>{{ intl.formatMessage({ id: 'device.actions.empty' }) }}</h3>
+    </div>
   </div>
 </template>
 

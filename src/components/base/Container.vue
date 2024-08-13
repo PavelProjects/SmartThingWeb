@@ -4,24 +4,24 @@ export default {
   props: {
     vertical: {
       type: Boolean,
-      default: () => false,
+      default: () => false
     },
     gap: {
       type: String,
-      default: () => 'var(--default-gap)',
+      default: () => 'var(--default-gap)'
     },
     padding: {
       type: String,
-      default: () => 'var(--default-padding)',
+      default: () => 'var(--default-padding)'
     }
   },
   computed: {
     style() {
       return {
-        'display': 'flex',
+        display: 'flex',
         'flex-direction': this.vertical ? 'column' : 'vertical',
-        'gap': this.gap,
-        'padding': this.padding
+        gap: this.gap,
+        padding: this.padding
       }
     }
   }

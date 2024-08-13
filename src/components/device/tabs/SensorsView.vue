@@ -86,7 +86,7 @@ export default {
       {{ intl.formatMessage({ id: 'device.sensors.title' }) }}
     </h1>
     <sync-loader class="loading-spinner" :loading="loading"></sync-loader>
-    <MenuView 
+    <MenuView
       v-if="haveSensors"
       :tabs="tabs"
       :tabTitle="hooksEnabled ? intl.formatMessage({ id: 'device.hooks.menu.item.title' }) : ''"
@@ -100,7 +100,7 @@ export default {
 </template>
 
 <style scoped>
-  .title:not(:last-child) {
-    border-bottom: 2px solid var(--color-border);
-  }
+.title:not(:last-child) {
+  border-bottom: 2px solid var(--color-border);
+}
 </style>

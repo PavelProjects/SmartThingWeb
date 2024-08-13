@@ -12,7 +12,7 @@ export default {
     InputField,
     PopUpDialog,
     LoadingButton,
-    Container,
+    Container
   },
   data() {
     const intl = useIntl()

@@ -30,12 +30,12 @@ export const DeviceApiMethods = {
   GET_METRICS: 'getMetrics',
   EXPORT_SETTINGS: 'exportSettings',
   IMPORT_SETTINGS: 'importSettings',
-  RESTART: 'restart',
+  RESTART: 'restart'
 }
 
 export const DeviceApi = {
   async health(device, gateway) {
-    return (await deviceFetch({ device, command: DeviceApiMethods.CHECK_HEALTH, gateway})).data
+    return (await deviceFetch({ device, command: DeviceApiMethods.CHECK_HEALTH, gateway })).data
   },
   async getDeviceInfo(device, gateway) {
     return (await deviceFetch({ device, command: DeviceApiMethods.GET_INFO, gateway })).data
@@ -57,7 +57,8 @@ export const DeviceApi = {
     })
   },
   async getConfig(device, gateway) {
-    return (await deviceFetch({ device, command: DeviceApiMethods.GET_CONFIG_VALUES, gateway })).data
+    return (await deviceFetch({ device, command: DeviceApiMethods.GET_CONFIG_VALUES, gateway }))
+      .data
   },
   async saveConfigValues(device, values, gateway) {
     await deviceFetch({
@@ -104,30 +105,36 @@ export const DeviceApi = {
     return (await deviceFetch({ device, command: DeviceApiMethods.GET_ALL_HOOKS, gateway })).data
   },
   async getHooks(device, observable, gateway) {
-    return (await deviceFetch({
-      device,
-      command: DeviceApiMethods.GET_HOOKS,
-      params: {
-        observable
-      },
-      gateway
-    })).data
+    return (
+      await deviceFetch({
+        device,
+        command: DeviceApiMethods.GET_HOOKS,
+        params: {
+          observable
+        },
+        gateway
+      })
+    ).data
   },
   async getHookById(device, observable, id, gateway) {
-    return (await deviceFetch({
-      device,
-      command: DeviceApiMethods.GET_HOOK_BY_ID,
-      params: { observable, id },
-      gateway
-    })).data
+    return (
+      await deviceFetch({
+        device,
+        command: DeviceApiMethods.GET_HOOK_BY_ID,
+        params: { observable, id },
+        gateway
+      })
+    ).data
   },
   async getHooksTemplates(device, type, gateway) {
-    return (await deviceFetch({
-      device,
-      command: DeviceApiMethods.GET_HOOKS_TEMPLATES,
-      gateway,
-      params: { type }
-    })).data
+    return (
+      await deviceFetch({
+        device,
+        command: DeviceApiMethods.GET_HOOKS_TEMPLATES,
+        gateway,
+        params: { type }
+      })
+    ).data
   },
   async createHook(device, observable, hook, gateway) {
     await deviceFetch({
@@ -172,34 +179,40 @@ export const DeviceApi = {
     })
   },
   async features(device, gateway) {
-    return (await deviceFetch({
-      device,
-      gateway,
-      command: DeviceApiMethods.GET_FEATURES
-    })).data
+    return (
+      await deviceFetch({
+        device,
+        gateway,
+        command: DeviceApiMethods.GET_FEATURES
+      })
+    ).data
   },
   async metrics(device, gateway) {
-    return (await deviceFetch({
-      device,
-      gateway,
-      command: DeviceApiMethods.GET_METRICS
-    })).data
+    return (
+      await deviceFetch({
+        device,
+        gateway,
+        command: DeviceApiMethods.GET_METRICS
+      })
+    ).data
   },
   async exportSettings(device, gateway) {
-    return (await deviceFetch({
-      device,
-      gateway,
-      command: DeviceApiMethods.EXPORT_SETTINGS
-    })).data
+    return (
+      await deviceFetch({
+        device,
+        gateway,
+        command: DeviceApiMethods.EXPORT_SETTINGS
+      })
+    ).data
   },
   async importSettings(device, gateway, settings) {
     await deviceFetch({
-        device,
-        gateway,
-        command: DeviceApiMethods.IMPORT_SETTINGS,
-        params: {
-          settings
-        }
+      device,
+      gateway,
+      command: DeviceApiMethods.IMPORT_SETTINGS,
+      params: {
+        settings
+      }
     })
   },
   async restartDevice(device, gateway) {
@@ -208,5 +221,5 @@ export const DeviceApi = {
       gateway,
       command: DeviceApiMethods.RESTART
     })
-  },
+  }
 }

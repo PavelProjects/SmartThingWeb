@@ -14,7 +14,7 @@ export default {
     InputField,
     LoadingButton,
     GatewayAuthDialog,
-    Container,
+    Container
   },
   data() {
     const stompClient = useStompClientStore()
@@ -27,7 +27,7 @@ export default {
       authDialogVisible: false,
       status: '',
       gateway: undefined,
-      user: undefined,
+      user: undefined
     }
   },
   mounted() {
@@ -47,10 +47,7 @@ export default {
   },
   computed: {
     connectionStatus() {
-      return this.intl.formatMessage(
-        { id: 'gateway.cloud.conn.status' },
-        { status: this.status }
-      )
+      return this.intl.formatMessage({ id: 'gateway.cloud.conn.status' }, { status: this.status })
     }
   },
   methods: {
@@ -73,7 +70,7 @@ export default {
     },
     async loadAuthentication() {
       try {
-        const auth = await GatewayApi.getCloudAuthentication() ?? {}
+        const auth = (await GatewayApi.getCloudAuthentication()) ?? {}
         this.gateway = auth.gateway
         this.user = auth.user
       } catch (error) {
@@ -113,7 +110,7 @@ export default {
             caption: this.intl.formatMessage({ id: 'gateway.cloud.logout.success' })
           })
           this.dialogVisible = false
-          
+
           this.loadAuthentication()
           this.loadCloudConfig()
         } catch (error) {
@@ -184,7 +181,11 @@ export default {
             :vertical="false"
           />
           <LoadingButton
-          v-if="['CONNECTION_LOST', 'DISCONNECTED', 'FAILED_TO_CONNECT', 'NOT_CONNECTED'].includes(status)"
+            v-if="
+              ['CONNECTION_LOST', 'DISCONNECTED', 'FAILED_TO_CONNECT', 'NOT_CONNECTED'].includes(
+                status
+              )
+            "
             @click="connect"
           >
             <h2>{{ intl.formatMessage({ id: 'gateway.cloud.reconnect' }) }}</h2>

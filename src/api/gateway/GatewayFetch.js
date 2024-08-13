@@ -1,16 +1,16 @@
-import axios from "axios";
-import { CloudApi } from "../CloudApi";
-import { toast } from "../../utils/EventBus";
+import axios from 'axios'
+import { CloudApi } from '../CloudApi'
+import { toast } from '../../utils/EventBus'
 
 const GATEWAY_PATH = import.meta.env.VITE_GATEWAY_IP || document.location.hostname
 const GATEWAY_PORT = import.meta.env.VITE_GATEWAY_PORT
-export const GATEWAY_URL = `http://${GATEWAY_PATH}${GATEWAY_PORT ? ':' + GATEWAY_PORT : ''}`;
+export const GATEWAY_URL = `http://${GATEWAY_PATH}${GATEWAY_PORT ? ':' + GATEWAY_PORT : ''}`
 
 export const HTTP_METHOD = {
-  GET: "GET",
-  POST: "POST",
-  PUT: "PUT",
-  DELETE: "DELETE"
+  GET: 'GET',
+  POST: 'POST',
+  PUT: 'PUT',
+  DELETE: 'DELETE'
 }
 
 const mode = import.meta.env.VITE_MODE
@@ -33,7 +33,7 @@ async function gatewayFetchCloud({ gateway, url, method, data }) {
   }
   if (!gateway?.online) {
     toast.error({
-      caption: "Gateway is offline!"
+      caption: 'Gateway is offline!'
     })
     return
   }

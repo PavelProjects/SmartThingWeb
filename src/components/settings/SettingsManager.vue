@@ -69,11 +69,7 @@ export default {
   <div class="container">
     <h1 class="title">{{ intl.formatMessage({ id: 'device.settings.manager.menu.header' }) }}</h1>
     <div class="bordered">
-      <MenuView
-        :tabs="tabs"
-        :tab="openTab"
-        @changed="handleChange"
-      />
+      <MenuView :tabs="tabs" :tab="openTab" @changed="handleChange" />
     </div>
   </div>
 </template>

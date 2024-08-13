@@ -7,7 +7,7 @@ export default {
     title: String,
     vertical: {
       type: Boolean,
-      default: () => true,
+      default: () => true
     }
   },
   computed: {
@@ -15,7 +15,7 @@ export default {
       if (!this.vertical) {
         return {
           'text-align': 'center',
-          'flex': ' 1 0 auto',
+          flex: ' 1 0 auto'
         }
       }
       return {}

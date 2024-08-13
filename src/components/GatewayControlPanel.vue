@@ -2,7 +2,6 @@
 import DevicesSearchView from './device/DevicesSearchView.vue'
 import DeviceControlPanel from './device/DeviceControlPanel.vue'
 import { useIntl } from 'vue-intl'
-import GatewaySelector from './gateway/GatewaySelector.vue'
 import DropdownMenu from './menu/DropdownMenu.vue'
 import { DeviceApi } from '../api/device/DeviceApi'
 import { toast } from '../utils/EventBus'
@@ -14,9 +13,8 @@ export default {
   components: {
     DevicesSearchView,
     DeviceControlPanel,
-    GatewaySelector,
     DropdownMenu,
-    RiseLoader,
+    RiseLoader
   },
   inject: ['gateway'],
   data() {
@@ -29,7 +27,7 @@ export default {
       device: undefined,
       features: undefined,
       apiMethods: undefined,
-      intl,
+      intl
     }
   },
   mounted() {
@@ -37,8 +35,8 @@ export default {
       window.addEventListener('resize', this.onResize)
     })
   },
-  unmounted() { 
-    window.removeEventListener('resize', this.onResize); 
+  unmounted() {
+    window.removeEventListener('resize', this.onResize)
   },
   computed: {
     wideEnough() {
@@ -59,8 +57,10 @@ export default {
       this.loadingDevice = true
       try {
         // await DeviceApi.health(selected, this.gateway)
-        this.features = await DeviceApi.features(selected, this.gateway).catch((e) => console.log(e)) || {}
-        this.apiMethods = await GatewayApi.getDeviceApiMethods({ device: selected, gateway: this.gateway }) ?? []
+        this.features =
+          (await DeviceApi.features(selected, this.gateway).catch((e) => console.log(e))) || {}
+        this.apiMethods =
+          (await GatewayApi.getDeviceApiMethods({ device: selected, gateway: this.gateway })) ?? []
         this.device = selected
         this.searchExpanded = false
       } catch (error) {
@@ -93,20 +93,18 @@ export default {
         placeholder="Devices"
         :vertical="false"
         :expanded="searchExpanded"
-        @expand="(v) => searchExpanded = v"
+        @expand="(v) => (searchExpanded = v)"
       >
-        <DevicesSearchView
-          :gateway="gateway"
-          :selected="device"
-          @select="handleDeviceSelect"
-        />
+        <DevicesSearchView :gateway="gateway" :selected="device" @select="handleDeviceSelect" />
       </DropdownMenu>
-      <RiseLoader v-if="loadingDevice" class="rise-loader"/>
+      <RiseLoader v-if="loadingDevice" class="rise-loader" />
       <div v-if="device">
-        <h1 class="title">{{ intl.formatMessage({ id: 'gateway.panel' }, {device: device.name}) }}</h1>
+        <h1 class="title">
+          {{ intl.formatMessage({ id: 'gateway.panel' }, { device: device.name }) }}
+        </h1>
         <KeepAlive>
           <DeviceControlPanel
-            :key="device.ip" 
+            :key="device.ip"
             :device="device"
             :gateway="gateway"
             :features="features"
@@ -115,7 +113,7 @@ export default {
         </KeepAlive>
       </div>
     </div>
-    <div v-else style="color: red; text-align: center;">
+    <div v-else style="color: red; text-align: center">
       <h1>{{ intl.formatMessage({ id: 'error' }, { type: 'access_denied' }) }}</h1>
     </div>
   </div>

@@ -1,10 +1,9 @@
 import axios from 'axios'
-import { toast } from '../../utils/EventBus'
-import { HTTP_METHOD, gatewayFetch } from './GatewayFetch';
+import { HTTP_METHOD, gatewayFetch } from './GatewayFetch'
 
 const GATEWAY_PATH = import.meta.env.VITE_GATEWAY_IP || document.location.hostname
 const GATEWAY_PORT = import.meta.env.VITE_GATEWAY_PORT
-export const GATEWAY_URL = `http://${GATEWAY_PATH}${GATEWAY_PORT ? ':' + GATEWAY_PORT : ''}`;
+export const GATEWAY_URL = `http://${GATEWAY_PATH}${GATEWAY_PORT ? ':' + GATEWAY_PORT : ''}`
 export const GATEWAY_WS_URL = `ws://${GATEWAY_PATH}${GATEWAY_PORT ? ':' + GATEWAY_PORT : ''}/smt-ws`
 
 const PATH_AUTHENTICATION = '/cloud/identity'
@@ -24,11 +23,6 @@ const axiosInstance = axios.create({
   baseURL: GATEWAY_URL,
   timeout: 5000
 })
-
-async function extractDataFromError(error) {
-  const { response } = error || {}
-  return (await response.data) || {}
-}
 
 const GatewayApi = {
   // only local
@@ -64,16 +58,18 @@ const GatewayApi = {
     return response.status === 200
   },
   async cloudDisconnect() {
-      const response = await axiosInstance.put(PATH_CLOUD_DISCONNECT)
-      return response.status === 200
+    const response = await axiosInstance.put(PATH_CLOUD_DISCONNECT)
+    return response.status === 200
   },
   // todo move to device api (get methods)
   async getDeviceApiMethods({ device: { name, ip }, gateway }) {
-    return (await gatewayFetch({
-      url: `${PATH_DEVICE_API}/methods?name=${name}&ip=${ip}`,
-      method: HTTP_METHOD.GET,
-      gateway
-    })).data
+    return (
+      await gatewayFetch({
+        url: `${PATH_DEVICE_API}/methods?name=${name}&ip=${ip}`,
+        method: HTTP_METHOD.GET,
+        gateway
+      })
+    ).data
   },
   // Cloud supported methods
   async getLogs(gateway) {
@@ -120,31 +116,35 @@ const GatewayApi = {
     return response.status === 200
   },
   async getFoundDevices(gateway) {
-    const response = await gatewayFetch({ gateway, url: PATH_DEVICES_FOUND, method: "GET" })
+    const response = await gatewayFetch({ gateway, url: PATH_DEVICES_FOUND, method: 'GET' })
     return response.data
   },
   async getSavedDevices(gateway) {
-    return (await gatewayFetch({ gateway, url: PATH_DEVICES_SAVED, method: "GET" })).data
+    return (await gatewayFetch({ gateway, url: PATH_DEVICES_SAVED, method: 'GET' })).data
   },
   async addDevice(ip, gateway) {
-    return (await gatewayFetch({
-      gateway,
-      url: PATH_DEVICES_SAVED + "?ip=" + ip,
-      method: "POST"
-    })).data
+    return (
+      await gatewayFetch({
+        gateway,
+        url: PATH_DEVICES_SAVED + '?ip=' + ip,
+        method: 'POST'
+      })
+    ).data
   },
   async updateSavedDevice(ip, gateway) {
-    return (await gatewayFetch({
-      gateway,
-      url: PATH_DEVICES_SAVED + "?ip=" + ip,
-      method: "PUT"
-    })).data
+    return (
+      await gatewayFetch({
+        gateway,
+        url: PATH_DEVICES_SAVED + '?ip=' + ip,
+        method: 'PUT'
+      })
+    ).data
   },
   async deleteSavedDevice(ip, gateway) {
     await gatewayFetch({
       gateway,
-      url: PATH_DEVICES_SAVED + "?ip=" + ip,
-      method: "DELETE"
+      url: PATH_DEVICES_SAVED + '?ip=' + ip,
+      method: 'DELETE'
     })
   }
 }

@@ -13,7 +13,7 @@ export default {
     InputField,
     LoadingButton,
     PopUpDialog,
-    Container,
+    Container
   },
   data() {
     const intl = useIntl()
@@ -37,7 +37,7 @@ export default {
         await CloudApi.authUser(this.login, this.password)
         const auth = await CloudApi.getAuthentication()
         if (!auth) {
-          throw new Error("Failed to get authentication")
+          throw new Error('Failed to get authentication')
         }
         toast.success({ caption: 'Welcome, ' + this.login })
         this.$emit('authenticated', auth)
@@ -57,12 +57,12 @@ export default {
 
 <template>
   <PopUpDialog>
-    <Container :vertical="true" style="padding: 5px;" :gap="'5px'">
+    <Container :vertical="true" style="padding: 5px" :gap="'5px'">
       <form>
         <InputField
           :label="intl.formatMessage({ id: 'login' })"
           v-model="login"
-          type="login"    
+          type="login"
           autocomplete="login"
           @enter="auth"
         />

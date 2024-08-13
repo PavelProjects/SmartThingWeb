@@ -1,5 +1,5 @@
 <script>
-import Container from '../base/Container.vue';
+import Container from '../base/Container.vue'
 
 export default {
   name: 'DashboardValue',
@@ -12,9 +12,9 @@ export default {
     value: [Number, String],
     units: {
       type: String,
-      default: () => ""
-    },
-  },
+      default: () => ''
+    }
+  }
 }
 </script>
 
@@ -26,9 +26,9 @@ export default {
 </template>
 
 <style scoped>
-  .item {
-    width: 200px;
-    padding: 5px;
-    text-align: center;
-  }
+.item {
+  width: 200px;
+  padding: 5px;
+  text-align: center;
+}
 </style>

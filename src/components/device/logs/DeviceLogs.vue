@@ -10,7 +10,7 @@ export default {
   name: 'DeviceLogs',
   components: {
     LogMessage,
-    Container,
+    Container
   },
   inject: ['gateway'],
   data() {
@@ -33,7 +33,7 @@ export default {
       toast.error({
         caption: 'Failed to load device logs'
       })
-      return;
+      return
     }
     this.messages.reverse()
 
@@ -116,14 +116,16 @@ export default {
   text-align: center;
   padding: var(--default-padding);
 }
-.log-message-container :deep(div),h2 {
+.log-message-container :deep(div),
+h2 {
   border-right: 2px solid var(--color-border);
   height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
-.log-message-container :deep(div:last-child),h2:last-child {
+.log-message-container :deep(div:last-child),
+h2:last-child {
   border-right: none;
 }
 </style>

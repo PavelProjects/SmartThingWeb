@@ -35,10 +35,11 @@ export default {
     style() {
       if (this.selected) {
         return {
-          'background-color': 'var(--color-background-soft)',
+          'background-color': 'var(--color-background-soft)'
         }
       }
-    },
+      return {}
+    }
   }
 }
 </script>

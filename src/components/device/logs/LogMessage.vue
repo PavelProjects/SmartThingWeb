@@ -12,7 +12,7 @@ export default {
       message,
       level,
       dateTime,
-      tag,
+      tag
     }
   },
   computed: {

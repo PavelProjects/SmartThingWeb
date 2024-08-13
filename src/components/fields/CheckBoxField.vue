@@ -16,7 +16,7 @@ export default {
     },
     vertical: {
       type: Boolean,
-      default: () => true,
+      default: () => true
     }
   },
   emits: ['update:modelValue'],

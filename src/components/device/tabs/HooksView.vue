@@ -39,7 +39,7 @@ export default {
           acc[key] = systemNameToNormal(key)
           return acc
         }, {})
-    },
+    }
   },
   async mounted() {
     this.loading = true
@@ -59,7 +59,7 @@ export default {
         console.error(error)
         const { error: description } = await extractDataFromError(error)
         toast.error({
-          caption: `Failed to fetch hooks for [${observable.type}]${observable.name}`,
+          caption: `Failed to fetch hooks for [${this.observable.type}]${this.observable.name}`,
           description
         })
       } finally {
@@ -68,7 +68,8 @@ export default {
     },
     async loadTemplates() {
       try {
-        this.templates = (await DeviceApi.getHooksTemplates(this.device, this.observable.type, this.gateway)) || {}
+        this.templates =
+          (await DeviceApi.getHooksTemplates(this.device, this.observable.type, this.gateway)) || {}
       } catch (error) {
         console.error(error)
         toast.error({
@@ -96,7 +97,7 @@ export default {
     templateForType(type) {
       return { ...this.templates[type], ...this.templates.default }
     }
-  },
+  }
 }
 </script>
 

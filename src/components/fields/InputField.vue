@@ -17,7 +17,8 @@ export default {
       type: Boolean,
       default: false
     },
-    validationFailed: { // todo replace with smth else
+    validationFailed: {
+      // todo replace with smth else
       type: Boolean,
       default: false
     },
@@ -45,7 +46,7 @@ export default {
         :value="modelValue"
         :disabled="disabled"
         :type="type"
-        :class="{ required: validationFailed  }"
+        :class="{ required: validationFailed }"
         :autocomplete="autocomplete"
         @input="emitUpdate($event.target.value)"
         @keypress.enter="() => $emit('enter')"

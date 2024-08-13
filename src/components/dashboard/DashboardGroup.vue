@@ -1,30 +1,30 @@
 <script>
 import DashboardValue from './DashboardValue.vue'
-import ContextMenu from '../menu/ContextMenu.vue';
-import GroupEditDialog from './GroupEditDialog.vue';
-import { useIntl } from 'vue-intl';
-import LoadingButton from '../controls/LoadingButton.vue';
-import { DashboardApi } from '../../api/gateway/DashboardApi';
-import { toast } from '../../utils/EventBus';
-import UpdateButton from '../controls/UpdateButton.vue';
-import Container from '../base/Container.vue';
-import { useStompClientStore } from '../../store/stompClientStore';
+import ContextMenu from '../menu/ContextMenu.vue'
+import GroupEditDialog from './GroupEditDialog.vue'
+import { useIntl } from 'vue-intl'
+import LoadingButton from '../controls/LoadingButton.vue'
+import { DashboardApi } from '../../api/gateway/DashboardApi'
+import { toast } from '../../utils/EventBus'
+import UpdateButton from '../controls/UpdateButton.vue'
+import Container from '../base/Container.vue'
+import { useStompClientStore } from '../../store/stompClientStore'
 
 export default {
-  components: { 
+  components: {
     DashboardValue,
     ContextMenu,
     GroupEditDialog,
     LoadingButton,
     UpdateButton,
-    Container,
+    Container
   },
   name: 'DashboardGroup',
   emits: ['updateGroups'],
   props: {
     gateway: Object,
     group: Object,
-    currentTime: Object,
+    currentTime: Object
   },
   data() {
     const intl = useIntl()
@@ -41,14 +41,18 @@ export default {
   async mounted() {
     const client = useStompClientStore()
     try {
-      const topic = "/dashboard/" + this.id
-      client.subscribe(topic, (message) => {
-        if (!message?.body) {
-          console.error("Empty message body!")
-          return
-        }
-        this.values = JSON.parse(message.body)
-      }, topic)
+      const topic = '/dashboard/' + this.id
+      client.subscribe(
+        topic,
+        (message) => {
+          if (!message?.body) {
+            console.error('Empty message body!')
+            return
+          }
+          this.values = JSON.parse(message.body)
+        },
+        topic
+      )
     } catch (error) {
       console.error(error)
     }
@@ -57,7 +61,7 @@ export default {
   unmounted() {
     const client = useStompClientStore()
     try {
-      client.unsubscribe("/dashboard/" + this.id)
+      client.unsubscribe('/dashboard/' + this.id)
     } catch (error) {
       console.error(error)
     }
@@ -143,10 +147,7 @@ export default {
         :loading="loading"
         :onClick="updateValues"
       />
-      <h2
-        class="title"
-        :title="deviceTitle"
-      >
+      <h2 class="title" :title="deviceTitle">
         {{ group.device.name }}
       </h2>
       <ContextMenu class="context-menu">
@@ -159,7 +160,7 @@ export default {
       </ContextMenu>
       <Container class="values">
         <DashboardValue
-          v-for="{ name, type, units }, index of observables"
+          v-for="({ name, type, units }, index) of observables"
           :key="index"
           :type="type"
           :name="name"
@@ -167,50 +168,43 @@ export default {
           :units="units"
         />
       </Container>
-      <LoadingButton
-        v-if="observables.length === 0"
-        @click="editing = true"
-      >
+      <LoadingButton v-if="observables.length === 0" @click="editing = true">
         <h2>
           {{ intl.formatMessage({ id: 'dashboard.group.add.values' }) }}
         </h2>
       </LoadingButton>
     </Container>
     <!-- todo load sensors and states inside edit dialog -->
-    <GroupEditDialog 
-      v-if="editing"
-      :group="group"
-      @close="handleEditClose"
-    />
+    <GroupEditDialog v-if="editing" :group="group" @close="handleEditClose" />
   </div>
 </template>
 
 <style scoped>
-  .dashboard-group {
-    padding: 2px;
-    position: relative;
-    width: fit-content;
-  }
-  .dashboard-group .title {
-    border-bottom: 2px solid var(--color-border);
-  }
-  .update {
-    position: absolute;
-    top: 2px;
-    left: 2px;
-  }
-  .values * {
-    border-right: 2px solid var(--color-border);
-  }
-  .values *:last-child {
-    border-right: none;
-  }
-  .context-menu {
-    position: absolute;
-    top: 5px;
-    right: 0px;
-  }
-  .field-container {
-    display: flex;
-  }
+.dashboard-group {
+  padding: 2px;
+  position: relative;
+  width: fit-content;
+}
+.dashboard-group .title {
+  border-bottom: 2px solid var(--color-border);
+}
+.update {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+}
+.values * {
+  border-right: 2px solid var(--color-border);
+}
+.values *:last-child {
+  border-right: none;
+}
+.context-menu {
+  position: absolute;
+  top: 5px;
+  right: 0px;
+}
+.field-container {
+  display: flex;
+}
 </style>

@@ -1,15 +1,16 @@
 <script>
 import { useIntl } from 'vue-intl'
 import { GatewayApi } from '../../api/gateway/GatewayApi'
-import { SearchApi } from '../../api/SearchDevicesApi'
-import { EventBus, REQUEST, toast } from '../../utils/EventBus'
+import { EventBus, toast } from '../../utils/EventBus'
 import Container from '../base/Container.vue'
 import UpdateButton from '../controls/UpdateButton.vue'
 import DeviceItem from './DeviceItem.vue'
 import PlusSVG from 'vue-material-design-icons/Plus.vue'
-import PopUpDialog from '../dialogs/PopUpDialog.vue'
 import AddDeviceDialog from './AddDeviceDialog.vue'
 import ContextMenu from '../menu/ContextMenu.vue'
+import { useStompClientStore } from '../../store/stompClientStore'
+
+const SEARCH_TOPIC = '/devices/search'
 
 export default {
   name: 'DevicesSearchView',
@@ -17,21 +18,22 @@ export default {
     UpdateButton,
     DeviceItem,
     Container,
-    PopUpDialog,
     AddDeviceDialog,
     ContextMenu,
-    PlusSVG,
+    PlusSVG
   },
   emits: ['select'],
   props: {
     title: String,
     gateway: Object,
-    selected: Object,
+    selected: Object
   },
   data() {
     const intl = useIntl()
+    const stompClient = useStompClientStore()
     return {
       intl,
+      stompClient,
       devices: {},
       savedDevices: {},
       searching: false,
@@ -39,65 +41,61 @@ export default {
       addDeviceVisible: false
     }
   },
-  watch: {
-    gateway() {
-      this.devices = {}
-      this.search()
-    }
-  },
+  // watch: {
+  //   gateway() {
+  //     this.devices = {}
+  //     this.loadFoundDevices()
+  //   }
+  // },
   mounted() {
-    this.search()
+    this.loadFoundDevices()
+    this.loadSavedDevices()
+
+    this.stompClient.subscribe(SEARCH_TOPIC, (message) => {
+      if (message && message.body) {
+        const deviceInfo = JSON.parse(message.body)
+        if (!this.devices[deviceInfo.ip]) {
+          this.devices[deviceInfo.ip] = deviceInfo
+        }
+      } else {
+        console.warn('Empty search topic message')
+      }
+    })
     EventBus.on('deviceUpdate', ({ device: { ip }, name }) => {
       if (this.devices[ip]) {
-        this.devices[ip]['name'] = name
-      } 
+        this.devices[ip].name = name
+      }
       if (this.savedDevices[ip]) {
-        this.savedDevices[ip]['name'] = name
+        this.savedDevices[ip].name = name
         GatewayApi.updateSavedDevice(ip, this.gateway).catch(console.log)
       }
     })
-    this.loadSavedDevices()
+  },
+  unmounted() {
+    this.stompClient.unsubscribe(SEARCH_TOPIC)
   },
   methods: {
-    search() {
+    async loadFoundDevices() {
       this.searching = true
-      const foundDevices = []
-      EventBus.on(REQUEST, ({ id, loading }) => {
-        if (id == 'search') {
-          this.searching = loading
-          if (!this.searching) {
-            Object.keys(this.devices).forEach((key) => {
-              if ((!key) in foundDevices) {
-                delete this.devices[key]
-                if (this.selectedIp == key) {
-                  this.selectedIp = undefined
-                }
-              }
-            })
-          }
-        }
-      })
-
       try {
-        // todo rework
-        SearchApi.searchDevices((deviceInfo) => {
-          if (!this.devices[deviceInfo.ip]) {
-            this.devices[deviceInfo.ip] = deviceInfo
-            foundDevices.push(deviceInfo.ip)
-            console.debug(`Found new device: ${deviceInfo.name}`)
-          }
-        }, this.gateway)
+        const foundDevices = await GatewayApi.getFoundDevices(this.gateway)
+        this.devices = foundDevices.reduce((acc, device) => {
+          acc[device.ip] = device
+          return acc
+        }, {})
       } catch (error) {
         console.error(error)
         toast.error({
           caption: 'Failed to load found devices'
         })
+      } finally {
+        this.searching = false
       }
     },
     async loadSavedDevices() {
       this.loadingSaved = true
       try {
-        const devices = await GatewayApi.getSavedDevices(this.gateway) ?? []
+        const devices = (await GatewayApi.getSavedDevices(this.gateway)) ?? []
         this.savedDevices = devices.reduce((acc, device) => {
           acc[device.ip] = device
           return acc
@@ -128,7 +126,7 @@ export default {
         this.loadingSaved = false
       }
     },
-    async deleteSavedDevice (ip) {
+    async deleteSavedDevice(ip) {
       if (!confirm(this.intl.formatMessage({ id: 'devices.saved.menu.delete.confirm' }))) {
         return
       }
@@ -187,7 +185,7 @@ export default {
         <h2 v-if="!loadingSaved && Object.keys(savedDevices).length == 0" class="title">
           {{ intl.formatMessage({ id: 'devices.saved.empty' }) }}
         </h2>
-        <PlusSVG 
+        <PlusSVG
           :title="intl.formatMessage({ id: 'devices.saved.plus.title' })"
           class="plus-icon"
           :size="35"
@@ -198,7 +196,7 @@ export default {
     <Container class="bordered" :vertical="true">
       <div style="position: relative">
         <h2 class="title list-title">{{ intl.formatMessage({ id: 'devices.search' }) }}</h2>
-        <UpdateButton class="update" :loading="searching" :onClick="search" />
+        <UpdateButton class="update" :loading="searching" :onClick="loadFoundDevices" />
       </div>
       <Container class="devices-list" :vertical="true">
         <DeviceItem
@@ -219,10 +217,12 @@ export default {
     <AddDeviceDialog
       v-if="addDeviceVisible"
       @close="addDeviceVisible = false"
-      @added="() => {
-        addDeviceVisible = false
-        loadSavedDevices()
-      }"
+      @added="
+        () => {
+          addDeviceVisible = false
+          loadSavedDevices()
+        }
+      "
     />
   </Container>
 </template>

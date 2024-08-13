@@ -1,12 +1,4 @@
-import axios from "axios"
-import { GATEWAY_URL } from "./GatewayApi"
-import { HTTP_METHOD, gatewayFetch } from "./GatewayFetch"
-
-
-const axiosInstance = axios.create({
-  baseURL: GATEWAY_URL,
-  timeout: 5000
-})
+import { HTTP_METHOD, gatewayFetch } from './GatewayFetch'
 
 const DashboardApi = {
   async getGroups(gateway) {
@@ -44,18 +36,22 @@ const DashboardApi = {
     return response.status === 200
   },
   async getGroupValues(groupId, gateway) {
-    return (await gatewayFetch({
-      url: '/dashboard/values/' + groupId,
-      method: HTTP_METHOD.GET,
-      gateway
-    })).data
+    return (
+      await gatewayFetch({
+        url: '/dashboard/values/' + groupId,
+        method: HTTP_METHOD.GET,
+        gateway
+      })
+    ).data
   },
   async updateGroupValues(groupId, gateway) {
-    return (await gatewayFetch({
-      url: '/dashboard/values/' + groupId,
-      method: HTTP_METHOD.PUT,
-      gateway
-    })).data
+    return (
+      await gatewayFetch({
+        url: '/dashboard/values/' + groupId,
+        method: HTTP_METHOD.PUT,
+        gateway
+      })
+    ).data
   }
 }
 
