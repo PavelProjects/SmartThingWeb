@@ -294,8 +294,8 @@ export default {
       />
     </Container>
     <PopUpDialog v-if="testDialogVisible" @close="testDialogVisible = false">
-      <Container :vertical="true" style="padding: 2px">
-        <InputField
+      <Container :vertical="true" style="padding: var(--default-gap);">
+        <InputField 
           :label="intl.formatMessage({ id: 'device.hook.test.label' })"
           :type="observable.type === 'sensor' ? 'number' : 'text'"
           v-model="testValue"
@@ -311,7 +311,10 @@ export default {
 </template>
 
 <style scoped>
-.icon {
-  cursor: pointer;
-}
+  .hook {
+    padding: var(--default-gap);
+  }
+  .icon {
+    cursor: pointer;
+  }
 </style>

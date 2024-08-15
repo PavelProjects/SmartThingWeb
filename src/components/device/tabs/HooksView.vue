@@ -107,6 +107,7 @@ export default {
     <sync-loader class="loading-spinner" :loading="loading"></sync-loader>
     <div v-if="!loading">
       <ComboBoxField
+        class="hook-selector"
         :label="intl.formatMessage({ id: 'device.hooks.button.add' })"
         :items="hookTypes"
         :vertical="false"
@@ -131,8 +132,8 @@ export default {
 </template>
 
 <style scoped>
-.field-label {
-  text-align: center;
+.hook-selector {
+  padding: var(--default-gap);
 }
 .hooks-list-view {
   max-height: 80vh;
@@ -140,7 +141,6 @@ export default {
   border-top: 2px solid var(--color-border);
 }
 .hooks-list-view .hook {
-  padding: 5px;
   border-bottom: 2px solid var(--color-border);
 }
 .hooks-list-view *:last-child {

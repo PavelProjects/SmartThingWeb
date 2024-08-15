@@ -28,19 +28,19 @@ export default {
 </template>
 
 <style scoped>
-.menu-item {
-  display: flex;
-  padding: 0px 2px;
-  transition: background-color 0.5s;
-  border-radius: var(--border-radius);
-  cursor: pointer;
-}
-.menu-item:hover {
-  transition: background-color 0.5s;
-  background-color: var(--color-background-mute);
-}
-.menu-item h2 {
-  word-wrap: break-word;
-  margin: auto;
-}
+  .menu-item {
+    display: flex;
+    padding: 0px var(--default-gap);
+    transition: background-color 0.5s;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+  }
+  .menu-item:hover {
+    transition: background-color 0.5s;
+    background-color: var(--color-background-mute);
+  }
+  .menu-item h2 {
+    word-wrap: break-word;
+    margin: auto;
+  }
 </style>

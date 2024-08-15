@@ -139,7 +139,7 @@ export default {
 
 <template>
   <div>
-    <Container class="dashboard-group bordered" :vertical="true">
+    <Container class="dashboard-group bordered" :vertical="true" gap="0">
       <UpdateButton
         v-if="observables.length > 0"
         class="update"
@@ -160,51 +160,62 @@ export default {
       </ContextMenu>
       <Container class="values">
         <DashboardValue
-          v-for="({ name, type, units }, index) of observables"
+          v-if="observables.length > 0"
+          v-for="{ name, type, units }, index of observables"
           :key="index"
           :type="type"
           :name="name"
           :value="values?.[type + 's']?.[name] ?? 'Nan'"
           :units="units"
         />
+        <LoadingButton
+          v-else
+          class="add-values"
+          @click="editing = true"
+        >
+          <h2>
+            {{ intl.formatMessage({ id: 'dashboard.group.add.values' }) }}
+          </h2>
+        </LoadingButton>
       </Container>
-      <LoadingButton v-if="observables.length === 0" @click="editing = true">
-        <h2>
-          {{ intl.formatMessage({ id: 'dashboard.group.add.values' }) }}
-        </h2>
-      </LoadingButton>
     </Container>
-    <!-- todo load sensors and states inside edit dialog -->
-    <GroupEditDialog v-if="editing" :group="group" @close="handleEditClose" />
+    <GroupEditDialog 
+      v-if="editing"
+      :group="group"
+      @close="handleEditClose"
+    />
   </div>
 </template>
 
 <style scoped>
-.dashboard-group {
-  padding: 2px;
-  position: relative;
-  width: fit-content;
-}
-.dashboard-group .title {
-  border-bottom: 2px solid var(--color-border);
-}
-.update {
-  position: absolute;
-  top: 2px;
-  left: 2px;
-}
-.values * {
-  border-right: 2px solid var(--color-border);
-}
-.values *:last-child {
-  border-right: none;
-}
-.context-menu {
-  position: absolute;
-  top: 5px;
-  right: 0px;
-}
-.field-container {
-  display: flex;
-}
+  .dashboard-group {
+    position: relative;
+    width: fit-content;
+  }
+  .dashboard-group .title {
+    border-bottom: 2px solid var(--color-border);
+  }
+  .update {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+  }
+  .add-values {
+    margin: var(--default-gap);
+  }
+  .values .dashboard-value {
+    padding: var(--default-gap);
+    border-right: 2px solid var(--color-border);
+  }
+  .values .dashboard-value:last-child {
+    border-right: none;
+  }
+  .context-menu {
+    position: absolute;
+    top: 5px;
+    right: 0px;
+  }
+  .field-container {
+    display: flex;
+  }
 </style>

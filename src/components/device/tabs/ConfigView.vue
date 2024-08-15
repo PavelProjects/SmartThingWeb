@@ -74,7 +74,6 @@ export default {
         toast.success({
           caption: 'Config updated'
         })
-        this.loadConfigValues()
       } catch (error) {
         console.error(error)
         const { error: description } = await extractDataFromError(error)
@@ -113,9 +112,6 @@ export default {
 
 <template>
   <Container :vertical="true">
-    <h1 class="title">
-      {{ intl.formatMessage({ id: 'device.config.title' }) }}
-    </h1>
     <sync-loader class="loading-spinner" :loading="loading"></sync-loader>
     <Container v-if="haveConfigEntries" class="config-inputs" :vertical="true">
       <div v-for="[key, { caption, type }] of Object.entries(this.configInfo)" :key="key">
@@ -143,12 +139,12 @@ h2 {
 }
 .controls-holder {
   flex: 1 0 auto;
+  padding: var(--default-gap);
 }
 .controls-holder button {
   width: 50%;
 }
 .config-inputs {
-  padding-bottom: calc(40px + var(--default-gap));
   width: 60%;
   margin: auto;
 }

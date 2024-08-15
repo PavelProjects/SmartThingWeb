@@ -164,56 +164,64 @@ export default {
           </div>
         </Container>
       </Container>
-      <LoadingButton :loading="loadingObservables" @click="add">
-        <h2>
-          {{ intl.formatMessage({ id: 'dashborad.group.edit.add.observables' }) }}
-        </h2>
-      </LoadingButton>
-      <InputField
-        :label="intl.formatMessage({ id: 'dashboard.group.edit.update.delay' })"
-        v-model="config.updateDelay"
-        type="number"
-      />
-      <LoadingButton :loading="loading" @click="save">
-        <h2>{{ intl.formatMessage({ id: 'dashboard.group.edit.save' }) }}</h2>
-      </LoadingButton>
+      <Container class="extra" :vertical="true">
+        <LoadingButton :loading="loadingObservables" @click="add">
+          <h2>
+            {{ intl.formatMessage({ id: 'dashborad.group.edit.add.observables' }) }}
+          </h2>
+        </LoadingButton>
+        <InputField 
+          :label="intl.formatMessage({ id: 'dashboard.group.edit.update.delay' })"
+          v-model="config.updateDelay"
+          type="number"
+        />
+        <LoadingButton
+          :loading="loading"
+          @click="save"
+        >
+          <h2>{{ intl.formatMessage({ id: 'dashboard.group.edit.save' }) }}</h2>
+        </LoadingButton>
+      </Container>
     </Container>
   </PopUpDialog>
 </template>
 
 <style scoped>
-.table {
-  max-height: 50vh;
-  overflow-y: auto;
-  overflow-x: hidden;
-  border-top: 1px solid var(--color-border);
-}
-.row {
-  display: grid;
-  grid-template-columns: 100px 200px 100px 50px;
-  text-align: center;
-  border-bottom: 1px solid var(--color-border);
-  word-wrap: break-word;
-}
-.row * {
-  border-right: 1px solid var(--color-border);
-}
-.row *:last-child {
-  border-right: none;
-}
-.column-input {
-  text-align: center;
-  border: none;
-  border-radius: 0px;
-  border-right: 1px solid var(--color-border);
-}
-.material-design-icon {
-  width: fit-content;
-  height: fit-content;
-  margin: auto;
-  cursor: pointer;
-}
-.required {
-  background-color: var(--color-danger);
-}
+  .table {
+    max-height: 50vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    border-top: 1px solid var(--color-border);
+  }
+  .row {
+    display: grid;
+    grid-template-columns: 100px 200px 100px 50px;
+    text-align: center;
+    border-bottom: 1px solid var(--color-border);
+    word-wrap: break-word;
+  }
+  .row * {
+    border-right: 1px solid var(--color-border);
+  }
+  .row *:last-child {
+    border-right: none;
+  }
+  .column-input {
+    text-align: center;
+    border: none;
+    border-radius: 0px;
+    border-right: 1px solid var(--color-border);
+  }
+  .material-design-icon {
+    width: fit-content;
+    height: fit-content;
+    margin: auto;
+    cursor: pointer;
+  }
+  .required {
+    background-color: var(--color-danger);
+  }
+  .extra {
+    padding: var(--default-gap);
+  }
 </style>

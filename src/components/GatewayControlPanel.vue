@@ -90,7 +90,7 @@ export default {
       <DropdownMenu
         v-else
         class="search"
-        placeholder="Devices"
+        :placeholder="intl.formatMessage({ id: 'gateway.panel.devices' })"
         :vertical="false"
         :expanded="searchExpanded"
         @expand="(v) => (searchExpanded = v)"

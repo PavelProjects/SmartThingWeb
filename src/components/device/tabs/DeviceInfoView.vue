@@ -75,8 +75,11 @@ export default {
 
 <template>
   <div>
-    <h1 class="title">{{ intl.formatMessage({ id: 'device.info.title' }) }}</h1>
-    <Container v-if="info" class="fields-list" :vertical="true">
+    <Container
+      v-if="info"
+      class="fields-list"
+      :vertical="true"
+    >
       <InputField
         :label="intl.formatMessage({ id: 'device.info.name' })"
         :title="deviceName ? '' : intl.formatMessage({ id: 'device.info.name.error.empty' })"
@@ -113,9 +116,9 @@ export default {
 </template>
 
 <style scoped>
-.fields-list {
-  padding: 5px;
-  width: 60%;
-  margin: auto;
-}
+  .fields-list {
+    width: 60%;
+    margin: auto;
+    padding-bottom: var(--default-gap);
+  }
 </style>

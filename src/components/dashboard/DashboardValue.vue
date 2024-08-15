@@ -19,16 +19,15 @@ export default {
 </script>
 
 <template>
-  <Container class="item" :vertical="true">
+  <Container class="dashboard-value item" :vertical="true">
     <h2 :title="type">{{ name }}</h2>
     <h1 class="value">{{ value }} {{ units }}</h1>
   </Container>
 </template>
 
 <style scoped>
-.item {
-  width: 200px;
-  padding: 5px;
-  text-align: center;
-}
+  .item {
+    width: 200px;
+    text-align: center;
+  }
 </style>

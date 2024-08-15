@@ -232,7 +232,7 @@ export default {
   width: 350px;
 }
 .devices-search-view .list-title {
-  border-bottom: 1px solid var(--color-border);
+  border-bottom: 2px solid var(--color-border);
 }
 .devices-search-view .update {
   position: absolute;

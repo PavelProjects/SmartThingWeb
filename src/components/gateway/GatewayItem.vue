@@ -221,7 +221,7 @@ export default {
   right: 0px;
 }
 .token-field {
-  padding: 5px;
+  padding: var(--default-gap);
   width: 50vw;
   word-wrap: break-word;
   border: 1px solid var(--color-border);

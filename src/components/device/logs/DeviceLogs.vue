@@ -116,9 +116,8 @@ export default {
   text-align: center;
   padding: var(--default-padding);
 }
-.log-message-container :deep(div),
-h2 {
-  border-right: 2px solid var(--color-border);
+.log-message-container :deep(div),h2 {
+  border-right: 1px solid var(--color-border);
   height: 100%;
   display: flex;
   flex-direction: column;

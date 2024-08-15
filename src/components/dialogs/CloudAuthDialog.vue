@@ -57,7 +57,7 @@ export default {
 
 <template>
   <PopUpDialog>
-    <Container :vertical="true" style="padding: 5px" :gap="'5px'">
+    <Container :vertical="true" style="padding: var(--default-gap);" :gap="'5px'">
       <form>
         <InputField
           :label="intl.formatMessage({ id: 'login' })"

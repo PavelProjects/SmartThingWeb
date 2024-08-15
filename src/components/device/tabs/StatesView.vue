@@ -78,12 +78,8 @@ export default {
   }
 }
 </script>
-<!-- todo if hooks disabled show panel with values? -->
 <template>
   <div>
-    <h1 class="title">
-      {{ intl.formatMessage({ id: 'device.states.title' }) }}
-    </h1>
     <sync-loader class="loading-spinner" :loading="loading"></sync-loader>
     <MenuView
       v-if="haveStates"

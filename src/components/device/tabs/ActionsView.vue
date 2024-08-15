@@ -63,9 +63,6 @@ export default {
 
 <template>
   <div>
-    <h1 class="title">
-      {{ intl.formatMessage({ id: 'device.actions.title' }) }}
-    </h1>
     <sync-loader class="loading-spinner" :loading="loading"></sync-loader>
     <div v-if="actions.length > 0" class="buttons-panel">
       <LoadingButton
@@ -90,8 +87,8 @@ export default {
 }
 .buttons-panel {
   display: grid;
-  row-gap: 5px;
-  padding: 5px;
+  row-gap: var(--default-gap);
+  padding: var(--default-gap);
 }
 .buttons-panel button {
   width: 100%;

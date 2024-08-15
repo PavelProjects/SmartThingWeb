@@ -218,7 +218,7 @@ export default {
   right: var(--default-gap);
   background-color: var(--color-background-mute);
   border-radius: var(--border-radius);
-  padding: 5px;
+  padding: var(--default-gap);
 }
 .dialog * {
   flex: 1 0 auto;

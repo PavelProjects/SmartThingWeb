@@ -82,9 +82,6 @@ export default {
 
 <template>
   <div>
-    <h1 class="title">
-      {{ intl.formatMessage({ id: 'device.sensors.title' }) }}
-    </h1>
     <sync-loader class="loading-spinner" :loading="loading"></sync-loader>
     <MenuView
       v-if="haveSensors"

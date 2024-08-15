@@ -104,11 +104,6 @@ textarea {
   gap: var(--default-gap);
   position: relative;
 }
-.hooks-list-view {
-  max-height: 80vh;
-  overflow-y: auto;
-  margin-top: var(--default-gap);
-}
 .hook-view-controls {
   display: flex;
   flex-direction: row-reverse;
