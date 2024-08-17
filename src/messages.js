@@ -242,7 +242,7 @@ const messages = {
   ru: {
     'doc.title': 'SmartThing',
     'doc.panel': 'Панель управления',
-    'doc.dashboard': 'Dashboard',
+    'doc.dashboard': 'Дашборд',
     'doc.device.settings': 'Настройки устройств',
     'doc.device.logs': 'Логи устройств',
     gateway: 'Маршрутизатор: {gateway}',

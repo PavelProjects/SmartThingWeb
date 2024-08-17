@@ -73,7 +73,7 @@ export default {
       }
     }
   }
-  // todo select device from path
+  // todo select device from path + device tabs
 }
 </script>
 
