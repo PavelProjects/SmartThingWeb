@@ -1,6 +1,5 @@
 <script>
 import { CloudApi } from '../../api/CloudApi'
-import { router } from '../../routes'
 import { EVENT, EventBus, GATEWAY_EVENT, toast } from '../../utils/EventBus'
 import { computed } from 'vue'
 
@@ -32,13 +31,13 @@ export default {
         return
       }
       if (!this.gatewayId) {
-        router.push('/gateways')
+        this.$router.push('/gateways')
         return
       }
       try {
         const gtw = await CloudApi.getGateway(this.gatewayId)
         if (!gtw || !gtw.online) {
-          router.push('/gateways')
+          this.$router.push('/gateways')
         } else {
           this.gateway = gtw
         }

@@ -1,6 +1,5 @@
 <script>
 import { CloudApi } from '../../api/CloudApi'
-import { router } from '../../routes'
 import { EVENT, EventBus, GATEWAY_EVENT, toast } from '../../utils/EventBus'
 import GatewayItem from './GatewayItem.vue'
 import GatewayEditDialog from './GatewayEditDialog.vue'
@@ -18,6 +17,7 @@ export default {
     PopUpDialog,
     Container
   },
+  emits: ['close'],
   data() {
     const intl = useIntl()
     return {
@@ -37,7 +37,7 @@ export default {
   methods: {
     handleGatewayClick(gateway) {
       if (gateway.online) {
-        router.push(`/${gateway.id}/panel`)
+        this.$router.push(`/${gateway.id}/panel`)
       } else {
         toast.error({
           caption: this.intl.formatMessage({ id: 'gateway.select.offline' }),
@@ -95,7 +95,7 @@ export default {
 </script>
 
 <template>
-  <PopUpDialog v-bind="$props">
+  <PopUpDialog @close="$emit('close')">
     <div class="gateway-selector">
       <div class="header">
         <h2 class="title">

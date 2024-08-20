@@ -5,7 +5,6 @@ import { toast } from '../../utils/EventBus'
 import GatewayEditDialog from './GatewayEditDialog.vue'
 import InputField from '../fields/InputField.vue'
 import { useIntl } from 'vue-intl'
-import { router } from '../../routes'
 import ContextMenu from '../menu/ContextMenu.vue'
 import Container from '../base/Container.vue'
 
@@ -79,7 +78,7 @@ export default {
             caption: this.intl.formatMessage({ id: 'gateway.item.delete.success' })
           })
           this.$emit('gatewaysUpdate')
-          router.push('/')
+          this.$router.push('/')
         } catch (error) {
           console.error(error)
           toast.error({
