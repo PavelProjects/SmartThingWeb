@@ -1,7 +1,7 @@
 <script>
 import Container from '../base/Container.vue'
 
-const IMG_PATH = '/img/'
+const IMG_PATH = document.location.pathname + 'img/'
 
 export default {
   name: 'DeviceItem',
