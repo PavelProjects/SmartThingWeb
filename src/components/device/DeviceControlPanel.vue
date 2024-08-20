@@ -4,7 +4,7 @@ import ActionsView from './tabs/ActionsView.vue'
 import SensorsView from './tabs/SensorsView.vue'
 import StatesView from './tabs/StatesView.vue'
 import ConfigView from './tabs/ConfigView.vue'
-import MetricsViewVue from './tabs/MetricsView.vue'
+import MetricsView from './tabs/MetricsView.vue'
 import MenuView from '../menu/MenuView.vue'
 import { useIntl } from 'vue-intl'
 import RiseLoader from 'vue-spinner/src/RiseLoader.vue'
@@ -57,7 +57,7 @@ export default {
           caption: intl.formatMessage({ id: 'device.tabs' }, { tab: 'config' })
         },
         metrics: {
-          class: MetricsViewVue,
+          class: MetricsView,
           caption: intl.formatMessage({ id: 'device.tabs' }, { tab: 'metrics' })
         }
       }

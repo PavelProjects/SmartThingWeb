@@ -24,7 +24,7 @@ export default {
       windowWidth: window.innerWidth,
       searchExpanded: true,
       loadingDevice: false,
-      device: undefined,
+      device: undefined, //todo provide
       features: undefined,
       apiMethods: undefined,
       intl
@@ -73,7 +73,6 @@ export default {
       }
     }
   }
-  // todo select device from path + device tabs
 }
 </script>
 
@@ -102,15 +101,13 @@ export default {
         <h1 class="title">
           {{ intl.formatMessage({ id: 'gateway.panel' }, { device: device.name }) }}
         </h1>
-        <KeepAlive>
-          <DeviceControlPanel
-            :key="device.ip"
-            :device="device"
-            :gateway="gateway"
-            :features="features"
-            :apiMethods="apiMethods"
-          />
-        </KeepAlive>
+        <DeviceControlPanel
+          :key="device.ip"
+          :device="device"
+          :gateway="gateway"
+          :features="features"
+          :apiMethods="apiMethods"
+        />
       </div>
     </div>
     <div v-else style="color: red; text-align: center">

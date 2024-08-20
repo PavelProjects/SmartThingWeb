@@ -31,24 +31,23 @@ export default {
       return this.mode === 'gateway' || !!this.gateway
     },
     gatewayName() {
-      if (this.mode !== 'gateway') {
+      if (this.mode === 'cloud') {
         return this.gateway?.name
+      }
+      return undefined
+    },
+    gatewayId() {
+      if (this.mode === 'cloud') {
+        return this.gateway?.id
       }
       return undefined
     }
   },
-  methods: {
-    addGatewayToPath(path) {
-      if (this.mode === 'gateway') {
-        return path
-      }
-      if (!this.gateway) {
-        router.push('/gateways')
-        return
-      }
-      return `/${this.gateway.id}${path}`
+  mounted() {
+    if (this.mode === 'cloud' && !this.gateway) {
+      this.$router.push({ name: 'gateways-selector' })
     }
-  }
+  },
 }
 </script>
 
@@ -57,16 +56,16 @@ export default {
     <div class="menu">
       <MenuSvg />
       <div v-if="gatewayRoutesEnabled" class="menu-items">
-        <router-link :to="addGatewayToPath('/panel')">
+        <router-link :to="{ name: 'panel', params: { gateway: gatewayId }}">
           <h2>{{ intl.formatMessage({ id: 'doc.panel' }) }}</h2>
         </router-link>
-        <router-link :to="addGatewayToPath('/dashboard')">
+        <router-link :to="{ name: 'dashboard', params: { gateway: gatewayId }}">
           <h2>{{ intl.formatMessage({ id: 'doc.dashboard' }) }}</h2>
         </router-link>
-        <router-link :to="addGatewayToPath('/settings')">
+        <router-link :to="{ name: 'settings', params: { gateway: gatewayId }}">
           <h2>{{ intl.formatMessage({ id: 'doc.device.settings' }) }}</h2>
         </router-link>
-        <router-link :to="addGatewayToPath('/logs')">
+        <router-link :to="{ name: 'logs', params: { gateway: gatewayId }}">
           <h2>{{ intl.formatMessage({ id: 'doc.device.logs' }) }}</h2>
         </router-link>
       </div>
