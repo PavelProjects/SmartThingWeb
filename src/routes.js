@@ -1,5 +1,5 @@
 import GatewayControlPanel from './components/GatewayControlPanel.vue'
-import DeviceLogs from './components/device/logs/DeviceLogs.vue'
+import DeviceLogs from './components/logs/DeviceLogs.vue'
 import SettingsManager from './components/settings/SettingsManager.vue'
 import GatewaySelector from './components/gateway/GatewaySelector.vue'
 import Dashborard from './components/dashboard/Dashboard.vue'

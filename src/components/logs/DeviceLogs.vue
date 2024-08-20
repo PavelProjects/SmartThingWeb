@@ -1,10 +1,10 @@
 <script>
 import { useIntl } from 'vue-intl'
-import { GatewayApi } from '../../../api/gateway/GatewayApi'
-import { useStompClientStore } from '../../../store/stompClientStore'
-import { toast } from '../../../utils/EventBus'
+import { GatewayApi } from '../../api/gateway/GatewayApi'
+import { useStompClientStore } from '../../store/stompClientStore'
+import { toast } from '../../utils/EventBus'
 import LogMessage from './LogMessage.vue'
-import Container from '../../base/Container.vue'
+import Container from '../base/Container.vue'
 
 export default {
   name: 'DeviceLogs',
