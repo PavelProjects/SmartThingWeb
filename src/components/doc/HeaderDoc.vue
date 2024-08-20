@@ -3,7 +3,6 @@ import GatewayAuthInfo from './GatewayAuthInfo.vue'
 import MenuSvg from 'vue-material-design-icons/Menu.vue'
 import UserAuthInfo from './UserAuthInfo.vue'
 import { useIntl } from 'vue-intl'
-import { router } from '../../routes'
 import GatewaySelector from '../gateway/GatewaySelector.vue'
 import Container from '../base/Container.vue'
 
@@ -16,12 +15,10 @@ export default {
     GatewaySelector,
     Container
   },
-  inject: ['gateway'],
+  inject: ['gateway', 'mode'],
   data() {
-    const mode = import.meta.env.VITE_MODE
     const intl = useIntl()
     return {
-      mode,
       intl,
       menuItemsVisible: false,
       gatewaySelectorVisible: false
@@ -46,7 +43,7 @@ export default {
   },
   mounted() {
     if (this.mode === 'cloud' && !this.gateway) {
-      this.$router.push({ name: 'gateways-selector' })
+      this.$router.push({ name: 'gateway-selector' })
     }
   },
 }

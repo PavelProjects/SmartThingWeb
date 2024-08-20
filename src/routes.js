@@ -12,7 +12,7 @@ const unkownRoute = {
   redirect: '/'
 }
 
-const gatewayRoutes = [
+const routes = mode === 'gateway' ? [
   {
     path: '/',
     redirect: () => {
@@ -40,9 +40,7 @@ const gatewayRoutes = [
     component: Dashborard
   },
   unkownRoute
-]
-
-const cloudRoutes = [
+] : [
   {
     path: '/',
     redirect: () => {
@@ -50,7 +48,7 @@ const cloudRoutes = [
     },
   },
   {
-    name: 'gateways-selector',
+    name: 'gateway-selector',
     path: '/gateways',
     component: GatewaySelector
   },
@@ -79,5 +77,5 @@ const cloudRoutes = [
 
 export const router = createRouter({
   history: createWebHashHistory(),
-  routes: mode === 'cloud' ? cloudRoutes : gatewayRoutes
+  routes: routes
 })

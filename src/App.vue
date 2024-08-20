@@ -7,6 +7,7 @@ import { useCloudAuthStore } from './store/cloudAuthStore'
 import { storeToRefs } from 'pinia'
 import { useStompClientStore } from './store/stompClientStore'
 import GatewayProvider from './components/gateway/GatewayProvider.vue'
+import { computed } from 'vue'
 
 export default {
   components: {
@@ -23,6 +24,11 @@ export default {
       id,
       login,
       authStore
+    }
+  },
+  provide() {
+    return {
+      mode: computed(() => this.mode)
     }
   },
   computed: {
@@ -50,7 +56,7 @@ export default {
 </script>
 
 <template>
-  <div>
+  <div v-if="!!mode">
     <router-view v-if="isAuthenticated" :key="$route.fullPath" v-slot="{ Component, path }">
       <GatewayProvider>
         <HeaderDoc class="doc" />

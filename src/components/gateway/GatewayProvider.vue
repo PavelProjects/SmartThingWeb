@@ -9,12 +9,12 @@ export default {
   name: 'GatewayProvider',
   data() {
     return {
-      mode: import.meta.env.VITE_MODE,
       gatewayId: this.$route.params.gateway,
       currentPath: this.$route.path,
       gateway: undefined
     }
   },
+  inject: ['mode'],
   provide() {
     return { gateway: computed(() => this.gateway) }
   },

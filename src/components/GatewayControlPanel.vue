@@ -3,10 +3,7 @@ import DevicesSearchView from './device/DevicesSearchView.vue'
 import DeviceControlPanel from './device/DeviceControlPanel.vue'
 import { useIntl } from 'vue-intl'
 import DropdownMenu from './menu/DropdownMenu.vue'
-import { DeviceApi } from '../api/device/DeviceApi'
-import { toast } from '../utils/EventBus'
 import RiseLoader from 'vue-spinner/src/RiseLoader.vue'
-import { GatewayApi } from '../api/gateway/GatewayApi'
 
 export default {
   name: 'DevicesMain',
@@ -16,17 +13,13 @@ export default {
     DropdownMenu,
     RiseLoader
   },
-  inject: ['gateway'],
+  inject: ['gateway', 'mode'],
   data() {
     const intl = useIntl()
     return {
-      mode: import.meta.env.VITE_MODE,
       windowWidth: window.innerWidth,
       searchExpanded: true,
-      loadingDevice: false,
-      device: undefined, //todo provide
-      features: undefined,
-      apiMethods: undefined,
+      device: undefined,
       intl
     }
   },
@@ -51,26 +44,7 @@ export default {
       if (this.device === selected) {
         return
       }
-      this.device = undefined
-      this.features = undefined
-
-      this.loadingDevice = true
-      try {
-        // await DeviceApi.health(selected, this.gateway)
-        this.features =
-          (await DeviceApi.features(selected, this.gateway).catch((e) => console.log(e))) || {}
-        this.apiMethods =
-          (await GatewayApi.getDeviceApiMethods({ device: selected, gateway: this.gateway })) ?? []
-        this.device = selected
-        this.searchExpanded = false
-      } catch (error) {
-        console.error(error)
-        toast.error({
-          caption: this.intl.formatMessage({ id: 'device.unreachable' })
-        })
-      } finally {
-        this.loadingDevice = false
-      }
+      this.device = selected
     }
   }
 }
@@ -96,19 +70,11 @@ export default {
       >
         <DevicesSearchView :gateway="gateway" :selected="device" @select="handleDeviceSelect" />
       </DropdownMenu>
-      <RiseLoader v-if="loadingDevice" class="rise-loader" />
-      <div v-if="device">
-        <h1 class="title">
-          {{ intl.formatMessage({ id: 'gateway.panel' }, { device: device.name }) }}
-        </h1>
-        <DeviceControlPanel
-          :key="device.ip"
-          :device="device"
-          :gateway="gateway"
-          :features="features"
-          :apiMethods="apiMethods"
-        />
-      </div>
+      <DeviceControlPanel
+        v-if="device"
+        :key="device.ip"
+        :device="device"
+      />
     </div>
     <div v-else style="color: red; text-align: center">
       <h1>{{ intl.formatMessage({ id: 'error' }, { type: 'access_denied' }) }}</h1>
