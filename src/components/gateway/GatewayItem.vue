@@ -151,16 +151,16 @@ export default {
         <h3>{{ gateway.description }}</h3>
       </div>
       <ContextMenu class="menu">
-        <p @click.stop="showEditDialog = true">
+        <p @click="showEditDialog = true">
           {{ intl.formatMessage({ id: 'gateway.item.button.edit' }) }}
         </p>
-        <p @click.stop="deleteGateway">
+        <p @click="deleteGateway">
           {{ intl.formatMessage({ id: 'gateway.item.button.delete' }) }}
         </p>
-        <p v-if="gateway.haveToken" @click.stop="deleteToken">
+        <p v-if="gateway.haveToken" @click="deleteToken">
           {{ intl.formatMessage({ id: 'gateway.item.button.token.delete' }) }}
         </p>
-        <p v-else @click.stop="generateToken">
+        <p v-else @click="generateToken">
           {{ intl.formatMessage({ id: 'gateway.item.button.token.gen' }) }}
         </p>
       </ContextMenu>

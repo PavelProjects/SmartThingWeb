@@ -8,22 +8,9 @@ export default {
   },
   data() {
     return {
-      hover: false,
-      clicked: false
+      open: false,
     }
   },
-  computed: {
-    itemsStyle() {
-      if (this.clicked) {
-        return {
-          display: 'inherit'
-        }
-      }
-      return {
-        display: this.hover ? 'inherit' : 'none'
-      }
-    }
-  }
 }
 </script>
 
@@ -31,35 +18,43 @@ export default {
   <div class="menu" @click.stop="() => {}">
     <DotsVertical
       class="menu-icon"
-      @click="() => (clicked = !clicked)"
-      @mouseover="() => (hover = true)"
-      @mouseleave="() => (hover = false)"
+      @click="() => (open = !open)"
     />
     <div
+      v-if="open"
       class="menu-items"
-      :style="itemsStyle"
-      @mouseover="() => (hover = true)"
-      @mouseleave="() => (hover = false)"
+      @click="() => open = false"
     >
       <slot></slot>
     </div>
+    <div v-if="open" class="context-overlay" @click="() => open = false"></div>
   </div>
 </template>
 
 <style scoped>
+.context-overlay {
+  position: fixed;
+  left: 0px;
+  width: 100vw;
+  height: 100vh;
+  z-index: 998;
+}
+.menu-icon {
+  z-index: 999;
+}
 .menu-items {
   position: absolute;
   z-index: 999;
   top: 5px;
-  right: -100px;
+  right: -95px;
   min-width: 100px;
   border: solid 1px var(--color-border);
   border-radius: var(--border-radius);
   background-color: var(--color-background-mute);
   padding: 2px 5px;
+  cursor: pointer;
 }
 :slotted(.menu-items *:hover) {
-  cursor: pointer;
   opacity: 0.8;
 }
 :slotted(.menu-items *) {

@@ -151,10 +151,10 @@ export default {
         {{ group.device.name }}
       </h2>
       <ContextMenu class="context-menu">
-        <p @click.stop="editing = true">
+        <p @click="editing = true">
           {{ intl.formatMessage({ id: 'dashboard.group.edit' }) }}
         </p>
-        <p @click.stop="deleteGroup">
+        <p @click="deleteGroup">
           {{ intl.formatMessage({ id: 'dashboard.group.delete' }) }}
         </p>
       </ContextMenu>

@@ -23,11 +23,12 @@ export default {
     return {
       mode,
       intl,
+      menuItemsVisible: false,
       gatewaySelectorVisible: false
     }
   },
   computed: {
-    gatewayRoutesEnabled() {
+    menuVisible() {
       return this.mode === 'gateway' || !!this.gateway
     },
     gatewayName() {
@@ -53,9 +54,9 @@ export default {
 
 <template>
   <Container class="doc">
-    <div class="menu">
-      <MenuSvg />
-      <div v-if="gatewayRoutesEnabled" class="menu-items">
+    <div v-if="menuVisible" class="menu">
+      <MenuSvg @click.stop="() => menuItemsVisible = !menuItemsVisible" />
+      <div v-if="menuItemsVisible" class="menu-items">
         <router-link :to="{ name: 'panel', params: { gateway: gatewayId }}">
           <h2>{{ intl.formatMessage({ id: 'doc.panel' }) }}</h2>
         </router-link>
@@ -69,10 +70,9 @@ export default {
           <h2>{{ intl.formatMessage({ id: 'doc.device.logs' }) }}</h2>
         </router-link>
       </div>
+      <div v-if="menuItemsVisible" class="overlay" @click="() => menuItemsVisible = fase"></div>
     </div>
-    <router-link to="/">
-      <h1 class="green">{{ intl.formatMessage({ id: 'doc.title' }) }}</h1>
-    </router-link>
+    <h1 class="green">{{ intl.formatMessage({ id: 'doc.title' }) }}</h1>
     <div v-if="gatewayName" class="gateway-info">
       <h1
         class="title"
@@ -103,20 +103,16 @@ export default {
 }
 
 .menu {
+  cursor: pointer;
   display: flex;
   height: 100%;
   align-items: center;
   gap: var(--default-gap);
 }
 
-.menu:hover .menu-items {
-  display: block;
-}
-
 .menu-items {
   min-width: 200px;
   text-align: center;
-  display: none;
   position: absolute;
   top: calc(var(--doc-height) - 5px);
   left: calc(var(--default-gap) - 5px);
@@ -124,6 +120,7 @@ export default {
   background-color: var(--color-background-mute);
   border: solid 1px var(--color-border);
   border-radius: var(--border-radius);
+  z-index: 999;
 }
 
 .menu-items h2:hover {
