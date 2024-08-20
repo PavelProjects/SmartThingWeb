@@ -56,10 +56,10 @@ export default {
   methods: {
     generateColorByIp(ip) {
       const splited = ip.split('.')
-      const r = this.chooseRandom(splited, 100, 200)
-      const g = this.chooseRandom(splited, 100, 200)
-      const b = this.chooseRandom(splited, 100, 200)
-      return 'rgb(' + r + ',' + g + ',' + b + ', 0.5)'
+      const r = this.chooseRandom(splited, 100, 250)
+      const g = this.chooseRandom(splited, 100, 250)
+      const b = this.chooseRandom(splited, 100, 250)
+      return 'rgb(' + r + ',' + g + ',' + b + ', 0.7)'
     },
     chooseRandom(arr, min, max) {
       const val = arr[Math.floor(Math.random() * arr.length)]
@@ -87,7 +87,7 @@ export default {
 
 <template>
   <Container class="logs-view" :vertical="true">
-    <div class="log-message-container bordered">
+    <div class="log-message-container">
       <h2 v-for="column of ['device', 'date', 'tag', 'level', 'msg']" :key="column">
         {{ intl.formatMessage({ id: 'device.logs.columns' }, { column }) }}
       </h2>
@@ -115,6 +115,7 @@ export default {
   grid-template-columns: 200px 150px 200px 120px auto;
   text-align: center;
   padding: var(--default-padding);
+  border: 1px solid;
 }
 .log-message-container :deep(div),h2 {
   border-right: 1px solid var(--color-border);
