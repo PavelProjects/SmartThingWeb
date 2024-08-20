@@ -384,12 +384,12 @@ const messages = {
     'device.info.chip.model': 'Модель чипа',
     'device.info.chip.revision': 'Ревизия чипа',
     'device.hooks.menu.item.title': 'Нажмите для открытия хуков',
-    'device.hooks.select.to.manage': `Select {
+    'device.hooks.select.to.manage': `Выберите {
       type, select,
       sensor {сенсор}
       state {состояние}
       other {{type}}
-    } to manage hooks`,
+    } для редактирования хуков`,
     'device.hooks.title': 'Хуки',
     'device.hooks.button.add': 'Добавить хук типа ',
     'device.metrics.updatime': `

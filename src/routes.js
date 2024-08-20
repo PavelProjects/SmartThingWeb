@@ -1,5 +1,5 @@
 import GatewayControlPanel from './components/GatewayControlPanel.vue'
-import DeviceLogs from './components/device/logs/DeviceLogs.vue'
+import DeviceLogs from './components/logs/DeviceLogs.vue'
 import SettingsManager from './components/settings/SettingsManager.vue'
 import GatewaySelector from './components/gateway/GatewaySelector.vue'
 import Dashborard from './components/dashboard/Dashboard.vue'
@@ -17,25 +17,27 @@ const gatewayRoutes = [
     path: '/',
     redirect: () => {
       return '/panel'
-    },
-    children: [
-      {
-        path: '/panel',
-        component: GatewayControlPanel
-      },
-      {
-        path: '/logs',
-        component: DeviceLogs
-      },
-      {
-        path: '/settings',
-        component: SettingsManager
-      },
-      {
-        path: '/dashboard',
-        component: Dashborard
-      }
-    ]
+    }
+  },
+  {
+    name: 'panel',
+    path: '/panel',
+    component: GatewayControlPanel,
+  },
+  {
+    name: 'logs',
+    path: '/logs',
+    component: DeviceLogs
+  },
+  {
+    name: 'settings',
+    path: '/settings',
+    component: SettingsManager
+  },
+  {
+    name: 'dashboard',
+    path: '/dashboard',
+    component: Dashborard
   },
   unkownRoute
 ]
@@ -46,28 +48,31 @@ const cloudRoutes = [
     redirect: () => {
       return '/gateways'
     },
-    children: [
-      {
-        path: '/gateways',
-        component: GatewaySelector
-      },
-      {
-        path: '/:gateway/panel',
-        component: GatewayControlPanel
-      },
-      {
-        path: '/:gateway/dashboard',
-        component: Dashborard
-      },
-      {
-        path: '/:gateway/logs',
-        component: DeviceLogs
-      },
-      {
-        path: '/:gateway/settings',
-        component: SettingsManager
-      }
-    ]
+  },
+  {
+    name: 'gateways-selector',
+    path: '/gateways',
+    component: GatewaySelector
+  },
+  {
+    name: 'panel',
+    path: '/:gateway/panel',
+    component: GatewayControlPanel
+  },
+  {
+    name: 'dashboard',
+    path: '/:gateway/dashboard',
+    component: Dashborard
+  },
+  {
+    name: 'logs',
+    path: '/:gateway/logs',
+    component: DeviceLogs
+  },
+  {
+    name: 'settings',
+    path: '/:gateway/settings',
+    component: SettingsManager
   },
   unkownRoute
 ]
