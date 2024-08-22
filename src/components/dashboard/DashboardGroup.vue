@@ -161,61 +161,53 @@ export default {
       <Container class="values">
         <DashboardValue
           v-if="observables.length > 0"
-          v-for="{ name, type, units }, index of observables"
+          v-for="({ name, type, units }, index) of observables"
           :key="index"
           :type="type"
           :name="name"
           :value="values?.[type + 's']?.[name] ?? 'Nan'"
           :units="units"
         />
-        <LoadingButton
-          v-else
-          class="add-values"
-          @click="editing = true"
-        >
+        <LoadingButton v-else class="add-values" @click="editing = true">
           <h2>
             {{ intl.formatMessage({ id: 'dashboard.group.add.values' }) }}
           </h2>
         </LoadingButton>
       </Container>
     </Container>
-    <GroupEditDialog 
-      v-if="editing"
-      :group="group"
-      @close="handleEditClose"
-    />
+    <GroupEditDialog v-if="editing" :group="group" @close="handleEditClose" />
   </div>
 </template>
 
 <style scoped>
-  .dashboard-group {
-    position: relative;
-    width: fit-content;
-  }
-  .dashboard-group .title {
-    border-bottom: 2px solid var(--color-border);
-  }
-  .update {
-    position: absolute;
-    top: 2px;
-    left: 2px;
-  }
-  .add-values {
-    margin: var(--default-gap);
-  }
-  .values .dashboard-value {
-    padding: var(--default-gap);
-    border-right: 2px solid var(--color-border);
-  }
-  .values .dashboard-value:last-child {
-    border-right: none;
-  }
-  .context-menu {
-    position: absolute;
-    top: 5px;
-    right: 0px;
-  }
-  .field-container {
-    display: flex;
-  }
+.dashboard-group {
+  position: relative;
+  width: fit-content;
+}
+.dashboard-group .title {
+  border-bottom: 2px solid var(--color-border);
+}
+.update {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+}
+.add-values {
+  margin: var(--default-gap);
+}
+.values .dashboard-value {
+  padding: var(--default-gap);
+  border-right: 2px solid var(--color-border);
+}
+.values .dashboard-value:last-child {
+  border-right: none;
+}
+.context-menu {
+  position: absolute;
+  top: 5px;
+  right: 0px;
+}
+.field-container {
+  display: flex;
+}
 </style>

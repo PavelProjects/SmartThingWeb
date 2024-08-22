@@ -45,29 +45,29 @@ export default {
     if (this.mode === 'cloud' && !this.gateway) {
       this.$router.push({ name: 'gateway-selector' })
     }
-  },
+  }
 }
 </script>
 
 <template>
   <Container class="doc">
     <div v-if="menuVisible" class="menu">
-      <MenuSvg @click.stop="() => menuItemsVisible = !menuItemsVisible" />
+      <MenuSvg @click.stop="() => (menuItemsVisible = !menuItemsVisible)" />
       <div v-if="menuItemsVisible" class="menu-items">
-        <router-link :to="{ name: 'panel', params: { gateway: gatewayId }}">
+        <router-link :to="{ name: 'panel', params: { gateway: gatewayId } }">
           <h2>{{ intl.formatMessage({ id: 'doc.panel' }) }}</h2>
         </router-link>
-        <router-link :to="{ name: 'dashboard', params: { gateway: gatewayId }}">
+        <router-link :to="{ name: 'dashboard', params: { gateway: gatewayId } }">
           <h2>{{ intl.formatMessage({ id: 'doc.dashboard' }) }}</h2>
         </router-link>
-        <router-link :to="{ name: 'settings', params: { gateway: gatewayId }}">
+        <router-link :to="{ name: 'settings', params: { gateway: gatewayId } }">
           <h2>{{ intl.formatMessage({ id: 'doc.device.settings' }) }}</h2>
         </router-link>
-        <router-link :to="{ name: 'logs', params: { gateway: gatewayId }}">
+        <router-link :to="{ name: 'logs', params: { gateway: gatewayId } }">
           <h2>{{ intl.formatMessage({ id: 'doc.device.logs' }) }}</h2>
         </router-link>
       </div>
-      <div v-if="menuItemsVisible" class="overlay" @click="() => menuItemsVisible = fase"></div>
+      <div v-if="menuItemsVisible" class="overlay" @click="() => (menuItemsVisible = fase)"></div>
     </div>
     <h1 class="green">{{ intl.formatMessage({ id: 'doc.title' }) }}</h1>
     <div v-if="gatewayName" class="gateway-info">

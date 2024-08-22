@@ -3,7 +3,6 @@ import DevicesSearchView from './device/DevicesSearchView.vue'
 import DeviceControlPanel from './device/DeviceControlPanel.vue'
 import { useIntl } from 'vue-intl'
 import DropdownMenu from './menu/DropdownMenu.vue'
-import RiseLoader from 'vue-spinner/src/RiseLoader.vue'
 
 export default {
   name: 'DevicesMain',
@@ -11,7 +10,6 @@ export default {
     DevicesSearchView,
     DeviceControlPanel,
     DropdownMenu,
-    RiseLoader
   },
   inject: ['gateway', 'mode'],
   data() {
@@ -71,11 +69,7 @@ export default {
       >
         <DevicesSearchView :gateway="gateway" :selected="device" @select="handleDeviceSelect" />
       </DropdownMenu>
-      <DeviceControlPanel
-        v-if="device"
-        :key="device.ip"
-        :device="device"
-      />
+      <DeviceControlPanel v-if="device" :key="device.ip" :device="device" />
     </div>
     <div v-else style="color: red; text-align: center">
       <h1>{{ intl.formatMessage({ id: 'error' }, { type: 'access_denied' }) }}</h1>

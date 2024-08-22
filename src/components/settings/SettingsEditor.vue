@@ -201,7 +201,7 @@ export default {
 </script>
 
 <template>
-  <div style="padding: var(--default-gap);">
+  <div style="padding: var(--default-gap)">
     <Container class="settings-editor" :vertical="true">
       <InputField
         :label="intl.formatMessage({ id: 'device.settings.editor.name' })"

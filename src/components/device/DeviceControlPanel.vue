@@ -39,30 +39,30 @@ export default {
       features: undefined,
       apiMethods: undefined,
       defaultTabs: {
-          info: {
-            class: DeviceInfoView,
-            caption: intl.formatMessage({ id: 'device.tabs' }, { tab: 'info' })
-          },
-          actions: {
-            class: ActionsView,
-            caption: intl.formatMessage({ id: 'device.tabs' }, { tab: 'actions' })
-          },
-          sensors: {
-            class: SensorsView,
-            caption: intl.formatMessage({ id: 'device.tabs' }, { tab: 'sensors' })
-          },
-          states: {
-            class: StatesView,
-            caption: intl.formatMessage({ id: 'device.tabs' }, { tab: 'states' })
-          },
-          config: {
-            class: ConfigView,
-            caption: intl.formatMessage({ id: 'device.tabs' }, { tab: 'config' })
-          },
-          metrics: {
-            class: MetricsView,
-            caption: intl.formatMessage({ id: 'device.tabs' }, { tab: 'metrics' })
-          }
+        info: {
+          class: DeviceInfoView,
+          caption: intl.formatMessage({ id: 'device.tabs' }, { tab: 'info' })
+        },
+        actions: {
+          class: ActionsView,
+          caption: intl.formatMessage({ id: 'device.tabs' }, { tab: 'actions' })
+        },
+        sensors: {
+          class: SensorsView,
+          caption: intl.formatMessage({ id: 'device.tabs' }, { tab: 'sensors' })
+        },
+        states: {
+          class: StatesView,
+          caption: intl.formatMessage({ id: 'device.tabs' }, { tab: 'states' })
+        },
+        config: {
+          class: ConfigView,
+          caption: intl.formatMessage({ id: 'device.tabs' }, { tab: 'config' })
+        },
+        metrics: {
+          class: MetricsView,
+          caption: intl.formatMessage({ id: 'device.tabs' }, { tab: 'metrics' })
+        }
       }
     }
   },
@@ -91,10 +91,10 @@ export default {
       this.loading = true
       try {
         // await DeviceApi.health(selected, this.gateway)
-        this.features =
-          (await DeviceApi.features(this.device, this.gateway)) || {}
+        this.features = (await DeviceApi.features(this.device, this.gateway)) || {}
         this.apiMethods =
-          (await GatewayApi.getDeviceApiMethods({ device: this.device, gateway: this.gateway })) ?? []
+          (await GatewayApi.getDeviceApiMethods({ device: this.device, gateway: this.gateway })) ??
+          []
       } catch (error) {
         console.error(error)
         toast.error({

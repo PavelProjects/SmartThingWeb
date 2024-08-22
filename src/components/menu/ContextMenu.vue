@@ -8,26 +8,19 @@ export default {
   },
   data() {
     return {
-      open: false,
+      open: false
     }
-  },
+  }
 }
 </script>
 
 <template>
   <div class="menu" @click.stop="() => {}">
-    <DotsVertical
-      class="menu-icon"
-      @click="() => (open = !open)"
-    />
-    <div
-      v-if="open"
-      class="menu-items"
-      @click="() => open = false"
-    >
+    <DotsVertical class="menu-icon" @click="() => (open = !open)" />
+    <div v-if="open" class="menu-items" @click="() => (open = false)">
       <slot></slot>
     </div>
-    <div v-if="open" class="context-overlay" @click="() => open = false"></div>
+    <div v-if="open" class="context-overlay" @click="() => (open = false)"></div>
   </div>
 </template>
 

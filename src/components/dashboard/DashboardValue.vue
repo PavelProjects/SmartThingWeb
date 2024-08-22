@@ -26,8 +26,8 @@ export default {
 </template>
 
 <style scoped>
-  .item {
-    width: 200px;
-    text-align: center;
-  }
+.item {
+  width: 200px;
+  text-align: center;
+}
 </style>

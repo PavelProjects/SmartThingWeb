@@ -117,7 +117,8 @@ export default {
   padding: var(--default-padding);
   border: 1px solid;
 }
-.log-message-container :deep(div),h2 {
+.log-message-container :deep(div),
+h2 {
   border-right: 1px solid var(--color-border);
   height: 100%;
   display: flex;

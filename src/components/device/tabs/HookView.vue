@@ -47,7 +47,7 @@ export default {
     TestTubeSvg,
     PopUpDialog,
     ChevronDown,
-    ChevronUp,
+    ChevronUp
   },
   data() {
     const intl = useIntl()
@@ -257,8 +257,8 @@ export default {
 <template>
   <Container class="hook" :vertical="true">
     <Container>
-      <ChevronUp v-if="expanded" @click.stop="() => expanded = false"/>
-      <ChevronDown v-else @click.stop="() => expanded = true"/>
+      <ChevronUp v-if="expanded" @click.stop="() => (expanded = false)" />
+      <ChevronDown v-else @click.stop="() => (expanded = true)" />
       <h3 class="title" style="flex: 1 1 auto; text-align: start">
         [{{ hook.id }}] {{ hook.caption || systemNameToNormal(hook.type) }}
       </h3>
@@ -301,8 +301,8 @@ export default {
       />
     </Container>
     <PopUpDialog v-if="testDialogVisible" @close="testDialogVisible = false">
-      <Container :vertical="true" style="padding: var(--default-gap);">
-        <InputField 
+      <Container :vertical="true" style="padding: var(--default-gap)">
+        <InputField
           :label="intl.formatMessage({ id: 'device.hook.test.label' })"
           :type="observable.type === 'sensor' ? 'number' : 'text'"
           v-model="testValue"
@@ -318,10 +318,10 @@ export default {
 </template>
 
 <style scoped>
-  .hook {
-    padding: var(--default-gap);
-  }
-  .icon {
-    cursor: pointer;
-  }
+.hook {
+  padding: var(--default-gap);
+}
+.icon {
+  cursor: pointer;
+}
 </style>
