@@ -5,6 +5,7 @@ import UserAuthInfo from './UserAuthInfo.vue'
 import { useIntl } from 'vue-intl'
 import GatewaySelector from '../gateway/GatewaySelector.vue'
 import Container from '../base/Container.vue'
+import LocaleSelector from './LocaleSelector.vue'
 
 export default {
   name: 'HeaderDoc',
@@ -13,7 +14,8 @@ export default {
     MenuSvg,
     UserAuthInfo,
     GatewaySelector,
-    Container
+    Container,
+    LocaleSelector,
   },
   inject: ['gateway', 'mode'],
   data() {
@@ -53,21 +55,22 @@ export default {
   <Container class="doc">
     <div v-if="menuVisible" class="menu">
       <MenuSvg @click.stop="() => (menuItemsVisible = !menuItemsVisible)" />
-      <div v-if="menuItemsVisible" class="menu-items">
-        <router-link :to="{ name: 'panel', params: { gateway: gatewayId } }">
-          <h2>{{ intl.formatMessage({ id: 'doc.panel' }) }}</h2>
-        </router-link>
-        <router-link :to="{ name: 'dashboard', params: { gateway: gatewayId } }">
-          <h2>{{ intl.formatMessage({ id: 'doc.dashboard' }) }}</h2>
-        </router-link>
-        <router-link :to="{ name: 'settings', params: { gateway: gatewayId } }">
-          <h2>{{ intl.formatMessage({ id: 'doc.device.settings' }) }}</h2>
-        </router-link>
-        <router-link :to="{ name: 'logs', params: { gateway: gatewayId } }">
-          <h2>{{ intl.formatMessage({ id: 'doc.device.logs' }) }}</h2>
-        </router-link>
+      <div v-if="menuItemsVisible" class="overlay" @click="() => (menuItemsVisible = fase)">
+        <div class="menu-items">
+          <router-link :to="{ name: 'panel', params: { gateway: gatewayId } }">
+            <h2>{{ intl.formatMessage({ id: 'doc.panel' }) }}</h2>
+          </router-link>
+          <router-link :to="{ name: 'dashboard', params: { gateway: gatewayId } }">
+            <h2>{{ intl.formatMessage({ id: 'doc.dashboard' }) }}</h2>
+          </router-link>
+          <router-link :to="{ name: 'settings', params: { gateway: gatewayId } }">
+            <h2>{{ intl.formatMessage({ id: 'doc.device.settings' }) }}</h2>
+          </router-link>
+          <router-link :to="{ name: 'logs', params: { gateway: gatewayId } }">
+            <h2>{{ intl.formatMessage({ id: 'doc.device.logs' }) }}</h2>
+          </router-link>
+        </div>
       </div>
-      <div v-if="menuItemsVisible" class="overlay" @click="() => (menuItemsVisible = fase)"></div>
     </div>
     <h1 class="green">{{ intl.formatMessage({ id: 'doc.title' }) }}</h1>
     <div v-if="gatewayName" class="gateway-info">
@@ -82,6 +85,7 @@ export default {
     </div>
     <UserAuthInfo v-if="mode === 'cloud'" class="log-in-info" />
     <GatewayAuthInfo v-if="mode === 'gateway'" class="log-in-info" />
+    <LocaleSelector />
     <GatewaySelector
       v-if="mode === 'cloud' && gatewaySelectorVisible"
       @close="gatewaySelectorVisible = false"
@@ -111,11 +115,10 @@ export default {
   min-width: 200px;
   text-align: center;
   position: absolute;
-  top: calc(var(--doc-height) - 5px);
-  left: calc(var(--default-gap) - 5px);
+  top: var(--default-gap);
+  left: var(--default-gap);
   padding: var(--default-padding);
   background-color: var(--color-background-mute);
-  border: solid 1px var(--color-border);
   border-radius: var(--border-radius);
   z-index: 999;
 }

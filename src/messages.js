@@ -1,6 +1,3 @@
-const defaultLocale = 'en'
-const currentLocale = navigator.language.slice(0, 2)
-
 const messages = {
   en: {
     'doc.title': 'SmartThing',
@@ -483,4 +480,4 @@ const messages = {
   }
 }
 
-export { defaultLocale, currentLocale, messages }
+export { messages }

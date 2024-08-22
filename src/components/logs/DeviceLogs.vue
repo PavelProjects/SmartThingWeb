@@ -116,6 +116,7 @@ export default {
   text-align: center;
   padding: var(--default-padding);
   border: 1px solid;
+  border-radius: var(--border-radius);
 }
 .log-message-container :deep(div),
 h2 {
