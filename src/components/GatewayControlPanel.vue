@@ -45,6 +45,7 @@ export default {
         return
       }
       this.device = selected
+      this.searchExpanded = false
     }
   }
 }

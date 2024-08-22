@@ -17,6 +17,8 @@ import { useIntl } from 'vue-intl'
 import Container from '../../base/Container.vue'
 import ContextMenu from '../../menu/ContextMenu.vue'
 import PopUpDialog from '../../dialogs/PopUpDialog.vue'
+import ChevronDown from 'vue-material-design-icons/ChevronDown.vue'
+import ChevronUp from 'vue-material-design-icons/ChevronUp.vue'
 
 const SYSTEM_FIELDS = ['id', 'type', 'readonly']
 
@@ -43,7 +45,9 @@ export default {
     CancelSVG,
     EditSVG,
     TestTubeSvg,
-    PopUpDialog
+    PopUpDialog,
+    ChevronDown,
+    ChevronUp,
   },
   data() {
     const intl = useIntl()
@@ -55,6 +59,7 @@ export default {
       editing: this.hookProp.id == NEW_HOOK_ID,
       haveChanges: this.hookProp.id == NEW_HOOK_ID,
       validationFailed: [],
+      expanded: false,
       loading: false,
       testLoading: false,
       testDialogVisible: false,
@@ -252,6 +257,8 @@ export default {
 <template>
   <Container class="hook" :vertical="true">
     <Container>
+      <ChevronUp v-if="expanded" @click.stop="() => expanded = false"/>
+      <ChevronDown v-else @click.stop="() => expanded = true"/>
       <h3 class="title" style="flex: 1 1 auto; text-align: start">
         [{{ hook.id }}] {{ hook.caption || systemNameToNormal(hook.type) }}
       </h3>
@@ -279,7 +286,7 @@ export default {
         </div>
       </Container>
     </Container>
-    <Container :vertical="true">
+    <Container v-if="expanded" :vertical="true">
       <InputField label="type" :modelValue="hook.type" :disabled="true" />
       <component
         v-for="{ key, label, value, render, required } in fieldsComponents"
