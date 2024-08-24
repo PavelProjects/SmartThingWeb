@@ -92,6 +92,11 @@ export default {
         :disabled="true"
       />
       <InputField
+        :label="intl.formatMessage({ id: 'device.info.platform' })"
+        :modelValue="info.platform"
+        :disabled="true"
+      />
+      <InputField
         :label="intl.formatMessage({ id: 'device.info.version' })"
         :modelValue="info.version"
         :disabled="true"
