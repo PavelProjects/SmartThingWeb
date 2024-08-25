@@ -52,14 +52,15 @@ export default {
   data() {
     const intl = useIntl()
     const testEnabled = !!this.apiMethods.find(({ name }) => name === DeviceApiMethods.TEST_HOOK)
+    const newHook = this.hookProp.id == NEW_HOOK_ID
     return {
       intl,
       testEnabled,
       hook: this.hookProp,
-      editing: this.hookProp.id == NEW_HOOK_ID,
-      haveChanges: this.hookProp.id == NEW_HOOK_ID,
+      editing: newHook,
+      haveChanges: newHook,
       validationFailed: [],
-      expanded: false,
+      expanded: newHook,
       loading: false,
       testLoading: false,
       testDialogVisible: false,
