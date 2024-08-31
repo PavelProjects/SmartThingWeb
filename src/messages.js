@@ -102,6 +102,7 @@ const messages = {
       states {States}
       config {Configuration}
       metrics {Metrics}
+      danger {DangerZone}
       other {{tab}}
     }`,
     'device.settings.editor.name.empty': "Name can't be empty!",
@@ -228,6 +229,26 @@ const messages = {
     'dashboard.group.edit.save': 'Save',
     'dashborad.group.edit.add.observables': 'Add sensors or states',
     'dashborad.group.edit.validation.error': 'Please fill required fields',
+    'danger.title': 'Please, be careful with this actions!',
+    'danger.restart.confirm': 'This action will restart device right now! Are u sure?',
+    'danger.restart.success': 'Device is restarting',
+    'danger.restart.success.timeout': 'Device should restart now',
+    'danger.restart.success.timeout.desc': 'Got a timeout exception, but device should restart now',
+    'danger.restart.error': 'Failed to restart device',
+    'danger.wipe.confirm': `{
+      step, select,
+      1 {THIS ACTIONS WILL DELETE ALL SETTINGS FROM DEVICE!}
+      2 {THERE IS NO WAY TO RESTORE THEM AFTER THIS ACTION!}
+      3 {THIS IS LAST YOUR LAST CHANCE}
+      other {}
+    }`,
+    'danger.wipe.success': 'Settings wiped',
+    'danger.wipe.success.desc': 'Device is gonna restart now, please wait',
+    'danger.wipe.success.timeout': 'Device should restart now',
+    'danger.wipe.success.timeout.desc': 'Got a timeout exception, but device should restart now',
+    'danger.wipe.error': 'Failed to wipe',
+    'danger.button.restart': 'Restart',
+    'danger.button.wipe': 'Wipe all device settings',
     login: 'Login',
     password: 'Password',
     'log.in': 'Log in',
@@ -341,6 +362,7 @@ const messages = {
       states {Состояния}
       config {Конфигурация}
       metrics {Метрики}
+      danger {Опасная зона}
       other {{tab}}
     }`,
     'device.settings.editor.name.empty': 'Название не может быть пустым',
@@ -471,6 +493,27 @@ const messages = {
     'dashboard.group.edit.save': 'Сохранить',
     'dashborad.group.edit.add.observables': 'Добавить сенсоры или состояния',
     'dashborad.group.edit.validation.error': 'Пожалуйста заполните требуемые поля',
+    'danger.title': 'Пожалуйста, будьте аккуратны с данными действиями!',
+    'danger.restart.confirm': 'Данное действие перезапустит устройство, вы уверены?',
+    'danger.restart.success': 'Устройство перезапускается',
+    'danger.restart.success.timeout': 'Устройство должно перезапуститься',
+    'danger.restart.success.timeout.desc':
+      'Возникла ошибка, которая означает перезапуск устройства.',
+    'danger.restart.error': 'Не удалось перезапустить устройство',
+    'danger.wipe.confirm': `{
+      step, select,
+      1 {ЭТО ДЕЙСТВИЕ УДАЛИТ ВСЕ НАСТРОЙКИ ИЗ ПАМЯТИ УСТРОЙСТВА!}
+      2 {ЭТО ДЕЙСТВИЕ НЕВОЗМОЖНО БУДЕТ ОТМЕНИТЬ!}
+      3 {ЭТО ПОСЛЕДНЕЕ ПРЕДУПРЕЖДЕНИЕ}
+      other {}
+    }`,
+    'danger.wipe.success': 'Настройки удалены',
+    'danger.wipe.success.desc': 'Устройство сейчас презагрузится',
+    'danger.wipe.success.timeout': 'Устройство должно перезапуститься',
+    'danger.wipe.success.timeout.desc': 'Возникла ошибка, которая означает перезапуск устройства.',
+    'danger.wipe.error': 'Неудалось удалить настройки',
+    'danger.button.restart': 'Перезапустить',
+    'danger.button.wipe': 'Удалить все настройки с устройства',
     login: 'Логин',
     password: 'Пароль',
     'log.in': 'Войти',

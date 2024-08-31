@@ -1,4 +1,3 @@
-
 <script>
 import Container from '../base/Container.vue'
 import { currentLocale, switchLocale, SUPPORTED_LOCALES } from '../../intlConfig'
@@ -13,22 +12,22 @@ export default {
       currentLocale,
       SUPPORTED_LOCALES,
       switchLocale,
-      expanded: false,
+      expanded: false
     }
-  },
+  }
 }
 </script>
 
 <template>
   <div>
-    <p class="locale" @click.stop="() => expanded = !expanded">{{ currentLocale }}</p>
-    <div v-if="expanded" class="overlay" @click.stop="() => expanded = false">
+    <p class="locale" @click.stop="() => (expanded = !expanded)">{{ currentLocale }}</p>
+    <div v-if="expanded" class="overlay" @click.stop="() => (expanded = false)">
       <Container :vertical="true" class="locales-list">
         <p
           v-for="locale of SUPPORTED_LOCALES.filter((l) => l !== currentLocale)"
           :key="locale"
           @click.stop="() => switchLocale(locale)"
-          class="locale" 
+          class="locale"
         >
           {{ locale }}
         </p>
@@ -38,16 +37,16 @@ export default {
 </template>
 
 <style>
-  .locale {
-    cursor: pointer;
-  }
-  .locales-list {
-    position: absolute;
-    top: var(--default-gap);
-    right: 8px;
-    width: fit-content;
-    padding: var(--default-gap);
-    background-color: var(--color-background-mute);
-    border-radius: var(--border-radius);
-  }
+.locale {
+  cursor: pointer;
+}
+.locales-list {
+  position: absolute;
+  top: var(--default-gap);
+  right: 8px;
+  width: fit-content;
+  padding: var(--default-gap);
+  background-color: var(--color-background-mute);
+  border-radius: var(--border-radius);
+}
 </style>

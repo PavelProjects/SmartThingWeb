@@ -15,7 +15,7 @@ export default {
     UserAuthInfo,
     GatewaySelector,
     Container,
-    LocaleSelector,
+    LocaleSelector
   },
   inject: ['gateway', 'mode'],
   data() {

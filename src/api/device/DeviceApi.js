@@ -30,7 +30,8 @@ export const DeviceApiMethods = {
   GET_METRICS: 'getMetrics',
   EXPORT_SETTINGS: 'exportSettings',
   IMPORT_SETTINGS: 'importSettings',
-  RESTART: 'restart'
+  RESTART: 'restart',
+  WIPE: 'wipe'
 }
 
 export const DeviceApi = {
@@ -215,11 +216,18 @@ export const DeviceApi = {
       }
     })
   },
-  async restartDevice(device, gateway) {
+  async restart(device, gateway) {
     await deviceFetch({
       device,
       gateway,
       command: DeviceApiMethods.RESTART
+    })
+  },
+  async wipe(device, gateway) {
+    await deviceFetch({
+      device,
+      gateway,
+      command: DeviceApiMethods.WIPE
     })
   }
 }

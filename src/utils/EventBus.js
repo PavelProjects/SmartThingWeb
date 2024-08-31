@@ -17,6 +17,9 @@ export const toast = {
   info: ({ caption, description, autoClose = true }) => {
     EventBus.emit(TOAST, { toast: { caption, description, type: 'info', autoClose } })
   },
+  warn: ({ caption, description, autoClose = true }) => {
+    EventBus.emit(TOAST, { toast: { caption, description, type: 'warning', autoClose } })
+  },
   error: ({ caption, description, autoClose = true }) => {
     EventBus.emit(TOAST, { toast: { caption, description, type: 'error', autoClose } })
   },

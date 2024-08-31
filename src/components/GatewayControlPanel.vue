@@ -9,7 +9,7 @@ export default {
   components: {
     DevicesSearchView,
     DeviceControlPanel,
-    DropdownMenu,
+    DropdownMenu
   },
   inject: ['gateway', 'mode'],
   data() {
