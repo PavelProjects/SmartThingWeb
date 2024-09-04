@@ -72,7 +72,9 @@ export default {
         </div>
       </div>
     </div>
-    <h1 class="green">{{ intl.formatMessage({ id: 'doc.title' }) }}</h1>
+    <router-link to="/">
+      <h1 class="green">{{ intl.formatMessage({ id: 'doc.title' }) }}</h1>
+    </router-link>
     <div v-if="gatewayName" class="gateway-info">
       <h1
         class="title"
