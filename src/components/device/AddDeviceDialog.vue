@@ -62,9 +62,9 @@ export default {
 <template>
   <PopUpDialog v-bind="$attrs">
     <Container class="add-device-dialog" :vertical="true">
-      <h1 class="title">
+      <h2 class="title">
         {{ intl.formatMessage({ id: 'devices.saved.add.title' }) }}
-      </h1>
+      </h2>
       <InputField
         v-model="ip"
         :validationFailed="!ip"

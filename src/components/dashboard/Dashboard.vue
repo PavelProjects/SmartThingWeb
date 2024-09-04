@@ -76,9 +76,9 @@ export default {
       />
       <Container v-if="!loading" :vertical="true">
         <div v-if="!groups?.length">
-          <h1 class="title">
+          <h2 class="title">
             {{ intl.formatMessage({ id: 'dashboard.groups.empty' }) }}
-          </h1>
+          </h2>
         </div>
         <PlusSVG
           class="add"

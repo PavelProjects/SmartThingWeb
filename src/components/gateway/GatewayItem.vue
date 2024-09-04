@@ -172,9 +172,9 @@ export default {
     />
     <PopUpDialog v-if="token" @close="token = undefined">
       <Container :vertical="true">
-        <h1 class="title">
+        <h2 class="title">
           {{ intl.formatMessage({ id: 'gateway.item.connection.token' }) }}
-        </h1>
+        </h2>
         <Container :vertical="true">
           <InputField
             :label="intl.formatMessage({ id: 'gateway.item.cloud.url' })"

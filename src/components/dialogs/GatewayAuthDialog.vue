@@ -84,9 +84,9 @@ export default {
 <template>
   <PopUpDialog @close="$emit('close')">
     <Container class="gtw-auth-dialog" :vertical="true">
-      <h1 class="title">
+      <h2 class="title">
         {{ intl.formatMessage({ id: 'gateway.cloud.auth.title' }) }}
-      </h1>
+      </h2>
       <InputField
         :label="intl.formatMessage({ id: 'gateway.cloud.auth.conn.token' })"
         v-model="cloudToken"

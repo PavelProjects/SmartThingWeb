@@ -103,7 +103,7 @@ export default {
 
 <template>
   <div>
-    <h1 class="title">{{ intl.formatMessage({ id: 'device.hooks.title' }) }}</h1>
+    <h2 class="title">{{ intl.formatMessage({ id: 'device.hooks.title' }) }}</h2>
     <sync-loader class="loading-spinner" :loading="loading"></sync-loader>
     <div v-if="!loading">
       <ComboBoxField
