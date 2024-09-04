@@ -22,7 +22,7 @@ export default {
     ContextMenu,
     PlusSVG
   },
-  emits: ['select'],
+  emits: ['select', 'deviceDeleted'],
   props: {
     title: String,
     gateway: Object,
@@ -41,12 +41,6 @@ export default {
       addDeviceVisible: false
     }
   },
-  // watch: {
-  //   gateway() {
-  //     this.devices = {}
-  //     this.loadFoundDevices()
-  //   }
-  // },
   mounted() {
     this.loadFoundDevices()
     this.loadSavedDevices()
@@ -137,6 +131,7 @@ export default {
           caption: this.intl.formatMessage({ id: 'devices.saved.menu.delete.success' })
         })
         await this.loadSavedDevices()
+        this.$emit("deviceDeleted", ip)
       } catch (error) {
         console.error(error)
         toast.error({

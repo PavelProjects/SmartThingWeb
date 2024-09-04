@@ -43,7 +43,13 @@ export default {
         return
       }
       this.device = selected
-      this.searchExpanded = false
+      this.searchExpanded = this.wideEnough
+    },
+    handleDeviceDelete(ip) {
+      if (this.device.ip === ip) {
+        this.device = undefined
+        this.searchExpanded = true
+      }
     }
   }
 }
@@ -52,22 +58,19 @@ export default {
 <template>
   <div class="devices-table">
     <div v-if="mode === 'gateway' || !!gateway">
-      <DevicesSearchView
-        v-if="wideEnough"
-        class="search"
-        :gateway="gateway"
-        :selected="device"
-        @select="handleDeviceSelect"
-      />
       <DropdownMenu
-        v-else
         class="search"
         :placeholder="intl.formatMessage({ id: 'gateway.panel.devices' })"
         :vertical="false"
         :expanded="searchExpanded"
         @expand="(v) => (searchExpanded = v)"
       >
-        <DevicesSearchView :gateway="gateway" :selected="device" @select="handleDeviceSelect" />
+        <DevicesSearchView 
+          :gateway="gateway"
+          :selected="device"
+          @select="handleDeviceSelect"
+          @deviceDeleted="handleDeviceDelete"
+        />
       </DropdownMenu>
       <DeviceControlPanel v-if="device" :key="device.ip" :device="device" />
     </div>

@@ -129,6 +129,7 @@ export default {
 .gateway-selector {
   margin: auto;
   width: 300px;
+  padding: var(--default-padding);
 }
 .header {
   position: relative;
