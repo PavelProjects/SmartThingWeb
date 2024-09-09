@@ -32,8 +32,6 @@ export default {
   data() {
     return {
       currentTab: undefined,
-      haveUpdateButton: this.haveUpdateMethod(this.tab),
-      loading: false,
       renders: {}
     }
   },
@@ -74,24 +72,12 @@ export default {
         if (!this.renders[name] || forceRender) {
           this.renders[name] = h(this.tabs[name].class, this.tabs[name].props)
         }
-        this.haveUpdateButton = this.haveUpdateMethod(name)
         this.currentTab = name
       }
     },
-    haveUpdateMethod(name) {
-      if (!this.tabs[name] || !this.tabs[name].class.methods) {
-        return false
-      }
-      return !!this.tabs[name].class.methods.update
-    },
     async updateContent() {
       if (this.$refs.content && this.$refs.content.update) {
-        this.loading = true
-        try {
-          await this.$refs.content.update()
-        } finally {
-          this.loading = false
-        }
+        await this.$refs.content.update()
       }
     }
   }
@@ -114,12 +100,6 @@ export default {
         />
       </div>
       <div v-if="renders[currentTab]" class="menu-item-content">
-        <UpdateButton
-          class="update-button"
-          v-if="haveUpdateButton"
-          :loading="loading"
-          :onClick="updateContent"
-        />
         <KeepAlive>
           <component ref="content" :key="currentTab" :is="renders[currentTab]" v-bind="$attrs" />
         </KeepAlive>

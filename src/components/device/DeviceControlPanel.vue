@@ -105,7 +105,6 @@ export default {
           (await GatewayApi.getDeviceApiMethods({ device: this.device, gateway: this.gateway })) ??
           {}
         this.apiMethods = methods.reduce((acc, method) => {
-          console.log(method)
           acc[method.name] = method
           return acc
         }, {})
@@ -123,7 +122,6 @@ export default {
       if (!TAB_REQUIRED_API[tab]) {
         return true
       }
-      console.log(this.apiMethods)
       for (const method of TAB_REQUIRED_API[tab]) {
         if (!this.apiMethods[method]) {
           return false
