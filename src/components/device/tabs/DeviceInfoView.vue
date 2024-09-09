@@ -101,16 +101,6 @@ export default {
         :modelValue="info.version"
         :disabled="true"
       />
-      <InputField
-        :label="intl.formatMessage({ id: 'device.info.chip.model' })"
-        :modelValue="info.chip_model"
-        :disabled="true"
-      />
-      <InputField
-        :label="intl.formatMessage({ id: 'device.info.chip.revision' })"
-        :modelValue="info.chip_revision"
-        :disabled="true"
-      />
     </Container>
     <sync-loader v-else class="loading-spinner" :loading="true"></sync-loader>
   </div>
