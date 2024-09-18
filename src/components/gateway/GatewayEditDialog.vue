@@ -63,7 +63,7 @@ export default {
 
 <template>
   <PopUpDialog @close="$emit('close')">
-    <Container class="gateway-editor " :vertical="true">
+    <Container class="gateway-editor" :vertical="true">
       <InputField :label="intl.formatMessage({ id: 'gateway.edit.name' })" v-model="name" />
       <InputField
         :label="intl.formatMessage({ id: 'gateway.edit.description' })"
@@ -77,7 +77,7 @@ export default {
 </template>
 
 <style scoped>
-  .gateway-editor {
-    padding: var(--default-padding);
-  }
+.gateway-editor {
+  padding: var(--default-padding);
+}
 </style>

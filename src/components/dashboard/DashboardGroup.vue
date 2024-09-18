@@ -1,5 +1,5 @@
 <script>
-import DashboardValue from './DashboardValue.vue'
+import DashboardValuesView from './DashboardValuesView.vue'
 import ContextMenu from '../menu/ContextMenu.vue'
 import GroupEditDialog from './GroupEditDialog.vue'
 import { useIntl } from 'vue-intl'
@@ -12,7 +12,7 @@ import { useStompClientStore } from '../../store/stompClientStore'
 
 export default {
   components: {
-    DashboardValue,
+    DashboardValuesView,
     ContextMenu,
     GroupEditDialog,
     LoadingButton,
@@ -32,7 +32,7 @@ export default {
       intl,
       updateDelay: this.group?.config?.updateDelay || 60000,
       loading: false,
-      values: {},
+      observablesValues: {},
       editing: false,
       features: {},
       ...this.group
@@ -49,7 +49,20 @@ export default {
             console.error('Empty message body!')
             return
           }
-          this.values = JSON.parse(message.body)
+          const updates = JSON.parse(message.body)
+          if (Array.isArray(updates)) {
+            updates.forEach(({ observable, value }) => {
+              const key = `${observable.type}_${observable.name}`
+              if (!!this.observablesValues[key]) {
+                this.observablesValues[key].values = [
+                  value,
+                  ...this.observablesValues[key].values ?? []
+                ]
+              }
+            })
+          } else {
+            console.error("Incoming values updates is not an array")
+          }
         },
         topic
       )
@@ -67,19 +80,6 @@ export default {
     }
   },
   computed: {
-    updateButtonTitle() {
-      let count = -1
-      try {
-        const date = new Date(this.values.lastUpdate)
-        count = Math.round((this.currentTime - date) / 1000)
-      } catch (error) {
-        console.error(error)
-      }
-      return this.intl.formatMessage(
-        { id: 'dashboard.group.update.title' },
-        { updateDelay: this.updateDelay / 1000, count }
-      )
-    },
     deviceTitle() {
       return this.intl.formatMessage({ id: 'dashboard.group.device.title' }, this.device)
     }
@@ -88,7 +88,11 @@ export default {
     async loadValues() {
       this.loading = true
       try {
-        this.values = await DashboardApi.getGroupValues(this.id, this.gateway)
+        const values = await DashboardApi.getGroupValues(this.id, this.gateway)
+        this.observablesValues = values.reduce((acc, { observable, values }) => {
+          acc[`${observable.type}_${observable.name}`] = { observable, values }
+          return acc
+        }, {})
       } catch (error) {
         console.error(error)
         toast.error({
@@ -101,11 +105,11 @@ export default {
     async updateValues() {
       this.loading = true
       try {
-        this.values = await DashboardApi.updateGroupValues(this.id, this.gateway)
+        await DashboardApi.updateValues(this.id, this.gateway)
       } catch (error) {
         console.error(error)
         toast.error({
-          caption: this.intl.formatMessage({ id: 'dashboard.group.values.load.error' })
+          caption: this.intl.formatMessage({ id: 'dashboard.group.values.update.error' })
         })
       } finally {
         this.loading = false
@@ -140,12 +144,13 @@ export default {
 <template>
   <div>
     <Container class="dashboard-group bordered" :vertical="true" gap="0">
+      <!-- todo rework or remove -->
       <UpdateButton
         v-if="observables.length > 0"
         class="update"
-        :title="updateButtonTitle"
+        title="Force update all values"
         :loading="loading"
-        :onClick="updateValues"
+        :onClick="() => updateValues()"
       />
       <h2 class="title" :title="deviceTitle">
         {{ group.device.name }}
@@ -158,22 +163,19 @@ export default {
           {{ intl.formatMessage({ id: 'dashboard.group.delete' }) }}
         </p>
       </ContextMenu>
-      <Container class="values">
-        <DashboardValue
-          v-if="observables.length > 0"
-          v-for="({ name, type, units }, index) of observables"
+      <Container class="values" v-if="observables.length > 0">
+        <DashboardValuesView
+          v-for="({ observable, values }, index) of observablesValues"
           :key="index"
-          :type="type"
-          :name="name"
-          :value="values?.[type + 's']?.[name] ?? 'Nan'"
-          :units="units"
+          :observable="observable"
+          :values="values"
         />
-        <LoadingButton v-else class="add-values" @click="editing = true">
-          <h2>
-            {{ intl.formatMessage({ id: 'dashboard.group.add.values' }) }}
-          </h2>
-        </LoadingButton>
       </Container>
+      <LoadingButton v-else class="add-values" @click="editing = true">
+        <h2>
+          {{ intl.formatMessage({ id: 'dashboard.group.add.values' }) }}
+        </h2>
+      </LoadingButton>
     </Container>
     <GroupEditDialog v-if="editing" :group="group" @close="handleEditClose" />
   </div>
@@ -195,11 +197,11 @@ export default {
 .add-values {
   margin: var(--default-gap);
 }
-.values .dashboard-value {
+.values .dashboard-values {
   padding: var(--default-gap);
   border-right: 2px solid var(--color-border);
 }
-.values .dashboard-value:last-child {
+.values .dashboard-values:last-child {
   border-right: none;
 }
 .context-menu {

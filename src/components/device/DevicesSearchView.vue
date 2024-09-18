@@ -131,7 +131,7 @@ export default {
           caption: this.intl.formatMessage({ id: 'devices.saved.menu.delete.success' })
         })
         await this.loadSavedDevices()
-        this.$emit("deviceDeleted", ip)
+        this.$emit('deviceDeleted', ip)
       } catch (error) {
         console.error(error)
         toast.error({

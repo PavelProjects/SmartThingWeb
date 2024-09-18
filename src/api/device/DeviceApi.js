@@ -18,6 +18,7 @@ export const DeviceApiMethods = {
   DELETE_CONFIG_VALUE: 'deleteConfigValue',
   DELETE_ALL_CONFIG_VALUES: 'deleteAllConfigValues',
   GET_SENSORS: 'getSensors',
+  GET_SENSORS_TYPES: 'getSensorsTypes',
   GET_STATES: 'getStates',
   GET_ALL_HOOKS: 'getAllHooks',
   GET_HOOK_BY_ID: 'getHookById',
@@ -98,6 +99,10 @@ export const DeviceApi = {
   },
   async getDeviceSensors(device, gateway) {
     return (await deviceFetch({ device, command: DeviceApiMethods.GET_SENSORS, gateway })).data
+  },
+  async getDeviceSensorsTypes(device, gateway) {
+    return (await deviceFetch({ device, command: DeviceApiMethods.GET_SENSORS_TYPES, gateway }))
+      .data
   },
   async getDeviceStates(device, gateway) {
     return (await deviceFetch({ device, command: DeviceApiMethods.GET_STATES, gateway })).data

@@ -65,7 +65,7 @@ export default {
         :expanded="searchExpanded"
         @expand="(v) => (searchExpanded = v)"
       >
-        <DevicesSearchView 
+        <DevicesSearchView
           :gateway="gateway"
           :selected="device"
           @select="handleDeviceSelect"

@@ -38,20 +38,18 @@ const DashboardApi = {
   async getGroupValues(groupId, gateway) {
     return (
       await gatewayFetch({
-        url: '/dashboard/values/' + groupId,
+        url: `/dashboard/values/${groupId}`,
         method: HTTP_METHOD.GET,
         gateway
       })
     ).data
   },
-  async updateGroupValues(groupId, gateway) {
-    return (
-      await gatewayFetch({
-        url: '/dashboard/values/' + groupId,
-        method: HTTP_METHOD.PUT,
-        gateway
-      })
-    ).data
+  async updateValues(groupId, gateway, ) {
+    await gatewayFetch({
+      url: `/dashboard/values/${groupId}/update`,
+      method: HTTP_METHOD.PUT,
+      gateway
+    })
   }
 }
 

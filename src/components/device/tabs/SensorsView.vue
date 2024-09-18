@@ -44,8 +44,8 @@ export default {
       this.loading = true
       try {
         this.sensors = (await DeviceApi.getDeviceSensors(this.device, this.gateway)) ?? {}
-        Object.entries(this.sensors).forEach(([name, { type, value }]) => {
-          const caption = `${name} (${type}): ${value}`
+        Object.entries(this.sensors).forEach(([name, value]) => {
+          const caption = `${name}: ${value}`
           if (this.tabs[name]) {
             this.tabs[name].caption = caption
           } else {
