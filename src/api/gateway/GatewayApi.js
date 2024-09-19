@@ -88,11 +88,11 @@ const GatewayApi = {
     })
     return response.data
   },
-  async updateDeviceSettings({ oldName, name, value }, gateway) {
+  async updateDeviceSettings({ id, name, value }, gateway) {
     const response = await gatewayFetch({
       url: PATH_DEVICE_SETTINGS,
       method: HTTP_METHOD.PUT,
-      data: { oldName, name, value },
+      data: { id, name, value },
       gateway
     })
     return response.status == 200

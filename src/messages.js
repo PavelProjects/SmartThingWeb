@@ -129,7 +129,7 @@ const messages = {
       other {{action}}
     }`,
     'device.settings.editor.select.device': 'Select device',
-    'device.settings.manager.add': 'Add new',
+    'device.settings.manager.add': 'Add new settings',
     'device.settings.manager.menu.header': 'Saved devices settings',
     'device.actions.empty': 'No actions configured',
     'device.config.button.delete.all': 'Delete all values',

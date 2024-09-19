@@ -229,7 +229,9 @@ export default {
           @select="() => selectedSettings = settings"
         />
         <LoadingButton @click="() => addNew()">
-          <h2>Add new settings</h2>
+          <h2>
+            {{ intl.formatMessage({ id: 'device.settings.manager.add' }) }}
+          </h2>
         </LoadingButton>
       </Container>
       <Container v-if="!!selectedSettings" class="settings-editor" :vertical="true">
@@ -252,7 +254,7 @@ export default {
               }}
             </h2>
           </LoadingButton>
-          <LoadingButton v-if="selectedSettings.name" @click="deleteSettings" class="delete">
+          <LoadingButton v-if="selectedSettings.id" @click="deleteSettings" class="delete">
             <h2>
               {{ intl.formatMessage({ id: 'device.settings.editor.button' }, { action: 'delete' }) }}
             </h2>
@@ -295,6 +297,8 @@ export default {
 }
 .settings-editor {
   width: 50vw;
+  max-width: 800px;
+  min-width: 500px;
   padding: var(--default-padding);
 }
 .settings-editor textarea {
