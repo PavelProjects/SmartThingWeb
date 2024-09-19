@@ -1,14 +1,31 @@
 <script>
 import { GatewayApi } from '../../api/gateway/GatewayApi'
-import SettingsEditor from './SettingsEditor.vue'
 import MenuView from '../menu/MenuView.vue'
 import { useIntl } from 'vue-intl'
 import { toast } from '../../utils/EventBus'
+import Container from '../base/Container.vue'
+import LoadingButton from '../controls/LoadingButton.vue'
+import MenuItem from '../menu/MenuItem.vue'
+import InputField from '../fields/InputField.vue'
+import { DeviceApi, extractDataFromError } from '../../api/device/DeviceApi'
+import DevicesSearchView from '../device/DevicesSearchView.vue'
+import PopUpDialog from '../dialogs/PopUpDialog.vue'
+
+const MODE = {
+  EXPORT: 'export',
+  IMPORT: 'import'
+}
 
 export default {
   name: 'SettingsManager',
   components: {
-    MenuView
+    MenuView,
+    LoadingButton,
+    Container,
+    MenuItem,
+    InputField,
+    DevicesSearchView,
+    PopUpDialog,
   },
   inject: ['gateway'],
   data() {
@@ -16,9 +33,10 @@ export default {
     return {
       intl,
       loading: false,
-      selected: undefined,
-      tabs: {},
-      openTab: undefined
+      selectedSettings: undefined,
+      savedSettings: [],
+      selectedDevice: undefined,
+      mode: undefined
     }
   },
   mounted() {
@@ -28,26 +46,7 @@ export default {
     async loadSettings() {
       this.loading = true
       try {
-        const settings = await GatewayApi.getDevicesSettings(this.gateway)
-        if (settings) {
-          this.tabs = settings.reduce((acc, settings) => {
-            acc[settings.name] = {
-              class: SettingsEditor,
-              caption: settings.name,
-              props: {
-                settings
-              }
-            }
-            return acc
-          }, {})
-        }
-        this.tabs['new'] = {
-          class: SettingsEditor,
-          caption: this.intl.formatMessage({ id: 'device.settings.manager.add' }),
-          props: {
-            settings: {}
-          }
-        }
+        this.savedSettings = await GatewayApi.getDevicesSettings(this.gateway)
         this.loading = false
       } catch (error) {
         console.error(error)
@@ -56,28 +55,260 @@ export default {
         })
       }
     },
-    async handleChange(name) {
-      await this.loadSettings()
-      this.openTab = name
+    addNew() {
+      this.selectedSettings = {
+        name: "New settings",
+        value: ""
+      }
+    },
+    validate() {
+      let valid = true
+      if (this.selectedSettings.name.length === 0) {
+        toast.error({
+          caption: this.intl.formatMessage({ id: 'device.settings.editor.name.empty' }),
+          description: this.intl.formatMessage({ id: 'device.settings.editor.name.empty.desc' })
+        })
+        valid = false
+      }
+      if (this.selectedSettings.value.length === 0) {
+        toast.error({
+          caption: this.intl.formatMessage({ id: 'device.settings.editor.setting.empty' }),
+          description: this.intl.formatMessage({ id: 'device.settings.editor.setting.empty.desc' })
+        })
+        valid = false
+      }
+      return valid
+    },
+    async save() {
+      if (!this.validate()) {
+        return
+      }
+      this.loading = true
+      try {
+        if (!!this.selectedSettings.id) {
+          try {
+            await GatewayApi.updateDeviceSettings(this.selectedSettings, this.gateway)
+            toast.success({
+              caption: this.intl.formatMessage({ id: 'device.settings.editor.updated' })
+            })
+            this.$emit('changed', this.selectedSettings.name)
+          } catch (error) {
+            console.error(error)
+            const { message: description } = await extractDataFromError(error)
+            toast.error({
+              caption: 'Failed to update device settings',
+              description
+            })
+          }
+        } else {
+          try {
+            await GatewayApi.createDeviceSettings(this.selectedSettings, this.gateway)
+            toast.success({
+              caption: this.intl.formatMessage({ id: 'device.settings.editor.created' })
+            })
+            this.$emit('changed', this.selectedSettings.name)
+          } catch (error) {
+            console.error(error)
+            const { message: description } = await extractDataFromError(error)
+            toast.error({
+              caption: 'Failed to create device settings',
+              description
+            })
+          }
+        }
+      } finally {
+        this.loading = false
+      }
+    },
+    async deleteSettings() {
+      if (!confirm(this.intl.formatMessage({ id: 'device.settings.editor.delete.confirm' }))) {
+        return
+      }
+      try {
+        await GatewayApi.deleteDeviceSettings(this.settings.name, this.gateway)
+        toast.success({
+          caption: this.intl.formatMessage({ id: 'device.settings.editor.delete.success' })
+        })
+        this.$emit('changed')
+      } catch (error) {
+        console.error(error)
+        const { message: description } = await extractDataFromError(error)
+        toast.error({
+          caption: 'Failed to delete device settings',
+          description
+        })
+      }
+    },
+    async handleDeviceClick(deviceInfo) {
+      this.selectedDevice = deviceInfo
+      this.loading = true
+      try {
+        if (this.mode === MODE.IMPORT) {
+          await this.importFrom()
+        } else if (this.mode === MODE.EXPORT) {
+          await this.exportTo()
+        }
+      } finally {
+        this.loading = false
+        this.selectedDevice = undefined
+        this.mode = undefined
+      }
+    },
+    async importFrom() {
+      try {
+        const loadedSettings =
+          (await DeviceApi.exportSettings(this.selectedDevice, this.gateway)) || {}
+        this.selectedSettings.value = JSON.stringify(loadedSettings, null, 2)
+        this.selectedSettings.name = `${this.selectedDevice.name}_${!!this.selectedDevice.type && this.selectedDevice.type}`
+      } catch (error) {
+        console.error(error)
+        const { error: description } = await extractDataFromError(error)
+        toast.error({
+          caption: 'Failed to export device settings',
+          description
+        })
+      }
+    },
+    async exportTo() {
+      let settings = {}
+      try {
+        settings = JSON.parse(this.selectedSettings.value)
+      } catch (error) {
+        toast.error({
+          caption: this.intl.formatMessage({ id: 'device.settings.editor.json.parse.error' }),
+          description: error
+        })
+        return
+      }
+
+      await this.save()
+      this.loading = true
+      try {
+        await DeviceApi.importSettings(this.selectedDevice, this.gateway, settings)
+        toast.success({
+          caption: this.intl.formatMessage(
+            { id: 'device.settings.editor.export.success' },
+            { name: this.selectedDevice.name }
+          ),
+          description: this.intl.formatMessage({ id: 'device.settings.editor.export.success.desc' })
+        })
+      } catch (error) {
+        console.error(error)
+        const { error: description } = await extractDataFromError(error)
+        toast.error({
+          caption: 'Failed to import settings',
+          description
+        })
+      } finally {
+        this.loading = false
+      }
+    },
+    handleExportBtn() {
+      this.mode = MODE.EXPORT
+    },
+    handleImportBtn() {
+      this.mode = MODE.IMPORT
     }
   }
-  // todo create new impl of menu for this task
 }
 </script>
 
 <template>
-  <div class="container">
-    <h2 class="title">{{ intl.formatMessage({ id: 'device.settings.manager.menu.header' }) }}</h2>
-    <div class="bordered">
-      <MenuView :tabs="tabs" :tab="openTab" @changed="handleChange" />
-    </div>
-  </div>
+  <Container :vertical="true">
+    <h1 class="title">{{ intl.formatMessage({ id: 'device.settings.manager.menu.header' }) }}</h1>
+    <Container class="bordered settings-manager">
+      <Container
+        class="items"
+        :vertical="true"
+      >
+        <MenuItem
+          v-for="settings, index of savedSettings"
+          :key="index"
+          :caption="settings.name"
+          :selected="selectedSettings == settings"
+          @select="() => selectedSettings = settings"
+        />
+        <LoadingButton @click="() => addNew()">
+          <h2>Add new settings</h2>
+        </LoadingButton>
+      </Container>
+      <Container v-if="!!selectedSettings" class="settings-editor" :vertical="true">
+        <InputField
+          :label="intl.formatMessage({ id: 'device.settings.editor.name' })"
+          v-model="selectedSettings.name"
+        />
+        <h2 class="title">
+          {{ intl.formatMessage({ id: 'device.settings.editor.title' }) }}
+        </h2>
+        <textarea class="editor" v-model="selectedSettings.value"></textarea>
+        <Container class="controls">
+          <LoadingButton @click="save" :loading="loading">
+            <h2>
+              {{
+                intl.formatMessage(
+                  { id: 'device.settings.editor.button' },
+                  { action: !!selectedSettings.id ? 'update' : 'create' }
+                )
+              }}
+            </h2>
+          </LoadingButton>
+          <LoadingButton v-if="selectedSettings.name" @click="deleteSettings" class="delete">
+            <h2>
+              {{ intl.formatMessage({ id: 'device.settings.editor.button' }, { action: 'delete' }) }}
+            </h2>
+          </LoadingButton>
+        </Container>
+        <Container class="controls">
+          <button v-if="!!selectedSettings.id" class="btn" @click="handleExportBtn">
+            <h2>
+              {{ intl.formatMessage({ id: 'device.settings.editor.button' }, { action: 'export' }) }}
+            </h2>
+          </button>
+          <button v-else class="btn" @click="handleImportBtn">
+            <h2>
+              {{ intl.formatMessage({ id: 'device.settings.editor.button' }, { action: 'import' }) }}
+            </h2>
+          </button>
+        </Container>
+      </Container>
+      <PopUpDialog v-if="mode" @close="mode = undefined">
+        <DevicesSearchView
+          :title="intl.formatMessage({ id: 'device.settings.editor.select.device' })"
+          @select="handleDeviceClick"
+        />
+      </PopUpDialog>
+    </Container>
+  </Container>
 </template>
 
 <style scoped>
-.container {
+.settings-manager {
   width: fit-content;
   margin: 0 auto;
-  padding: 10px;
+}
+.items {
+  padding: var(--default-gap);
+  border-right: 2px solid var(--color-border);
+}
+.items:last-child {
+  border-right: none;
+}
+.settings-editor {
+  width: 50vw;
+  padding: var(--default-padding);
+}
+.settings-editor textarea {
+  resize: none;
+  font-size: 14px;
+}
+.editor {
+  font-size: 20px;
+  min-height: 400px;
+}
+.delete {
+  background-color: var(--color-danger);
+}
+.controls button {
+  flex: 1 0 auto;
 }
 </style>

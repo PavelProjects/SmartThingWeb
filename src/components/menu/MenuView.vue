@@ -20,10 +20,7 @@ export default {
     },
     header: String,
     tabTitle: String,
-    placeholder: {
-      type: String,
-      default: () => 'Select menu item'
-    },
+    placeholder: String,
     disabled: {
       type: Boolean,
       default: () => false
@@ -96,7 +93,7 @@ export default {
           :title="tabTitle"
           :caption="caption ?? name"
           :selected="currentTab === name"
-          @select="switchTab(name)"
+          @select="() => switchTab(name)"
         />
       </div>
       <div v-if="renders[currentTab]" class="menu-item-content">
@@ -104,7 +101,7 @@ export default {
           <component ref="content" :key="currentTab" :is="renders[currentTab]" v-bind="$attrs" />
         </KeepAlive>
       </div>
-      <div v-else class="placeholder">
+      <div v-else-if="placeholder" class="placeholder">
         <h2 class="title">
           {{ placeholder }}
         </h2>
@@ -127,6 +124,10 @@ export default {
   gap: var(--default-gap);
   overflow: auto;
   padding: var(--default-gap);
+}
+.menu-items:last-child {
+  border-right: none;
+  border-bottom: none;
 }
 .menu-item-content {
   position: relative;
