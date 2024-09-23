@@ -1,6 +1,5 @@
 <script>
 import { GatewayApi } from '../../api/gateway/GatewayApi'
-import MenuView from '../menu/MenuView.vue'
 import { useIntl } from 'vue-intl'
 import { toast } from '../../utils/EventBus'
 import Container from '../base/Container.vue'
@@ -19,13 +18,12 @@ const MODE = {
 export default {
   name: 'SettingsManager',
   components: {
-    MenuView,
     LoadingButton,
     Container,
     MenuItem,
     InputField,
     DevicesSearchView,
-    PopUpDialog,
+    PopUpDialog
   },
   inject: ['gateway'],
   data() {
@@ -57,8 +55,8 @@ export default {
     },
     addNew() {
       this.selectedSettings = {
-        name: "New settings",
-        value: ""
+        name: 'New settings',
+        value: ''
       }
     },
     validate() {
@@ -85,13 +83,19 @@ export default {
       }
       this.loading = true
       try {
-        if (!!this.selectedSettings.id) {
-          this.selectedSettings = await GatewayApi.updateDeviceSettings(this.selectedSettings, this.gateway)
+        if (this.selectedSettings.id) {
+          this.selectedSettings = await GatewayApi.updateDeviceSettings(
+            this.selectedSettings,
+            this.gateway
+          )
           toast.success({
             caption: this.intl.formatMessage({ id: 'device.settings.editor.updated' })
           })
         } else {
-          this.selectedSettings = await GatewayApi.createDeviceSettings(this.selectedSettings, this.gateway)
+          this.selectedSettings = await GatewayApi.createDeviceSettings(
+            this.selectedSettings,
+            this.gateway
+          )
           toast.success({
             caption: this.intl.formatMessage({ id: 'device.settings.editor.created' })
           })
@@ -205,16 +209,13 @@ export default {
   <Container :vertical="true">
     <h1 class="title">{{ intl.formatMessage({ id: 'device.settings.manager.menu.header' }) }}</h1>
     <Container class="bordered settings-manager">
-      <Container
-        class="items"
-        :vertical="true"
-      >
+      <Container class="items" :vertical="true">
         <MenuItem
-          v-for="settings, index of savedSettings"
+          v-for="(settings, index) of savedSettings"
           :key="index"
           :caption="settings.name"
           :selected="selectedSettings == settings"
-          @select="() => selectedSettings = settings"
+          @select="() => (selectedSettings = settings)"
         />
         <LoadingButton @click="() => addNew()">
           <h2>
@@ -244,19 +245,25 @@ export default {
           </LoadingButton>
           <LoadingButton v-if="selectedSettings.id" @click="deleteSettings" class="delete">
             <h2>
-              {{ intl.formatMessage({ id: 'device.settings.editor.button' }, { action: 'delete' }) }}
+              {{
+                intl.formatMessage({ id: 'device.settings.editor.button' }, { action: 'delete' })
+              }}
             </h2>
           </LoadingButton>
         </Container>
         <Container class="controls">
           <button v-if="!!selectedSettings.id" class="btn" @click="handleExportBtn">
             <h2>
-              {{ intl.formatMessage({ id: 'device.settings.editor.button' }, { action: 'export' }) }}
+              {{
+                intl.formatMessage({ id: 'device.settings.editor.button' }, { action: 'export' })
+              }}
             </h2>
           </button>
           <button v-else class="btn" @click="handleImportBtn">
             <h2>
-              {{ intl.formatMessage({ id: 'device.settings.editor.button' }, { action: 'import' }) }}
+              {{
+                intl.formatMessage({ id: 'device.settings.editor.button' }, { action: 'import' })
+              }}
             </h2>
           </button>
         </Container>

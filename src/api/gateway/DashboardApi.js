@@ -44,7 +44,7 @@ const DashboardApi = {
       })
     ).data
   },
-  async updateValues(groupId, gateway, ) {
+  async updateValues(groupId, gateway) {
     await gatewayFetch({
       url: `/dashboard/values/${groupId}/update`,
       method: HTTP_METHOD.PUT,

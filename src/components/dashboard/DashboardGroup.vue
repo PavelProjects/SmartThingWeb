@@ -29,9 +29,9 @@ export default {
   data() {
     const intl = useIntl()
     const observablesValues = this.group.observables.reduce((acc, observable) => {
-          acc[`${observable.type}_${observable.name}`] = { observable, values: [] }
-          return acc
-        }, {})
+      acc[`${observable.type}_${observable.name}`] = { observable, values: [] }
+      return acc
+    }, {})
 
     return {
       intl,
@@ -58,15 +58,15 @@ export default {
           if (Array.isArray(updates)) {
             updates.forEach(({ observable, value }) => {
               const key = `${observable.type}_${observable.name}`
-              if (!!this.observablesValues[key]) {
+              if (this.observablesValues[key]) {
                 this.observablesValues[key].values = [
                   value,
-                  ...this.observablesValues[key].values ?? []
+                  ...(this.observablesValues[key].values ?? [])
                 ]
               }
             })
           } else {
-            console.error("Incoming values updates is not an array")
+            console.error('Incoming values updates is not an array')
           }
         },
         topic
