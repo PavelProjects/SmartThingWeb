@@ -111,6 +111,7 @@ const messages = {
     'device.settings.editor.setting.empty.desc': 'Insert settings json',
     'device.settings.editor.updated': 'Settings updated!',
     'device.settings.editor.created': 'Settings created!',
+    'device.settings.editor.error': 'Error occured!',
     'device.settings.editor.delete.confirm':
       'This action will delete saved settings permanently. Are you sure?',
     'device.settings.editor.delete.success': 'Settings deleted',
@@ -372,6 +373,7 @@ const messages = {
     'device.settings.editor.setting.empty.desc': 'Вставьте JSON настроек',
     'device.settings.editor.updated': 'Настройки обновлены!',
     'device.settings.editor.created': 'Настройки сохранены!',
+    'device.settings.editor.error': 'Произошла ошибка!',
     'device.settings.editor.delete.confirm':
       'Данное действие удалит данные настройки навсегда. Вы уверены?',
     'device.settings.editor.delete.success': 'Настройки удалены',

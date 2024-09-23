@@ -95,7 +95,7 @@ const GatewayApi = {
       data: { id, name, value },
       gateway
     })
-    return response.status == 200
+    return response.data
   },
   async createDeviceSettings({ name, value }, gateway) {
     const response = await gatewayFetch({
@@ -104,11 +104,11 @@ const GatewayApi = {
       data: { name, value },
       gateway
     })
-    return response.status === 200
+    return response.data
   },
-  async deleteDeviceSettings(name, gateway) {
+  async deleteDeviceSettings(id, gateway) {
     const response = await gatewayFetch({
-      url: `${PATH_DEVICE_SETTINGS}/${name}`,
+      url: `${PATH_DEVICE_SETTINGS}/${id}`,
       method: HTTP_METHOD.DELETE,
       data: { name },
       gateway

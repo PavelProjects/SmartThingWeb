@@ -86,36 +86,23 @@ export default {
       this.loading = true
       try {
         if (!!this.selectedSettings.id) {
-          try {
-            await GatewayApi.updateDeviceSettings(this.selectedSettings, this.gateway)
-            toast.success({
-              caption: this.intl.formatMessage({ id: 'device.settings.editor.updated' })
-            })
-            this.$emit('changed', this.selectedSettings.name)
-          } catch (error) {
-            console.error(error)
-            const { message: description } = await extractDataFromError(error)
-            toast.error({
-              caption: 'Failed to update device settings',
-              description
-            })
-          }
+          this.selectedSettings = await GatewayApi.updateDeviceSettings(this.selectedSettings, this.gateway)
+          toast.success({
+            caption: this.intl.formatMessage({ id: 'device.settings.editor.updated' })
+          })
         } else {
-          try {
-            await GatewayApi.createDeviceSettings(this.selectedSettings, this.gateway)
-            toast.success({
-              caption: this.intl.formatMessage({ id: 'device.settings.editor.created' })
-            })
-            this.$emit('changed', this.selectedSettings.name)
-          } catch (error) {
-            console.error(error)
-            const { message: description } = await extractDataFromError(error)
-            toast.error({
-              caption: 'Failed to create device settings',
-              description
-            })
-          }
+          this.selectedSettings = await GatewayApi.createDeviceSettings(this.selectedSettings, this.gateway)
+          toast.success({
+            caption: this.intl.formatMessage({ id: 'device.settings.editor.created' })
+          })
         }
+        this.loadSettings()
+      } catch (error) {
+        const { message: description } = await extractDataFromError(error)
+        toast.error({
+          caption: 'device.settings.editor.error',
+          description
+        })
       } finally {
         this.loading = false
       }
@@ -125,11 +112,12 @@ export default {
         return
       }
       try {
-        await GatewayApi.deleteDeviceSettings(this.settings.name, this.gateway)
+        await GatewayApi.deleteDeviceSettings(this.selectedSettings.id, this.gateway)
         toast.success({
           caption: this.intl.formatMessage({ id: 'device.settings.editor.delete.success' })
         })
-        this.$emit('changed')
+        this.loadSettings()
+        this.selectedSettings = undefined
       } catch (error) {
         console.error(error)
         const { message: description } = await extractDataFromError(error)
