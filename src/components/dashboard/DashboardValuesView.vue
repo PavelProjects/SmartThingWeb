@@ -22,7 +22,7 @@ export default {
       if (date) {
         return 'Last update: ' + date
       }
-      return undefined
+      return 'Value not found in device response'
     }
   }
 }

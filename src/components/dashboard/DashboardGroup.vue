@@ -28,11 +28,16 @@ export default {
   },
   data() {
     const intl = useIntl()
+    const observablesValues = this.group.observables.reduce((acc, observable) => {
+          acc[`${observable.type}_${observable.name}`] = { observable, values: [] }
+          return acc
+        }, {})
+
     return {
       intl,
+      observablesValues,
       updateDelay: this.group?.config?.updateDelay || 60000,
       loading: false,
-      observablesValues: {},
       editing: false,
       features: {},
       ...this.group
@@ -89,10 +94,9 @@ export default {
       this.loading = true
       try {
         const values = await DashboardApi.getGroupValues(this.id, this.gateway)
-        this.observablesValues = values.reduce((acc, { observable, values }) => {
-          acc[`${observable.type}_${observable.name}`] = { observable, values }
-          return acc
-        }, {})
+        values.forEach(({ observable, values }) => {
+          this.observablesValues[`${observable.type}_${observable.name}`] = { observable, values }
+        })
       } catch (error) {
         console.error(error)
         toast.error({
@@ -144,7 +148,6 @@ export default {
 <template>
   <div>
     <Container class="dashboard-group bordered" :vertical="true" gap="0">
-      <!-- todo rework or remove -->
       <UpdateButton
         v-if="observables.length > 0"
         class="update"
