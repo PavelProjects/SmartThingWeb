@@ -114,9 +114,13 @@ export default {
   <Container :vertical="true">
     <sync-loader class="loading-spinner" :loading="loading"></sync-loader>
     <Container v-if="haveConfigEntries" class="config-inputs" :vertical="true">
-      <div v-for="[key, { caption, type }] of Object.entries(this.configInfo)" :key="key">
+      <div
+        v-for="[key, { caption, type }] of Object.entries(this.configInfo)"
+        :key="key"
+        :title="intl.formatMessage({ id: 'device.config.field.title' }, { name: key, type })"
+      >
         <CheckBoxField v-if="type === 'boolean'" :label="caption" v-model="values[key]" />
-        <InputField v-else :label="caption" :type="type" v-model="values[key]" />
+        <InputField v-else :label="`${caption} [${key}]`" :type="type" v-model="values[key]" />
       </div>
     </Container>
     <Container class="controls-holder" :gap="'10px'">
