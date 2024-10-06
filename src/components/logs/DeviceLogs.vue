@@ -22,7 +22,6 @@ export default {
       messages: [],
       colors: {},
       stompClient,
-      idSeq: 0
     }
   },
   async mounted() {
@@ -45,7 +44,6 @@ export default {
           console.error('Davice name or ip in log message is missing!')
           return
         }
-        parsed.id = this.idSeq++
         this.messages.unshift(parsed)
       }
     })
@@ -56,10 +54,10 @@ export default {
   methods: {
     generateColorByIp(ip) {
       const splited = ip.split('.')
-      const r = this.chooseRandom(splited, 100, 250)
-      const g = this.chooseRandom(splited, 100, 250)
-      const b = this.chooseRandom(splited, 100, 250)
-      return 'rgb(' + r + ',' + g + ',' + b + ', 0.7)'
+      const r = this.chooseRandom(splited, 50, 250)
+      const g = this.chooseRandom(splited, 50, 250)
+      const b = this.chooseRandom(splited, 50, 250)
+      return 'rgb(' + r + ',' + g + ',' + b + ', {opacity})'
     },
     chooseRandom(arr, min, max) {
       const val = arr[Math.floor(Math.random() * arr.length)]
@@ -93,8 +91,8 @@ export default {
       </h2>
     </div>
     <LogMessage
-      v-for="message of messages"
-      :key="message.id"
+      v-for="message, index of messages"
+      :key="index"
       :log="message"
       :color="colorByIp(message)"
     />

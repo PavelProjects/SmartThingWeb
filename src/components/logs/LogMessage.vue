@@ -30,13 +30,19 @@ export default {
         default:
           return undefined
       }
+    },
+    style() {
+      return {
+        borderColor: this.color.replace("{opacity}", "0.7"),
+        backgroundColor: this.color.replace("{opacity}", "0.05"),
+      }
     }
   }
 }
 </script>
 
 <template>
-  <div class="log-message-container bordered" :style="{ borderColor: color }">
+  <div class="log-message-container bordered" :style="style">
     <div>{{ `${device?.ip} [${device?.name}]` }}</div>
     <div>{{ dateTime }}</div>
     <div>{{ tag }}</div>
