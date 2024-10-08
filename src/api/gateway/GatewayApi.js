@@ -1,9 +1,8 @@
 import axios from 'axios'
-import { HTTP_METHOD, gatewayFetch } from './GatewayFetch'
+import { HTTP_METHOD, gatewayFetch, GATEWAY_URL } from './GatewayFetch'
 
 const GATEWAY_PATH = import.meta.env.VITE_GATEWAY_IP || document.location.hostname
 const GATEWAY_PORT = import.meta.env.VITE_GATEWAY_PORT
-export const GATEWAY_URL = `http://${GATEWAY_PATH}${GATEWAY_PORT ? ':' + GATEWAY_PORT : ''}`
 export const GATEWAY_WS_URL = `ws://${GATEWAY_PATH}${GATEWAY_PORT ? ':' + GATEWAY_PORT : ''}/smt-ws`
 
 const PATH_AUTHENTICATION = '/cloud/identity'

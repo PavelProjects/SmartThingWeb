@@ -5,6 +5,7 @@ const messages = {
     'doc.dashboard': 'Dashboard',
     'doc.device.settings': 'Device settings',
     'doc.device.logs': 'Device logs',
+    'doc.device.ota': 'Arduino OTA',
     gateway: 'Gateway: {gateway}',
     'gateway.panel.devices': 'Devices',
     'gateway.panel': 'Control panel for {device}',
@@ -253,6 +254,50 @@ const messages = {
     'danger.wipe.error': 'Failed to wipe',
     'danger.button.restart': 'Restart',
     'danger.button.wipe': 'Wipe all device settings',
+    'ota.load.saved.error': 'Failed to load saved firmwares',
+    'ota.load.running.error': 'Failed to load active uploads',
+    'ota.saved.header': 'Availibale firmwares',
+    'ota.running.header': 'Active firmware uploads',
+    'ota.add.header': 'Add new firmware',
+    'ota.add.button': 'Save',
+    'ota.add.supported.error': 'Failed to load supported boards',
+    'ota.add.success': 'Firmware added',
+    'ota.add.error': 'Failed to add firmware',
+    'ota.firmware.info.board': 'Board',
+    'ota.firmware.info.type': 'Type',
+    'ota.firmware.info.version': 'Version',
+    'ota.firmware.info.file': 'Firmware file',
+    'ota.edit.header': 'Edit firmware info',
+    'ota.edit.button': 'Save changes',
+    'ota.edit.succes': 'Firmware info updated',
+    'ota.edit.error': 'Failed to update firmware info',
+    'ota.upload.confirm': 'Are u sure u want to upload {firmwareType} [{firmwareVersion}] '
+      + 'to device {deviceName} ({deviceIp})?',
+    'ota.upload.success': 'Firmware upload to {deviceName} started',
+    'ota.upload.error': 'Failed to start upload to {deviceName}',
+    'ota.delete.confirm': 'Are you sure you want to delete this firmware? THis action can\'t ve reversed!',
+    'ota.delete.success': 'Firmware deleted',
+    'ota.delete.error': 'Failed to delete firmware',
+    'ota.firmware.menu.edit': 'Edit',
+    'ota.firmware.menu.delete': 'Delete',
+    'ota.firmware.menu.upload': 'Upload',
+    'ota.firmware.menu.download': 'Download',
+    'ota.upload.to': 'Upload to',
+    'ota.upload.block.firmware': 'Firmware',
+    'ota.upload.block.device': 'Device',
+    'ota.upload.status': `Status: {
+      status, select,
+      STARTED {starting upload}
+      INVITATION {invitation send}
+      INVITATION_FAILED {invitation failed}
+      INVITATION_ACCEPTED {invitation accepted}
+      FIRMWARE_TRANSFER {transfering firmware}
+      FIRMWARE_TRANSFER_FAILED {transfer failed}
+      FIRMWARE_TRANSFER_CONFIRMATION {transfer finishing}
+      FIRMWARE_TRANSFER_FINISHED {transfer finished}
+      FINISHED {upload finished}
+      other {{status}}
+    }`,
     login: 'Login',
     password: 'Password',
     'log.in': 'Log in',
@@ -268,6 +313,7 @@ const messages = {
     'doc.dashboard': 'Дашборд',
     'doc.device.settings': 'Настройки устройств',
     'doc.device.logs': 'Логи устройств',
+    'doc.device.ota': 'Ardunio OTA',
     gateway: 'Маршрутизатор: {gateway}',
     'gateway.panel.devices': 'Устройства',
     'gateway.panel': 'Панель управления {device}',
@@ -439,7 +485,7 @@ const messages = {
     'device.hook.test.error': 'Не удалось вызвать хук',
     'device.sensors.empty': 'Нет настроенных сенсоров',
     'device.states.empty': 'Нет настроенных состояний',
-    'devices.search': 'Устройства',
+    'devices.search': 'Найденные устройства',
     'devices.search.empty': 'Устройства не найдены!',
     'devices.search.in.progress': 'Поиск...',
     'devices.saved': 'Сохраненные устройства',
@@ -522,6 +568,50 @@ const messages = {
     'danger.wipe.error': 'Неудалось удалить настройки',
     'danger.button.restart': 'Перезапустить',
     'danger.button.wipe': 'Удалить все настройки с устройства',
+    'ota.load.saved.error': 'Не удалось загрузить сохраненные прошивки',
+    'ota.load.running.error': 'Не удалось загрузить активные обновления',
+    'ota.saved.header': 'Доступные прошивки',
+    'ota.running.header': 'Активные обновления прошивок',
+    'ota.add.header': 'Добавить прошивку',
+    'ota.add.button': 'Сохранить',
+    'ota.add.supported.error': 'Не удалось загрузить список доступных платформ',
+    'ota.add.success': 'Прошивка добавлена',
+    'ota.add.error': 'Ошибка при добавлении прошивки',
+    'ota.firmware.info.board': 'Платформа',
+    'ota.firmware.info.type': 'Тип',
+    'ota.firmware.info.version': 'Версия',
+    'ota.firmware.info.file': 'Файл прошивки',
+    'ota.edit.header': 'Редактировать описание прошивки',
+    'ota.edit.button': 'Сохранить',
+    'ota.edit.succes': 'Данные обновлены',
+    'ota.edit.error': 'Не удалось обновить данные',
+     'ota.upload.confirm': 'Вы уверены, что хотите загрузить прошивку {firmwareType} [{firmwareVersion}] '
+      + 'на устройство {deviceName} ({deviceIp})?',
+    'ota.upload.success': 'Загрузка прошивки на {deviceName} начата',
+    'ota.upload.error': 'Ошибка при запуске загрузки прошивки на {deviceName}',
+    'ota.delete.confirm': 'Вы уверены, что хотите удалить данную прошивку? Это действие нельзя отменить!',
+    'ota.delete.success': 'Прошивка удалена',
+    'ota.delete.error': 'Ошибка при удалении прошивки',
+    'ota.firmware.menu.edit': 'Редактировать',
+    'ota.firmware.menu.delete': 'Удалить',
+    'ota.firmware.menu.upload': 'Загрузить',
+    'ota.firmware.menu.download': 'Скачать',
+    'ota.upload.to': 'Загрузить на',
+    'ota.upload.block.firmware': 'Прошивка',
+    'ota.upload.block.device': 'Устройство',
+    'ota.upload.status': `Статус: {
+      status, select,
+      STARTED {загрузка начинается}
+      INVITATION {приглашение отправлено}
+      INVITATION_FAILED {приглашение отклонено}
+      INVITATION_ACCEPTED {приглашение принято}
+      FIRMWARE_TRANSFER {передача прошивки}
+      FIRMWARE_TRANSFER_FAILED {ошибка передачи}
+      FIRMWARE_TRANSFER_CONFIRMATION {заврешение передачи}
+      FIRMWARE_TRANSFER_FINISHED {передача завершена}
+      FINISHED {загрузка завершена}
+      other {{status}}
+    }`,
     login: 'Логин',
     password: 'Пароль',
     'log.in': 'Войти',

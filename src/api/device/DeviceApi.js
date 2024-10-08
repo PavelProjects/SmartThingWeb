@@ -2,7 +2,7 @@ import { deviceFetch } from './DeviceFetch'
 
 export async function extractDataFromError(error) {
   const { response } = error || {}
-  return (await response.data) || {}
+  return (await response?.data) || {}
 }
 
 export const DeviceApiMethods = {

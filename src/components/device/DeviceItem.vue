@@ -45,12 +45,15 @@ export default {
 </script>
 <template>
   <Container class="device-item" :style="style">
-    <Container :vertical="true" style="flex: 1 1 auto">
-      <h1 class="header">{{ header }}</h1>
-      <h2>
+    <div class="device-item-table">
+      <h3>Name: {{ device.name }}</h3>
+      <h3>Type: {{ device.type }}</h3>
+      <h3>Version: {{ device.version }}</h3>
+      <h3>Board: {{ device.board ?? "Unknown" }}</h3>
+      <h3 @click.stop="() => {}">
         Ip <a :href="'http://' + device.ip" target="”_blank”">{{ device.ip }}</a>
-      </h2>
-    </Container>
+      </h3>
+    </div>
     <img v-if="imgSrc" :src="imgSrc" />
   </Container>
 </template>
@@ -59,12 +62,9 @@ export default {
 .device-item {
   padding: var(--default-padding);
 }
-.device-item:hover {
-  transition: background-color 0.5s;
-  background-color: var(--color-background-mute);
-}
-.header {
-  word-wrap: break-word;
+.device-item-table {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
 }
 img {
   width: 50px;

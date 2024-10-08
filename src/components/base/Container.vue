@@ -16,7 +16,7 @@ export default {
       return {
         display: 'flex',
         'flex-direction': this.vertical ? 'column' : 'vertical',
-        gap: this.gap
+        gap: this.gap,
       }
     }
   }

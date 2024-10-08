@@ -1,5 +1,5 @@
 <script>
-import Container from '../base/Container.vue'
+import Container from '../Container.vue'
 import FieldContainer from './FieldContainer.vue'
 export default {
   components: { FieldContainer, Container },

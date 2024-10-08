@@ -23,10 +23,12 @@ export default {
     PlusSVG
   },
   emits: ['select', 'deviceDeleted'],
+  inject: ['gateway'],
   props: {
     title: String,
-    gateway: Object,
-    selected: Object
+    // gateway: Object,
+    selected: Object,
+    board: String,
   },
   data() {
     const intl = useIntl()
@@ -34,8 +36,8 @@ export default {
     return {
       intl,
       stompClient,
-      devices: {},
-      savedDevices: {},
+      devices: [],
+      savedDevices: [],
       searching: false,
       loadingSaved: false,
       addDeviceVisible: false
@@ -45,23 +47,16 @@ export default {
     this.loadFoundDevices()
     this.loadSavedDevices()
 
-    this.stompClient.subscribe(SEARCH_TOPIC, (message) => {
-      if (message && message.body) {
-        const deviceInfo = JSON.parse(message.body)
-        if (!this.devices[deviceInfo.ip]) {
-          this.devices[deviceInfo.ip] = deviceInfo
-        }
+    EventBus.on('deviceUpdate', ({ device, name }) => {
+      let index = this.devices.indexOf(device)
+      if (index > 0) {
+        this.devices[index].name = name
       } else {
-        console.warn('Empty search topic message')
-      }
-    })
-    EventBus.on('deviceUpdate', ({ device: { ip }, name }) => {
-      if (this.devices[ip]) {
-        this.devices[ip].name = name
-      }
-      if (this.savedDevices[ip]) {
-        this.savedDevices[ip].name = name
-        GatewayApi.updateSavedDevice(ip, this.gateway).catch(console.log)
+        index = this.savedDevices.indexOf(device)
+        if (index > 0) {
+          this.savedDevices[index].name = name
+          GatewayApi.updateSavedDevice(device.ip, this.gateway).catch(console.log)
+        }
       }
     })
   },
@@ -72,11 +67,7 @@ export default {
     async loadFoundDevices() {
       this.searching = true
       try {
-        const foundDevices = await GatewayApi.getFoundDevices(this.gateway)
-        this.devices = foundDevices.reduce((acc, device) => {
-          acc[device.ip] = device
-          return acc
-        }, {})
+        this.devices = this.filterDevices(await GatewayApi.getFoundDevices(this.gateway)) ?? []
       } catch (error) {
         console.error(error)
         toast.error({
@@ -89,11 +80,7 @@ export default {
     async loadSavedDevices() {
       this.loadingSaved = true
       try {
-        const devices = (await GatewayApi.getSavedDevices(this.gateway)) ?? []
-        this.savedDevices = devices.reduce((acc, device) => {
-          acc[device.ip] = device
-          return acc
-        }, {})
+        this.savedDevices = this.filterDevices(await GatewayApi.getSavedDevices(this.gateway)) ?? []
       } catch (error) {
         console.error(error)
         toast.error({
@@ -144,6 +131,15 @@ export default {
     handleClick(ip, deviceInfo) {
       this.selectedIp = ip
       this.$emit('select', deviceInfo)
+    },
+    filterDevices(list) {
+      if (!list) {
+        return;
+      }
+      if (!this.board) {
+        return list
+      }
+      return list.filter((device) => device?.board === this.board)
     }
   }
 }
@@ -154,30 +150,51 @@ export default {
     <h2 v-if="title" class="title">{{ title }}</h2>
     <Container class="bordered" :vertical="true">
       <div style="position: relative">
+        <h2 class="title list-title">{{ intl.formatMessage({ id: 'devices.search' }) }}</h2>
+        <UpdateButton class="update" :loading="searching" :onClick="loadFoundDevices" />
+      </div>
+      <Container class="devices-list" :vertical="true">
+        <DeviceItem
+          v-for="deviceInfo, index of devices"
+          :key="index"
+          :selected="selected?.ip == deviceInfo.ip"
+          :device="deviceInfo"
+          @click="() => handleClick(deviceInfo.ip, deviceInfo)"
+        />
+        <h2 v-if="!searching && Object.keys(devices).length == 0" class="title">
+          {{ intl.formatMessage({ id: 'devices.search.empty' }) }}
+        </h2>
+        <h2 v-if="searching && Object.keys(devices).length == 0" class="title">
+          {{ intl.formatMessage({ id: 'devices.search.in.progress' }) }}
+        </h2>
+      </Container>
+    </Container>
+    <Container class="bordered" :vertical="true">
+      <div style="position: relative">
         <h2 class="title list-title">{{ intl.formatMessage({ id: 'devices.saved' }) }}</h2>
         <UpdateButton class="update" :loading="loadingSaved" :onClick="loadSavedDevices" />
       </div>
       <Container class="devices-list" :vertical="true">
         <div
-          v-for="[ip, deviceInfo] of Object.entries(savedDevices)"
-          :key="ip"
+          v-for="deviceInfo, index of savedDevices"
+          :key="index"
           class="device-item saved-item"
         >
           <DeviceItem
-            :selected="selected?.ip == ip"
+            :selected="selected?.ip == deviceInfo.ip"
             :device="deviceInfo"
-            @click="() => handleClick(ip, deviceInfo)"
+            @click="() => handleClick(deviceInfo.ip, deviceInfo)"
           />
           <ContextMenu class="context-menu">
-            <p @click="updateSavedDevice(ip)">
+            <p @click="updateSavedDevice(deviceInfo.ip)">
               {{ intl.formatMessage({ id: 'devices.saved.menu.update' }) }}
             </p>
-            <p @click="deleteSavedDevice(ip)">
+            <p @click="deleteSavedDevice(deviceInfo.ip)">
               {{ intl.formatMessage({ id: 'devices.saved.menu.delete' }) }}
             </p>
           </ContextMenu>
         </div>
-        <h2 v-if="!loadingSaved && Object.keys(savedDevices).length == 0" class="title">
+        <h2 v-if="!loadingSaved && savedDevices.length == 0" class="title">
           {{ intl.formatMessage({ id: 'devices.saved.empty' }) }}
         </h2>
         <PlusSVG
@@ -186,27 +203,6 @@ export default {
           :size="35"
           @click="addDeviceVisible = true"
         />
-      </Container>
-    </Container>
-    <Container class="bordered" :vertical="true">
-      <div style="position: relative">
-        <h2 class="title list-title">{{ intl.formatMessage({ id: 'devices.search' }) }}</h2>
-        <UpdateButton class="update" :loading="searching" :onClick="loadFoundDevices" />
-      </div>
-      <Container class="devices-list" :vertical="true">
-        <DeviceItem
-          v-for="[ip, deviceInfo] of Object.entries(devices)"
-          :key="ip"
-          :selected="selected?.ip == ip"
-          :device="deviceInfo"
-          @click="() => handleClick(ip, deviceInfo)"
-        />
-        <h2 v-if="!searching && Object.keys(devices).length == 0" class="title">
-          {{ intl.formatMessage({ id: 'devices.search.empty' }) }}
-        </h2>
-        <h2 v-if="searching && Object.keys(devices).length == 0" class="title">
-          {{ intl.formatMessage({ id: 'devices.search.in.progress' }) }}
-        </h2>
       </Container>
     </Container>
     <AddDeviceDialog
@@ -233,6 +229,10 @@ export default {
   position: absolute;
   right: 0px;
   top: 0px;
+}
+.device-item:hover {
+  transition: background-color 0.5s;
+  background-color: var(--color-background-mute);
 }
 .devices-list {
   height: fit-content;

@@ -92,4 +92,8 @@ export default {
 .rise-loader {
   padding-top: 40px;
 }
+.device-item:hover {
+  transition: background-color 0.5s;
+  background-color: var(--color-background-mute);
+}
 </style>

@@ -53,9 +53,15 @@ export default {
       <DevicesSearchView
         :title="intl.formatMessage({ id: 'dashboard.group.create.select.device' })"
         :style="{ width: '350px' }"
-        :gateway="gateway"
         @select="selectDevice"
       />
     </Container>
   </PopUpDialog>
 </template>
+
+<style lang="css" scoped>
+.device-item:hover {
+  transition: background-color 0.5s;
+  background-color: var(--color-background-mute);
+}
+</style>

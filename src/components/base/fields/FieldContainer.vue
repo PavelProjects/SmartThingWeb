@@ -1,5 +1,5 @@
 <script>
-import Container from '../base/Container.vue'
+import Container from '../Container.vue'
 export default {
   components: { Container },
   props: {

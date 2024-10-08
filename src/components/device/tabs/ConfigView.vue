@@ -1,9 +1,9 @@
 <script>
 import { DeviceApi, extractDataFromError } from '../../../api/device/DeviceApi.js'
-import InputField from '../../fields/InputField.vue'
+import InputField from '../../base/fields/InputField.vue'
 import LoadingButton from '../../controls/LoadingButton.vue'
 import SyncLoader from 'vue-spinner/src/SyncLoader.vue'
-import CheckBoxField from '../../fields/CheckBoxField.vue'
+import CheckBoxField from '../../base/fields/CheckBoxField.vue'
 import { useIntl } from 'vue-intl'
 import { toast } from '../../../utils/EventBus.js'
 import Container from '../../base/Container.vue'

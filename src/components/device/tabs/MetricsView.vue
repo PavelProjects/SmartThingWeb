@@ -1,6 +1,6 @@
 <script>
 import { DeviceApi } from '../../../api/device/DeviceApi'
-import TreeList from '../../fields/TreeList.vue'
+import TreeList from '../../base/fields/TreeList.vue'
 import SyncLoader from 'vue-spinner/src/SyncLoader.vue'
 import { toast } from '../../../utils/EventBus'
 import { useIntl } from 'vue-intl'

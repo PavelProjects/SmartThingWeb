@@ -4,6 +4,7 @@ import SettingsManager from './components/settings/SettingsManager.vue'
 import GatewaySelector from './components/gateway/GatewaySelector.vue'
 import Dashborard from './components/dashboard/Dashboard.vue'
 import { createRouter, createWebHashHistory } from 'vue-router'
+import OtaUpdates from './components/ota/OtaUpdates.vue'
 
 const mode = import.meta.env.VITE_MODE
 
@@ -40,6 +41,11 @@ const routes =
           name: 'dashboard',
           path: '/dashboard',
           component: Dashborard
+        },
+        {
+          name: 'ota',
+          path: '/ota',
+          component: OtaUpdates
         },
         unkownRoute
       ]

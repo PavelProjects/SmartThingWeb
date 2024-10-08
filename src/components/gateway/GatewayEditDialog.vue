@@ -3,7 +3,7 @@ import { useIntl } from 'vue-intl'
 import { toast } from '../../utils/EventBus'
 import LoadingButton from '../controls/LoadingButton.vue'
 import PopUpDialog from '../dialogs/PopUpDialog.vue'
-import InputField from '../fields/InputField.vue'
+import InputField from '../base/fields/InputField.vue'
 import Container from '../base/Container.vue'
 
 const NAME_MAX_LENGTH = 32

@@ -1,0 +1,105 @@
+<script>
+import { OtaApi } from '../../api/gateway/OtaApi';
+import Container from '../base/Container.vue'
+import LoadingButton from '../controls/LoadingButton.vue';
+import InputField from '../base/fields/InputField.vue';
+import ComboBoxField from '../base/fields/ComboBoxField.vue';
+import { toast } from '../../utils/EventBus';
+import FileField from '../base/fields/FileField.vue';
+import PopUpDialog from '../dialogs/PopUpDialog.vue'
+import { useIntl } from 'vue-intl';
+
+export default {
+  name: "AddOtaFirmwareDialog",
+  components: {
+    Container,
+    LoadingButton,
+    InputField,
+    FileField,
+    ComboBoxField,
+    PopUpDialog,
+  },
+  emits: ['created'],
+  data() {
+    const intl = useIntl()
+    return {
+      intl,
+      loading: false,
+      supportedBoards: [],
+      info: {
+        board: undefined,
+        type: undefined,
+        version: undefined,
+      },
+      files: undefined,
+    }
+  },
+  async mounted() {
+    try {
+      this.supportedBoards = await OtaApi.getSupportedBoards()
+    } catch (error) {
+      toast.error({ caption: this.intl.formatMessage({ id: 'ota.add.supported.error' })})
+    }
+  },
+  methods: {
+    async addFirmware() {
+      if (!this.info.board || !this.info.type || !this.info.version || !this.files[0]) {
+        return;
+      }
+      this.loading = true
+      try {
+        await OtaApi.addFirmware(this.info, this.files[0])
+        toast.success({ caption: this.intl.formatMessage({ id: 'ota.add.success' })})
+        this.$emit('created')
+      } catch (error) {
+        toast.error({ caption: this.intl.formatMessage({ id: 'ota.add.error' })})
+      } finally {
+        this.loading = false
+      }
+    },
+  }
+}
+</script>
+
+<template>
+  <PopUpDialog v-bind="$attrs">
+    <Container :vertical="true" id="add-firmware">
+      <h2 class="title">
+        {{ intl.formatMessage({ id: 'ota.add.header' }) }}
+      </h2>
+      <ComboBoxField
+        :label="intl.formatMessage({ id: 'ota.firmware.info.board' })"
+        v-model="info.board"
+        :items="supportedBoards"
+        :validationFailed="!info.board"
+      />
+      <InputField 
+        :label="intl.formatMessage({ id: 'ota.firmware.info.type' })"
+        v-model="info.type"
+        :validationFailed="!info.type"
+      />
+      <InputField 
+        :label="intl.formatMessage({ id: 'ota.firmware.info.version' })"
+        v-model="info.version"
+        :validationFailed="!info.version"
+      />
+      <FileField
+        :label="intl.formatMessage({ id: 'ota.firmware.info.file' })"
+        accept=".bin"
+        v-model="files"
+        :validationFailed="!files"
+      />
+      <LoadingButton @click="addFirmware" :loading="loading">
+        <h2>
+          {{ intl.formatMessage({ id: 'ota.add.button' }) }}
+        </h2>
+      </LoadingButton>
+    </Container>
+  </PopUpDialog>
+</template>
+
+<style>
+#add-firmware {
+  padding: var(--default-padding);
+}
+</style>

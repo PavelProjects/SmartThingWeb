@@ -5,7 +5,7 @@ import { toast } from '../../utils/EventBus'
 import Container from '../base/Container.vue'
 import LoadingButton from '../controls/LoadingButton.vue'
 import MenuItem from '../menu/MenuItem.vue'
-import InputField from '../fields/InputField.vue'
+import InputField from '../base/fields/InputField.vue'
 import { DeviceApi, extractDataFromError } from '../../api/device/DeviceApi'
 import DevicesSearchView from '../device/DevicesSearchView.vue'
 import PopUpDialog from '../dialogs/PopUpDialog.vue'
@@ -309,5 +309,9 @@ export default {
 }
 .controls button {
   flex: 1 0 auto;
+}
+.device-item:hover {
+  transition: background-color 0.5s;
+  background-color: var(--color-background-mute);
 }
 </style>

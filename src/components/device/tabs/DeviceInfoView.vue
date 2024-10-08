@@ -1,7 +1,7 @@
 <script>
 import SyncLoader from 'vue-spinner/src/SyncLoader.vue'
 import { DeviceApi, extractDataFromError } from '../../../api/device/DeviceApi.js'
-import InputField from '../../fields/InputField.vue'
+import InputField from '../../base/fields/InputField.vue'
 import LoadingButton from '../../controls/LoadingButton.vue'
 import { EventBus, toast } from '../../../utils/EventBus.js'
 import { useIntl } from 'vue-intl'

@@ -69,6 +69,9 @@ export default {
           <router-link :to="{ name: 'logs', params: { gateway: gatewayId } }">
             <h2>{{ intl.formatMessage({ id: 'doc.device.logs' }) }}</h2>
           </router-link>
+          <router-link :to="{ name: 'ota', params: { gateway: gatewayId } }">
+            <h2>{{ intl.formatMessage({ id: 'doc.device.ota' }) }}</h2>
+          </router-link>
         </div>
       </div>
     </div>
