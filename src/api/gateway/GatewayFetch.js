@@ -3,8 +3,9 @@ import { CloudApi } from '../CloudApi'
 import { toast } from '../../utils/EventBus'
 
 const GATEWAY_PATH = import.meta.env.VITE_GATEWAY_IP || document.location.hostname
-const GATEWAY_PORT = import.meta.env.VITE_GATEWAY_PORT
-export const GATEWAY_URL = `http://${GATEWAY_PATH}${GATEWAY_PORT ? ':' + GATEWAY_PORT : ''}`
+const GATEWAY_PORT = import.meta.env.VITE_GATEWAY_PORT || document.location.port
+export const GATEWAY_URL = `http://${GATEWAY_PATH}${GATEWAY_PORT ? ':' + GATEWAY_PORT : ''}/api`
+export const GATEWAY_WS_URL = `ws://${GATEWAY_PATH}${GATEWAY_PORT ? ':' + GATEWAY_PORT : ''}/smt-ws`
 
 export const HTTP_METHOD = {
   GET: 'GET',

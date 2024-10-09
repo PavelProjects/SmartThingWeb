@@ -1,6 +1,6 @@
 import { Client } from '@stomp/stompjs'
 import { defineStore } from 'pinia'
-import { GATEWAY_WS_URL } from '../api/gateway/GatewayApi'
+import { GATEWAY_WS_URL } from '../api/gateway/GatewayFetch'
 import { CLOUD_WS_URL } from '../api/CloudApi'
 import { EVENT, EventBus, LOGGED_IN, LOGGED_OUT, TOAST, WS_CONNECTED } from '../utils/EventBus'
 
