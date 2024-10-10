@@ -4,22 +4,22 @@ const { protocol, host, pathname } = document.location
 
 const CLOUD_ADRESS = import.meta.env.VITE_CLOUD_ADRESS ?? `${host}${pathname}`
 const CLOUD_WS_URL = `${protocol === 'https:' ? 'wss' : 'ws'}://${CLOUD_ADRESS}/smt-ws`
-const CLOUD_API_URL = `${protocol}//${CLOUD_ADRESS}/api`
+const CLOUD_API_URL = `${protocol}//${CLOUD_ADRESS}`
 
 const REFRESH_TOKEN_KEY = 'refresh-token'
 
-const URL_AUTH = '/auth'
-const URL_AUTH_USER = '/auth/user'
-const URL_REFRESH_USER = '/auth/user/refresh'
-const URL_AUTH_GATEWAY = '/auth/gateway'
-const URL_LOGOUT_USER = '/auth/user/logout'
-const URL_LOGOUT_GATEWAY = '/auth/gateway/logout'
-const URL_GATEWAY_BY_ID = '/gateway/management'
-const URL_GATEWAYS_LIST = '/gateway/management/list'
-const URL_GATEWAY_REQUEST = '/gateway/requests'
-const URL_GATEWAY_CREATE = '/gateway/management/create'
-const URL_GATEWAY_UPDATE = '/gateway/management/update'
-const URL_GATEWAY_DELETE = '/gateway/management/delete'
+const URL_AUTH = '/api/auth'
+const URL_AUTH_USER = '/api/auth/user'
+const URL_REFRESH_USER = '/api/auth/user/refresh'
+const URL_AUTH_GATEWAY = '/api/auth/gateway'
+const URL_LOGOUT_USER = '/api/auth/user/logout'
+const URL_LOGOUT_GATEWAY = '/api/auth/gateway/logout'
+const URL_GATEWAY_BY_ID = '/api/gateway/management'
+const URL_GATEWAYS_LIST = '/api/gateway/management/list'
+const URL_GATEWAY_REQUEST = '/api/gateway/requests'
+const URL_GATEWAY_CREATE = '/api/gateway/management/create'
+const URL_GATEWAY_UPDATE = '/api/gateway/management/update'
+const URL_GATEWAY_DELETE = '/api/gateway/management/delete'
 
 const axiosConfig = {
   baseURL: CLOUD_API_URL,

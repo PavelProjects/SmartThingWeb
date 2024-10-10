@@ -64,7 +64,7 @@ export default {
         const { response } = error || {}
         const { status } = response
         let description = ''
-        if (status == 403) {
+        if (status === 403 || status === 401) {
           description = 'Access denied. Wrong token?'
         } else if (status == 503 || status === 502) {
           description = 'Cloud is unavailable'
