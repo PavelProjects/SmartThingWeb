@@ -3,7 +3,7 @@ import { HTTP_METHOD, gatewayFetch } from './GatewayFetch'
 const DashboardApi = {
   async getGroups(gateway) {
     const response = await gatewayFetch({
-      url: '/dashboard',
+      url: '/api/dashboard',
       method: HTTP_METHOD.GET,
       gateway
     })
@@ -11,7 +11,7 @@ const DashboardApi = {
   },
   async createGroup(group, gateway) {
     const response = await gatewayFetch({
-      url: '/dashboard',
+      url: '/api/dashboard',
       method: HTTP_METHOD.POST,
       data: group,
       gateway
@@ -20,7 +20,7 @@ const DashboardApi = {
   },
   async updateGroup(group, gateway) {
     const response = await gatewayFetch({
-      url: '/dashboard',
+      url: '/api/dashboard',
       method: HTTP_METHOD.PUT,
       data: group,
       gateway
@@ -29,7 +29,7 @@ const DashboardApi = {
   },
   async deleteGroup(groupId, gateway) {
     const response = await gatewayFetch({
-      url: '/dashboard/' + groupId,
+      url: '/api/dashboard/' + groupId,
       method: HTTP_METHOD.DELETE,
       gateway
     })
@@ -38,7 +38,7 @@ const DashboardApi = {
   async getGroupValues(groupId, gateway) {
     return (
       await gatewayFetch({
-        url: `/dashboard/values/${groupId}`,
+        url: `/api/dashboard/values/${groupId}`,
         method: HTTP_METHOD.GET,
         gateway
       })
@@ -46,7 +46,7 @@ const DashboardApi = {
   },
   async updateValues(groupId, gateway) {
     await gatewayFetch({
-      url: `/dashboard/values/${groupId}/update`,
+      url: `/api/dashboard/values/${groupId}/update`,
       method: HTTP_METHOD.PUT,
       gateway
     })

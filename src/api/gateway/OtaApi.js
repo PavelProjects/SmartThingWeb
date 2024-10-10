@@ -2,7 +2,7 @@ import axios from 'axios'
 import { GATEWAY_URL } from './GatewayFetch'
 
 const axiosInstance = axios.create({
-  baseURL: GATEWAY_URL + '/ota/firmware',
+  baseURL: GATEWAY_URL + '/api/ota/firmware',
   timeout: 5000
 })
 
@@ -32,7 +32,7 @@ const OtaApi = {
     return (await axiosInstance.get('/boards')).data
   },
   buildDownloadFirmwareLink: (id) => {
-    return `${GATEWAY_URL}/ota/firmware/download?id=${id}`
+    return `${GATEWAY_URL}/api/ota/firmware/download?id=${id}`
   }
 }
 
