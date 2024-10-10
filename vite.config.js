@@ -17,6 +17,6 @@ export default defineConfig({
         entryFileNames: 'assets/script.js',
         assetFileNames: 'assets/styles.css',
       }
-  }
+    }
   }
 })

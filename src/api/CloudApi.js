@@ -2,10 +2,9 @@ import axios from 'axios'
 
 const { protocol, host, pathname } = document.location
 
-const CLOUD_API_PATH = import.meta.env.VITE_CLOUD_API_PATH
-const CLOUD_ADRESS = import.meta.env.VITE_CLOUD_ADRESS ?? `${host}${pathname}${CLOUD_API_PATH}`
+const CLOUD_ADRESS = import.meta.env.VITE_CLOUD_ADRESS ?? `${host}${pathname}`
 const CLOUD_WS_URL = `${protocol === 'https:' ? 'wss' : 'ws'}://${CLOUD_ADRESS}/smt-ws`
-const CLOUD_API_URL = `${protocol}//${CLOUD_ADRESS}`
+const CLOUD_API_URL = `${protocol}//${CLOUD_ADRESS}/api`
 
 const REFRESH_TOKEN_KEY = 'refresh-token'
 
