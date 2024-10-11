@@ -19,6 +19,7 @@ export default {
 
     return {
       intl,
+      idSeq: 0,
       messages: [],
       colors: {},
       stompClient,
@@ -26,7 +27,7 @@ export default {
   },
   async mounted() {
     try {
-      this.messages = await GatewayApi.getLogs(this.gateway)
+      this.messages = (await GatewayApi.getLogs(this.gateway) ?? []).map((message) => ({...message, id: this.idSeq++}))
     } catch (error) {
       console.error(error)
       toast.error({
@@ -44,7 +45,7 @@ export default {
           console.error('Davice name or ip in log message is missing!')
           return
         }
-        this.messages.unshift(parsed)
+        this.messages.unshift({...parsed, id: this.idSeq++})
       }
     })
   },
@@ -91,8 +92,8 @@ export default {
       </h2>
     </div>
     <LogMessage
-      v-for="message, index of messages"
-      :key="index"
+      v-for="message of messages"
+      :key="message.id"
       :log="message"
       :color="colorByIp(message)"
     />
