@@ -36,6 +36,7 @@ export default {
     return {
       intl,
       stompClient,
+      searchEnabled: true,
       devices: [],
       savedDevices: [],
       searching: false,
@@ -67,7 +68,10 @@ export default {
     async loadFoundDevices() {
       this.searching = true
       try {
-        this.devices = this.filterDevices(await GatewayApi.getFoundDevices(this.gateway)) ?? []
+        this.searchEnabled = await GatewayApi.deviceSearchEnabled(this.gateway)
+        if (this.searchEnabled) {
+          this.devices = this.filterDevices(await GatewayApi.getFoundDevices(this.gateway)) ?? []
+        }
       } catch (error) {
         console.error(error)
         toast.error({
@@ -153,7 +157,7 @@ export default {
         <h2 class="title list-title">{{ intl.formatMessage({ id: 'devices.search' }) }}</h2>
         <UpdateButton class="update" :loading="searching" :onClick="loadFoundDevices" />
       </div>
-      <Container class="devices-list" :vertical="true">
+      <Container v-if="searchEnabled" class="devices-list" :vertical="true">
         <DeviceItem
           v-for="deviceInfo, index of devices"
           :key="index"
@@ -168,6 +172,9 @@ export default {
           {{ intl.formatMessage({ id: 'devices.search.in.progress' }) }}
         </h2>
       </Container>
+      <h2 v-else class="title" :title="intl.formatMessage({ id: 'devices.search.disabled.title' })">
+        {{ intl.formatMessage({ id: 'devices.search.disabled' }) }}
+      </h2>
     </Container>
     <Container class="bordered" :vertical="true">
       <div style="position: relative">

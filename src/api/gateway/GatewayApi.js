@@ -8,6 +8,7 @@ const PATH_CLOUD_CONFIG = '/api/cloud/config'
 const PATH_CLOUD_CONNECTED = '/api/cloud/connection/status'
 const PATH_CLOUD_CONNECT = '/api/cloud/connection/connect'
 const PATH_CLOUD_DISCONNECT = '/api/cloud/connection/disconnect'
+const PATH_SEARCH_ENABLED = '/api/devices/search/enabled'
 const PATH_DEVICES_FOUND = '/api/devices/found'
 const PATH_DEVICES_SAVED = '/api/devices/saved'
 const PATH_DEVICE_API = '/api/device/api'
@@ -109,6 +110,9 @@ const GatewayApi = {
       gateway
     })
     return response.status === 200
+  },
+  async deviceSearchEnabled(gateway) {
+    return (await gatewayFetch({ gateway, url: PATH_SEARCH_ENABLED, method: 'GET' })).data
   },
   async getFoundDevices(gateway) {
     const response = await gatewayFetch({ gateway, url: PATH_DEVICES_FOUND, method: 'GET' })
