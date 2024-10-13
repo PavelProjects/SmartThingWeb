@@ -6,9 +6,10 @@ import Container from '../base/Container.vue'
 import LoadingButton from '../controls/LoadingButton.vue'
 import MenuItem from '../menu/MenuItem.vue'
 import InputField from '../base/fields/InputField.vue'
-import { DeviceApi, extractDataFromError } from '../../api/device/DeviceApi'
+import { DeviceApi } from '../../api/device/DeviceApi'
 import DevicesSearchView from '../device/DevicesSearchView.vue'
 import PopUpDialog from '../dialogs/PopUpDialog.vue'
+import { extractDataFromError } from '../../api/ApiUtils'
 
 const MODE = {
   EXPORT: 'export',

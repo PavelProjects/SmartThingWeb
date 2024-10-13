@@ -1,11 +1,12 @@
 <script>
 import { systemNameToNormal } from '../../../utils/StringUtils.js'
 import HookView from './HookView.vue'
-import { DeviceApi, extractDataFromError } from '../../../api/device/DeviceApi.js'
+import { DeviceApi } from '../../../api/device/DeviceApi.js'
 import ComboBoxField from '../../base/fields/ComboBoxField.vue'
 import SyncLoader from 'vue-spinner/src/SyncLoader.vue'
 import { useIntl } from 'vue-intl'
 import { toast } from '../../../utils/EventBus.js'
+import { extractDataFromError } from '../../../api/ApiUtils.js'
 
 export const NEW_HOOK_ID = 'New'
 

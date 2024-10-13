@@ -1,10 +1,5 @@
 import { deviceFetch } from './DeviceFetch'
 
-export async function extractDataFromError(error) {
-  const { response } = error || {}
-  return (await response?.data) || {}
-}
-
 export const DeviceApiMethods = {
   CHECK_HEALTH: 'health',
   GET_INFO: 'getInfo',

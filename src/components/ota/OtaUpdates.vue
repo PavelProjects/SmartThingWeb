@@ -76,6 +76,7 @@ export default {
         {{ intl.formatMessage({ id: 'ota.saved.header' }) }}
       </h1>
       <TreeView
+        class="bordered"
         :values="firmwaresTree"
       />
       <LoadingButton @click="() => addVisible = true">

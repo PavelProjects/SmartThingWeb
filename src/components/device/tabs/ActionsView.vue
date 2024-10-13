@@ -1,9 +1,10 @@
 <script>
 import SyncLoader from 'vue-spinner/src/SyncLoader.vue'
-import { DeviceApi, extractDataFromError } from '../../../api/device/DeviceApi.js'
+import { DeviceApi } from '../../../api/device/DeviceApi.js'
 import LoadingButton from '../../controls/LoadingButton.vue'
 import { useIntl } from 'vue-intl'
 import { toast } from '../../../utils/EventBus.js'
+import { extractDataFromError } from '../../../api/ApiUtils.js'
 
 export default {
   name: 'ActionsView',

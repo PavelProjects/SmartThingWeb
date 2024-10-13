@@ -8,6 +8,7 @@ import { toast } from '../../utils/EventBus';
 import FileField from '../base/fields/FileField.vue';
 import PopUpDialog from '../dialogs/PopUpDialog.vue'
 import { useIntl } from 'vue-intl';
+import { extractDataFromError } from '../../api/ApiUtils';
 
 export default {
   name: "AddOtaFirmwareDialog",
@@ -52,7 +53,11 @@ export default {
         toast.success({ caption: this.intl.formatMessage({ id: 'ota.add.success' })})
         this.$emit('created')
       } catch (error) {
-        toast.error({ caption: this.intl.formatMessage({ id: 'ota.add.error' })})
+        const data = extractDataFromError(error)
+        toast.error({
+          caption: this.intl.formatMessage({ id: 'ota.add.error' }),
+          description: data?.message
+        })
       } finally {
         this.loading = false
       }

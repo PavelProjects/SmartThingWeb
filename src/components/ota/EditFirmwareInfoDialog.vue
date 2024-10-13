@@ -7,6 +7,7 @@ import ComboBoxField from '../base/fields/ComboBoxField.vue';
 import LoadingButton from '../controls/LoadingButton.vue';
 import PopUpDialog from '../dialogs/PopUpDialog.vue';
 import { useIntl } from 'vue-intl';
+import { extractDataFromError } from '../../api/ApiUtils';
 
 export default {
   name: 'EditFirmwareInfoDialog',
@@ -48,7 +49,11 @@ export default {
         toast.success({ caption: this.intl.formatMessage({ id: 'ota.edit.succes' }) })
         this.$emit("updated")
       } catch (error) {
-        toast.error({ caption: this.intl.formatMessage({ id: 'ota.edit.error' }) })
+        const data = await extractDataFromError(error)
+        toast.error({
+          caption: this.intl.formatMessage({ id: 'ota.edit.error' }),
+          description: data?.message
+        })
       }
     }
   }

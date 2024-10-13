@@ -2,7 +2,7 @@
 import { systemNameToNormal } from '../../../utils/StringUtils.js'
 import InputField from '../../base/fields/InputField.vue'
 import ComboBoxField from '../../base/fields/ComboBoxField.vue'
-import { DeviceApi, DeviceApiMethods, extractDataFromError } from '../../../api/device/DeviceApi.js'
+import { DeviceApi, DeviceApiMethods } from '../../../api/device/DeviceApi.js'
 import { NEW_HOOK_ID } from './HooksView.vue'
 import { h } from 'vue'
 import { toast } from '../../../utils/EventBus.js'
@@ -19,6 +19,7 @@ import ContextMenu from '../../menu/ContextMenu.vue'
 import PopUpDialog from '../../dialogs/PopUpDialog.vue'
 import ChevronDown from 'vue-material-design-icons/ChevronDown.vue'
 import ChevronUp from 'vue-material-design-icons/ChevronUp.vue'
+import { extractDataFromError } from '../../../api/ApiUtils.js'
 
 const SYSTEM_FIELDS = ['id', 'type', 'readonly']
 

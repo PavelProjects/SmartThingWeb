@@ -1,11 +1,12 @@
 <script>
 import SyncLoader from 'vue-spinner/src/SyncLoader.vue'
-import { DeviceApi, extractDataFromError } from '../../../api/device/DeviceApi.js'
+import { DeviceApi } from '../../../api/device/DeviceApi.js'
 import InputField from '../../base/fields/InputField.vue'
 import LoadingButton from '../../controls/LoadingButton.vue'
 import { EventBus, toast } from '../../../utils/EventBus.js'
 import { useIntl } from 'vue-intl'
 import Container from '../../base/Container.vue'
+import { extractDataFromError } from '../../../api/ApiUtils.js'
 
 export default {
   name: 'DeviceInfoView',

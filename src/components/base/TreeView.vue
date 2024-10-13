@@ -39,9 +39,18 @@ export default {
 </script>
 
 <template>
-  <ul>
+  <ul class="tree-view">
     <li v-for="[key, value] of Object.entries(values)" :key="key">
       <component :is="listItem(key, value)"></component>
     </li>
   </ul>
 </template>
+
+<style lang="css" scoped>
+.tree-view {
+  padding-inline-start: 30px;
+}
+.tree-view li, ul {
+  padding-inline-start: 10px;
+}
+</style>
