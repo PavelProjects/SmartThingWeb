@@ -50,7 +50,7 @@ axiosInstance.interceptors.response.use(
   (response) => response,
   async (error) => {
     const { status, url } = error?.response ?? {}
-    if (status === 401 && !url.endWith(URL_AUTH) && !url.endWith(URL_REFRESH_USER)) {
+    if (status === 401 && !url?.endWith(URL_AUTH) && !url?.endWith(URL_REFRESH_USER)) {
       if (error?.config?.retry) {
         console.debug('Failed to retry request')
         return error
