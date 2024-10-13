@@ -87,13 +87,8 @@ export default {
 </script>
 
 <template>
-  <Container
-    :vertical="true"
-    class="firmware-item bordered"
-  >
-    <h3>{{ intl.formatMessage({ id: 'ota.firmware.info.board' }) }}: {{  firmware.board }}</h3>
-    <h3>{{ intl.formatMessage({ id: 'ota.firmware.info.type' }) }}: {{  firmware.type }}</h3>
-    <h3>{{ intl.formatMessage({ id: 'ota.firmware.info.version' }) }}: {{  firmware.version }}</h3>
+  <Container class="firmware-item">
+    <h3>{{  firmware.board }}</h3>
     <ContextMenu class="context-menu">
       <p @click="() => editVisible = true">
         {{ intl.formatMessage({ id: 'ota.firmware.menu.edit' }) }}

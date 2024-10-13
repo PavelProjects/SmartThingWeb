@@ -8,6 +8,8 @@ import AddOtaFirmwareDialog from './AddOtaFirmwareDialog.vue';
 import OtaFirmwareItem from './OtaFirmwareItem.vue';
 import OtaFirmwareUploadItem from './OtaFirmwareUploadItem.vue';
 import { useIntl } from 'vue-intl';
+import TreeView from '../base/TreeView.vue';
+import { h } from 'vue';
 
 export default {
   name: "OtaUpdates",
@@ -18,12 +20,13 @@ export default {
     AddOtaFirmwareDialog,
     OtaFirmwareItem,
     OtaFirmwareUploadItem,
+    TreeView,
   },
   data() {
     const intl = useIntl();
     return {
       intl,
-      savedFirmwares: [],
+      firmwaresTree: {},
       runningUploads: [],
       addVisible: false
     }
@@ -35,7 +38,22 @@ export default {
   methods: {
     async loadSaved() {
       try {
-        this.savedFirmwares = await OtaApi.getSavedFirmwares()
+        const savedFirmwares = await OtaApi.getSavedFirmwares() ?? []
+        this.firmwaresTree = savedFirmwares.reduce((acc, {id, type, version, board}) => {
+        if (!acc[type]) {
+          acc[type] = {}
+        }
+        if (!acc[type][version]) {
+          acc[type][version] = {}
+        }
+        acc[type][version][board] = h(OtaFirmwareItem, {
+          firmware: {id, type, version, board},
+          onDeleted: () => this.loadSaved(),
+          onUpdated: () => this.loadSaved(),
+          onUploadStarted: () => this.loadRunningUploads()
+        })
+        return acc;
+      }, {})
       } catch (error) {
         toast.error({ caption: this.intl.formatMessage({ id: "ota.load.saved.error" }) })
       }
@@ -57,13 +75,8 @@ export default {
       <h1 class="title">
         {{ intl.formatMessage({ id: 'ota.saved.header' }) }}
       </h1>
-      <OtaFirmwareItem
-        v-for="firmware, index of savedFirmwares"
-        :key="index"
-        :firmware="firmware"
-        @deleted="loadSaved"
-        @updated="loadSaved"
-        @uploadStarted="loadRunningUploads"
+      <TreeView
+        :values="firmwaresTree"
       />
       <LoadingButton @click="() => addVisible = true">
         <h2>

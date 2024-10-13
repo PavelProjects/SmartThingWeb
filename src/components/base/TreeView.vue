@@ -1,8 +1,8 @@
 <script>
-import { h } from 'vue'
+import { h, isVNode } from 'vue'
 
 export default {
-  name: 'TreeList',
+  name: 'TreeView',
   props: {
     values: {
       type: Object,
@@ -16,10 +16,15 @@ export default {
   },
   methods: {
     listItem(key, value) {
+      if (isVNode(value)) {
+        return h('div', {}, value)
+      }
       return h('div', {}, [key + ': ', this.valueNode(value)])
     },
     valueNode(value) {
-      if (Array.isArray(value)) {
+      if (isVNode(value)) {
+        return value
+      } else if (Array.isArray(value)) {
         const children = value.map((v) => h('p', {}, v))
         return h('ul', {}, children)
       } else if (value instanceof Object) {
