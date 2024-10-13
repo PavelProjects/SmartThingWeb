@@ -76,6 +76,7 @@ export default {
         {{ intl.formatMessage({ id: 'ota.saved.header' }) }}
       </h1>
       <TreeView
+        v-if="Object.keys(firmwaresTree).length > 0"
         class="bordered"
         :values="firmwaresTree"
       />
