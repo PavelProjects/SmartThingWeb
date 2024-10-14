@@ -2,13 +2,17 @@
 import { useIntl } from 'vue-intl';
 import { useStompClientStore } from '../../store/stompClientStore';
 import Container from '../base/Container.vue';
+import LoadingButton from '../base/controls/LoadingButton.vue';
 import DeviceItem from '../device/DeviceItem.vue';
+import { toast } from '../../utils/EventBus';
+import { OtaApi } from '../../api/gateway/OtaApi';
 
 export default {
   name: "OtaFirmwareUploadItem",
   components: {
     Container,
     DeviceItem,
+    LoadingButton,
   },
   props: {
     uploadProgress: Object
@@ -47,6 +51,20 @@ export default {
   },
   unmounted() {
     this.stompClient.unsubscribe('/ota/' + this.taskId)
+  },
+  methods: {
+    async abort() {
+      if (!confirm(this.intl.formatMessage({ id: 'ota.upload.abort.confirm' }, { device: this.device.name }))) {
+        return;
+      }
+
+      try {
+        await OtaApi.abortFirmwareUpload(this.taskId)
+        toast.success({ caption: this.intl.formatMessage({ id: 'ota.upload.abort.success' })})
+      } catch (error) {
+        toast.error({ caption: this.intl.formatMessage({ id: 'ota.upload.abort.error' })})
+      }
+    }
   }
 }
 
@@ -70,14 +88,23 @@ export default {
         <DeviceItem :device="device" />
       </div>
     </div>
-    <div class="upload-progress-container">
-      <h3 class="title">
-        {{ intl.formatMessage({ id: 'ota.upload.status' }, { status }) }}
-      </h3>
+    <Container class="upload-progress-container" :vertical="true">
+      <Container>
+        <h3>
+          {{ intl.formatMessage({ id: 'ota.upload.status' }, { status }) }}
+        </h3>
+        <LoadingButton
+          v-if="!['FINISHED', 'FIRMWARE_TRANSFER_FINISHED', 'ABORTED'].includes(status)"
+          class="abort-button"
+          @click="() => abort()"
+        >
+          {{ intl.formatMessage({ id: 'ota.upload.abort' }) }}
+        </LoadingButton>
+      </Container>
       <div v-if="progress" class="upload-progress" :style="progressBarStyle">
         <h3 class="upload-progress-percent">{{ progress }}%</h3>
       </div>
-    </div>
+    </Container>
   </Container>
 </template>
 
@@ -101,5 +128,10 @@ export default {
     border-radius: var(--border-radius);
     background-color: green;
     padding-left: var(--default-padding);
+  }
+  .abort-button {
+    width: fit-content;
+    margin-left: auto;
+    background-color: var(--color-danger);
   }
 </style>

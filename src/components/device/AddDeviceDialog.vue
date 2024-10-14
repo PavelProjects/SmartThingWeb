@@ -3,7 +3,7 @@ import { useIntl } from 'vue-intl'
 import { GatewayApi } from '../../api/gateway/GatewayApi'
 import { toast } from '../../utils/EventBus'
 import Container from '../base/Container.vue'
-import LoadingButton from '../controls/LoadingButton.vue'
+import LoadingButton from '../base/controls/LoadingButton.vue'
 import PopUpDialog from '../dialogs/PopUpDialog.vue'
 import InputField from '../base/fields/InputField.vue'
 

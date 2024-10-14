@@ -1,7 +1,7 @@
 <script>
 import { DeviceApi } from '../../../api/device/DeviceApi.js'
 import InputField from '../../base/fields/InputField.vue'
-import LoadingButton from '../../controls/LoadingButton.vue'
+import LoadingButton from '../../base/controls/LoadingButton.vue'
 import SyncLoader from 'vue-spinner/src/SyncLoader.vue'
 import CheckBoxField from '../../base/fields/CheckBoxField.vue'
 import { useIntl } from 'vue-intl'

@@ -287,6 +287,10 @@ const messages = {
     'ota.upload.to': 'Upload to',
     'ota.upload.block.firmware': 'Firmware',
     'ota.upload.block.device': 'Device',
+    'ota.upload.abort': 'Abort upload',
+    'ota.upload.abort.confirm': 'Firmware upload to {device} will be aborted, are you sure?',
+    'ota.upload.abort.success': 'Firmware upload aborted',
+    'ota.upload.abort.error': 'Failed to abort firmware upload',
     'ota.upload.status': `Status: {
       status, select,
       STARTED {starting upload}
@@ -298,6 +302,7 @@ const messages = {
       FIRMWARE_TRANSFER_CONFIRMATION {transfer finishing}
       FIRMWARE_TRANSFER_FINISHED {transfer finished}
       FINISHED {upload finished}
+      ABORTED {upload aborted}
       other {{status}}
     }`,
     login: 'Login',
@@ -603,6 +608,10 @@ const messages = {
     'ota.upload.to': 'Загрузить на',
     'ota.upload.block.firmware': 'Прошивка',
     'ota.upload.block.device': 'Устройство',
+    'ota.upload.abort': 'Отменить загрузку',
+    'ota.upload.abort.confirm': 'Загрузка прошивки на {device} будет отменена, вы уверены?',
+    'ota.upload.abort.success': 'Загрузка прошивки отменена',
+    'ota.upload.abort.error': 'Не удалось отменить загрузку прошивки',
     'ota.upload.status': `Статус: {
       status, select,
       STARTED {загрузка начинается}
@@ -614,6 +623,7 @@ const messages = {
       FIRMWARE_TRANSFER_CONFIRMATION {заврешение передачи}
       FIRMWARE_TRANSFER_FINISHED {передача завершена}
       FINISHED {загрузка завершена}
+      ABORTED {загрузка отменена}
       other {{status}}
     }`,
     login: 'Логин',

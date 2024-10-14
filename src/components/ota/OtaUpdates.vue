@@ -1,7 +1,7 @@
 <script>
 import { OtaApi } from '../../api/gateway/OtaApi';
 import Container from '../base/Container.vue'
-import LoadingButton from '../controls/LoadingButton.vue';
+import LoadingButton from '../base/controls/LoadingButton.vue';
 import InputField from '../base/fields/InputField.vue';
 import { toast } from '../../utils/EventBus';
 import AddOtaFirmwareDialog from './AddOtaFirmwareDialog.vue';

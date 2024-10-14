@@ -4,7 +4,7 @@ import { toast } from '../../utils/EventBus';
 import Container from '../base/Container.vue'
 import InputField from '../base/fields/InputField.vue';
 import ComboBoxField from '../base/fields/ComboBoxField.vue';
-import LoadingButton from '../controls/LoadingButton.vue';
+import LoadingButton from '../base/controls/LoadingButton.vue';
 import PopUpDialog from '../dialogs/PopUpDialog.vue';
 import { useIntl } from 'vue-intl';
 import { extractDataFromError } from '../../api/ApiUtils';

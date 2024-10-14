@@ -1,6 +1,6 @@
 <script>
 import Container from '../../base/Container.vue'
-import LoadingButton from '../../controls/LoadingButton.vue'
+import LoadingButton from '../../base/controls/LoadingButton.vue'
 import { DeviceApi } from '../../../api/device/DeviceApi'
 import { toast } from '../../../utils/EventBus'
 import { useIntl } from 'vue-intl'

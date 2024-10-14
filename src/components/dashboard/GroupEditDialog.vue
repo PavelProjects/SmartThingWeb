@@ -2,7 +2,7 @@
 import { useIntl } from 'vue-intl'
 import PopUpDialog from '../dialogs/PopUpDialog.vue'
 import InputField from '../base/fields/InputField.vue'
-import LoadingButton from '../controls/LoadingButton.vue'
+import LoadingButton from '../base/controls/LoadingButton.vue'
 import { toast } from '../../utils/EventBus'
 import DeleteSVG from 'vue-material-design-icons/Delete.vue'
 import { DashboardApi } from '../../api/gateway/DashboardApi'

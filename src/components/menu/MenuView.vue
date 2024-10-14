@@ -1,6 +1,6 @@
 <script>
 import { h } from 'vue'
-import UpdateButton from '../controls/UpdateButton.vue'
+import UpdateButton from '../base/controls/UpdateButton.vue'
 import MenuItem from './MenuItem.vue'
 import Container from '../base/Container.vue'
 

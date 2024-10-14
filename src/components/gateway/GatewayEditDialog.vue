@@ -1,7 +1,7 @@
 <script>
 import { useIntl } from 'vue-intl'
 import { toast } from '../../utils/EventBus'
-import LoadingButton from '../controls/LoadingButton.vue'
+import LoadingButton from '../base/controls/LoadingButton.vue'
 import PopUpDialog from '../dialogs/PopUpDialog.vue'
 import InputField from '../base/fields/InputField.vue'
 import Container from '../base/Container.vue'

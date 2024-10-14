@@ -20,10 +20,13 @@ const OtaApi = {
     return (await axiosInstance.put('', info)).data
   },
   deleteFirmware: async (id) => {
-    return (await axiosInstance.delete('', { params: { id }})).status == 200
+    return (await axiosInstance.delete('', { params: { id }})).status === 200
   },
   uploadFirmware: async (id, device) => {
-    return (await axiosInstance.post('/upload', device, { params: { id }})).status == 200
+    return (await axiosInstance.post('/upload', device, { params: { id }})).status === 200
+  },
+  abortFirmwareUpload: async(id) => {
+    return (await axiosInstance.delete('/upload', { params: { id }})).status === 200
   },
   getRunningUploads: async () => {
     return (await axiosInstance.get('/upload')).data

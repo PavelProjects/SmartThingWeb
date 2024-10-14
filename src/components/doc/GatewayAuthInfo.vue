@@ -1,7 +1,7 @@
 <script>
 import { GatewayApi } from '../../api/gateway/GatewayApi.js'
 import InputField from '../base/fields/InputField.vue'
-import LoadingButton from '../controls/LoadingButton.vue'
+import LoadingButton from '../base/controls/LoadingButton.vue'
 import GatewayAuthDialog from '../dialogs/GatewayAuthDialog.vue'
 import { toast } from '../../utils/EventBus.js'
 import { useStompClientStore } from '../../store/stompClientStore.js'
