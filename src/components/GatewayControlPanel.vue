@@ -62,7 +62,7 @@ export default {
         class="search"
         :placeholder="intl.formatMessage({ id: 'gateway.panel.devices' })"
         :vertical="false"
-        :expanded="searchExpanded"
+        :expanded="searchExpanded || !device"
         @expand="(v) => (searchExpanded = v)"
       >
         <DevicesSearchView

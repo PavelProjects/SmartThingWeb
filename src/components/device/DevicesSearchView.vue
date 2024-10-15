@@ -71,6 +71,7 @@ export default {
         this.searchEnabled = await GatewayApi.deviceSearchEnabled(this.gateway)
         if (this.searchEnabled) {
           this.devices = this.filterDevices(await GatewayApi.getFoundDevices(this.gateway)) ?? []
+          this.devices.sort(this.sortFunction)
         }
       } catch (error) {
         console.error(error)
@@ -85,6 +86,7 @@ export default {
       this.loadingSaved = true
       try {
         this.savedDevices = this.filterDevices(await GatewayApi.getSavedDevices(this.gateway)) ?? []
+        this.savedDevices.sort(this.sortFunction)
       } catch (error) {
         console.error(error)
         toast.error({
@@ -135,6 +137,19 @@ export default {
     handleClick(ip, deviceInfo) {
       this.selectedIp = ip
       this.$emit('select', deviceInfo)
+    },
+    sortFunction(d1, d2) {
+      const l1 = Number(d1.ip.split('.')[3])
+      const l2 = Number(d2.ip.split('.')[3])
+
+      if (l1 == l2) {
+        return 0
+      }
+      if (l1 < l2) {
+        return -1
+      } else {
+        return 1
+      }
     },
     filterDevices(list) {
       if (!list) {

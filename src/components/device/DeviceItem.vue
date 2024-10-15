@@ -53,8 +53,8 @@ export default {
       <h3 @click.stop="() => {}">
         Ip <a :href="'http://' + device.ip" target="”_blank”">{{ device.ip }}</a>
       </h3>
+      <img v-if="imgSrc" :src="imgSrc" />
     </div>
-    <img v-if="imgSrc" :src="imgSrc" />
   </Container>
 </template>
 
@@ -65,10 +65,11 @@ export default {
 .device-item-table {
   display: grid;
   grid-template-columns: 1fr 1fr;
+  flex: 1 0 auto;
 }
 img {
-  width: 50px;
-  height: 50px;
+  width: 30px;
+  height: 30px;
   border-radius: var(--border-radius);
   margin: auto;
 }

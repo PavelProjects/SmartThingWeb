@@ -44,10 +44,6 @@ export default {
       features: {},
       apiMethods: {},
       defaultTabs: {
-        info: {
-          class: DeviceInfoView,
-          caption: intl.formatMessage({ id: 'device.tabs' }, { tab: 'info' })
-        },
         actions: {
           class: ActionsView,
           caption: intl.formatMessage({ id: 'device.tabs' }, { tab: 'actions' })
@@ -59,6 +55,10 @@ export default {
         states: {
           class: StatesView,
           caption: intl.formatMessage({ id: 'device.tabs' }, { tab: 'states' })
+        },
+        info: {
+          class: DeviceInfoView,
+          caption: intl.formatMessage({ id: 'device.tabs' }, { tab: 'info' })
         },
         config: {
           class: ConfigView,
@@ -140,7 +140,7 @@ export default {
     </h1>
     <RiseLoader v-if="loading" />
     <div v-else id="control-panel" class="bordered">
-      <MenuView :tabs="tabs" tab="info" :vertical="true" />
+      <MenuView :tabs="tabs" :tab="Object.keys(tabs)[0]" :vertical="true" />
     </div>
   </div>
 </template>
