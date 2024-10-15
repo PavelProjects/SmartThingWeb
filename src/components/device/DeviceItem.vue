@@ -16,7 +16,7 @@ export default {
   },
   computed: {
     imgSrc() {
-      const { name } = this.device
+      const { name, type } = this.device
       if (['pepe', 'frog'].includes(name)) {
         return IMG_PATH + 'pepe.gif'
       }
@@ -25,6 +25,9 @@ export default {
       }
       if (['sus', 'amogus', 'imposter', 'sussy_baka'].includes(name)) {
         return IMG_PATH + 'amogus.gif'
+      }
+      if (name === 'test' || name.startsWith('autotest') || type === 'test_device') {
+        return IMG_PATH + 'pepe_test.png'
       }
       return undefined
     },
@@ -68,8 +71,8 @@ export default {
   flex: 1 0 auto;
 }
 img {
-  width: 30px;
-  height: 30px;
+  width: 40px;
+  height: 40px;
   border-radius: var(--border-radius);
   margin: auto;
 }
