@@ -5,12 +5,16 @@ import { useStompClientStore } from '../../store/stompClientStore'
 import { toast } from '../../utils/EventBus'
 import LogMessage from './LogMessage.vue'
 import Container from '../base/Container.vue'
+import InputField from '../base/fields/InputField.vue'
+import ComboBoxField from '../base/fields/ComboBoxField.vue'
 
 export default {
   name: 'DeviceLogs',
   components: {
     LogMessage,
-    Container
+    Container,
+    InputField,
+    ComboBoxField,
   },
   inject: ['gateway'],
   data() {
@@ -22,21 +26,26 @@ export default {
       idSeq: 0,
       messages: [],
       colors: {},
+      filters: {
+        device: undefined,
+        tag: undefined,
+        message: undefined,
+        level: undefined,
+      },
+      loading: false,
       stompClient,
     }
   },
-  async mounted() {
-    try {
-      this.messages = (await GatewayApi.getLogs(this.gateway) ?? []).map((message) => ({...message, id: this.idSeq++}))
-    } catch (error) {
-      console.error(error)
-      toast.error({
-        caption: 'Failed to load device logs'
-      })
-      return
+  watch: {
+    filters: {
+      handler() {
+        this.loadMessages()
+      },
+      deep: true
     }
-    this.messages.reverse()
-
+  },
+  async mounted() {
+    await this.loadMessages()
     this.stompClient.subscribe('/devices/logs', (message) => {
       if (message && message.body) {
         console.debug(`Device log  message: ${message.body}`)
@@ -53,6 +62,21 @@ export default {
     this.stompClient.unsubscribe('/devices/logs')
   },
   methods: {
+    async loadMessages() {
+      if (this.loading) {
+        return;
+      }
+      this.loading = true
+      try {
+        this.messages = (await GatewayApi.getLogs(this.gateway, this.filters) ?? []).map((message) => ({...message, id: this.idSeq++}))
+      } catch (error) {
+        toast.error({
+          caption: 'Failed to load device logs'
+        })
+      } finally {
+        this.loading = false
+      }
+    },
     generateColorByIp(ip) {
       const splited = ip.split('.')
       const r = this.chooseRandom(splited, 50, 250)
@@ -86,6 +110,25 @@ export default {
 
 <template>
   <Container class="logs-view" :vertical="true">
+    <Container class="filters">
+      <InputField
+        :label="intl.formatMessage({ id: 'device.logs.columns' }, { column: 'device' })"
+        v-model="filters.device"
+      />
+      <InputField
+        :label="intl.formatMessage({ id: 'device.logs.columns' }, { column: 'tag' })"
+        v-model="filters.tag"
+      />
+      <ComboBoxField
+        :label="intl.formatMessage({ id: 'device.logs.columns' }, { column: 'level' })"
+        :items="['DEBUG', 'INFO', 'WARN', 'ERROR']"
+          v-model="filters.level"
+      />
+      <InputField
+        :label="intl.formatMessage({ id: 'device.logs.columns' }, { column: 'msg' })"
+        v-model="filters.message"
+      />
+    </Container>
     <div class="log-message-container">
       <h2 v-for="column of ['device', 'date', 'tag', 'level', 'msg']" :key="column">
         {{ intl.formatMessage({ id: 'device.logs.columns' }, { column }) }}
@@ -107,6 +150,9 @@ export default {
   overflow-y: auto;
   min-width: 80vw;
   padding: var(--default-gap);
+}
+.filters {
+  margin: 0 auto;
 }
 .log-message-container {
   display: grid;

@@ -68,9 +68,17 @@ const GatewayApi = {
     ).data
   },
   // Cloud supported methods
-  async getLogs(gateway) {
+  async getLogs(gateway, filters={}) {
+    const params = Object.entries(filters).reduce((acc, [key, value]) => {
+      if (!!value) {
+        acc.push(`${key}=${value}`)
+      }
+      return acc
+    }, [])
+    const query = params.length === 0 ? '' : `?${params.join('&')}`
+
     const response = await gatewayFetch({
-      url: PATH_DEVICE_LOGS,
+      url: `${PATH_DEVICE_LOGS}${query}`,
       method: HTTP_METHOD.GET,
       gateway
     })
