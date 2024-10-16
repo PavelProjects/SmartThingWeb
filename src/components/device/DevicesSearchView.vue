@@ -10,7 +10,21 @@ import AddDeviceDialog from './AddDeviceDialog.vue'
 import ContextMenu from '../menu/ContextMenu.vue'
 import { useStompClientStore } from '../../store/stompClientStore'
 
-const SEARCH_TOPIC = '/devices/search'
+const FOUND_TOPIC = "/devices/found"
+const LOST_TOPIC = "/devices/lost"
+function sortFunction(d1, d2) {
+  const l1 = Number(d1.ip.split('.')[3])
+  const l2 = Number(d2.ip.split('.')[3])
+
+  if (l1 == l2) {
+    return 0
+  }
+  if (l1 < l2) {
+    return -1
+  } else {
+    return 1
+  }
+}
 
 export default {
   name: 'DevicesSearchView',
@@ -26,7 +40,6 @@ export default {
   inject: ['gateway'],
   props: {
     title: String,
-    // gateway: Object,
     selected: Object,
     board: String,
   },
@@ -49,34 +62,72 @@ export default {
     this.loadSavedDevices()
 
     EventBus.on('deviceUpdate', ({ device, name }) => {
-      let index = this.devices.indexOf(device)
+      let index = this.devices.findIndex(({ ip, name }) => device.ip === ip)
       if (index > 0) {
         this.devices[index].name = name
       } else {
-        index = this.savedDevices.indexOf(device)
+        index = this.savedDevices.indexOf(({ ip, name }) => device.ip === ip)
         if (index > 0) {
           this.savedDevices[index].name = name
           GatewayApi.updateSavedDevice(device.ip, this.gateway).catch(console.log)
         }
       }
     })
+
+    this.stompClient.subscribe(FOUND_TOPIC, (message) => {
+      if (!message?.body) {
+        return;
+      }
+      this.handleDeviceFound(JSON.parse(message.body))
+    })
+    this.stompClient.subscribe(LOST_TOPIC, (message) => {
+      if (!message?.body) {
+        return;
+      }
+      this.handleDeviceLost(JSON.parse(message.body))
+    })
   },
   unmounted() {
-    this.stompClient.unsubscribe(SEARCH_TOPIC)
+    this.stompClient.unsubscribe(FOUND_TOPIC)
+    this.stompClient.unsubscribe(LOST_TOPIC)
   },
   methods: {
+    handleDeviceFound(device) {
+      const existing = this.devices.find(({ ip, name }) => ip === device.ip && name === device.name)
+      if (!existing) {
+        this.devices.push(device)
+        this.devices.sort(sortFunction)
+
+        if (this.selected?.ip === device.ip) {
+          toast.info({
+            caption: this.intl.formatMessage({ id: 'devices.search.found' }, { device: device.name }),
+            autoClose: false
+          })
+        }
+      }
+    },
+    handleDeviceLost(device) {
+      const oldLength = this.devices.length
+      this.devices = this.devices.filter(({ ip, name }) => !(device.ip == ip && device.name == name))
+      if (oldLength !== this.devices.length && this.selected?.ip === device.ip) {
+        toast.warn({
+          caption: this.intl.formatMessage({ id: 'devices.search.lost' }, { device: device.name }),
+          autoClose: false
+        })
+      }
+    },
     async loadFoundDevices() {
       this.searching = true
       try {
         this.searchEnabled = await GatewayApi.deviceSearchEnabled(this.gateway)
         if (this.searchEnabled) {
           this.devices = this.filterDevices(await GatewayApi.getFoundDevices(this.gateway)) ?? []
-          this.devices.sort(this.sortFunction)
+          this.devices.sort(sortFunction)
         }
       } catch (error) {
         console.error(error)
         toast.error({
-          caption: 'Failed to load found devices'
+          caption: this.intl.formatMessage({ id: 'devices.search.load.error' })
         })
       } finally {
         this.searching = false
@@ -86,7 +137,7 @@ export default {
       this.loadingSaved = true
       try {
         this.savedDevices = this.filterDevices(await GatewayApi.getSavedDevices(this.gateway)) ?? []
-        this.savedDevices.sort(this.sortFunction)
+        this.savedDevices.sort(sortFunction)
       } catch (error) {
         console.error(error)
         toast.error({
@@ -137,19 +188,6 @@ export default {
     handleClick(ip, deviceInfo) {
       this.selectedIp = ip
       this.$emit('select', deviceInfo)
-    },
-    sortFunction(d1, d2) {
-      const l1 = Number(d1.ip.split('.')[3])
-      const l2 = Number(d2.ip.split('.')[3])
-
-      if (l1 == l2) {
-        return 0
-      }
-      if (l1 < l2) {
-        return -1
-      } else {
-        return 1
-      }
     },
     filterDevices(list) {
       if (!list) {
