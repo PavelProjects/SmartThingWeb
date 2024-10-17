@@ -17,7 +17,11 @@ export default {
     return { intl }
   },
   methods: {
-    async selectDevice(newDev) {
+    async selectDevice(devices) {
+      const newDev = devices[0]
+      if (!newDev) {
+        return
+      }
       const exists = this.groups.find(
         ({ device }) => device.ip === newDev.ip && device.name === newDev.name
       )
@@ -53,7 +57,7 @@ export default {
       <DevicesSearchView
         :title="intl.formatMessage({ id: 'dashboard.group.create.select.device' })"
         :style="{ width: '350px' }"
-        @select="selectDevice"
+        v-on:update:model-value="selectDevice"
       />
     </Container>
   </PopUpDialog>

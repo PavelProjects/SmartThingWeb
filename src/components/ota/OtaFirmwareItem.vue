@@ -8,6 +8,7 @@ import EditFirmwareInfoDialog from './EditFirmwareInfoDialog.vue';
 import DevicesSearchView from '../device/DevicesSearchView.vue';
 import PopUpDialog from '../dialogs/PopUpDialog.vue';
 import { useIntl } from 'vue-intl';
+import LoadingButton from '../base/controls/LoadingButton.vue';
 
 export default {
   name: 'OtaFirmwareItem',
@@ -18,6 +19,7 @@ export default {
     InputField,
     PopUpDialog,
     DevicesSearchView,
+    LoadingButton,
   },
   emits: ['updated', 'deleted', 'uploadStarted'],
   props: {
@@ -29,6 +31,7 @@ export default {
       intl,
       editVisible: false,
       searchVisible: false,
+      devicesToUpload: [],
     }
   },
   computed: {
@@ -41,33 +44,36 @@ export default {
       this.editVisible = false
       this.$emit("updated")
     },
-    async uploadFirmware(device) {
-      this.searchVisible = false
-      if (!device) {
+    async uploadFirmware() {
+      if (!this.devicesToUpload) {
         return;
       }
+      this.searchVisible = false
+      const names = this.devicesToUpload.map(({ name }) => name).join(", ")
       const msg = this.intl.formatMessage(
         { id: 'ota.upload.confirm' },
         {
           firmwareType: this.firmware.type,
           firmwareVersion: this.firmware.version,
-          deviceName: device.name,
-          deviceIp: device.ip
+          deviceName: names
         }
       )
-      if (!confirm(msg)) {
-        return;
-      }
       try {
-        await OtaApi.uploadFirmware(this.firmware.id, device)
+        if (!confirm(msg)) {
+          return;
+        }
+        const result = await OtaApi.uploadFirmware(this.firmware.id, this.devicesToUpload)
+        console.log(result) // todo display errors
         toast.success({ 
-          caption: this.intl.formatMessage({ id: 'ota.upload.success' }, { deviceName: device.name }) 
+          caption: this.intl.formatMessage({ id: 'ota.upload.success' }, { deviceName: names }) 
         })
         this.$emit('uploadStarted')
       } catch (error) {
         toast.error({ 
-          caption: this.intl.formatMessage({ id: 'ota.upload.error' }, { deviceName: device.name }) 
+          caption: this.intl.formatMessage({ id: 'ota.upload.error' }, { deviceName: names }) 
         })
+      } finally {
+        this.devicesToUpload = []
       }
     },
     async deleteFirmware() {
@@ -113,13 +119,17 @@ export default {
       v-if="searchVisible"
       @close="() => searchVisible = false"
     >
-      <div class="device-select">
+      <Container class="device-select" :vertical="true">
         <DevicesSearchView
           :title="intl.formatMessage({ id: 'ota.upload.to' })"
-          :board="firmware.board"
-          @select="uploadFirmware"
+          :filters="{ board: firmware.board }"
+          :multiple="true"
+          v-model="devicesToUpload"
         />
-      </div>
+        <LoadingButton @click="uploadFirmware">
+          <h2>Upload</h2>
+        </LoadingButton>
+      </Container>
     </PopUpDialog>
   </Container>
 </template>

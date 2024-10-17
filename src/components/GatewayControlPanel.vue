@@ -34,16 +34,14 @@ export default {
       return (this.windowWidth - 800) / 2 > 350
     }
   },
+  watch: {
+    device() {
+      this.searchExpanded = this.wideEnough
+    }
+  },
   methods: {
     onResize() {
       this.windowWidth = window.innerWidth
-    },
-    async handleDeviceSelect(selected) {
-      if (this.device === selected) {
-        return
-      }
-      this.device = selected
-      this.searchExpanded = this.wideEnough
     },
     handleDeviceDelete(ip) {
       if (this.device.ip === ip) {
@@ -66,13 +64,11 @@ export default {
         @expand="(v) => (searchExpanded = v)"
       >
         <DevicesSearchView
-          :gateway="gateway"
-          :selected="device"
-          @select="handleDeviceSelect"
+          v-model="device"
           @deviceDeleted="handleDeviceDelete"
         />
       </DropdownMenu>
-      <DeviceControlPanel v-if="device" :key="device.ip" :device="device" />
+      <DeviceControlPanel v-if="device && device[0]" :key="device[0].ip" :device="device[0]" />
     </div>
     <div v-else style="color: red; text-align: center">
       <h1>{{ intl.formatMessage({ id: 'error' }, { type: 'access_denied' }) }}</h1>

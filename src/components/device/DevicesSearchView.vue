@@ -36,13 +36,17 @@ export default {
     ContextMenu,
     PlusSVG
   },
-  emits: ['select', 'deviceDeleted'],
   inject: ['gateway'],
   props: {
     title: String,
-    selected: Object,
-    board: String,
+    filters: Object,
+    multiple: Boolean,
+    modelValue: {
+      type: Array,
+      default: () => ([])
+    },
   },
+  emits: ['update:modelValue', 'deviceDeleted'],
   data() {
     const intl = useIntl()
     const stompClient = useStompClientStore()
@@ -98,7 +102,7 @@ export default {
         this.devices.push(device)
         this.devices.sort(sortFunction)
 
-        if (this.selected?.ip === device.ip) {
+        if (this.modelValue?.ip === device.ip) {
           toast.info({
             caption: this.intl.formatMessage({ id: 'devices.search.found' }, { device: device.name }),
             autoClose: false
@@ -109,7 +113,7 @@ export default {
     handleDeviceLost(device) {
       const oldLength = this.devices.length
       this.devices = this.devices.filter(({ ip, name }) => !(device.ip == ip && device.name == name))
-      if (oldLength !== this.devices.length && this.selected?.ip === device.ip) {
+      if (oldLength !== this.devices.length && this.modelValue?.ip === device.ip) {
         toast.warn({
           caption: this.intl.formatMessage({ id: 'devices.search.lost' }, { device: device.name }),
           autoClose: false
@@ -185,19 +189,35 @@ export default {
         this.loadingSaved = false
       }
     },
-    handleClick(ip, deviceInfo) {
-      this.selectedIp = ip
-      this.$emit('select', deviceInfo)
-    },
     filterDevices(list) {
       if (!list) {
         return;
       }
-      if (!this.board) {
+      if (!this.filters) {
         return list
       }
-      return list.filter((device) => device?.board === this.board)
-    }
+      return list.filter((device) => {
+        return Object.entries(this.filters).reduce((acc, [key, value]) => {
+          acc = acc && device[key] === value
+          return acc
+        }, true)
+      })
+    },
+    handleClick(deviceInfo) {
+      if (this.multiple) {
+        if (this.modelValue.includes(deviceInfo)) {
+          const index = this.modelValue.indexOf(deviceInfo)
+          this.$emit('update:modelValue', [
+            ...this.modelValue.slice(0, index),
+            ...this.modelValue.slice(index + 1, this.modelValue.length)
+          ])
+        } else {
+          this.$emit('update:modelValue', [...this.modelValue, deviceInfo])
+        }
+      } else {
+        this.$emit('update:modelValue', [deviceInfo])
+      }
+    },
   }
 }
 </script>
@@ -212,11 +232,11 @@ export default {
       </div>
       <Container v-if="searchEnabled" class="devices-list" :vertical="true">
         <DeviceItem
-          v-for="deviceInfo, index of devices"
-          :key="index"
-          :selected="selected?.ip == deviceInfo.ip"
+          v-for="deviceInfo of devices"
+          :key="deviceInfo.ip"
+          :selected="modelValue.includes(deviceInfo)"
           :device="deviceInfo"
-          @click="() => handleClick(deviceInfo.ip, deviceInfo)"
+          @click="() => handleClick(deviceInfo)"
         />
         <h2 v-if="!searching && Object.keys(devices).length == 0" class="title">
           {{ intl.formatMessage({ id: 'devices.search.empty' }) }}
@@ -241,7 +261,7 @@ export default {
           class="device-item saved-item"
         >
           <DeviceItem
-            :selected="selected?.ip == deviceInfo.ip"
+            :selected="modelValue?.ip == deviceInfo.ip"
             :device="deviceInfo"
             @click="() => handleClick(deviceInfo.ip, deviceInfo)"
           />

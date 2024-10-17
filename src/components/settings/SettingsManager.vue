@@ -133,7 +133,10 @@ export default {
       }
     },
     async handleDeviceClick(deviceInfo) {
-      this.selectedDevice = deviceInfo
+      if (!deviceInfo || !deviceInfo[0]) {
+        return
+      }
+      this.selectedDevice = deviceInfo[0]
       this.loading = true
       try {
         if (this.mode === MODE.IMPORT) {
@@ -272,7 +275,7 @@ export default {
       <PopUpDialog v-if="mode" @close="mode = undefined">
         <DevicesSearchView
           :title="intl.formatMessage({ id: 'device.settings.editor.select.device' })"
-          @select="handleDeviceClick"
+          v-on:update:model-value="handleDeviceClick"
         />
       </PopUpDialog>
     </Container>

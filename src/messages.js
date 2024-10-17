@@ -277,7 +277,7 @@ const messages = {
     'ota.edit.succes': 'Firmware info updated',
     'ota.edit.error': 'Failed to update firmware info',
     'ota.upload.confirm': 'Are u sure u want to upload {firmwareType} [{firmwareVersion}] '
-      + 'to device {deviceName} ({deviceIp})?',
+      + 'to devices: {deviceName}?',
     'ota.upload.success': 'Firmware upload to {deviceName} started',
     'ota.upload.error': 'Failed to start upload to {deviceName}',
     'ota.delete.confirm': 'Are you sure you want to delete this firmware? THis action can\'t ve reversed!',
@@ -601,7 +601,7 @@ const messages = {
     'ota.edit.succes': 'Данные обновлены',
     'ota.edit.error': 'Не удалось обновить данные',
      'ota.upload.confirm': 'Вы уверены, что хотите загрузить прошивку {firmwareType} [{firmwareVersion}] '
-      + 'на устройство {deviceName} ({deviceIp})?',
+      + 'на устройства: {deviceName}?',
     'ota.upload.success': 'Загрузка прошивки на {deviceName} начата',
     'ota.upload.error': 'Ошибка при запуске загрузки прошивки на {deviceName}',
     'ota.delete.confirm': 'Вы уверены, что хотите удалить данную прошивку? Это действие нельзя отменить!',

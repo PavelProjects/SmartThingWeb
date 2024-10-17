@@ -25,6 +25,9 @@ const OtaApi = {
   uploadFirmware: async (id, device) => {
     return (await axiosInstance.post('/upload', device, { params: { id }})).status === 200
   },
+  uploadFirmwareBatch: async (id, devices) => {
+    return (await axiosInstance.post('/upload', devices, { params: { id }})).data
+  },
   abortFirmwareUpload: async(id) => {
     return (await axiosInstance.delete('/upload', { params: { id }})).status === 200
   },
