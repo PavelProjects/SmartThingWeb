@@ -48,10 +48,8 @@ export default {
     await this.loadMessages()
     this.stompClient.subscribe('/devices/logs', (message) => {
       if (message && message.body) {
-        console.debug(`Device log  message: ${message.body}`)
         const parsed = JSON.parse(message.body)
         if (!parsed?.device?.ip || !parsed?.device?.name) {
-          console.error('Davice name or ip in log message is missing!')
           return
         }
         this.messages.unshift({ ...parsed, id: this.idSeq++ })
