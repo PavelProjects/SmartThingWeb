@@ -6,7 +6,7 @@ import { useIntl } from 'vue-intl'
 import GatewaySelector from '../gateway/GatewaySelector.vue'
 import Container from '../base/Container.vue'
 import LocaleSelector from './LocaleSelector.vue'
-import BuildInfoDialog from './BuildInfoDialog.vue'
+import BuildInfoDialog from '../dialogs/BuildInfoDialog.vue'
 
 export default {
   name: 'HeaderDoc',
