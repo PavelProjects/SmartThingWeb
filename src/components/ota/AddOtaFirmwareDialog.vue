@@ -1,24 +1,24 @@
 <script>
-import { OtaApi } from '../../api/gateway/OtaApi';
+import { OtaApi } from '../../api/gateway/OtaApi'
 import Container from '../base/Container.vue'
-import LoadingButton from '../base/controls/LoadingButton.vue';
-import InputField from '../base/fields/InputField.vue';
-import ComboBoxField from '../base/fields/ComboBoxField.vue';
-import { toast } from '../../utils/EventBus';
-import FileField from '../base/fields/FileField.vue';
+import LoadingButton from '../base/controls/LoadingButton.vue'
+import InputField from '../base/fields/InputField.vue'
+import ComboBoxField from '../base/fields/ComboBoxField.vue'
+import { toast } from '../../utils/EventBus'
+import FileField from '../base/fields/FileField.vue'
 import PopUpDialog from '../dialogs/PopUpDialog.vue'
-import { useIntl } from 'vue-intl';
-import { extractDataFromError } from '../../api/ApiUtils';
+import { useIntl } from 'vue-intl'
+import { extractDataFromError } from '../../api/ApiUtils'
 
 export default {
-  name: "AddOtaFirmwareDialog",
+  name: 'AddOtaFirmwareDialog',
   components: {
     Container,
     LoadingButton,
     InputField,
     FileField,
     ComboBoxField,
-    PopUpDialog,
+    PopUpDialog
   },
   emits: ['created'],
   data() {
@@ -30,27 +30,27 @@ export default {
       info: {
         board: undefined,
         type: undefined,
-        version: undefined,
+        version: undefined
       },
-      files: undefined,
+      files: undefined
     }
   },
   async mounted() {
     try {
       this.supportedBoards = await OtaApi.getSupportedBoards()
     } catch (error) {
-      toast.error({ caption: this.intl.formatMessage({ id: 'ota.add.supported.error' })})
+      toast.error({ caption: this.intl.formatMessage({ id: 'ota.add.supported.error' }) })
     }
   },
   methods: {
     async addFirmware() {
       if (!this.info.board || !this.info.type || !this.info.version || !this.files[0]) {
-        return;
+        return
       }
       this.loading = true
       try {
         await OtaApi.addFirmware(this.info, this.files[0])
-        toast.success({ caption: this.intl.formatMessage({ id: 'ota.add.success' })})
+        toast.success({ caption: this.intl.formatMessage({ id: 'ota.add.success' }) })
         this.$emit('created')
       } catch (error) {
         const data = extractDataFromError(error)
@@ -61,7 +61,7 @@ export default {
       } finally {
         this.loading = false
       }
-    },
+    }
   }
 }
 </script>
@@ -78,12 +78,12 @@ export default {
         :items="supportedBoards"
         :validationFailed="!info.board"
       />
-      <InputField 
+      <InputField
         :label="intl.formatMessage({ id: 'ota.firmware.info.type' })"
         v-model="info.type"
         :validationFailed="!info.type"
       />
-      <InputField 
+      <InputField
         :label="intl.formatMessage({ id: 'ota.firmware.info.version' })"
         v-model="info.version"
         :validationFailed="!info.version"

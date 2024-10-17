@@ -6,6 +6,7 @@ import { useIntl } from 'vue-intl'
 import GatewaySelector from '../gateway/GatewaySelector.vue'
 import Container from '../base/Container.vue'
 import LocaleSelector from './LocaleSelector.vue'
+import BuildInfoDialog from './BuildInfoDialog.vue'
 
 export default {
   name: 'HeaderDoc',
@@ -15,7 +16,8 @@ export default {
     UserAuthInfo,
     GatewaySelector,
     Container,
-    LocaleSelector
+    LocaleSelector,
+    BuildInfoDialog
   },
   inject: ['gateway', 'mode'],
   data() {
@@ -23,7 +25,8 @@ export default {
     return {
       intl,
       menuItemsVisible: false,
-      gatewaySelectorVisible: false
+      gatewaySelectorVisible: false,
+      buildInfoVisible: false
     }
   },
   computed: {
@@ -69,9 +72,15 @@ export default {
           <router-link :to="{ name: 'logs', params: { gateway: gatewayId } }">
             <h2>{{ intl.formatMessage({ id: 'doc.device.logs' }) }}</h2>
           </router-link>
-          <router-link v-if="mode === 'gateway'" :to="{ name: 'ota', params: { gateway: gatewayId } }">
+          <router-link
+            v-if="mode === 'gateway'"
+            :to="{ name: 'ota', params: { gateway: gatewayId } }"
+          >
             <h2>{{ intl.formatMessage({ id: 'doc.device.ota' }) }}</h2>
           </router-link>
+          <a>
+            <h2 @click="() => (buildInfoVisible = true)">Build info</h2>
+          </a>
         </div>
       </div>
     </div>
@@ -95,6 +104,7 @@ export default {
       v-if="mode === 'cloud' && gatewaySelectorVisible"
       @close="gatewaySelectorVisible = false"
     />
+    <BuildInfoDialog v-if="buildInfoVisible" @close="() => (buildInfoVisible = false)" />
   </Container>
 </template>
 

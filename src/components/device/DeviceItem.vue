@@ -52,7 +52,7 @@ export default {
       <h3>Name: {{ device.name }}</h3>
       <h3>Type: {{ device.type }}</h3>
       <h3>Version: {{ device.version }}</h3>
-      <h3>Board: {{ device.board ?? "Unknown" }}</h3>
+      <h3>Board: {{ device.board ?? 'Unknown' }}</h3>
       <h3 @click.stop="() => {}">
         Ip <a :href="'http://' + device.ip" target="”_blank”">{{ device.ip }}</a>
       </h3>

@@ -5,7 +5,16 @@ import vue from '@vitejs/plugin-vue'
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
+  // eslint-disable-next-line no-undef
   const env = loadEnv(mode, process.cwd(), '')
+
+  // dev requires string, prod - not
+  const defineTransform = (value) => {
+    if (mode === 'development') {
+      return JSON.stringify(value)
+    }
+    return value
+  }
 
   return {
     plugins: [vue()],
@@ -18,9 +27,14 @@ export default defineConfig(({ mode }) => {
       rollupOptions: {
         output: {
           entryFileNames: 'assets/script.js',
-          assetFileNames: 'assets/styles.css',
+          assetFileNames: 'assets/styles.css'
         }
       }
+    },
+    define: {
+      __APP_VERSION__: defineTransform(env.npm_package_version),
+      __APP_MODE__: defineTransform(env.VITE_MODE),
+      __BUILD_DATE__: defineTransform(new Date().toISOString())
     },
     base: env.BASE_PATH ?? ''
   }

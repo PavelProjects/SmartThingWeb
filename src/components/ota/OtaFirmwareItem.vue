@@ -1,14 +1,13 @@
 <script>
-import { OtaApi } from '../../api/gateway/OtaApi';
-import { toast } from '../../utils/EventBus';
+import { OtaApi } from '../../api/gateway/OtaApi'
+import { toast } from '../../utils/EventBus'
 import Container from '../base/Container.vue'
-import InputField from '../base/fields/InputField.vue';
-import ContextMenu from '../menu/ContextMenu.vue';
-import EditFirmwareInfoDialog from './EditFirmwareInfoDialog.vue';
-import DevicesSearchView from '../device/DevicesSearchView.vue';
-import PopUpDialog from '../dialogs/PopUpDialog.vue';
-import { useIntl } from 'vue-intl';
-import LoadingButton from '../base/controls/LoadingButton.vue';
+import ContextMenu from '../menu/ContextMenu.vue'
+import EditFirmwareInfoDialog from './EditFirmwareInfoDialog.vue'
+import DevicesSearchView from '../device/DevicesSearchView.vue'
+import PopUpDialog from '../dialogs/PopUpDialog.vue'
+import { useIntl } from 'vue-intl'
+import LoadingButton from '../base/controls/LoadingButton.vue'
 
 export default {
   name: 'OtaFirmwareItem',
@@ -16,10 +15,9 @@ export default {
     Container,
     ContextMenu,
     EditFirmwareInfoDialog,
-    InputField,
     PopUpDialog,
     DevicesSearchView,
-    LoadingButton,
+    LoadingButton
   },
   emits: ['updated', 'deleted', 'uploadStarted'],
   props: {
@@ -31,7 +29,7 @@ export default {
       intl,
       editVisible: false,
       searchVisible: false,
-      devicesToUpload: [],
+      devicesToUpload: []
     }
   },
   computed: {
@@ -42,14 +40,14 @@ export default {
   methods: {
     handleUpdated() {
       this.editVisible = false
-      this.$emit("updated")
+      this.$emit('updated')
     },
     async uploadFirmware() {
       if (!this.devicesToUpload) {
-        return;
+        return
       }
       this.searchVisible = false
-      const names = this.devicesToUpload.map(({ name }) => name).join(", ")
+      const names = this.devicesToUpload.map(({ name }) => name).join(', ')
       const msg = this.intl.formatMessage(
         { id: 'ota.upload.confirm' },
         {
@@ -60,27 +58,33 @@ export default {
       )
       try {
         if (!confirm(msg)) {
-          return;
+          return
         }
         const result = await OtaApi.uploadFirmwareBatch(this.firmware.id, this.devicesToUpload)
         this.$emit('uploadStarted')
 
-        const success = this.devicesToUpload.filter(({ ip }) => !!result[ip]).map(({ name }) => name).join(', ')
-        const failure = this.devicesToUpload.filter(({ ip }) => !result[ip]).map(({ name }) => name).join(', ')
+        const success = this.devicesToUpload
+          .filter(({ ip }) => !!result[ip])
+          .map(({ name }) => name)
+          .join(', ')
+        const failure = this.devicesToUpload
+          .filter(({ ip }) => !result[ip])
+          .map(({ name }) => name)
+          .join(', ')
 
         if (success) {
-          toast.success({ 
-            caption: this.intl.formatMessage({ id: 'ota.upload.success' }, { deviceName: success }) 
+          toast.success({
+            caption: this.intl.formatMessage({ id: 'ota.upload.success' }, { deviceName: success })
           })
         }
         if (failure) {
-          toast.error({ 
-            caption: this.intl.formatMessage({ id: 'ota.upload.error' }, { deviceName: failure }) 
+          toast.error({
+            caption: this.intl.formatMessage({ id: 'ota.upload.error' }, { deviceName: failure })
           })
         }
       } catch (error) {
-        toast.error({ 
-          caption: this.intl.formatMessage({ id: 'ota.upload.error' }, { deviceName: names }) 
+        toast.error({
+          caption: this.intl.formatMessage({ id: 'ota.upload.error' }, { deviceName: names })
         })
       } finally {
         this.devicesToUpload = []
@@ -88,7 +92,7 @@ export default {
     },
     async deleteFirmware() {
       if (!confirm(this.intl.formatMessage({ id: 'ota.delete.confirm' }))) {
-        return;
+        return
       }
       try {
         await OtaApi.deleteFirmware(this.firmware.id)
@@ -97,22 +101,22 @@ export default {
       } catch (error) {
         toast.error({ caption: this.intl.formatMessage({ id: 'ota.delete.error' }) })
       }
-    },
+    }
   }
 }
 </script>
 
 <template>
   <Container class="firmware-item">
-    <h3>{{  firmware.board }}</h3>
+    <h3>{{ firmware.board }}</h3>
     <ContextMenu class="context-menu">
-      <p @click="() => editVisible = true">
+      <p @click="() => (editVisible = true)">
         {{ intl.formatMessage({ id: 'ota.firmware.menu.edit' }) }}
       </p>
       <p @click="deleteFirmware">
         {{ intl.formatMessage({ id: 'ota.firmware.menu.delete' }) }}
       </p>
-      <p @click="() => searchVisible = true">
+      <p @click="() => (searchVisible = true)">
         {{ intl.formatMessage({ id: 'ota.firmware.menu.upload' }) }}
       </p>
       <a :href="firmwareLink" download>
@@ -121,14 +125,11 @@ export default {
     </ContextMenu>
     <EditFirmwareInfoDialog
       v-if="editVisible"
-      @close="() => editVisible = false"
+      @close="() => (editVisible = false)"
       @updated="handleUpdated"
       :originalInfo="firmware"
     />
-    <PopUpDialog
-      v-if="searchVisible"
-      @close="() => searchVisible = false"
-    >
+    <PopUpDialog v-if="searchVisible" @close="() => (searchVisible = false)">
       <Container class="device-select" :vertical="true">
         <DevicesSearchView
           :title="intl.formatMessage({ id: 'ota.upload.to' })"

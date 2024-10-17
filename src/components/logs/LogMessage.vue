@@ -33,8 +33,8 @@ export default {
     },
     style() {
       return {
-        borderColor: this.color.replace("{opacity}", "0.7"),
-        backgroundColor: this.color.replace("{opacity}", "0.05"),
+        borderColor: this.color.replace('{opacity}', '0.7'),
+        backgroundColor: this.color.replace('{opacity}', '0.05')
       }
     }
   }

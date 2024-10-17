@@ -63,10 +63,7 @@ export default {
         :expanded="searchExpanded || !device"
         @expand="(v) => (searchExpanded = v)"
       >
-        <DevicesSearchView
-          v-model="device"
-          @deviceDeleted="handleDeviceDelete"
-        />
+        <DevicesSearchView v-model="device" @deviceDeleted="handleDeviceDelete" />
       </DropdownMenu>
       <DeviceControlPanel v-if="device && device[0]" :key="device[0].ip" :device="device[0]" />
     </div>

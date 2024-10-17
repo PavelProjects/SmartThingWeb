@@ -1,13 +1,13 @@
 <script>
-import { OtaApi } from '../../api/gateway/OtaApi';
-import { toast } from '../../utils/EventBus';
+import { OtaApi } from '../../api/gateway/OtaApi'
+import { toast } from '../../utils/EventBus'
 import Container from '../base/Container.vue'
-import InputField from '../base/fields/InputField.vue';
-import ComboBoxField from '../base/fields/ComboBoxField.vue';
-import LoadingButton from '../base/controls/LoadingButton.vue';
-import PopUpDialog from '../dialogs/PopUpDialog.vue';
-import { useIntl } from 'vue-intl';
-import { extractDataFromError } from '../../api/ApiUtils';
+import InputField from '../base/fields/InputField.vue'
+import ComboBoxField from '../base/fields/ComboBoxField.vue'
+import LoadingButton from '../base/controls/LoadingButton.vue'
+import PopUpDialog from '../dialogs/PopUpDialog.vue'
+import { useIntl } from 'vue-intl'
+import { extractDataFromError } from '../../api/ApiUtils'
 
 export default {
   name: 'EditFirmwareInfoDialog',
@@ -16,7 +16,7 @@ export default {
     PopUpDialog,
     InputField,
     ComboBoxField,
-    LoadingButton,
+    LoadingButton
   },
   emits: ['updated'],
   props: {
@@ -24,7 +24,7 @@ export default {
   },
   data() {
     const intl = useIntl()
-    const { board, type, version } = this.originalInfo;
+    const { board, type, version } = this.originalInfo
     return {
       intl,
       supportedBoards: [],
@@ -35,19 +35,19 @@ export default {
     try {
       this.supportedBoards = await OtaApi.getSupportedBoards()
     } catch (error) {
-      toast.error({ caption: this.intl.formatMessage({ id: 'ota.add.supported.error' })})
+      toast.error({ caption: this.intl.formatMessage({ id: 'ota.add.supported.error' }) })
     }
   },
   methods: {
     async save() {
-      const { board, type, version } = this.info;
+      const { board, type, version } = this.info
       if (!board || !type || !version) {
-        return;
+        return
       }
       try {
-        await OtaApi.updateFirmware({ id: this.originalInfo.id, board, type, version });
+        await OtaApi.updateFirmware({ id: this.originalInfo.id, board, type, version })
         toast.success({ caption: this.intl.formatMessage({ id: 'ota.edit.succes' }) })
-        this.$emit("updated")
+        this.$emit('updated')
       } catch (error) {
         const data = await extractDataFromError(error)
         toast.error({
@@ -74,13 +74,11 @@ export default {
       />
       <InputField
         :label="intl.formatMessage({ id: 'ota.firmware.info.type' })"
-        label="Type"
         v-model="info.type"
         :validationFailed="!info.type"
       />
       <InputField
         :label="intl.formatMessage({ id: 'ota.firmware.info.version' })"
-        label="Version"
         v-model="info.version"
         :validationFailed="!info.version"
       />
@@ -94,7 +92,7 @@ export default {
 </template>
 
 <style scoped>
-  .edit-firmware {
-    padding: var(--default-padding);
-  }
+.edit-firmware {
+  padding: var(--default-padding);
+}
 </style>

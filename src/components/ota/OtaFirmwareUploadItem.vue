@@ -1,18 +1,18 @@
 <script>
-import { useIntl } from 'vue-intl';
-import { useStompClientStore } from '../../store/stompClientStore';
-import Container from '../base/Container.vue';
-import LoadingButton from '../base/controls/LoadingButton.vue';
-import DeviceItem from '../device/DeviceItem.vue';
-import { toast } from '../../utils/EventBus';
-import { OtaApi } from '../../api/gateway/OtaApi';
+import { useIntl } from 'vue-intl'
+import { useStompClientStore } from '../../store/stompClientStore'
+import Container from '../base/Container.vue'
+import LoadingButton from '../base/controls/LoadingButton.vue'
+import DeviceItem from '../device/DeviceItem.vue'
+import { toast } from '../../utils/EventBus'
+import { OtaApi } from '../../api/gateway/OtaApi'
 
 export default {
-  name: "OtaFirmwareUploadItem",
+  name: 'OtaFirmwareUploadItem',
   components: {
     Container,
     DeviceItem,
-    LoadingButton,
+    LoadingButton
   },
   props: {
     uploadProgress: Object
@@ -35,14 +35,14 @@ export default {
   computed: {
     progressBarStyle() {
       return {
-        width: this.progress + "%"
+        width: this.progress + '%'
       }
     }
   },
   mounted() {
     this.stompClient.subscribe('/ota/' + this.taskId, (message) => {
       if (!message.body) {
-        return;
+        return
       }
       const progressInfo = JSON.parse(message.body)
       this.status = progressInfo.status
@@ -54,20 +54,23 @@ export default {
   },
   methods: {
     async abort() {
-      if (!confirm(this.intl.formatMessage({ id: 'ota.upload.abort.confirm' }, { device: this.device.name }))) {
-        return;
+      if (
+        !confirm(
+          this.intl.formatMessage({ id: 'ota.upload.abort.confirm' }, { device: this.device.name })
+        )
+      ) {
+        return
       }
 
       try {
         await OtaApi.abortFirmwareUpload(this.taskId)
-        toast.success({ caption: this.intl.formatMessage({ id: 'ota.upload.abort.success' })})
+        toast.success({ caption: this.intl.formatMessage({ id: 'ota.upload.abort.success' }) })
       } catch (error) {
-        toast.error({ caption: this.intl.formatMessage({ id: 'ota.upload.abort.error' })})
+        toast.error({ caption: this.intl.formatMessage({ id: 'ota.upload.abort.error' }) })
       }
     }
   }
 }
-
 </script>
 
 <template>
@@ -77,9 +80,11 @@ export default {
         <h2 class="title">
           {{ intl.formatMessage({ id: 'ota.upload.block.firmware' }) }}
         </h2>
-        <h3>{{ intl.formatMessage({ id: 'ota.firmware.info.board' }) }}: {{  firmware.board }}</h3>
-        <h3>{{ intl.formatMessage({ id: 'ota.firmware.info.type' }) }}: {{  firmware.type }}</h3>
-        <h3>{{ intl.formatMessage({ id: 'ota.firmware.info.version' }) }}: {{  firmware.version }}</h3>
+        <h3>{{ intl.formatMessage({ id: 'ota.firmware.info.board' }) }}: {{ firmware.board }}</h3>
+        <h3>{{ intl.formatMessage({ id: 'ota.firmware.info.type' }) }}: {{ firmware.type }}</h3>
+        <h3>
+          {{ intl.formatMessage({ id: 'ota.firmware.info.version' }) }}: {{ firmware.version }}
+        </h3>
       </div>
       <div class="device-info">
         <h2 class="title">
@@ -109,29 +114,29 @@ export default {
 </template>
 
 <style scoped>
-  .info-view {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    border-bottom: 1px solid var(--color-border);
-  }
-  .firmware-info {
-    border-right: 1px solid var(--color-border);
-    padding: var(--default-padding);
-  }
-  .device-info {
-    padding: var(--default-padding);
-  }
-  .upload-progress-container {
-    padding: var(--default-padding);
-  }
-  .upload-progress {
-    border-radius: var(--border-radius);
-    background-color: green;
-    padding-left: var(--default-padding);
-  }
-  .abort-button {
-    width: fit-content;
-    margin-left: auto;
-    background-color: var(--color-danger);
-  }
+.info-view {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-bottom: 1px solid var(--color-border);
+}
+.firmware-info {
+  border-right: 1px solid var(--color-border);
+  padding: var(--default-padding);
+}
+.device-info {
+  padding: var(--default-padding);
+}
+.upload-progress-container {
+  padding: var(--default-padding);
+}
+.upload-progress {
+  border-radius: var(--border-radius);
+  background-color: green;
+  padding-left: var(--default-padding);
+}
+.abort-button {
+  width: fit-content;
+  margin-left: auto;
+  background-color: var(--color-danger);
+}
 </style>

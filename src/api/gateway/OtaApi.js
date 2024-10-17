@@ -11,7 +11,7 @@ const OtaApi = {
     return (await axiosInstance.get()).data
   },
   addFirmware: async (info, file) => {
-    const form = new FormData();
+    const form = new FormData()
     form.append('info', JSON.stringify(info))
     form.append('file', file)
     return (await axiosInstance.post('', form)).data
@@ -20,16 +20,16 @@ const OtaApi = {
     return (await axiosInstance.put('', info)).data
   },
   deleteFirmware: async (id) => {
-    return (await axiosInstance.delete('', { params: { id }})).status === 200
+    return (await axiosInstance.delete('', { params: { id } })).status === 200
   },
   uploadFirmware: async (id, device) => {
-    return (await axiosInstance.post('/upload', device, { params: { id }})).status === 200
+    return (await axiosInstance.post('/upload', device, { params: { id } })).status === 200
   },
   uploadFirmwareBatch: async (id, devices) => {
-    return (await axiosInstance.post('/upload/batch', devices, { params: { id }})).data
+    return (await axiosInstance.post('/upload/batch', devices, { params: { id } })).data
   },
-  abortFirmwareUpload: async(id) => {
-    return (await axiosInstance.delete('/upload', { params: { id }})).status === 200
+  abortFirmwareUpload: async (id) => {
+    return (await axiosInstance.delete('/upload', { params: { id } })).status === 200
   },
   getRunningUploads: async () => {
     return (await axiosInstance.get('/upload')).data

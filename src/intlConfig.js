@@ -8,7 +8,7 @@ const SUPPORTED_LOCALES = Object.keys(messages)
 const storageLocale = localStorage.getItem(LOCALE_STORAGE_KEY)
 let currentLocale = navigator.language.slice(0, 2) ?? DEFAULT_LOCALE
 if (SUPPORTED_LOCALES.includes(storageLocale)) {
-  currentLocale = storageLocale;
+  currentLocale = storageLocale
 }
 
 const intlInstance = createIntl(

@@ -39,17 +39,21 @@ export default {
   async mounted() {
     document.title = 'SmartThingWeb ' + this.mode
 
-    useStompClientStore()
-
-    if (this.mode === 'gateway') {
-      this.id = ''
-      return
-    }
-    try {
-      const { user } = (await CloudApi.getAuthentication()) ?? {}
-      this.authStore.setAuthentication(user)
-    } catch (error) {
-      console.error(error)
+    useStompClientStore() // todo why it's here? some bug ????
+    this.tryAuth()
+  },
+  methods: {
+    async tryAuth() {
+      if (this.mode === 'gateway') {
+        this.id = ''
+        return
+      }
+      try {
+        const { user } = (await CloudApi.getAuthentication()) ?? {}
+        this.authStore.setAuthentication(user)
+      } catch (error) {
+        console.error(error)
+      }
     }
   }
 }

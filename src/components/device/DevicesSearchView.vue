@@ -10,8 +10,8 @@ import AddDeviceDialog from './AddDeviceDialog.vue'
 import ContextMenu from '../menu/ContextMenu.vue'
 import { useStompClientStore } from '../../store/stompClientStore'
 
-const FOUND_TOPIC = "/devices/found"
-const LOST_TOPIC = "/devices/lost"
+const FOUND_TOPIC = '/devices/found'
+const LOST_TOPIC = '/devices/lost'
 function sortFunction(d1, d2) {
   const l1 = Number(d1.ip.split('.')[3])
   const l2 = Number(d2.ip.split('.')[3])
@@ -43,8 +43,8 @@ export default {
     multiple: Boolean,
     modelValue: {
       type: Array,
-      default: () => ([])
-    },
+      default: () => []
+    }
   },
   emits: ['update:modelValue', 'deviceDeleted'],
   data() {
@@ -66,11 +66,11 @@ export default {
     this.loadSavedDevices()
 
     EventBus.on('deviceUpdate', ({ device, name }) => {
-      let index = this.devices.findIndex(({ ip, name }) => device.ip === ip)
+      let index = this.devices.findIndex(({ ip }) => device.ip === ip)
       if (index > 0) {
         this.devices[index].name = name
       } else {
-        index = this.savedDevices.indexOf(({ ip, name }) => device.ip === ip)
+        index = this.savedDevices.indexOf(({ ip }) => device.ip === ip)
         if (index > 0) {
           this.savedDevices[index].name = name
           GatewayApi.updateSavedDevice(device.ip, this.gateway).catch(console.log)
@@ -80,13 +80,13 @@ export default {
 
     this.stompClient.subscribe(FOUND_TOPIC, (message) => {
       if (!message?.body) {
-        return;
+        return
       }
       this.handleDeviceFound(JSON.parse(message.body))
     })
     this.stompClient.subscribe(LOST_TOPIC, (message) => {
       if (!message?.body) {
-        return;
+        return
       }
       this.handleDeviceLost(JSON.parse(message.body))
     })
@@ -104,7 +104,10 @@ export default {
 
         if (this.modelValue?.ip === device.ip) {
           toast.info({
-            caption: this.intl.formatMessage({ id: 'devices.search.found' }, { device: device.name }),
+            caption: this.intl.formatMessage(
+              { id: 'devices.search.found' },
+              { device: device.name }
+            ),
             autoClose: false
           })
         }
@@ -112,7 +115,9 @@ export default {
     },
     handleDeviceLost(device) {
       const oldLength = this.devices.length
-      this.devices = this.devices.filter(({ ip, name }) => !(device.ip == ip && device.name == name))
+      this.devices = this.devices.filter(
+        ({ ip, name }) => !(device.ip == ip && device.name == name)
+      )
       if (oldLength !== this.devices.length && this.modelValue?.ip === device.ip) {
         toast.warn({
           caption: this.intl.formatMessage({ id: 'devices.search.lost' }, { device: device.name }),
@@ -191,7 +196,7 @@ export default {
     },
     filterDevices(list) {
       if (!list) {
-        return;
+        return
       }
       if (!this.filters) {
         return list
@@ -217,7 +222,7 @@ export default {
       } else {
         this.$emit('update:modelValue', [deviceInfo])
       }
-    },
+    }
   }
 }
 </script>
@@ -256,7 +261,7 @@ export default {
       </div>
       <Container class="devices-list" :vertical="true">
         <div
-          v-for="deviceInfo, index of savedDevices"
+          v-for="(deviceInfo, index) of savedDevices"
           :key="index"
           class="device-item saved-item"
         >

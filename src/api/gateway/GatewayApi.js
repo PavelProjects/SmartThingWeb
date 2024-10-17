@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { HTTP_METHOD, gatewayFetch, GATEWAY_URL } from './GatewayFetch'
 
+const PATH_BUILD_INFO = '/api/build'
 const PATH_AUTHENTICATION = '/api/cloud/identity'
 const PATH_LOGIN = '/api/cloud/login'
 const PATH_LOGOUT = '/api/cloud/logout'
@@ -57,6 +58,16 @@ const GatewayApi = {
     const response = await axiosInstance.put(PATH_CLOUD_DISCONNECT)
     return response.status === 200
   },
+  // Cloud supported methods
+  async getBuildInfo(gateway) {
+    return (
+      await gatewayFetch({
+        url: PATH_BUILD_INFO,
+        method: HTTP_METHOD.GET,
+        gateway
+      })
+    ).data
+  },
   // todo move to device api (get methods)
   async getDeviceApiMethods({ device: { name, ip }, gateway }) {
     return (
@@ -67,10 +78,9 @@ const GatewayApi = {
       })
     ).data
   },
-  // Cloud supported methods
-  async getLogs(gateway, filters={}) {
+  async getLogs(gateway, filters = {}) {
     const params = Object.entries(filters).reduce((acc, [key, value]) => {
-      if (!!value) {
+      if (value) {
         acc.push(`${key}=${value}`)
       }
       return acc

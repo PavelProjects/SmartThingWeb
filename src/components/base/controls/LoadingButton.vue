@@ -5,7 +5,7 @@ export default {
   name: 'LoadingButton',
   props: {
     testId: String,
-    loading: Boolean,
+    loading: Boolean
   },
   components: {
     PulseLoader

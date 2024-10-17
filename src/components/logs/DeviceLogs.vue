@@ -14,7 +14,7 @@ export default {
     LogMessage,
     Container,
     InputField,
-    ComboBoxField,
+    ComboBoxField
   },
   inject: ['gateway'],
   data() {
@@ -30,10 +30,10 @@ export default {
         device: undefined,
         tag: undefined,
         message: undefined,
-        level: undefined,
+        level: undefined
       },
       loading: false,
-      stompClient,
+      stompClient
     }
   },
   watch: {
@@ -54,7 +54,7 @@ export default {
           console.error('Davice name or ip in log message is missing!')
           return
         }
-        this.messages.unshift({...parsed, id: this.idSeq++})
+        this.messages.unshift({ ...parsed, id: this.idSeq++ })
       }
     })
   },
@@ -64,11 +64,13 @@ export default {
   methods: {
     async loadMessages() {
       if (this.loading) {
-        return;
+        return
       }
       this.loading = true
       try {
-        this.messages = (await GatewayApi.getLogs(this.gateway, this.filters) ?? []).map((message) => ({...message, id: this.idSeq++}))
+        this.messages = ((await GatewayApi.getLogs(this.gateway, this.filters)) ?? []).map(
+          (message) => ({ ...message, id: this.idSeq++ })
+        )
       } catch (error) {
         toast.error({
           caption: 'Failed to load device logs'
@@ -122,7 +124,7 @@ export default {
       <ComboBoxField
         :label="intl.formatMessage({ id: 'device.logs.columns' }, { column: 'level' })"
         :items="['DEBUG', 'INFO', 'WARN', 'ERROR']"
-          v-model="filters.level"
+        v-model="filters.level"
       />
       <InputField
         :label="intl.formatMessage({ id: 'device.logs.columns' }, { column: 'msg' })"

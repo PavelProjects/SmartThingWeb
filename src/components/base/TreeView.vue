@@ -50,7 +50,8 @@ export default {
 .tree-view {
   padding-inline-start: 30px;
 }
-.tree-view li, ul {
+.tree-view li,
+ul {
   padding-inline-start: 10px;
 }
 </style>

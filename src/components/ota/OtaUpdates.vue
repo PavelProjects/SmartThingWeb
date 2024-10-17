@@ -1,29 +1,26 @@
 <script>
-import { OtaApi } from '../../api/gateway/OtaApi';
+import { OtaApi } from '../../api/gateway/OtaApi'
 import Container from '../base/Container.vue'
-import LoadingButton from '../base/controls/LoadingButton.vue';
-import InputField from '../base/fields/InputField.vue';
-import { toast } from '../../utils/EventBus';
-import AddOtaFirmwareDialog from './AddOtaFirmwareDialog.vue';
-import OtaFirmwareItem from './OtaFirmwareItem.vue';
-import OtaFirmwareUploadItem from './OtaFirmwareUploadItem.vue';
-import { useIntl } from 'vue-intl';
-import TreeView from '../base/TreeView.vue';
-import { h } from 'vue';
+import LoadingButton from '../base/controls/LoadingButton.vue'
+import { toast } from '../../utils/EventBus'
+import AddOtaFirmwareDialog from './AddOtaFirmwareDialog.vue'
+import OtaFirmwareItem from './OtaFirmwareItem.vue'
+import OtaFirmwareUploadItem from './OtaFirmwareUploadItem.vue'
+import { useIntl } from 'vue-intl'
+import TreeView from '../base/TreeView.vue'
+import { h } from 'vue'
 
 export default {
-  name: "OtaUpdates",
+  name: 'OtaUpdates',
   components: {
     Container,
     LoadingButton,
-    InputField,
     AddOtaFirmwareDialog,
-    OtaFirmwareItem,
     OtaFirmwareUploadItem,
-    TreeView,
+    TreeView
   },
   data() {
-    const intl = useIntl();
+    const intl = useIntl()
     return {
       intl,
       firmwaresTree: {},
@@ -38,31 +35,31 @@ export default {
   methods: {
     async loadSaved() {
       try {
-        const savedFirmwares = await OtaApi.getSavedFirmwares() ?? []
-        this.firmwaresTree = savedFirmwares.reduce((acc, {id, type, version, board}) => {
-        if (!acc[type]) {
-          acc[type] = {}
-        }
-        if (!acc[type][version]) {
-          acc[type][version] = {}
-        }
-        acc[type][version][board] = h(OtaFirmwareItem, {
-          firmware: {id, type, version, board},
-          onDeleted: () => this.loadSaved(),
-          onUpdated: () => this.loadSaved(),
-          onUploadStarted: () => this.loadRunningUploads()
-        })
-        return acc;
-      }, {})
+        const savedFirmwares = (await OtaApi.getSavedFirmwares()) ?? []
+        this.firmwaresTree = savedFirmwares.reduce((acc, { id, type, version, board }) => {
+          if (!acc[type]) {
+            acc[type] = {}
+          }
+          if (!acc[type][version]) {
+            acc[type][version] = {}
+          }
+          acc[type][version][board] = h(OtaFirmwareItem, {
+            firmware: { id, type, version, board },
+            onDeleted: () => this.loadSaved(),
+            onUpdated: () => this.loadSaved(),
+            onUploadStarted: () => this.loadRunningUploads()
+          })
+          return acc
+        }, {})
       } catch (error) {
-        toast.error({ caption: this.intl.formatMessage({ id: "ota.load.saved.error" }) })
+        toast.error({ caption: this.intl.formatMessage({ id: 'ota.load.saved.error' }) })
       }
     },
     async loadRunningUploads() {
       try {
         this.runningUploads = await OtaApi.getRunningUploads()
       } catch (error) {
-        toast.error({ caption: this.intl.formatMessage({ id: "ota.load.running.error" }) })
+        toast.error({ caption: this.intl.formatMessage({ id: 'ota.load.running.error' }) })
       }
     }
   }
@@ -70,7 +67,7 @@ export default {
 </script>
 
 <template>
-  <Container id='ota-updates' style="width: fit-content;" :gap="'10vw'">
+  <Container id="ota-updates" style="width: fit-content" :gap="'10vw'">
     <Container :vertical="true">
       <h1 class="title">
         {{ intl.formatMessage({ id: 'ota.saved.header' }) }}
@@ -80,7 +77,7 @@ export default {
         class="bordered"
         :values="firmwaresTree"
       />
-      <LoadingButton @click="() => addVisible = true">
+      <LoadingButton @click="() => (addVisible = true)">
         <h2>
           {{ intl.formatMessage({ id: 'ota.add.button' }) }}
         </h2>
@@ -98,11 +95,13 @@ export default {
     </Container>
     <AddOtaFirmwareDialog
       v-if="addVisible"
-      @close="() => addVisible = false"
-      @created="() => {
-        addVisible = false;
-        loadSaved();
-      }"
+      @close="() => (addVisible = false)"
+      @created="
+        () => {
+          addVisible = false
+          loadSaved()
+        }
+      "
     />
   </Container>
 </template>
