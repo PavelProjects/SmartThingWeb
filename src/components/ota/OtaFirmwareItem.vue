@@ -62,12 +62,22 @@ export default {
         if (!confirm(msg)) {
           return;
         }
-        const result = await OtaApi.uploadFirmware(this.firmware.id, this.devicesToUpload)
-        console.log(result) // todo display errors
-        toast.success({ 
-          caption: this.intl.formatMessage({ id: 'ota.upload.success' }, { deviceName: names }) 
-        })
+        const result = await OtaApi.uploadFirmwareBatch(this.firmware.id, this.devicesToUpload)
         this.$emit('uploadStarted')
+
+        const success = this.devicesToUpload.filter(({ ip }) => !!result[ip]).map(({ name }) => name).join(', ')
+        const failure = this.devicesToUpload.filter(({ ip }) => !result[ip]).map(({ name }) => name).join(', ')
+
+        if (success) {
+          toast.success({ 
+            caption: this.intl.formatMessage({ id: 'ota.upload.success' }, { deviceName: success }) 
+          })
+        }
+        if (failure) {
+          toast.error({ 
+            caption: this.intl.formatMessage({ id: 'ota.upload.error' }, { deviceName: failure }) 
+          })
+        }
       } catch (error) {
         toast.error({ 
           caption: this.intl.formatMessage({ id: 'ota.upload.error' }, { deviceName: names }) 
