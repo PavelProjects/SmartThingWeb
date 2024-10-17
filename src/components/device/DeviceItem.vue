@@ -1,12 +1,12 @@
 <script>
 import Container from '../base/Container.vue'
-
-const IMG_PATH = document.location.pathname + 'img/'
+import DeviceIcon from './DeviceIcon.vue';
 
 export default {
   name: 'DeviceItem',
   components: {
-    Container
+    Container,
+    DeviceIcon,
   },
   props: {
     device: {
@@ -16,20 +16,7 @@ export default {
   },
   computed: {
     imgSrc() {
-      const { name, type } = this.device
-      if (['pepe', 'frog'].includes(name)) {
-        return IMG_PATH + 'pepe.gif'
-      }
-      if (['drg', 'rock', 'stone', 'rock_and_stone'].includes(name)) {
-        return IMG_PATH + 'drg.gif'
-      }
-      if (['sus', 'amogus', 'imposter', 'sussy_baka'].includes(name)) {
-        return IMG_PATH + 'amogus.gif'
-      }
-      if (name === 'test' || name.startsWith('autotest') || type === 'test_device') {
-        return IMG_PATH + 'pepe_test.png'
-      }
-      return undefined
+      return deviceInfoToImg(this.device)
     },
     header() {
       const { name, type } = this.device
@@ -56,7 +43,7 @@ export default {
       <h3 @click.stop="() => {}">
         Ip <a :href="'http://' + device.ip" target="”_blank”">{{ device.ip }}</a>
       </h3>
-      <img v-if="imgSrc" :src="imgSrc" />
+      <DeviceIcon :device="device" />
     </div>
   </Container>
 </template>
@@ -69,11 +56,5 @@ export default {
   display: grid;
   grid-template-columns: 1fr 1fr;
   flex: 1 0 auto;
-}
-img {
-  width: 40px;
-  height: 40px;
-  border-radius: var(--border-radius);
-  margin: auto;
 }
 </style>

@@ -13,6 +13,8 @@ import { GatewayApi } from '../../api/gateway/GatewayApi'
 import { computed } from 'vue'
 import { toast } from '../../utils/EventBus'
 import DangerZoneView from './tabs/DangerZoneView.vue'
+import Container from '../base/Container.vue'
+import DeviceIcon from './DeviceIcon.vue'
 
 const TAB_REQUIRED_API = {
   danger: [DeviceApiMethods.RESTART, DeviceApiMethods.WIPE]
@@ -22,7 +24,9 @@ export default {
   name: 'DeviceControlPanel',
   components: {
     MenuView,
-    RiseLoader
+    RiseLoader,
+    Container,
+    DeviceIcon,
   },
   props: {
     device: Object
@@ -90,6 +94,9 @@ export default {
           return acc
         }, {})
       }
+    },
+    headerImg() {
+      return deviceInfoToImg(this.device)
     }
   },
   mounted() {
@@ -135,9 +142,12 @@ export default {
 
 <template>
   <div v-if="!unreachable">
-    <h1 class="title">
-      {{ intl.formatMessage({ id: 'gateway.panel' }, { device: device.name }) }}
-    </h1>
+    <Container class="control-panel-header">
+      <h1 class="title">
+        {{ intl.formatMessage({ id: 'gateway.panel' }, { device: device.name }) }}
+      </h1>
+      <DeviceIcon :device="device"/>
+    </Container>
     <RiseLoader v-if="loading" />
     <div v-else id="control-panel" class="bordered">
       <MenuView :tabs="tabs" :tab="Object.keys(tabs)[0]" :vertical="true" />
@@ -149,5 +159,9 @@ export default {
 #control-panel {
   margin: 0 auto;
   width: 800px;
+}
+.control-panel-header {
+  width: fit-content;
+  margin: auto;
 }
 </style>
