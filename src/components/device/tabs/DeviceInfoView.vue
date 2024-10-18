@@ -103,6 +103,12 @@ export default {
         :disabled="true"
       />
       <InputField
+        :label="intl.formatMessage({ id: 'device.info.smt.version' })"
+        :modelValue="info.smtVersion"
+        :disabled="true"
+      />
+      <InputField
+        v-if="!!info.version"
         :label="intl.formatMessage({ id: 'device.info.version' })"
         :modelValue="info.version"
         :disabled="true"
