@@ -10,8 +10,7 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
-
+  build-gateway:
     runs-on: ubuntu-latest
 
     strategy:
@@ -27,5 +26,24 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - run: echo "VITE_MODE=gateway" > .env
+    - run: npm ci
+    - run: npm run build --if-present
+  build-cloud:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [22.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    - run: echo "BASE_PATH=/ > .env
+    - run: echo "VITE_MODE=cloud" >> .env
     - run: npm ci
     - run: npm run build --if-present
