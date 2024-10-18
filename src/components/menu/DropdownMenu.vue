@@ -3,12 +3,12 @@ import ChevronRight from 'vue-material-design-icons/ChevronRight.vue'
 import ChevronLeft from 'vue-material-design-icons/ChevronLeft.vue'
 import ChevronUp from 'vue-material-design-icons/ChevronUp.vue'
 import ChevronDown from 'vue-material-design-icons/ChevronDown.vue'
-import Container from '../base/Container.vue'
+import BaseContainer from '../base/BaseContainer.vue'
 
 export default {
   name: 'DropdownMenu',
   components: {
-    Container,
+    BaseContainer,
     ChevronRight,
     ChevronLeft,
     ChevronUp,
@@ -41,24 +41,24 @@ export default {
 
 <template>
   <div class="dropdown-menu">
-    <Container :vertical="vertical">
+    <BaseContainer :vertical="vertical">
       <ChevronDown v-if="expanded && vertical" title="Expand" :size="35" />
       <div :style="slotStyle">
         <slot></slot>
       </div>
-      <Container style="cursor: pointer" @click.stop="handleClick">
+      <BaseContainer style="cursor: pointer" @click.stop="handleClick">
         <div v-if="expanded">
           <ChevronUp v-if="vertical" title="Hide" :size="35" />
           <ChevronLeft v-else title="Hide" :size="35" />
         </div>
-        <Container v-else>
+        <BaseContainer v-else>
           <h2 v-if="placeholder" class="title">
             {{ placeholder }}
           </h2>
           <ChevronRight v-if="!vertical" title="Expand" :size="35" />
-        </Container>
-      </Container>
-    </Container>
+        </BaseContainer>
+      </BaseContainer>
+    </BaseContainer>
   </div>
 </template>
 

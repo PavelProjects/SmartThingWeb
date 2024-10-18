@@ -6,14 +6,14 @@ import { DashboardApi } from '../../api/gateway/DashboardApi'
 import { useIntl } from 'vue-intl'
 import RiseLoader from 'vue-spinner/src/RiseLoader.vue'
 import { toast } from '../../utils/EventBus'
-import Container from '../base/Container.vue'
+import BaseContainer from '../base/BaseContainer.vue'
 
 export default {
-  name: 'Dashboard',
+  name: 'DevicesDashboard',
   components: {
     DashboardGroup,
     GroupAddDialog,
-    Container,
+    BaseContainer,
     PlusSVG,
     RiseLoader
   },
@@ -63,7 +63,7 @@ export default {
 
 <template>
   <div class="dashboard">
-    <Container class="groups" :vertical="true">
+    <BaseContainer class="groups" :vertical="true">
       <RiseLoader v-if="loading" class="spinner" />
       <DashboardGroup
         v-for="group of groups"
@@ -74,7 +74,7 @@ export default {
         @updateGroups="loadGroups"
         style="margin: auto"
       />
-      <Container v-if="!loading" :vertical="true">
+      <BaseContainer v-if="!loading" :vertical="true">
         <div v-if="!groups?.length">
           <h2 class="title">
             {{ intl.formatMessage({ id: 'dashboard.groups.empty' }) }}
@@ -86,8 +86,8 @@ export default {
           :size="40"
           @click.stop="addGroupDialog = true"
         />
-      </Container>
-    </Container>
+      </BaseContainer>
+    </BaseContainer>
     <GroupAddDialog v-if="addGroupDialog" :groups="groups" @close="handleAddClose" />
   </div>
 </template>

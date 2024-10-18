@@ -1,14 +1,14 @@
 <script>
 import { GatewayApi } from '../../api/gateway/GatewayApi'
 import { BUILD_INFO } from '../../buildInfo'
-import Container from '../base/Container.vue'
+import BaseContainer from '../base/BaseContainer.vue'
 import PopUpDialog from '../dialogs/PopUpDialog.vue'
 
 export default {
   name: 'BuildInfoDialog',
   components: {
     PopUpDialog,
-    Container
+    BaseContainer
   },
   inject: ['gateway'],
   data() {
@@ -34,9 +34,9 @@ export default {
       }
       return value.split('').reduce((acc, ch) => {
         if (ch.toUpperCase() == ch) {
-            acc += ' ' + ch.toLowerCase()
+          acc += ' ' + ch.toLowerCase()
         } else {
-            acc += ch
+          acc += ch
         }
         return acc
       }, '')
@@ -47,16 +47,20 @@ export default {
 
 <template>
   <PopUpDialog v-bind="$attrs">
-    <Container :vertical="true" class="build-info">
-      <Container :vertical="true">
+    <BaseContainer :vertical="true" class="build-info">
+      <BaseContainer :vertical="true">
         <h2 class="title">Gateway backend build info</h2>
-        <p v-for="[key, value] of Object.entries(gatewayInfo)" :key="key">{{ camelToNormal(key) }}: {{ value }}</p>
-      </Container>
-      <Container :vertical="true">
+        <p v-for="[key, value] of Object.entries(gatewayInfo)" :key="key">
+          {{ camelToNormal(key) }}: {{ value }}
+        </p>
+      </BaseContainer>
+      <BaseContainer :vertical="true">
         <h2 class="title">UI build info</h2>
-        <p v-for="[key, value] of Object.entries(infoUI)" :key="key">{{ camelToNormal(key) }}: {{ value }}</p>
-      </Container>
-    </Container>
+        <p v-for="[key, value] of Object.entries(infoUI)" :key="key">
+          {{ camelToNormal(key) }}: {{ value }}
+        </p>
+      </BaseContainer>
+    </BaseContainer>
   </PopUpDialog>
 </template>
 

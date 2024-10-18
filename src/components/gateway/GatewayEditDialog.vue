@@ -4,7 +4,7 @@ import { toast } from '../../utils/EventBus'
 import LoadingButton from '../base/controls/LoadingButton.vue'
 import PopUpDialog from '../dialogs/PopUpDialog.vue'
 import InputField from '../base/fields/InputField.vue'
-import Container from '../base/Container.vue'
+import BaseContainer from '../base/BaseContainer.vue'
 
 const NAME_MAX_LENGTH = 32
 
@@ -14,7 +14,7 @@ export default {
     PopUpDialog,
     InputField,
     LoadingButton,
-    Container
+    BaseContainer
   },
   props: {
     gateway: Object
@@ -63,7 +63,7 @@ export default {
 
 <template>
   <PopUpDialog @close="$emit('close')">
-    <Container class="gateway-editor" :vertical="true">
+    <BaseContainer class="gateway-editor" :vertical="true">
       <InputField :label="intl.formatMessage({ id: 'gateway.edit.name' })" v-model="name" />
       <InputField
         :label="intl.formatMessage({ id: 'gateway.edit.description' })"
@@ -72,7 +72,7 @@ export default {
       <LoadingButton @click="handleSave">
         <h2>{{ buttonTitle }}</h2>
       </LoadingButton>
-    </Container>
+    </BaseContainer>
   </PopUpDialog>
 </template>
 

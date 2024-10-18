@@ -4,10 +4,10 @@ import { DashboardApi } from '../../api/gateway/DashboardApi'
 import { toast } from '../../utils/EventBus'
 import DevicesSearchView from '../device/DevicesSearchView.vue'
 import PopUpDialog from '../dialogs/PopUpDialog.vue'
-import Container from '../base/Container.vue'
+import BaseContainer from '../base/BaseContainer.vue'
 export default {
   name: 'GroupAddDialog',
-  components: { PopUpDialog, DevicesSearchView, Container },
+  components: { PopUpDialog, DevicesSearchView, BaseContainer },
   props: {
     groups: Array
   },
@@ -53,13 +53,13 @@ export default {
 
 <template>
   <PopUpDialog v-bind="$props">
-    <Container :vertical="true">
+    <BaseContainer :vertical="true">
       <DevicesSearchView
         :title="intl.formatMessage({ id: 'dashboard.group.create.select.device' })"
         :style="{ width: '350px' }"
         v-on:update:model-value="selectDevice"
       />
-    </Container>
+    </BaseContainer>
   </PopUpDialog>
 </template>
 

@@ -6,7 +6,7 @@ import GatewayAuthDialog from '../dialogs/GatewayAuthDialog.vue'
 import { toast } from '../../utils/EventBus.js'
 import { useStompClientStore } from '../../store/stompClientStore.js'
 import { useIntl } from 'vue-intl'
-import Container from '../base/Container.vue'
+import BaseContainer from '../base/BaseContainer.vue'
 
 export default {
   name: 'GatewayAuthInfo',
@@ -14,7 +14,7 @@ export default {
     InputField,
     LoadingButton,
     GatewayAuthDialog,
-    Container
+    BaseContainer
   },
   data() {
     const stompClient = useStompClientStore()
@@ -140,8 +140,8 @@ export default {
       </h2>
     </div>
     <div v-if="dialogVisible" class="overlay" @click.stop="dialogVisible = false">
-      <Container class="dialog" @click.stop="() => {}" :vertical="true">
-        <Container v-if="gateway" :vertical="true">
+      <BaseContainer class="dialog" @click.stop="() => {}" :vertical="true">
+        <BaseContainer v-if="gateway" :vertical="true">
           <h2 class="title">
             {{ intl.formatMessage({ id: 'gateway.cloud.info' }) }}
           </h2>
@@ -169,8 +169,8 @@ export default {
             :modelValue="gateway.description"
             :vertical="false"
           />
-        </Container>
-        <Container v-if="cloudConfig" :vertical="true">
+        </BaseContainer>
+        <BaseContainer v-if="cloudConfig" :vertical="true">
           <h2 class="title">
             {{ intl.formatMessage({ id: 'gateway.cloud.config' }) }}
           </h2>
@@ -196,11 +196,11 @@ export default {
           <LoadingButton @click="logout">
             <h2>{{ intl.formatMessage({ id: 'log.out' }) }}</h2>
           </LoadingButton>
-        </Container>
+        </BaseContainer>
         <button v-if="!cloudConfig" class="btn" @click="authDialogVisible = true">
           <h2>{{ intl.formatMessage({ id: 'gateway.cloud.add.token' }) }}</h2>
         </button>
-      </Container>
+      </BaseContainer>
     </div>
     <GatewayAuthDialog v-if="authDialogVisible" @close="authDialogCloseHandle" />
   </div>

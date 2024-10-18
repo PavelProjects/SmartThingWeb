@@ -2,7 +2,7 @@
 import { useIntl } from 'vue-intl'
 import { GatewayApi } from '../../api/gateway/GatewayApi'
 import { EventBus, toast } from '../../utils/EventBus'
-import Container from '../base/Container.vue'
+import BaseContainer from '../base/BaseContainer.vue'
 import UpdateButton from '../base/controls/UpdateButton.vue'
 import DeviceItem from './DeviceItem.vue'
 import PlusSVG from 'vue-material-design-icons/Plus.vue'
@@ -31,7 +31,7 @@ export default {
   components: {
     UpdateButton,
     DeviceItem,
-    Container,
+    BaseContainer,
     AddDeviceDialog,
     ContextMenu,
     PlusSVG
@@ -228,14 +228,14 @@ export default {
 </script>
 
 <template>
-  <Container class="devices-search-view" :vertical="true">
+  <BaseContainer class="devices-search-view" :vertical="true">
     <h2 v-if="title" class="title">{{ title }}</h2>
-    <Container class="bordered" :vertical="true">
+    <BaseContainer class="bordered" :vertical="true">
       <div style="position: relative">
         <h2 class="title list-title">{{ intl.formatMessage({ id: 'devices.search' }) }}</h2>
         <UpdateButton class="update" :loading="searching" :onClick="loadFoundDevices" />
       </div>
-      <Container v-if="searchEnabled" class="devices-list" :vertical="true">
+      <BaseContainer v-if="searchEnabled" class="devices-list" :vertical="true">
         <DeviceItem
           v-for="deviceInfo of devices"
           :key="deviceInfo.ip"
@@ -249,17 +249,17 @@ export default {
         <h2 v-if="searching && Object.keys(devices).length == 0" class="title">
           {{ intl.formatMessage({ id: 'devices.search.in.progress' }) }}
         </h2>
-      </Container>
+      </BaseContainer>
       <h2 v-else class="title" :title="intl.formatMessage({ id: 'devices.search.disabled.title' })">
         {{ intl.formatMessage({ id: 'devices.search.disabled' }) }}
       </h2>
-    </Container>
-    <Container class="bordered" :vertical="true">
+    </BaseContainer>
+    <BaseContainer class="bordered" :vertical="true">
       <div style="position: relative">
         <h2 class="title list-title">{{ intl.formatMessage({ id: 'devices.saved' }) }}</h2>
         <UpdateButton class="update" :loading="loadingSaved" :onClick="loadSavedDevices" />
       </div>
-      <Container class="devices-list" :vertical="true">
+      <BaseContainer class="devices-list" :vertical="true">
         <div
           v-for="(deviceInfo, index) of savedDevices"
           :key="index"
@@ -288,8 +288,8 @@ export default {
           :size="35"
           @click="addDeviceVisible = true"
         />
-      </Container>
-    </Container>
+      </BaseContainer>
+    </BaseContainer>
     <AddDeviceDialog
       v-if="addDeviceVisible"
       @close="addDeviceVisible = false"
@@ -300,7 +300,7 @@ export default {
         }
       "
     />
-  </Container>
+  </BaseContainer>
 </template>
 
 <style scoped>

@@ -14,7 +14,7 @@ import CancelSVG from 'vue-material-design-icons/WindowClose.vue'
 import EditSVG from 'vue-material-design-icons/Pencil.vue'
 import TestTubeSvg from 'vue-material-design-icons/TestTube.vue'
 import { useIntl } from 'vue-intl'
-import Container from '../../base/Container.vue'
+import BaseContainer from '../../base/BaseContainer.vue'
 import ContextMenu from '../../menu/ContextMenu.vue'
 import PopUpDialog from '../../dialogs/PopUpDialog.vue'
 import ChevronDown from 'vue-material-design-icons/ChevronDown.vue'
@@ -39,7 +39,7 @@ export default {
     ComboBoxField,
     LoadingButton,
     CheckBoxField,
-    Container,
+    BaseContainer,
     ContextMenu,
     DeleteSVG,
     SaveSVG,
@@ -257,20 +257,20 @@ export default {
 </script>
 
 <template>
-  <Container class="hook" :vertical="true">
-    <Container>
+  <BaseContainer class="hook" :vertical="true">
+    <BaseContainer>
       <ChevronUp v-if="expanded" @click.stop="() => (expanded = false)" />
       <ChevronDown v-else @click.stop="() => (expanded = true)" />
       <h3 class="title" style="flex: 1 1 auto; text-align: start">
         [{{ hook.id }}] {{ hook.caption || systemNameToNormal(hook.type) }}
       </h3>
-      <Container>
-        <Container v-if="!hook.readonly">
-          <Container v-if="editing">
+      <BaseContainer>
+        <BaseContainer v-if="!hook.readonly">
+          <BaseContainer v-if="editing">
             <SaveSVG class="icon" :onClick="saveHook" :loading="loading" />
             <CancelSVG class="icon" :onClick="cancel" />
-          </Container>
-          <Container v-else>
+          </BaseContainer>
+          <BaseContainer v-else>
             <EditSVG class="icon" :onClick="() => (editing = true)" />
             <DeleteSVG class="icon" :onClick="deleteHook" :loading="loading" />
             <TestTubeSvg
@@ -279,16 +279,16 @@ export default {
               :title="intl.formatMessage({ id: 'device.hook.test.it' })"
               @click="() => (testDialogVisible = true)"
             />
-          </Container>
-        </Container>
+          </BaseContainer>
+        </BaseContainer>
         <div v-else>
           <h3 style="text-align: center">
             {{ intl.formatMessage({ id: 'device.hook.readonly' }) }}
           </h3>
         </div>
-      </Container>
-    </Container>
-    <Container v-if="expanded" :vertical="true">
+      </BaseContainer>
+    </BaseContainer>
+    <BaseContainer v-if="expanded" :vertical="true">
       <InputField label="type" :modelValue="hook.type" :disabled="true" />
       <component
         v-for="{ key, label, value, render, required } in fieldsComponents"
@@ -301,9 +301,9 @@ export default {
         :validationFailed="validationFailed.includes(key)"
         @update:modelValue="(value) => setValue(key, value)"
       />
-    </Container>
+    </BaseContainer>
     <PopUpDialog v-if="testDialogVisible" @close="testDialogVisible = false">
-      <Container :vertical="true" style="padding: var(--default-gap)">
+      <BaseContainer :vertical="true" style="padding: var(--default-gap)">
         <InputField
           :label="intl.formatMessage({ id: 'device.hook.test.label' })"
           :type="observable.type === 'sensor' ? 'number' : 'text'"
@@ -314,9 +314,9 @@ export default {
             {{ intl.formatMessage({ id: 'device.hook.test.button' }) }}
           </h2>
         </LoadingButton>
-      </Container>
+      </BaseContainer>
     </PopUpDialog>
-  </Container>
+  </BaseContainer>
 </template>
 
 <style scoped>

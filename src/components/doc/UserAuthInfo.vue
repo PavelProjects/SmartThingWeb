@@ -4,10 +4,10 @@ import { useCloudAuthStore } from '../../store/cloudAuthStore'
 import { CloudApi } from '../../api/CloudApi'
 import { useIntl } from 'vue-intl'
 import { toast } from '../../utils/EventBus'
-import Container from '../base/Container.vue'
+import BaseContainer from '../base/BaseContainer.vue'
 export default {
   components: {
-    Container
+    BaseContainer
   },
   data() {
     const intl = useIntl()
@@ -48,7 +48,7 @@ export default {
       {{ login }}
     </h2>
     <div v-if="openDialog && login" class="overlay" @click.stop="openDialog = false">
-      <Container class="dialog" @click.stop="() => {}" :vertical="true">
+      <BaseContainer class="dialog" @click.stop="() => {}" :vertical="true">
         <h2>{{ intl.formatMessage({ id: 'cloud.auth.info.user.id' }, { id }) }}</h2>
         <h2>{{ intl.formatMessage({ id: 'cloud.auth.info.user.login' }, { login }) }}</h2>
         <button class="btn" @click.stop="logout">
@@ -56,7 +56,7 @@ export default {
             {{ intl.formatMessage({ id: 'log.out' }) }}
           </h2>
         </button>
-      </Container>
+      </BaseContainer>
     </div>
   </div>
 </template>

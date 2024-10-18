@@ -1,7 +1,7 @@
 <script>
 import { OtaApi } from '../../api/gateway/OtaApi'
 import { toast } from '../../utils/EventBus'
-import Container from '../base/Container.vue'
+import BaseContainer from '../base/BaseContainer.vue'
 import ContextMenu from '../menu/ContextMenu.vue'
 import EditFirmwareInfoDialog from './EditFirmwareInfoDialog.vue'
 import DevicesSearchView from '../device/DevicesSearchView.vue'
@@ -12,7 +12,7 @@ import LoadingButton from '../base/controls/LoadingButton.vue'
 export default {
   name: 'OtaFirmwareItem',
   components: {
-    Container,
+    BaseContainer,
     ContextMenu,
     EditFirmwareInfoDialog,
     PopUpDialog,
@@ -107,7 +107,7 @@ export default {
 </script>
 
 <template>
-  <Container class="firmware-item">
+  <BaseContainer class="firmware-item">
     <h3>{{ firmware.board }}</h3>
     <ContextMenu class="context-menu">
       <p @click="() => (editVisible = true)">
@@ -130,7 +130,7 @@ export default {
       :originalInfo="firmware"
     />
     <PopUpDialog v-if="searchVisible" @close="() => (searchVisible = false)">
-      <Container class="device-select" :vertical="true">
+      <BaseContainer class="device-select" :vertical="true">
         <DevicesSearchView
           :title="intl.formatMessage({ id: 'ota.upload.to' })"
           :filters="{ board: firmware.board }"
@@ -140,9 +140,9 @@ export default {
         <LoadingButton @click="uploadFirmware">
           <h2>Upload</h2>
         </LoadingButton>
-      </Container>
+      </BaseContainer>
     </PopUpDialog>
-  </Container>
+  </BaseContainer>
 </template>
 
 <style scoped>

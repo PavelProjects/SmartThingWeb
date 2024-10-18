@@ -2,7 +2,7 @@
 import { useIntl } from 'vue-intl'
 import { GatewayApi } from '../../api/gateway/GatewayApi'
 import { toast } from '../../utils/EventBus'
-import Container from '../base/Container.vue'
+import BaseContainer from '../base/BaseContainer.vue'
 import LoadingButton from '../base/controls/LoadingButton.vue'
 import PopUpDialog from '../dialogs/PopUpDialog.vue'
 import InputField from '../base/fields/InputField.vue'
@@ -10,7 +10,7 @@ import InputField from '../base/fields/InputField.vue'
 export default {
   name: 'AddDeviceDialog',
   components: {
-    Container,
+    BaseContainer,
     InputField,
     PopUpDialog,
     LoadingButton
@@ -61,7 +61,7 @@ export default {
 
 <template>
   <PopUpDialog v-bind="$attrs">
-    <Container class="add-device-dialog" :vertical="true">
+    <BaseContainer class="add-device-dialog" :vertical="true">
       <h2 class="title">
         {{ intl.formatMessage({ id: 'devices.saved.add.title' }) }}
       </h2>
@@ -75,7 +75,7 @@ export default {
           {{ intl.formatMessage({ id: 'devices.saved.add.title' }) }}
         </h2>
       </LoadingButton>
-    </Container>
+    </BaseContainer>
   </PopUpDialog>
 </template>
 

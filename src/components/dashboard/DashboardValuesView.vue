@@ -1,10 +1,10 @@
 <script>
-import Container from '../base/Container.vue'
+import BaseContainer from '../base/BaseContainer.vue'
 
 export default {
   name: 'DashboardValuesView',
   components: {
-    Container
+    BaseContainer
   },
   props: {
     observable: Object,
@@ -29,10 +29,10 @@ export default {
 </script>
 
 <template>
-  <Container class="dashboard-values item" :vertical="true">
+  <BaseContainer class="dashboard-values item" :vertical="true">
     <h2 :title="observable.type">{{ observable.name }}</h2>
     <h1 class="value" :title="lastUpdate">{{ lastValue ?? 'Nan' }} {{ observable.units }}</h1>
-  </Container>
+  </BaseContainer>
 </template>
 
 <style scoped>

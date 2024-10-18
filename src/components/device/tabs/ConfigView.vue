@@ -6,7 +6,7 @@ import SyncLoader from 'vue-spinner/src/SyncLoader.vue'
 import CheckBoxField from '../../base/fields/CheckBoxField.vue'
 import { useIntl } from 'vue-intl'
 import { toast } from '../../../utils/EventBus.js'
-import Container from '../../base/Container.vue'
+import BaseContainer from '../../base/BaseContainer.vue'
 import { extractDataFromError } from '../../../api/ApiUtils.js'
 
 export default {
@@ -16,7 +16,7 @@ export default {
     InputField,
     CheckBoxField,
     LoadingButton,
-    Container,
+    BaseContainer,
     SyncLoader
   },
   data() {
@@ -112,9 +112,9 @@ export default {
 </script>
 
 <template>
-  <Container :vertical="true">
+  <BaseContainer :vertical="true">
     <sync-loader class="loading-spinner" :loading="loading"></sync-loader>
-    <Container v-if="haveConfigEntries" class="config-inputs" :vertical="true">
+    <BaseContainer v-if="haveConfigEntries" class="config-inputs" :vertical="true">
       <div
         v-for="[key, { caption, type }] of Object.entries(this.configInfo)"
         :key="key"
@@ -123,19 +123,19 @@ export default {
         <CheckBoxField v-if="type === 'boolean'" :label="caption" v-model="values[key]" />
         <InputField v-else :label="`${caption} [${key}]`" :type="type" v-model="values[key]" />
       </div>
-    </Container>
-    <Container class="controls-holder" :gap="'10px'">
+    </BaseContainer>
+    <BaseContainer class="controls-holder" :gap="'10px'">
       <LoadingButton class="delete" :loading="deleteLoading" @click="deleteAllValues">
         <h2>{{ intl.formatMessage({ id: 'device.config.button.delete.all' }) }}</h2>
       </LoadingButton>
       <LoadingButton :loading="saveLoading" @click="saveConfig">
         <h2>{{ intl.formatMessage({ id: 'device.config.button.save' }) }}</h2>
       </LoadingButton>
-    </Container>
+    </BaseContainer>
     <h2 v-if="!haveConfigEntries" class="title">
       {{ intl.formatMessage({ id: 'device.config.empty.entries' }) }}
     </h2>
-  </Container>
+  </BaseContainer>
 </template>
 
 <style scoped>

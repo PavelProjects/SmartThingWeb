@@ -2,7 +2,7 @@
 import { GatewayApi } from '../../api/gateway/GatewayApi'
 import { useIntl } from 'vue-intl'
 import { toast } from '../../utils/EventBus'
-import Container from '../base/Container.vue'
+import BaseContainer from '../base/BaseContainer.vue'
 import LoadingButton from '../base/controls/LoadingButton.vue'
 import MenuItem from '../menu/MenuItem.vue'
 import InputField from '../base/fields/InputField.vue'
@@ -20,7 +20,7 @@ export default {
   name: 'SettingsManager',
   components: {
     LoadingButton,
-    Container,
+    BaseContainer,
     MenuItem,
     InputField,
     DevicesSearchView,
@@ -210,10 +210,10 @@ export default {
 </script>
 
 <template>
-  <Container :vertical="true">
+  <BaseContainer :vertical="true">
     <h1 class="title">{{ intl.formatMessage({ id: 'device.settings.manager.menu.header' }) }}</h1>
-    <Container class="bordered settings-manager">
-      <Container class="items" :vertical="true">
+    <BaseContainer class="bordered settings-manager">
+      <BaseContainer class="items" :vertical="true">
         <MenuItem
           v-for="(settings, index) of savedSettings"
           :key="index"
@@ -226,8 +226,8 @@ export default {
             {{ intl.formatMessage({ id: 'device.settings.manager.add' }) }}
           </h2>
         </LoadingButton>
-      </Container>
-      <Container v-if="!!selectedSettings" class="settings-editor" :vertical="true">
+      </BaseContainer>
+      <BaseContainer v-if="!!selectedSettings" class="settings-editor" :vertical="true">
         <InputField
           :label="intl.formatMessage({ id: 'device.settings.editor.name' })"
           v-model="selectedSettings.name"
@@ -236,7 +236,7 @@ export default {
           {{ intl.formatMessage({ id: 'device.settings.editor.title' }) }}
         </h2>
         <textarea class="editor" v-model="selectedSettings.value"></textarea>
-        <Container class="controls">
+        <BaseContainer class="controls">
           <LoadingButton @click="save" :loading="loading">
             <h2>
               {{
@@ -254,8 +254,8 @@ export default {
               }}
             </h2>
           </LoadingButton>
-        </Container>
-        <Container class="controls">
+        </BaseContainer>
+        <BaseContainer class="controls">
           <button v-if="!!selectedSettings.id" class="btn" @click="handleExportBtn">
             <h2>
               {{
@@ -270,16 +270,16 @@ export default {
               }}
             </h2>
           </button>
-        </Container>
-      </Container>
+        </BaseContainer>
+      </BaseContainer>
       <PopUpDialog v-if="mode" @close="mode = undefined">
         <DevicesSearchView
           :title="intl.formatMessage({ id: 'device.settings.editor.select.device' })"
           v-on:update:model-value="handleDeviceClick"
         />
       </PopUpDialog>
-    </Container>
-  </Container>
+    </BaseContainer>
+  </BaseContainer>
 </template>
 
 <style scoped>

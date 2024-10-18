@@ -4,7 +4,7 @@ import { GatewayApi } from '../../api/gateway/GatewayApi'
 import { useStompClientStore } from '../../store/stompClientStore'
 import { toast } from '../../utils/EventBus'
 import LogMessage from './LogMessage.vue'
-import Container from '../base/Container.vue'
+import BaseContainer from '../base/BaseContainer.vue'
 import InputField from '../base/fields/InputField.vue'
 import ComboBoxField from '../base/fields/ComboBoxField.vue'
 
@@ -12,7 +12,7 @@ export default {
   name: 'DeviceLogs',
   components: {
     LogMessage,
-    Container,
+    BaseContainer,
     InputField,
     ComboBoxField
   },
@@ -109,8 +109,8 @@ export default {
 </script>
 
 <template>
-  <Container class="logs-view" :vertical="true">
-    <Container class="filters">
+  <BaseContainer class="logs-view" :vertical="true">
+    <BaseContainer class="filters">
       <InputField
         :label="intl.formatMessage({ id: 'device.logs.columns' }, { column: 'device' })"
         v-model="filters.device"
@@ -128,7 +128,7 @@ export default {
         :label="intl.formatMessage({ id: 'device.logs.columns' }, { column: 'msg' })"
         v-model="filters.message"
       />
-    </Container>
+    </BaseContainer>
     <div class="log-message-container">
       <h2 v-for="column of ['device', 'date', 'tag', 'level', 'msg']" :key="column">
         {{ intl.formatMessage({ id: 'device.logs.columns' }, { column }) }}
@@ -140,7 +140,7 @@ export default {
       :log="message"
       :color="colorByIp(message)"
     />
-  </Container>
+  </BaseContainer>
 </template>
 
 <style scoped>

@@ -1,8 +1,8 @@
 <script>
-import Container from '../Container.vue'
+import BaseContainer from '../BaseContainer.vue'
 import FieldContainer from './FieldContainer.vue'
 export default {
-  components: { FieldContainer, Container },
+  components: { FieldContainer, BaseContainer },
   name: 'InputField',
   props: {
     testId: String,
@@ -39,7 +39,7 @@ export default {
 
 <template>
   <FieldContainer :label="label" :title="title">
-    <Container class="input-field-container">
+    <BaseContainer class="input-field-container">
       <input
         class="input-field"
         :id="testId"
@@ -52,7 +52,7 @@ export default {
         @keypress.enter="() => $emit('enter')"
       />
       <slot></slot>
-    </Container>
+    </BaseContainer>
   </FieldContainer>
 </template>
 

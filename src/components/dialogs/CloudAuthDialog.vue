@@ -5,7 +5,7 @@ import { toast } from '../../utils/EventBus'
 import LoadingButton from '../base/controls/LoadingButton.vue'
 import InputField from '../base/fields/InputField.vue'
 import PopUpDialog from './PopUpDialog.vue'
-import Container from '../base/Container.vue'
+import BaseContainer from '../base/BaseContainer.vue'
 
 export default {
   name: 'CloudAuthDialog',
@@ -13,7 +13,7 @@ export default {
     InputField,
     LoadingButton,
     PopUpDialog,
-    Container
+    BaseContainer
   },
   data() {
     const intl = useIntl()
@@ -57,7 +57,7 @@ export default {
 
 <template>
   <PopUpDialog>
-    <Container :vertical="true" style="padding: var(--default-gap)" :gap="'5px'">
+    <BaseContainer :vertical="true" style="padding: var(--default-gap)" :gap="'5px'">
       <form>
         <InputField
           :label="intl.formatMessage({ id: 'login' })"
@@ -79,6 +79,6 @@ export default {
           {{ intl.formatMessage({ id: 'log.in' }) }}
         </h2>
       </LoadingButton>
-    </Container>
+    </BaseContainer>
   </PopUpDialog>
 </template>

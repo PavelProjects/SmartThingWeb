@@ -1,6 +1,6 @@
 <script>
 export default {
-  name: 'Container',
+  name: 'BaseContainer',
   props: {
     vertical: {
       type: Boolean,

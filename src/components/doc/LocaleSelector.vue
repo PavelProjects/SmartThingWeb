@@ -1,11 +1,11 @@
 <script>
-import Container from '../base/Container.vue'
+import BaseContainer from '../base/BaseContainer.vue'
 import { currentLocale, switchLocale, SUPPORTED_LOCALES } from '../../intlConfig'
 
 export default {
   name: 'LocaleSelector',
   components: {
-    Container
+    BaseContainer
   },
   data() {
     return {
@@ -22,7 +22,7 @@ export default {
   <div>
     <p class="locale" @click.stop="() => (expanded = !expanded)">{{ currentLocale }}</p>
     <div v-if="expanded" class="overlay" @click.stop="() => (expanded = false)">
-      <Container :vertical="true" class="locales-list">
+      <BaseContainer :vertical="true" class="locales-list">
         <p
           v-for="locale of SUPPORTED_LOCALES.filter((l) => l !== currentLocale)"
           :key="locale"
@@ -31,7 +31,7 @@ export default {
         >
           {{ locale }}
         </p>
-      </Container>
+      </BaseContainer>
     </div>
   </div>
 </template>

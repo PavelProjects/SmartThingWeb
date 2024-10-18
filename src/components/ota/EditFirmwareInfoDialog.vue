@@ -1,7 +1,7 @@
 <script>
 import { OtaApi } from '../../api/gateway/OtaApi'
 import { toast } from '../../utils/EventBus'
-import Container from '../base/Container.vue'
+import BaseContainer from '../base/BaseContainer.vue'
 import InputField from '../base/fields/InputField.vue'
 import ComboBoxField from '../base/fields/ComboBoxField.vue'
 import LoadingButton from '../base/controls/LoadingButton.vue'
@@ -12,7 +12,7 @@ import { extractDataFromError } from '../../api/ApiUtils'
 export default {
   name: 'EditFirmwareInfoDialog',
   components: {
-    Container,
+    BaseContainer,
     PopUpDialog,
     InputField,
     ComboBoxField,
@@ -62,7 +62,7 @@ export default {
 
 <template>
   <PopUpDialog v-bind="$attrs">
-    <Container :vertical="true" class="edit-firmware">
+    <BaseContainer :vertical="true" class="edit-firmware">
       <h2 class="title">
         {{ intl.formatMessage({ id: 'ota.edit.header' }) }}
       </h2>
@@ -87,7 +87,7 @@ export default {
           {{ intl.formatMessage({ id: 'ota.edit.button' }) }}
         </h2>
       </LoadingButton>
-    </Container>
+    </BaseContainer>
   </PopUpDialog>
 </template>
 

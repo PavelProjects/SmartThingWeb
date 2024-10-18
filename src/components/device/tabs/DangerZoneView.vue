@@ -1,5 +1,5 @@
 <script>
-import Container from '../../base/Container.vue'
+import BaseContainer from '../../base/BaseContainer.vue'
 import LoadingButton from '../../base/controls/LoadingButton.vue'
 import { DeviceApi } from '../../../api/device/DeviceApi'
 import { toast } from '../../../utils/EventBus'
@@ -8,7 +8,7 @@ import { useIntl } from 'vue-intl'
 export default {
   name: 'DangerZoneView',
   components: {
-    Container,
+    BaseContainer,
     LoadingButton
   },
   inject: ['gateway', 'device'],
@@ -83,7 +83,7 @@ export default {
     <h1 class="title">
       {{ intl.formatMessage({ id: 'danger.title' }) }}
     </h1>
-    <Container :vertical="true" :gap="'var(--default-gap)'">
+    <BaseContainer :vertical="true" :gap="'var(--default-gap)'">
       <LoadingButton class="danger-button" @click="restart" :loading="restarting">
         <h1>
           {{ intl.formatMessage({ id: 'danger.button.restart' }) }}
@@ -94,7 +94,7 @@ export default {
           {{ intl.formatMessage({ id: 'danger.button.wipe' }) }}
         </h1>
       </LoadingButton>
-    </Container>
+    </BaseContainer>
   </div>
 </template>
 

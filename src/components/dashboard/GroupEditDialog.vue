@@ -6,7 +6,7 @@ import LoadingButton from '../base/controls/LoadingButton.vue'
 import { toast } from '../../utils/EventBus'
 import DeleteSVG from 'vue-material-design-icons/Delete.vue'
 import { DashboardApi } from '../../api/gateway/DashboardApi'
-import Container from '../base/Container.vue'
+import BaseContainer from '../base/BaseContainer.vue'
 import { DeviceApi } from '../../api/device/DeviceApi'
 
 export default {
@@ -15,7 +15,7 @@ export default {
     PopUpDialog,
     InputField,
     LoadingButton,
-    Container,
+    BaseContainer,
     DeleteSVG
   },
   props: {
@@ -120,19 +120,19 @@ export default {
 
 <template>
   <PopUpDialog v-bind="$props">
-    <Container :vertical="true">
+    <BaseContainer :vertical="true">
       <h2 class="title">
         {{ intl.formatMessage({ id: 'dashboard.group.edit.title' }, { name: device.name }) }}
       </h2>
-      <Container :vertical="true" :gap="0">
-        <Container class="table" :vertical="true">
+      <BaseContainer :vertical="true" :gap="0">
+        <BaseContainer class="table" :vertical="true">
           <div class="row">
             <h2 v-for="column of ['type', 'name', 'units', '']" :key="column">
               {{ intl.formatMessage({ id: 'dashboard.group.edit.columns' }, { column }) }}
             </h2>
           </div>
-        </Container>
-        <Container v-if="!loadingObservables" class="table" :vertical="true">
+        </BaseContainer>
+        <BaseContainer v-if="!loadingObservables" class="table" :vertical="true">
           <div v-for="(obs, index) of observables" :key="index" class="row">
             <select
               class="column-input"
@@ -162,9 +162,9 @@ export default {
             <input class="column-input" type="text" v-model="obs.units" />
             <DeleteSVG @click="remove(index)" />
           </div>
-        </Container>
-      </Container>
-      <Container class="extra" :vertical="true">
+        </BaseContainer>
+      </BaseContainer>
+      <BaseContainer class="extra" :vertical="true">
         <LoadingButton :loading="loadingObservables" @click="add">
           <h2>
             {{ intl.formatMessage({ id: 'dashborad.group.edit.add.observables' }) }}
@@ -178,8 +178,8 @@ export default {
         <LoadingButton :loading="loading" @click="save">
           <h2>{{ intl.formatMessage({ id: 'dashboard.group.edit.save' }) }}</h2>
         </LoadingButton>
-      </Container>
-    </Container>
+      </BaseContainer>
+    </BaseContainer>
   </PopUpDialog>
 </template>
 

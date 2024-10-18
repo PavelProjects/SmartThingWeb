@@ -7,7 +7,7 @@ import LoadingButton from '../base/controls/LoadingButton.vue'
 import { DashboardApi } from '../../api/gateway/DashboardApi'
 import { toast } from '../../utils/EventBus'
 import UpdateButton from '../base/controls/UpdateButton.vue'
-import Container from '../base/Container.vue'
+import BaseContainer from '../base/BaseContainer.vue'
 import { useStompClientStore } from '../../store/stompClientStore'
 
 export default {
@@ -17,7 +17,7 @@ export default {
     GroupEditDialog,
     LoadingButton,
     UpdateButton,
-    Container
+    BaseContainer
   },
   name: 'DashboardGroup',
   emits: ['updateGroups'],
@@ -147,7 +147,7 @@ export default {
 
 <template>
   <div>
-    <Container class="dashboard-group bordered" :vertical="true" gap="0">
+    <BaseContainer class="dashboard-group bordered" :vertical="true" gap="0">
       <UpdateButton
         v-if="observables.length > 0"
         class="update"
@@ -166,20 +166,20 @@ export default {
           {{ intl.formatMessage({ id: 'dashboard.group.delete' }) }}
         </p>
       </ContextMenu>
-      <Container class="values" v-if="observables.length > 0">
+      <BaseContainer class="values" v-if="observables.length > 0">
         <DashboardValuesView
           v-for="({ observable, values }, index) of observablesValues"
           :key="index"
           :observable="observable"
           :values="values"
         />
-      </Container>
+      </BaseContainer>
       <LoadingButton v-else class="add-values" @click="editing = true">
         <h2>
           {{ intl.formatMessage({ id: 'dashboard.group.add.values' }) }}
         </h2>
       </LoadingButton>
-    </Container>
+    </BaseContainer>
     <GroupEditDialog v-if="editing" :group="group" @close="handleEditClose" />
   </div>
 </template>

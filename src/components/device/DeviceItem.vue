@@ -1,12 +1,12 @@
 <script>
-import Container from '../base/Container.vue'
-import DeviceIcon from './DeviceIcon.vue';
+import BaseContainer from '../base/BaseContainer.vue'
+import DeviceIcon from './DeviceIcon.vue'
 
 export default {
   name: 'DeviceItem',
   components: {
-    Container,
-    DeviceIcon,
+    BaseContainer,
+    DeviceIcon
   },
   props: {
     device: {
@@ -15,9 +15,6 @@ export default {
     selected: Boolean
   },
   computed: {
-    imgSrc() {
-      return deviceInfoToImg(this.device)
-    },
     header() {
       const { name, type } = this.device
       return `${name} ${type ? '(' + type + ')' : ''}`
@@ -34,7 +31,7 @@ export default {
 }
 </script>
 <template>
-  <Container class="device-item" :style="style">
+  <BaseContainer class="device-item" :style="style">
     <div class="device-item-table">
       <h3>Name: {{ device.name }}</h3>
       <h3>Type: {{ device.type }}</h3>
@@ -45,7 +42,7 @@ export default {
       </h3>
       <DeviceIcon :device="device" />
     </div>
-  </Container>
+  </BaseContainer>
 </template>
 
 <style scoped>

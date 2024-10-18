@@ -1,6 +1,6 @@
 <script>
 import { OtaApi } from '../../api/gateway/OtaApi'
-import Container from '../base/Container.vue'
+import BaseContainer from '../base/BaseContainer.vue'
 import LoadingButton from '../base/controls/LoadingButton.vue'
 import InputField from '../base/fields/InputField.vue'
 import ComboBoxField from '../base/fields/ComboBoxField.vue'
@@ -13,7 +13,7 @@ import { extractDataFromError } from '../../api/ApiUtils'
 export default {
   name: 'AddOtaFirmwareDialog',
   components: {
-    Container,
+    BaseContainer,
     LoadingButton,
     InputField,
     FileField,
@@ -68,7 +68,7 @@ export default {
 
 <template>
   <PopUpDialog v-bind="$attrs">
-    <Container :vertical="true" id="add-firmware">
+    <BaseContainer :vertical="true" id="add-firmware">
       <h2 class="title">
         {{ intl.formatMessage({ id: 'ota.add.header' }) }}
       </h2>
@@ -99,7 +99,7 @@ export default {
           {{ intl.formatMessage({ id: 'ota.add.button' }) }}
         </h2>
       </LoadingButton>
-    </Container>
+    </BaseContainer>
   </PopUpDialog>
 </template>
 

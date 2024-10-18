@@ -1,7 +1,7 @@
 <script>
 import { useIntl } from 'vue-intl'
 import { useStompClientStore } from '../../store/stompClientStore'
-import Container from '../base/Container.vue'
+import BaseContainer from '../base/BaseContainer.vue'
 import LoadingButton from '../base/controls/LoadingButton.vue'
 import DeviceItem from '../device/DeviceItem.vue'
 import { toast } from '../../utils/EventBus'
@@ -10,7 +10,7 @@ import { OtaApi } from '../../api/gateway/OtaApi'
 export default {
   name: 'OtaFirmwareUploadItem',
   components: {
-    Container,
+    BaseContainer,
     DeviceItem,
     LoadingButton
   },
@@ -74,7 +74,7 @@ export default {
 </script>
 
 <template>
-  <Container class="bordered" :vertical="true" :gap="'0px'">
+  <BaseContainer class="bordered" :vertical="true" :gap="'0px'">
     <div class="info-view">
       <div class="firmware-info">
         <h2 class="title">
@@ -93,8 +93,8 @@ export default {
         <DeviceItem :device="device" />
       </div>
     </div>
-    <Container class="upload-progress-container" :vertical="true">
-      <Container>
+    <BaseContainer class="upload-progress-container" :vertical="true">
+      <BaseContainer>
         <h3>
           {{ intl.formatMessage({ id: 'ota.upload.status' }, { status }) }}
         </h3>
@@ -105,12 +105,12 @@ export default {
         >
           {{ intl.formatMessage({ id: 'ota.upload.abort' }) }}
         </LoadingButton>
-      </Container>
+      </BaseContainer>
       <div v-if="progress" class="upload-progress" :style="progressBarStyle">
         <h3 class="upload-progress-percent">{{ progress }}%</h3>
       </div>
-    </Container>
-  </Container>
+    </BaseContainer>
+  </BaseContainer>
 </template>
 
 <style scoped>

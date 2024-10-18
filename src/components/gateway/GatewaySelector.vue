@@ -6,7 +6,7 @@ import GatewayEditDialog from './GatewayEditDialog.vue'
 import UpdateButton from '../base/controls/UpdateButton.vue'
 import { useIntl } from 'vue-intl'
 import PopUpDialog from '../dialogs/PopUpDialog.vue'
-import Container from '../base/Container.vue'
+import BaseContainer from '../base/BaseContainer.vue'
 
 export default {
   name: 'GatewaySelector',
@@ -15,7 +15,7 @@ export default {
     GatewayEditDialog,
     UpdateButton,
     PopUpDialog,
-    Container
+    BaseContainer
   },
   emits: ['close'],
   data() {
@@ -103,7 +103,7 @@ export default {
         </h2>
         <UpdateButton class="update" :loading="loading" :onClick="loadGateways" />
       </div>
-      <Container :vertical="true">
+      <BaseContainer :vertical="true">
         <GatewayItem
           v-for="gateway of gateways"
           :key="gateway.id"
@@ -114,7 +114,7 @@ export default {
         <button class="btn" @click="showCreateDialog = true">
           <h2>{{ intl.formatMessage({ id: 'gateway.create.button' }) }}</h2>
         </button>
-      </Container>
+      </BaseContainer>
       <GatewayEditDialog
         v-if="showCreateDialog"
         :gateway="{}"

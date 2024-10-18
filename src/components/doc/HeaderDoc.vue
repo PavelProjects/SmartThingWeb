@@ -4,7 +4,7 @@ import MenuSvg from 'vue-material-design-icons/Menu.vue'
 import UserAuthInfo from './UserAuthInfo.vue'
 import { useIntl } from 'vue-intl'
 import GatewaySelector from '../gateway/GatewaySelector.vue'
-import Container from '../base/Container.vue'
+import BaseContainer from '../base/BaseContainer.vue'
 import LocaleSelector from './LocaleSelector.vue'
 import BuildInfoDialog from '../dialogs/BuildInfoDialog.vue'
 
@@ -15,7 +15,7 @@ export default {
     MenuSvg,
     UserAuthInfo,
     GatewaySelector,
-    Container,
+    BaseContainer,
     LocaleSelector,
     BuildInfoDialog
   },
@@ -55,7 +55,7 @@ export default {
 </script>
 
 <template>
-  <Container class="doc">
+  <BaseContainer class="doc">
     <div v-if="menuVisible" class="menu">
       <MenuSvg @click.stop="() => (menuItemsVisible = !menuItemsVisible)" />
       <div v-if="menuItemsVisible" class="overlay" @click="() => (menuItemsVisible = fase)">
@@ -105,7 +105,7 @@ export default {
       @close="gatewaySelectorVisible = false"
     />
     <BuildInfoDialog v-if="buildInfoVisible" @close="() => (buildInfoVisible = false)" />
-  </Container>
+  </BaseContainer>
 </template>
 
 <style scoped>

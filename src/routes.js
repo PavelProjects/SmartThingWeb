@@ -2,7 +2,7 @@ import GatewayControlPanel from './components/GatewayControlPanel.vue'
 import DeviceLogs from './components/logs/DeviceLogs.vue'
 import SettingsManager from './components/settings/SettingsManager.vue'
 import GatewaySelector from './components/gateway/GatewaySelector.vue'
-import Dashborard from './components/dashboard/Dashboard.vue'
+import DevicesDashboard from './components/dashboard/DevicesDashboard.vue'
 import { createRouter, createWebHashHistory } from 'vue-router'
 import OtaUpdates from './components/ota/OtaUpdates.vue'
 
@@ -40,7 +40,7 @@ const routes =
         {
           name: 'dashboard',
           path: '/dashboard',
-          component: Dashborard
+          component: DevicesDashboard
         },
         {
           name: 'ota',
@@ -69,7 +69,7 @@ const routes =
         {
           name: 'dashboard',
           path: '/:gateway/dashboard',
-          component: Dashborard
+          component: DevicesDashboard
         },
         {
           name: 'logs',

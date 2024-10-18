@@ -13,7 +13,7 @@ import { GatewayApi } from '../../api/gateway/GatewayApi'
 import { computed } from 'vue'
 import { toast } from '../../utils/EventBus'
 import DangerZoneView from './tabs/DangerZoneView.vue'
-import Container from '../base/Container.vue'
+import BaseContainer from '../base/BaseContainer.vue'
 import DeviceIcon from './DeviceIcon.vue'
 
 const TAB_REQUIRED_API = {
@@ -25,8 +25,8 @@ export default {
   components: {
     MenuView,
     RiseLoader,
-    Container,
-    DeviceIcon,
+    BaseContainer,
+    DeviceIcon
   },
   props: {
     device: Object
@@ -94,9 +94,6 @@ export default {
           return acc
         }, {})
       }
-    },
-    headerImg() {
-      return deviceInfoToImg(this.device)
     }
   },
   mounted() {
@@ -142,12 +139,12 @@ export default {
 
 <template>
   <div v-if="!unreachable">
-    <Container class="control-panel-header">
+    <BaseContainer class="control-panel-header">
       <h1 class="title">
         {{ intl.formatMessage({ id: 'gateway.panel' }, { device: device.name }) }}
       </h1>
-      <DeviceIcon :device="device"/>
-    </Container>
+      <DeviceIcon :device="device" />
+    </BaseContainer>
     <RiseLoader v-if="loading" />
     <div v-else id="control-panel" class="bordered">
       <MenuView :tabs="tabs" :tab="Object.keys(tabs)[0]" :vertical="true" />

@@ -5,7 +5,7 @@ import InputField from '../../base/fields/InputField.vue'
 import LoadingButton from '../../base/controls/LoadingButton.vue'
 import { EventBus, toast } from '../../../utils/EventBus.js'
 import { useIntl } from 'vue-intl'
-import Container from '../../base/Container.vue'
+import BaseContainer from '../../base/BaseContainer.vue'
 import { extractDataFromError } from '../../../api/ApiUtils.js'
 
 export default {
@@ -14,7 +14,7 @@ export default {
     SyncLoader,
     InputField,
     LoadingButton,
-    Container
+    BaseContainer
   },
   inject: ['device', 'gateway'],
   data() {
@@ -76,7 +76,7 @@ export default {
 
 <template>
   <div>
-    <Container v-if="info" class="fields-list" :vertical="true">
+    <BaseContainer v-if="info" class="fields-list" :vertical="true">
       <InputField
         :label="intl.formatMessage({ id: 'device.info.name' })"
         :title="deviceName ? '' : intl.formatMessage({ id: 'device.info.name.error.empty' })"
@@ -113,7 +113,7 @@ export default {
         :modelValue="info.version"
         :disabled="true"
       />
-    </Container>
+    </BaseContainer>
     <sync-loader v-else class="loading-spinner" :loading="true"></sync-loader>
   </div>
 </template>

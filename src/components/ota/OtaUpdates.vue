@@ -1,6 +1,6 @@
 <script>
 import { OtaApi } from '../../api/gateway/OtaApi'
-import Container from '../base/Container.vue'
+import BaseContainer from '../base/BaseContainer.vue'
 import LoadingButton from '../base/controls/LoadingButton.vue'
 import { toast } from '../../utils/EventBus'
 import AddOtaFirmwareDialog from './AddOtaFirmwareDialog.vue'
@@ -13,7 +13,7 @@ import { h } from 'vue'
 export default {
   name: 'OtaUpdates',
   components: {
-    Container,
+    BaseContainer,
     LoadingButton,
     AddOtaFirmwareDialog,
     OtaFirmwareUploadItem,
@@ -67,8 +67,8 @@ export default {
 </script>
 
 <template>
-  <Container id="ota-updates" style="width: fit-content" :gap="'10vw'">
-    <Container :vertical="true">
+  <BaseContainer id="ota-updates" style="width: fit-content" :gap="'10vw'">
+    <BaseContainer :vertical="true">
       <h1 class="title">
         {{ intl.formatMessage({ id: 'ota.saved.header' }) }}
       </h1>
@@ -82,8 +82,8 @@ export default {
           {{ intl.formatMessage({ id: 'ota.add.button' }) }}
         </h2>
       </LoadingButton>
-    </Container>
-    <Container v-if="!!runningUploads.length" :vertical="true">
+    </BaseContainer>
+    <BaseContainer v-if="!!runningUploads.length" :vertical="true">
       <h1 class="title">
         {{ intl.formatMessage({ id: 'ota.running.header' }) }}
       </h1>
@@ -92,7 +92,7 @@ export default {
         :key="uploadProgress.taskId"
         :uploadProgress="uploadProgress"
       />
-    </Container>
+    </BaseContainer>
     <AddOtaFirmwareDialog
       v-if="addVisible"
       @close="() => (addVisible = false)"
@@ -103,7 +103,7 @@ export default {
         }
       "
     />
-  </Container>
+  </BaseContainer>
 </template>
 
 <style scoped>

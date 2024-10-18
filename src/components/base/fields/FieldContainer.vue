@@ -1,7 +1,7 @@
 <script>
-import Container from '../Container.vue'
+import BaseContainer from '../BaseContainer.vue'
 export default {
-  components: { Container },
+  components: { BaseContainer },
   props: {
     label: String,
     title: String,
@@ -25,8 +25,8 @@ export default {
 </script>
 
 <template>
-  <Container :vertical="vertical">
+  <BaseContainer :vertical="vertical">
     <h3 v-if="label" class="field-label" :style="labelStyle">{{ label }}</h3>
     <slot></slot>
-  </Container>
+  </BaseContainer>
 </template>

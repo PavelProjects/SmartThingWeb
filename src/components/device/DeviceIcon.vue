@@ -35,9 +35,14 @@ export default {
   },
   methods: {
     onError() {
-      console.info("No icon for device [" + this.device?.name + "] were found. If you want add custom icon " +
-        "for this device add " + this.device?.name + ".png image in /img/ folder. You can find this folder " + 
-        "in web page's folder on the server."
+      console.info(
+        'No icon for device [' +
+          this.device?.name +
+          '] were found. If you want add custom icon ' +
+          'for this device add ' +
+          this.device?.name +
+          '.png image in /img/ folder. You can find this folder ' +
+          "in web page's folder on the server."
       )
     }
   }
@@ -45,11 +50,11 @@ export default {
 </script>
 
 <template>
-  <img 
+  <img
     class="device-img"
     :src="imgSrc"
     :style="{ display: loaded ? 'unset' : 'none' }"
-    @load="() => loaded = true"
+    @load="() => (loaded = true)"
     @error="onError"
   />
 </template>

@@ -5,14 +5,14 @@ import { toast } from '../../utils/EventBus'
 import LoadingButton from '../base/controls/LoadingButton.vue'
 import InputField from '../base/fields/InputField.vue'
 import PopUpDialog from './PopUpDialog.vue'
-import Container from '../base/Container.vue'
+import BaseContainer from '../base/BaseContainer.vue'
 
 export default {
   components: {
     InputField,
     PopUpDialog,
     LoadingButton,
-    Container
+    BaseContainer
   },
   data() {
     const intl = useIntl()
@@ -83,7 +83,7 @@ export default {
 
 <template>
   <PopUpDialog @close="$emit('close')">
-    <Container class="gtw-auth-dialog" :vertical="true">
+    <BaseContainer class="gtw-auth-dialog" :vertical="true">
       <h2 class="title">
         {{ intl.formatMessage({ id: 'gateway.cloud.auth.title' }) }}
       </h2>
@@ -92,7 +92,7 @@ export default {
         v-model="cloudToken"
         :validationFailed="cloudToken.length === 0"
       />
-      <Container v-if="parsedToken" :vertical="true">
+      <BaseContainer v-if="parsedToken" :vertical="true">
         <InputField
           :label="intl.formatMessage({ id: 'gateway.cloud.auth.url' })"
           v-model="parsedToken.cloudUrl"
@@ -106,8 +106,8 @@ export default {
         <LoadingButton :loading="loading" @click="authenticate">
           <h2>{{ intl.formatMessage({ id: 'gateway.cloud.auth.connect' }) }}</h2>
         </LoadingButton>
-      </Container>
-    </Container>
+      </BaseContainer>
+    </BaseContainer>
   </PopUpDialog>
 </template>
 
