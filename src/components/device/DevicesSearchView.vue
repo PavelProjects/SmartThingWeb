@@ -230,7 +230,7 @@ export default {
 <template>
   <BaseContainer class="devices-search-view" :vertical="true">
     <h2 v-if="title" class="title">{{ title }}</h2>
-    <BaseContainer class="bordered" :vertical="true">
+    <BaseContainer class="bordered" :vertical="true" :gap="'0'">
       <div style="position: relative">
         <h2 class="title list-title">{{ intl.formatMessage({ id: 'devices.search' }) }}</h2>
         <UpdateButton class="update" :loading="searching" :onClick="loadFoundDevices" />
@@ -239,7 +239,7 @@ export default {
         <DeviceItem
           v-for="deviceInfo of devices"
           :key="deviceInfo.ip"
-          :selected="modelValue.includes(deviceInfo)"
+          :class="modelValue.includes(deviceInfo) && 'device-item-selected'"
           :device="deviceInfo"
           @click="() => handleClick(deviceInfo)"
         />
@@ -254,7 +254,7 @@ export default {
         {{ intl.formatMessage({ id: 'devices.search.disabled' }) }}
       </h2>
     </BaseContainer>
-    <BaseContainer class="bordered" :vertical="true">
+    <BaseContainer class="bordered" :vertical="true" :gap="'0'">
       <div style="position: relative">
         <h2 class="title list-title">{{ intl.formatMessage({ id: 'devices.saved' }) }}</h2>
         <UpdateButton class="update" :loading="loadingSaved" :onClick="loadSavedDevices" />
@@ -266,7 +266,7 @@ export default {
           class="device-item saved-item"
         >
           <DeviceItem
-            :selected="modelValue?.ip == deviceInfo.ip"
+            :class="modelValue.includes(deviceInfo) && 'device-item-selected'"
             :device="deviceInfo"
             @click="() => handleClick(deviceInfo.ip, deviceInfo)"
           />
@@ -307,36 +307,49 @@ export default {
 .devices-search-view {
   width: 350px;
 }
+
 .devices-search-view .list-title {
   border-bottom: 2px solid var(--color-border);
 }
+
 .devices-search-view .update {
   position: absolute;
   right: 0px;
   top: 0px;
 }
+
+.device-item-selected {
+  background-color: var(--color-background-soft);
+}
+
 .device-item:hover {
   transition: background-color 0.5s;
   background-color: var(--color-background-mute);
 }
+
 .devices-list {
   height: fit-content;
-  padding: 2px;
 }
+
 .devices-list .device-item {
   cursor: pointer;
   border-bottom: 1px solid var(--color-border);
 }
+
 .devices-list .device-item:last-child {
   border-bottom: none;
+  border-radius: 0 0 var(--border-radius) var(--border-radius);
 }
+
 .plus-icon {
   margin: auto;
   cursor: pointer;
 }
+
 .saved-item {
   position: relative;
 }
+
 .context-menu {
   position: absolute;
   top: 0px;
