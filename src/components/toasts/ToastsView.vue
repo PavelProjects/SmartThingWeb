@@ -1,11 +1,13 @@
 <script>
 import { EventBus, TOAST } from '../../utils/EventBus.js'
 import ToastItem from './ToastItem.vue'
+import BaseContainer from '../base/BaseContainer.vue'
 
 export default {
   name: 'ToatsView',
   components: {
-    ToastItem
+    ToastItem,
+    BaseContainer,
   },
   data() {
     return {
@@ -33,7 +35,7 @@ export default {
 </script>
 
 <template scoped>
-  <div class="list panel">
+  <BaseContainer :vertical="true">
     <ToastItem
       v-for="[id, { gateway, device, toast }] of Object.entries(toasts)"
       :key="id"
@@ -43,5 +45,5 @@ export default {
       :toast="toast"
       @close="close"
     />
-  </div>
+  </BaseContainer>
 </template>
