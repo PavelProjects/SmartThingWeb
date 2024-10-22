@@ -1,4 +1,5 @@
 <script>
+import { useIntl } from 'vue-intl'
 import BaseContainer from '../base/BaseContainer.vue'
 import DeviceIcon from './DeviceIcon.vue'
 
@@ -13,10 +14,11 @@ export default {
       type: Object
     }
   },
-  computed: {
-    header() {
-      const { name, type } = this.device
-      return `${name} ${type ? '(' + type + ')' : ''}`
+  data() {
+    const intl = useIntl()
+
+    return {
+      intl
     }
   }
 }
@@ -24,12 +26,12 @@ export default {
 <template>
   <BaseContainer class="device-item" :style="style">
     <div class="device-item-table">
-      <h3>Name: {{ device.name }}</h3>
-      <h3>Type: {{ device.type }}</h3>
+      <h3>{{ intl.formatMessage({ id: 'device.item.name' }, device) }}</h3>
+      <h3>{{ intl.formatMessage({ id: 'device.item.type' }, device) }}</h3>
       <h3 @click.stop="() => {}">
         Ip: <a :href="'http://' + device.ip" target="”_blank”">{{ device.ip }}</a>
       </h3>
-      <h3>Board: {{ device.board ?? 'Unknown' }}</h3>
+      <h3>{{ intl.formatMessage({ id: 'device.item.board' }, device) }}</h3>
     </div>
     <DeviceIcon :device="device" />
   </BaseContainer>

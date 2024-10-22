@@ -95,6 +95,10 @@ const messages = {
       other {{ column }}
     }`,
     'device.unreachable': 'Device is unreachable',
+    'device.item.name': 'Name: {name}',
+    'device.item.type': 'Type: {type}',
+    'device.item.ip': 'Ip: {ip}',
+    'device.item.board': 'Board: {board, select, undefined {Unknown} other {{board}}}',
     'device.tabs': `{
       tab, select,
       info {Information}
@@ -427,6 +431,10 @@ const messages = {
       other {{ column }}
     }`,
     'device.unreachable': 'Устройство не доступно',
+    'device.item.name': 'Имя: {name}',
+    'device.item.type': 'Тип: {type}',
+    'device.item.ip': 'Ip: {ip}',
+    'device.item.board': 'Платформа: {board, select, undefined {Неизвестно} other {{board}}}',
     'device.tabs': `{
       tab, select,
       info {Информация}
