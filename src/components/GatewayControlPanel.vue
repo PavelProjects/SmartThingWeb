@@ -3,7 +3,6 @@ import DevicesSearchView from './device/DevicesSearchView.vue'
 import DeviceControlPanel from './device/DeviceControlPanel.vue'
 import { useIntl } from 'vue-intl'
 import DropdownMenu from './menu/DropdownMenu.vue'
-import { toast } from '../utils/EventBus';
 
 export default {
   name: 'DevicesMain',

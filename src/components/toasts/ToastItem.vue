@@ -16,14 +16,14 @@ export default {
       default: () => LIFE_TIME
     },
     device: Object,
-    gateway: Object,
+    gateway: Object
   },
   data() {
     return {
       toastClass: undefined,
       ttlBarWidth: 0,
       delay: this.ttl / 50,
-      interval: undefined,
+      interval: undefined
     }
   },
   computed: {
@@ -121,7 +121,8 @@ export default {
   cursor: pointer;
 }
 
-.toast h2, h3 {
+.toast h2,
+h3 {
   text-align: center;
 }
 
@@ -136,5 +137,4 @@ export default {
   border-radius: var(--border-radius) 0 0 var(--border-radius);
   transition: all 0.2s;
 }
-
 </style>

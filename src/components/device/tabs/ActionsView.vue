@@ -34,7 +34,7 @@ export default {
       } catch (error) {
         console.error(error)
         toast.error({
-          caption: 'Failed to fetch device actions'
+          caption: this.intl.formatMessage({ id: 'device.actions.fetch.error' })
         })
       } finally {
         this.loading = false
@@ -45,13 +45,13 @@ export default {
       try {
         await DeviceApi.executeDeviceAcion(this.device, action, this.gateway)
         toast.success({
-          caption: 'Done'
+          caption: this.intl.formatMessage({ id: 'device.actions.call.succes' })
         })
       } catch (error) {
         console.error(error)
         const { error: description } = await extractDataFromError(error)
         toast.error({
-          caption: 'Failed to execute action ' + action,
+          caption: this.intl.formatMessage({ id: 'device.actions.call.error' }, { action }),
           description
         })
       } finally {

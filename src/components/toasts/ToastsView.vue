@@ -7,7 +7,7 @@ export default {
   name: 'ToatsView',
   components: {
     ToastItem,
-    BaseContainer,
+    BaseContainer
   },
   data() {
     return {

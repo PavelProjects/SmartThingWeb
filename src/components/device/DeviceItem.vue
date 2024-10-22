@@ -1,6 +1,6 @@
 <script>
 import BaseContainer from '../base/BaseContainer.vue'
-import DeviceIcon from './DeviceIcon.vue';
+import DeviceIcon from './DeviceIcon.vue'
 
 export default {
   name: 'DeviceItem',
@@ -11,19 +11,18 @@ export default {
   props: {
     device: {
       type: Object
-    },
+    }
   },
   computed: {
     header() {
       const { name, type } = this.device
       return `${name} ${type ? '(' + type + ')' : ''}`
-    },
+    }
   }
 }
 </script>
 <template>
   <BaseContainer class="device-item" :style="style">
-    
     <div class="device-item-table">
       <h3>Name: {{ device.name }}</h3>
       <h3>Type: {{ device.type }}</h3>
@@ -32,7 +31,7 @@ export default {
       </h3>
       <h3>Board: {{ device.board ?? 'Unknown' }}</h3>
     </div>
-    <DeviceIcon :device="device"/>
+    <DeviceIcon :device="device" />
   </BaseContainer>
 </template>
 

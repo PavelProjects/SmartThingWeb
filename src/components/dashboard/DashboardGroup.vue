@@ -1,5 +1,5 @@
 <script>
-import DashboardValuesView from './DashboardValuesView.vue'
+import DashboardValue from './DashboardValue.vue'
 import ContextMenu from '../menu/ContextMenu.vue'
 import GroupEditDialog from './GroupEditDialog.vue'
 import { useIntl } from 'vue-intl'
@@ -9,15 +9,18 @@ import { toast } from '../../utils/EventBus'
 import UpdateButton from '../base/controls/UpdateButton.vue'
 import BaseContainer from '../base/BaseContainer.vue'
 import { useStompClientStore } from '../../store/stompClientStore'
+import DashboardAction from './DashboardAction.vue'
+import { DeviceApi } from '../../api/device/DeviceApi'
 
 export default {
   components: {
-    DashboardValuesView,
+    DashboardValue,
     ContextMenu,
     GroupEditDialog,
     LoadingButton,
     UpdateButton,
-    BaseContainer
+    BaseContainer,
+    DashboardAction
   },
   name: 'DashboardGroup',
   emits: ['updateGroups'],
@@ -36,6 +39,7 @@ export default {
     return {
       intl,
       observablesValues,
+      actionsInfo: {},
       updateDelay: this.group?.config?.updateDelay || 60000,
       loading: false,
       editing: false,
@@ -74,7 +78,9 @@ export default {
     } catch (error) {
       console.error(error)
     }
+
     this.loadValues()
+    this.loadActions()
   },
   unmounted() {
     const client = useStompClientStore()
@@ -102,6 +108,14 @@ export default {
         toast.error({
           caption: this.intl.formatMessage({ id: 'dashboard.group.values.load.error' })
         })
+      } finally {
+        this.loading = false
+      }
+    },
+    async loadActions() {
+      this.loading = true
+      try {
+        this.actionsInfo = await DeviceApi.getDeviceActionsInfo(this.device, this.gateway)
       } finally {
         this.loading = false
       }
@@ -166,15 +180,28 @@ export default {
           {{ intl.formatMessage({ id: 'dashboard.group.delete' }) }}
         </p>
       </ContextMenu>
-      <BaseContainer class="values" v-if="observables.length > 0">
-        <DashboardValuesView
+      <BaseContainer v-if="observables?.length" class="observables">
+        <DashboardValue
           v-for="({ observable, values }, index) of observablesValues"
           :key="index"
           :observable="observable"
           :values="values"
         />
       </BaseContainer>
-      <LoadingButton v-else class="add-values" @click="editing = true">
+      <BaseContainer v-if="actions?.length" class="actions">
+        <DashboardAction
+          v-for="action of actions"
+          :key="action"
+          :device="device"
+          :action="action"
+          :caption="actionsInfo[action]"
+        />
+      </BaseContainer>
+      <LoadingButton
+        v-if="!observables?.length && !actions?.length"
+        class="add-values"
+        @click="editing = true"
+      >
         <h2>
           {{ intl.formatMessage({ id: 'dashboard.group.add.values' }) }}
         </h2>
@@ -198,14 +225,21 @@ export default {
   left: 2px;
 }
 .add-values {
-  margin: var(--default-gap);
+  margin: var(--default-padding);
 }
-.values .dashboard-values {
-  padding: var(--default-gap);
-  border-right: 2px solid var(--color-border);
+.observables {
+  border-bottom: 2px solid var(--color-border);
 }
-.values .dashboard-values:last-child {
-  border-right: none;
+.observables:last-child {
+  border-bottom: none;
+}
+.actions {
+  padding: 0px var(--default-padding);
+}
+.dashboard-item {
+  width: 200px;
+  text-align: center;
+  margin: var(--default-padding) auto;
 }
 .context-menu {
   position: absolute;
