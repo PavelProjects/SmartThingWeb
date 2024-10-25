@@ -27,7 +27,7 @@ export default {
     async handleClick() {
       this.loading = true
       try {
-        await DeviceApi.executeDeviceAcion(this.device, this.action, this.gateway)
+        await DeviceApi.callAction(this.device, this.action, this.gateway)
         toast.success({
           caption: this.intl.formatMessage({ id: 'device.actions.call.succes' })
         })

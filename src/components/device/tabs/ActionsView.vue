@@ -1,36 +1,34 @@
 <script>
 import SyncLoader from 'vue-spinner/src/SyncLoader.vue'
 import { DeviceApi } from '../../../api/device/DeviceApi.js'
-import LoadingButton from '../../base/controls/LoadingButton.vue'
 import { useIntl } from 'vue-intl'
 import { toast } from '../../../utils/EventBus.js'
-import { extractDataFromError } from '../../../api/ApiUtils.js'
+import ActionItem from './ActionItem.vue'
 
 export default {
   name: 'ActionsView',
   components: {
-    LoadingButton,
+    ActionItem,
     SyncLoader
   },
-  inject: ['device', 'gateway'],
+  inject: ['device', 'gateway', 'features'],
   data() {
     const intl = useIntl()
     return {
       intl,
       actions: [],
-      loading: false,
-      loadingAction: false
+      loading: false
     }
   },
-  created() {
+  mounted() {
+    console.log(this.features)
     this.loadActions()
   },
   methods: {
     async loadActions() {
       this.loading = true
       try {
-        const response = (await DeviceApi.getDeviceActionsInfo(this.device, this.gateway)) || {}
-        this.actions = Object.entries(response)
+        this.actions = (await DeviceApi.getDeviceActionsInfo(this.device, this.gateway)) || {}
       } catch (error) {
         console.error(error)
         toast.error({
@@ -40,23 +38,8 @@ export default {
         this.loading = false
       }
     },
-    async sendAction(action) {
-      this.loadingAction = true
-      try {
-        await DeviceApi.executeDeviceAcion(this.device, action, this.gateway)
-        toast.success({
-          caption: this.intl.formatMessage({ id: 'device.actions.call.succes' })
-        })
-      } catch (error) {
-        console.error(error)
-        const { error: description } = await extractDataFromError(error)
-        toast.error({
-          caption: this.intl.formatMessage({ id: 'device.actions.call.error' }, { action }),
-          description
-        })
-      } finally {
-        this.loadingAction = false
-      }
+    update() {
+      this.loadActions()
     }
   }
 }
@@ -66,15 +49,12 @@ export default {
   <div>
     <sync-loader class="loading-spinner" :loading="loading"></sync-loader>
     <div v-if="actions.length > 0" class="buttons-panel">
-      <LoadingButton
-        v-for="[name, caption] of actions"
-        :key="name"
-        :title="name"
-        :loading="loadingAction"
-        @click="sendAction(name)"
-      >
-        <h1>{{ caption }}</h1>
-      </LoadingButton>
+      <ActionItem
+        v-for="action of actions"
+        :key="action.name"
+        :action="action"
+        @delayUpdated="() => loadActions()"
+      />
     </div>
     <div v-else class="title">
       <h3>{{ intl.formatMessage({ id: 'device.actions.empty' }) }}</h3>
@@ -83,16 +63,9 @@ export default {
 </template>
 
 <style scoped>
-* {
-  text-align: center;
-}
 .buttons-panel {
   display: grid;
   row-gap: var(--default-gap);
   padding: var(--default-padding);
-}
-.buttons-panel button {
-  width: 100%;
-  height: 100%;
 }
 </style>

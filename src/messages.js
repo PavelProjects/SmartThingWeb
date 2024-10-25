@@ -140,6 +140,24 @@ const messages = {
     'device.actions.call.succes': 'Done',
     'device.actions.call.error': 'Failed to execute action {action}',
     'device.actions.fetch.error': 'Failed to fetch device actions',
+    'device.actions.title': `System name: {name}\n{
+      callDelay, select,
+      0 {}
+      other {Call delay: {callDelay}\nLast scheduled call: {lastCall}}
+    }`,
+    'device.actions.delay.validation.error': `Delay can't be negative`,
+    'device.actions.delay.disable.confirm':
+      'Are you sure you want to disable action scheduled call?',
+    'device.actions.delay.update.success': `{
+      callDelay, select,
+      0 {Delay disabled}
+      other {Delay updated}
+    }`,
+    'device.actions.delay.update.error': 'Failed to update delay',
+    'device.actions.delay.title': 'Action scheduled call delay',
+    'device.actions.delay.label': 'Call action every (ms)',
+    'device.actions.delay.save': 'Save',
+    'device.actions.delay.disable': 'Disable',
     'device.actions.empty': 'No actions configured',
     'device.config.button.delete.all': 'Delete all values',
     'device.config.button.save': 'Save',
@@ -476,6 +494,24 @@ const messages = {
     'device.actions.call.succes': 'Выполнено',
     'device.actions.call.error': 'Не удалось выполнить действие {action}',
     'device.actions.fetch.error': 'Не удалось получить список действий устройства',
+    'device.actions.title': `Системное имя: {name}\n{
+      callDelay, select,
+      0 {}
+      other {Пауза между вызовами: {callDelay}\nПоследний вызов: {lastCall}}
+    }`,
+    'device.actions.delay.validation.error': `Пауза не может быть отрицательной`,
+    'device.actions.delay.disable.confirm':
+      'Вы уверены, что хотите отключить плановый вызов действия?',
+    'device.actions.delay.update.success': `{
+      callDelay, select,
+      0 {Плановый вызов был отключен}
+      other {Пауза была обновлена}
+    }`,
+    'device.actions.delay.update.error': 'Не удалось обновить паузу',
+    'device.actions.delay.title': 'Плановый вызов действия',
+    'device.actions.delay.label': 'Вызывать действия каждые (мс)',
+    'device.actions.delay.save': 'Сохранить',
+    'device.actions.delay.disable': 'Отключить',
     'device.actions.empty': 'Нет настроенных действий',
     'device.config.button.delete.all': 'Удалить все значения',
     'device.config.button.save': 'Сохранить',

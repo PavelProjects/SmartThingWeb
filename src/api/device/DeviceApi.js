@@ -7,6 +7,7 @@ export const DeviceApiMethods = {
   GET_ACTIONS: 'getActions',
   SAVE_NAME: 'saveName',
   CALL_ACTION: 'callAction',
+  ACTION_SCHEDULE: 'actionSchedule',
   GET_CONFIG_INFO: 'getConfigInfo',
   GET_CONFIG_VALUES: 'getConfigValues',
   SAVE_CONFIG_VALUES: 'saveConfigValues',
@@ -82,12 +83,23 @@ export const DeviceApi = {
       gateway
     })
   },
-  async executeDeviceAcion(device, action, gateway) {
+  async callAction(device, name, gateway) {
     await deviceFetch({
       device,
       command: DeviceApiMethods.CALL_ACTION,
       params: {
-        action
+        name
+      },
+      gateway
+    })
+  },
+  async actionSchedule(device, name, callDelay, gateway) {
+    await deviceFetch({
+      device,
+      command: DeviceApiMethods.ACTION_SCHEDULE,
+      params: {
+        name,
+        callDelay
       },
       gateway
     })

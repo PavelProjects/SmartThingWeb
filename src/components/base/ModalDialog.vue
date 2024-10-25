@@ -30,6 +30,7 @@ export default {
   margin: auto;
 }
 .dialog-content {
+  min-width: 400px;
   border: 1px solid var(--color-border);
   border-radius: var(--border-radius);
   background-color: var(--color-background);
