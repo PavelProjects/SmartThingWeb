@@ -10,7 +10,7 @@ export default {
     ModalDialog,
     BaseContainer
   },
-  inject: ['gateway'],
+  inject: ['gateway', 'mode'],
   data() {
     return {
       infoUI: BUILD_INFO,
@@ -54,7 +54,7 @@ export default {
           {{ camelToNormal(key) }}: {{ value }}
         </p>
       </BaseContainer>
-      <BaseContainer :vertical="true">
+      <BaseContainer v-if="mode === 'gateway'" :vertical="true">
         <h2 class="title">UI build info</h2>
         <p v-for="[key, value] of Object.entries(infoUI)" :key="key">
           {{ camelToNormal(key) }}: {{ value }}
