@@ -20,11 +20,13 @@ export default {
   emits: ['close'],
   data() {
     const intl = useIntl()
+
     return {
       intl,
       gateways: [],
       loading: false,
-      showCreateDialog: false
+      showCreateDialog: false,
+      modalClass: this.$route.params.gateway ? '' : 'clear-background'
     }
   },
   async mounted() {
@@ -95,7 +97,7 @@ export default {
 </script>
 
 <template>
-  <ModalDialog @close="$emit('close')">
+  <ModalDialog id="gateway-selector" :class="modalClass" @close="$emit('close')">
     <div class="gateway-selector">
       <div class="header">
         <h2 class="title">
@@ -128,7 +130,6 @@ export default {
 <style scoped>
 .gateway-selector {
   margin: auto;
-  width: 300px;
   padding: var(--default-padding);
 }
 .header {
@@ -138,5 +139,8 @@ export default {
   position: absolute;
   top: 0px;
   right: 0px;
+}
+.clear-background::backdrop {
+  background-color: unset;
 }
 </style>

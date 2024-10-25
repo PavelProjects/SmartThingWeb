@@ -89,6 +89,7 @@ dialog {
   padding: 0;
   background-color: transparent;
   outline: none;
+  overflow: visible;
 }
 
 dialog::backdrop {

@@ -62,7 +62,7 @@ export default {
 </script>
 
 <template>
-  <ModalDialog @close="$emit('close')">
+  <ModalDialog id="gateway-edit" @close="$emit('close')">
     <BaseContainer class="gateway-editor" :vertical="true">
       <InputField :label="intl.formatMessage({ id: 'gateway.edit.name' })" v-model="name" />
       <InputField
