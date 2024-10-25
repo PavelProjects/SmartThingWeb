@@ -4,7 +4,7 @@ import { CloudApi } from '../../api/CloudApi'
 import { toast } from '../../utils/EventBus'
 import LoadingButton from '../base/controls/LoadingButton.vue'
 import InputField from '../base/fields/InputField.vue'
-import PopUpDialog from './PopUpDialog.vue'
+import ModalDialog from '../base/ModalDialog.vue'
 import BaseContainer from '../base/BaseContainer.vue'
 
 export default {
@@ -12,7 +12,7 @@ export default {
   components: {
     InputField,
     LoadingButton,
-    PopUpDialog,
+    ModalDialog,
     BaseContainer
   },
   data() {
@@ -56,8 +56,8 @@ export default {
 </script>
 
 <template>
-  <PopUpDialog>
-    <BaseContainer :vertical="true" style="padding: var(--default-gap)" :gap="'5px'">
+  <ModalDialog>
+    <BaseContainer :vertical="true" style="padding: var(--default-padding)" :gap="'5px'">
       <form>
         <InputField
           :label="intl.formatMessage({ id: 'login' })"
@@ -80,5 +80,5 @@ export default {
         </h2>
       </LoadingButton>
     </BaseContainer>
-  </PopUpDialog>
+  </ModalDialog>
 </template>

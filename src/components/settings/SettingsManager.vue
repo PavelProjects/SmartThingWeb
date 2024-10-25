@@ -8,7 +8,7 @@ import MenuItem from '../menu/MenuItem.vue'
 import InputField from '../base/fields/InputField.vue'
 import { DeviceApi } from '../../api/device/DeviceApi'
 import DevicesSearchView from '../device/DevicesSearchView.vue'
-import PopUpDialog from '../dialogs/PopUpDialog.vue'
+import ModalDialog from '../base/ModalDialog.vue'
 import { extractDataFromError } from '../../api/ApiUtils'
 
 const MODE = {
@@ -24,7 +24,7 @@ export default {
     MenuItem,
     InputField,
     DevicesSearchView,
-    PopUpDialog
+    ModalDialog
   },
   inject: ['gateway'],
   data() {
@@ -272,12 +272,12 @@ export default {
           </button>
         </BaseContainer>
       </BaseContainer>
-      <PopUpDialog v-if="mode" @close="mode = undefined">
+      <ModalDialog v-if="mode" @close="mode = undefined">
         <DevicesSearchView
           :title="intl.formatMessage({ id: 'device.settings.editor.select.device' })"
           v-on:update:model-value="handleDeviceClick"
         />
-      </PopUpDialog>
+      </ModalDialog>
     </BaseContainer>
   </BaseContainer>
 </template>
@@ -288,7 +288,7 @@ export default {
   margin: 0 auto;
 }
 .items {
-  padding: var(--default-gap);
+  padding: var(--default-padding);
   border-right: 2px solid var(--color-border);
 }
 .items:last-child {

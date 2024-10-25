@@ -16,7 +16,7 @@ import TestTubeSvg from 'vue-material-design-icons/TestTube.vue'
 import { useIntl } from 'vue-intl'
 import BaseContainer from '../../base/BaseContainer.vue'
 import ContextMenu from '../../menu/ContextMenu.vue'
-import PopUpDialog from '../../dialogs/PopUpDialog.vue'
+import ModalDialog from '../../base/ModalDialog.vue'
 import ChevronDown from 'vue-material-design-icons/ChevronDown.vue'
 import ChevronUp from 'vue-material-design-icons/ChevronUp.vue'
 import { extractDataFromError } from '../../../api/ApiUtils.js'
@@ -46,7 +46,7 @@ export default {
     CancelSVG,
     EditSVG,
     TestTubeSvg,
-    PopUpDialog,
+    ModalDialog,
     ChevronDown,
     ChevronUp
   },
@@ -302,8 +302,8 @@ export default {
         @update:modelValue="(value) => setValue(key, value)"
       />
     </BaseContainer>
-    <PopUpDialog v-if="testDialogVisible" @close="testDialogVisible = false">
-      <BaseContainer :vertical="true" style="padding: var(--default-gap)">
+    <ModalDialog v-if="testDialogVisible" @close="testDialogVisible = false">
+      <BaseContainer :vertical="true" style="padding: var(--default-padding)">
         <InputField
           :label="intl.formatMessage({ id: 'device.hook.test.label' })"
           :type="observable.type === 'sensor' ? 'number' : 'text'"
@@ -315,13 +315,13 @@ export default {
           </h2>
         </LoadingButton>
       </BaseContainer>
-    </PopUpDialog>
+    </ModalDialog>
   </BaseContainer>
 </template>
 
 <style scoped>
 .hook {
-  padding: var(--default-gap);
+  padding: var(--default-padding);
 }
 .icon {
   cursor: pointer;

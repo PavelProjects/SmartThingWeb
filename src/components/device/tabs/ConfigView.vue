@@ -144,7 +144,7 @@ h2 {
 }
 .controls-holder {
   flex: 1 0 auto;
-  padding: var(--default-gap);
+  padding: var(--default-padding);
 }
 .controls-holder button {
   width: 50%;

@@ -5,7 +5,7 @@ import BaseContainer from '../base/BaseContainer.vue'
 import ContextMenu from '../menu/ContextMenu.vue'
 import EditFirmwareInfoDialog from './EditFirmwareInfoDialog.vue'
 import DevicesSearchView from '../device/DevicesSearchView.vue'
-import PopUpDialog from '../dialogs/PopUpDialog.vue'
+import ModalDialog from '../base/ModalDialog.vue'
 import { useIntl } from 'vue-intl'
 import LoadingButton from '../base/controls/LoadingButton.vue'
 
@@ -15,7 +15,7 @@ export default {
     BaseContainer,
     ContextMenu,
     EditFirmwareInfoDialog,
-    PopUpDialog,
+    ModalDialog,
     DevicesSearchView,
     LoadingButton
   },
@@ -129,7 +129,7 @@ export default {
       @updated="handleUpdated"
       :originalInfo="firmware"
     />
-    <PopUpDialog v-if="searchVisible" @close="() => (searchVisible = false)">
+    <ModalDialog v-if="searchVisible" @close="() => (searchVisible = false)">
       <BaseContainer class="device-select" :vertical="true">
         <DevicesSearchView
           :title="intl.formatMessage({ id: 'ota.upload.to' })"
@@ -141,7 +141,7 @@ export default {
           <h2>Upload</h2>
         </LoadingButton>
       </BaseContainer>
-    </PopUpDialog>
+    </ModalDialog>
   </BaseContainer>
 </template>
 

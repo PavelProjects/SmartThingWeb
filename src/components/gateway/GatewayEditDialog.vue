@@ -2,7 +2,7 @@
 import { useIntl } from 'vue-intl'
 import { toast } from '../../utils/EventBus'
 import LoadingButton from '../base/controls/LoadingButton.vue'
-import PopUpDialog from '../dialogs/PopUpDialog.vue'
+import ModalDialog from '../base/ModalDialog.vue'
 import InputField from '../base/fields/InputField.vue'
 import BaseContainer from '../base/BaseContainer.vue'
 
@@ -11,7 +11,7 @@ const NAME_MAX_LENGTH = 32
 export default {
   name: 'GatewayEditDialog',
   components: {
-    PopUpDialog,
+    ModalDialog,
     InputField,
     LoadingButton,
     BaseContainer
@@ -62,7 +62,7 @@ export default {
 </script>
 
 <template>
-  <PopUpDialog @close="$emit('close')">
+  <ModalDialog @close="$emit('close')">
     <BaseContainer class="gateway-editor" :vertical="true">
       <InputField :label="intl.formatMessage({ id: 'gateway.edit.name' })" v-model="name" />
       <InputField
@@ -73,7 +73,7 @@ export default {
         <h2>{{ buttonTitle }}</h2>
       </LoadingButton>
     </BaseContainer>
-  </PopUpDialog>
+  </ModalDialog>
 </template>
 
 <style scoped>

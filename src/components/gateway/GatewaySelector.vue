@@ -5,7 +5,7 @@ import GatewayItem from './GatewayItem.vue'
 import GatewayEditDialog from './GatewayEditDialog.vue'
 import UpdateButton from '../base/controls/UpdateButton.vue'
 import { useIntl } from 'vue-intl'
-import PopUpDialog from '../dialogs/PopUpDialog.vue'
+import ModalDialog from '../base/ModalDialog.vue'
 import BaseContainer from '../base/BaseContainer.vue'
 
 export default {
@@ -14,7 +14,7 @@ export default {
     GatewayItem,
     GatewayEditDialog,
     UpdateButton,
-    PopUpDialog,
+    ModalDialog,
     BaseContainer
   },
   emits: ['close'],
@@ -95,7 +95,7 @@ export default {
 </script>
 
 <template>
-  <PopUpDialog @close="$emit('close')">
+  <ModalDialog @close="$emit('close')">
     <div class="gateway-selector">
       <div class="header">
         <h2 class="title">
@@ -122,7 +122,7 @@ export default {
         @close="showCreateDialog = false"
       />
     </div>
-  </PopUpDialog>
+  </ModalDialog>
 </template>
 
 <style scoped>

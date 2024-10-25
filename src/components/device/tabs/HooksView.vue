@@ -134,7 +134,7 @@ export default {
 
 <style scoped>
 .hook-selector {
-  padding: var(--default-gap);
+  padding: var(--default-padding);
 }
 .hooks-list-view {
   max-height: 80vh;

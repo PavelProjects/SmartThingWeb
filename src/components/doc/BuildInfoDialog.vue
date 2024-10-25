@@ -2,12 +2,12 @@
 import { GatewayApi } from '../../api/gateway/GatewayApi'
 import { BUILD_INFO } from '../../buildInfo'
 import BaseContainer from '../base/BaseContainer.vue'
-import PopUpDialog from '../dialogs/PopUpDialog.vue'
+import ModalDialog from '../base/ModalDialog.vue'
 
 export default {
   name: 'BuildInfoDialog',
   components: {
-    PopUpDialog,
+    ModalDialog,
     BaseContainer
   },
   inject: ['gateway'],
@@ -46,7 +46,7 @@ export default {
 </script>
 
 <template>
-  <PopUpDialog v-bind="$attrs">
+  <ModalDialog v-bind="$attrs">
     <BaseContainer :vertical="true" class="build-info">
       <BaseContainer :vertical="true">
         <h2 class="title">Gateway backend build info</h2>
@@ -61,7 +61,7 @@ export default {
         </p>
       </BaseContainer>
     </BaseContainer>
-  </PopUpDialog>
+  </ModalDialog>
 </template>
 
 <style scoped>

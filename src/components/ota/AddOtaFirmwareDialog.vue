@@ -6,7 +6,7 @@ import InputField from '../base/fields/InputField.vue'
 import ComboBoxField from '../base/fields/ComboBoxField.vue'
 import { toast } from '../../utils/EventBus'
 import FileField from '../base/fields/FileField.vue'
-import PopUpDialog from '../dialogs/PopUpDialog.vue'
+import ModalDialog from '../base/ModalDialog.vue'
 import { useIntl } from 'vue-intl'
 import { extractDataFromError } from '../../api/ApiUtils'
 
@@ -18,7 +18,7 @@ export default {
     InputField,
     FileField,
     ComboBoxField,
-    PopUpDialog
+    ModalDialog
   },
   emits: ['created'],
   data() {
@@ -67,7 +67,7 @@ export default {
 </script>
 
 <template>
-  <PopUpDialog v-bind="$attrs">
+  <ModalDialog v-bind="$attrs">
     <BaseContainer :vertical="true" id="add-firmware">
       <h2 class="title">
         {{ intl.formatMessage({ id: 'ota.add.header' }) }}
@@ -100,7 +100,7 @@ export default {
         </h2>
       </LoadingButton>
     </BaseContainer>
-  </PopUpDialog>
+  </ModalDialog>
 </template>
 
 <style>

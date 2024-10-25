@@ -89,7 +89,7 @@ export default {
 .buttons-panel {
   display: grid;
   row-gap: var(--default-gap);
-  padding: var(--default-gap);
+  padding: var(--default-padding);
 }
 .buttons-panel button {
   width: 100%;

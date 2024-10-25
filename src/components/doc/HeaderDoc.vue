@@ -1,17 +1,17 @@
 <script>
-import GatewayAuthInfo from './GatewayAuthInfo.vue'
+import GatewayCloudStatus from './gateway/GatewayCloudStatus.vue'
 import MenuSvg from 'vue-material-design-icons/Menu.vue'
-import UserAuthInfo from './UserAuthInfo.vue'
+import UserAuthInfo from './cloud/UserAuthInfo.vue'
 import { useIntl } from 'vue-intl'
 import GatewaySelector from '../gateway/GatewaySelector.vue'
 import BaseContainer from '../base/BaseContainer.vue'
 import LocaleSelector from './LocaleSelector.vue'
-import BuildInfoDialog from '../dialogs/BuildInfoDialog.vue'
+import BuildInfoDialog from './BuildInfoDialog.vue'
 
 export default {
   name: 'HeaderDoc',
   components: {
-    GatewayAuthInfo,
+    GatewayCloudStatus,
     MenuSvg,
     UserAuthInfo,
     GatewaySelector,
@@ -98,7 +98,7 @@ export default {
       </h1>
     </div>
     <UserAuthInfo v-if="mode === 'cloud'" class="log-in-info" />
-    <GatewayAuthInfo v-if="mode === 'gateway'" class="log-in-info" />
+    <GatewayCloudStatus v-if="mode === 'gateway'" class="log-in-info" />
     <LocaleSelector />
     <GatewaySelector
       v-if="mode === 'cloud' && gatewaySelectorVisible"

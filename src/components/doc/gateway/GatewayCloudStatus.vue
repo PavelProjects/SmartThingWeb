@@ -1,20 +1,22 @@
 <script>
-import { GatewayApi } from '../../api/gateway/GatewayApi.js'
-import InputField from '../base/fields/InputField.vue'
-import LoadingButton from '../base/controls/LoadingButton.vue'
-import GatewayAuthDialog from '../dialogs/GatewayAuthDialog.vue'
-import { toast } from '../../utils/EventBus.js'
-import { useStompClientStore } from '../../store/stompClientStore.js'
+import { GatewayApi } from '../../../api/gateway/GatewayApi.js'
+import InputField from '../../base/fields/InputField.vue'
+import LoadingButton from '../../base/controls/LoadingButton.vue'
+import GatewayCloudConnect from './GatewayCloudConnect.vue'
+import { toast } from '../../../utils/EventBus.js'
+import { useStompClientStore } from '../../../store/stompClientStore.js'
 import { useIntl } from 'vue-intl'
-import BaseContainer from '../base/BaseContainer.vue'
+import BaseContainer from '../../base/BaseContainer.vue'
+import ModalDialog from '../../base/ModalDialog.vue'
 
 export default {
-  name: 'GatewayAuthInfo',
+  name: 'GatewayCloudStatus',
   components: {
     InputField,
     LoadingButton,
-    GatewayAuthDialog,
-    BaseContainer
+    GatewayCloudConnect,
+    BaseContainer,
+    ModalDialog
   },
   data() {
     const stompClient = useStompClientStore()
@@ -24,10 +26,8 @@ export default {
       intl,
       stompClient,
       dialogVisible: false,
-      authDialogVisible: false,
       status: '',
-      gateway: undefined,
-      user: undefined
+      auth: undefined
     }
   },
   mounted() {
@@ -56,9 +56,6 @@ export default {
         this.cloudConfig = await GatewayApi.getCloudConfig()
       } catch (error) {
         console.error(error)
-        toast.error({
-          caption: 'Failed to fetch cloud info'
-        })
       }
     },
     async getConnStatus() {
@@ -70,14 +67,9 @@ export default {
     },
     async loadAuthentication() {
       try {
-        const auth = (await GatewayApi.getCloudAuthentication()) ?? {}
-        this.gateway = auth.gateway
-        this.user = auth.user
+        this.auth = (await GatewayApi.getCloudAuthentication()) ?? {}
       } catch (error) {
         console.error(error)
-        toast.error({
-          caption: 'Failed to fetch cloud authentication info'
-        })
       }
     },
     async connect() {
@@ -120,10 +112,9 @@ export default {
         }
       }
     },
-    async authDialogCloseHandle() {
-      this.authDialogVisible = false
+    async cloudConnected() {
       await this.loadAuthentication()
-      if (this.gateway) {
+      if (this.auth.gateway) {
         this.loadCloudConfig()
         this.connect()
       }
@@ -139,46 +130,38 @@ export default {
         {{ connectionStatus }}
       </h2>
     </div>
-    <div v-if="dialogVisible" class="overlay" @click.stop="dialogVisible = false">
-      <BaseContainer class="dialog" @click.stop="() => {}" :vertical="true">
-        <BaseContainer v-if="gateway" :vertical="true">
-          <h2 class="title">
-            {{ intl.formatMessage({ id: 'gateway.cloud.info' }) }}
-          </h2>
+    <ModalDialog v-if="dialogVisible" @close="dialogVisible = false">
+      <BaseContainer class="cloud-info" @click.stop="() => {}" :vertical="true">
+        <h2 class="title">
+          {{ intl.formatMessage({ id: 'gateway.cloud.info' }) }}
+        </h2>
+        <BaseContainer v-if="auth" :vertical="true">
+          <InputField
+            v-if="cloudConfig"
+            :label="intl.formatMessage({ id: 'gateway.cloud.config' })"
+            :modelValue="cloudConfig.cloudUrl"
+            :disabled="true"
+          />
           <InputField
             :label="intl.formatMessage({ id: 'gateway.cloud.info.user' })"
-            :modelValue="user.login"
-            :title="user.id"
+            :modelValue="auth.user.login"
+            :title="auth.user.id"
             :disabled="true"
-            :vertical="false"
           />
           <InputField
             :label="intl.formatMessage({ id: 'gateway.cloud.info.gateway.id' })"
-            :modelValue="gateway.id"
+            :modelValue="auth.gateway.id"
             :disabled="true"
-            :vertical="false"
           />
           <InputField
             :label="intl.formatMessage({ id: 'gateway.cloud.info.gateway.name' })"
-            :modelValue="gateway.name"
+            :modelValue="auth.gateway.name"
             :disabled="true"
-            :vertical="false"
           />
           <InputField
             :label="intl.formatMessage({ id: 'gateway.cloud.info.gateway.description' })"
-            :modelValue="gateway.description"
-            :vertical="false"
-          />
-        </BaseContainer>
-        <BaseContainer v-if="cloudConfig" :vertical="true">
-          <h2 class="title">
-            {{ intl.formatMessage({ id: 'gateway.cloud.config' }) }}
-          </h2>
-          <InputField
-            :label="intl.formatMessage({ id: 'gateway.cloud.config.url' })"
-            :modelValue="cloudConfig.cloudUrl"
+            :modelValue="auth.gateway.description"
             :disabled="true"
-            :vertical="false"
           />
           <LoadingButton
             v-if="
@@ -197,12 +180,14 @@ export default {
             <h2>{{ intl.formatMessage({ id: 'log.out' }) }}</h2>
           </LoadingButton>
         </BaseContainer>
-        <button v-if="!cloudConfig" class="btn" @click="authDialogVisible = true">
-          <h2>{{ intl.formatMessage({ id: 'gateway.cloud.add.token' }) }}</h2>
-        </button>
+        <BaseContainer v-if="!auth" :vertical="true">
+          <h3>
+            {{ intl.formatMessage({ id: 'gateway.cloud.info.missing' }) }}
+          </h3>
+          <GatewayCloudConnect @connected="cloudConnected" />
+        </BaseContainer>
       </BaseContainer>
-    </div>
-    <GatewayAuthDialog v-if="authDialogVisible" @close="authDialogCloseHandle" />
+    </ModalDialog>
   </div>
 </template>
 
@@ -211,16 +196,8 @@ export default {
   cursor: pointer;
   user-select: none;
 }
-.dialog {
-  min-width: 320px;
-  position: absolute;
-  top: var(--default-gap);
-  right: var(--default-gap);
-  background-color: var(--color-background-mute);
-  border-radius: var(--border-radius);
-  padding: var(--default-gap);
-}
-.dialog * {
-  flex: 1 0 auto;
+.cloud-info {
+  min-width: 400px;
+  padding: var(--default-padding);
 }
 </style>

@@ -5,7 +5,7 @@ import BaseContainer from '../base/BaseContainer.vue'
 import InputField from '../base/fields/InputField.vue'
 import ComboBoxField from '../base/fields/ComboBoxField.vue'
 import LoadingButton from '../base/controls/LoadingButton.vue'
-import PopUpDialog from '../dialogs/PopUpDialog.vue'
+import ModalDialog from '../base/ModalDialog.vue'
 import { useIntl } from 'vue-intl'
 import { extractDataFromError } from '../../api/ApiUtils'
 
@@ -13,7 +13,7 @@ export default {
   name: 'EditFirmwareInfoDialog',
   components: {
     BaseContainer,
-    PopUpDialog,
+    ModalDialog,
     InputField,
     ComboBoxField,
     LoadingButton
@@ -61,7 +61,7 @@ export default {
 </script>
 
 <template>
-  <PopUpDialog v-bind="$attrs">
+  <ModalDialog v-bind="$attrs">
     <BaseContainer :vertical="true" class="edit-firmware">
       <h2 class="title">
         {{ intl.formatMessage({ id: 'ota.edit.header' }) }}
@@ -88,7 +88,7 @@ export default {
         </h2>
       </LoadingButton>
     </BaseContainer>
-  </PopUpDialog>
+  </ModalDialog>
 </template>
 
 <style scoped>

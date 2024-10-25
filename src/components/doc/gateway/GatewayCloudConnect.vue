@@ -1,16 +1,15 @@
 <script>
 import { useIntl } from 'vue-intl'
-import { GatewayApi } from '../../api/gateway/GatewayApi'
-import { toast } from '../../utils/EventBus'
-import LoadingButton from '../base/controls/LoadingButton.vue'
-import InputField from '../base/fields/InputField.vue'
-import PopUpDialog from './PopUpDialog.vue'
-import BaseContainer from '../base/BaseContainer.vue'
+import { GatewayApi } from '../../../api/gateway/GatewayApi'
+import { toast } from '../../../utils/EventBus'
+import LoadingButton from '../../base/controls/LoadingButton.vue'
+import InputField from '../../base/fields/InputField.vue'
+import BaseContainer from '../../base/BaseContainer.vue'
 
 export default {
+  name: 'GatewayCloudConnect',
   components: {
     InputField,
-    PopUpDialog,
     LoadingButton,
     BaseContainer
   },
@@ -23,7 +22,7 @@ export default {
       intl
     }
   },
-  emits: ['close'],
+  emits: ['connected'],
   watch: {
     cloudToken() {
       if (!this.cloudToken) {
@@ -58,7 +57,7 @@ export default {
         toast.success({
           caption: 'Successfuly authenticated in cloud'
         })
-        this.$emit('close')
+        this.$emit('connected')
       } catch (error) {
         console.error(error)
         const { response } = error || {}
@@ -82,40 +81,33 @@ export default {
 </script>
 
 <template>
-  <PopUpDialog @close="$emit('close')">
-    <BaseContainer class="gtw-auth-dialog" :vertical="true">
-      <h2 class="title">
-        {{ intl.formatMessage({ id: 'gateway.cloud.auth.title' }) }}
-      </h2>
+  <BaseContainer class="gtw-auth-dialog" :vertical="true">
+    <InputField
+      :label="intl.formatMessage({ id: 'gateway.cloud.auth.conn.token' })"
+      v-model="cloudToken"
+      :validationFailed="cloudToken.length === 0"
+    />
+    <BaseContainer v-if="parsedToken" :vertical="true">
       <InputField
-        :label="intl.formatMessage({ id: 'gateway.cloud.auth.conn.token' })"
-        v-model="cloudToken"
-        :validationFailed="cloudToken.length === 0"
+        :label="intl.formatMessage({ id: 'gateway.cloud.auth.url' })"
+        v-model="parsedToken.cloudUrl"
+        :validationFailed="parsedToken.cloudUrl.length === 0"
       />
-      <BaseContainer v-if="parsedToken" :vertical="true">
-        <InputField
-          :label="intl.formatMessage({ id: 'gateway.cloud.auth.url' })"
-          v-model="parsedToken.cloudUrl"
-          :validationFailed="parsedToken.cloudUrl.length === 0"
-        />
-        <InputField
-          :label="intl.formatMessage({ id: 'gateway.cloud.auth.token' })"
-          v-model="parsedToken.token"
-          :validationFailed="parsedToken.token.length === 0"
-        />
-        <LoadingButton :loading="loading" @click="authenticate">
-          <h2>{{ intl.formatMessage({ id: 'gateway.cloud.auth.connect' }) }}</h2>
-        </LoadingButton>
-      </BaseContainer>
+      <InputField
+        :label="intl.formatMessage({ id: 'gateway.cloud.auth.token' })"
+        v-model="parsedToken.token"
+        :validationFailed="parsedToken.token.length === 0"
+      />
+      <LoadingButton :loading="loading" @click="authenticate">
+        <h2>{{ intl.formatMessage({ id: 'gateway.cloud.auth.connect' }) }}</h2>
+      </LoadingButton>
     </BaseContainer>
-  </PopUpDialog>
+  </BaseContainer>
 </template>
 
 <style scoped>
 .gtw-auth-dialog {
   gap: calc(3 * var(--default-gap));
-  padding: var(--default-gap);
-  width: 500px;
 }
 .gtw-auth-dialog button {
   flex: 1 0 auto;
