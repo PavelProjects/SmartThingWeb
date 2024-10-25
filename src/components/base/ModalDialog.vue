@@ -10,7 +10,6 @@ export default {
     open: Boolean
   },
   mounted() {
-    console.log(this.id)
     // it's okat bcz we can open only one modal dialog at the moment
     document.getElementById(this.id)?.showModal()
   },

@@ -232,7 +232,7 @@ export default {
     <h2 v-if="title" class="header">{{ title }}</h2>
     <BaseContainer class="bordered" :vertical="true" :gap="'0'">
       <div style="position: relative">
-        <h2 class="title list-title">{{ intl.formatMessage({ id: 'devices.search' }) }}</h2>
+        <h2 class="header list-title">{{ intl.formatMessage({ id: 'devices.search' }) }}</h2>
         <UpdateButton class="update" :loading="searching" :onClick="loadFoundDevices" />
       </div>
       <BaseContainer v-if="searchEnabled" class="devices-list" :vertical="true">
@@ -260,7 +260,7 @@ export default {
     </BaseContainer>
     <BaseContainer class="bordered" :vertical="true" :gap="'0'">
       <div style="position: relative">
-        <h2 class="title list-title">{{ intl.formatMessage({ id: 'devices.saved' }) }}</h2>
+        <h2 class="header list-title">{{ intl.formatMessage({ id: 'devices.saved' }) }}</h2>
         <UpdateButton class="update" :loading="loadingSaved" :onClick="loadSavedDevices" />
       </div>
       <BaseContainer class="devices-list" :vertical="true">
