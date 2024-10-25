@@ -78,3 +78,14 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+dialog {
+  color: var(--color-text);
+  border: none;
+  padding: 0;
+  background-color: transparent;
+}
+
+dialog::backdrop {
+  background-color: var(--background-tilt);
+}

@@ -139,8 +139,8 @@ export default {
         {{ connectionStatus }}
       </h2>
     </div>
-    <div v-if="dialogVisible" class="overlay" @click.stop="dialogVisible = false">
-      <BaseContainer class="dialog" @click.stop="() => {}" :vertical="true">
+    <dialog class="auth-info-dialog" :open="dialogVisible" @click.stop="dialogVisible = false">
+      <BaseContainer @click.stop="() => {}" :vertical="true">
         <BaseContainer v-if="gateway" :vertical="true">
           <h2 class="title">
             {{ intl.formatMessage({ id: 'gateway.cloud.info' }) }}
@@ -201,7 +201,7 @@ export default {
           <h2>{{ intl.formatMessage({ id: 'gateway.cloud.add.token' }) }}</h2>
         </button>
       </BaseContainer>
-    </div>
+    </dialog>
     <GatewayAuthDialog v-if="authDialogVisible" @close="authDialogCloseHandle" />
   </div>
 </template>
