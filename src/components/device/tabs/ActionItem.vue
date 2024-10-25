@@ -99,7 +99,9 @@ export default {
   <BaseContainer :vertical="false">
     <LoadingButton
       class="action-button"
-      :title="intl.formatMessage({ id: 'device.actions.title' }, { callDelay: 0, lastCall: 0, ...action})"
+      :title="
+        intl.formatMessage({ id: 'device.actions.title' }, { callDelay: 0, lastCall: 0, ...action })
+      "
       :loading="loading"
       @click="callAction(action.name)"
     >
