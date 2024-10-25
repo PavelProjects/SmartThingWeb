@@ -24,7 +24,7 @@ export default {
 }
 </script>
 <template>
-  <BaseContainer class="device-item" :style="style">
+  <BaseContainer class="device-item">
     <div class="device-item-table">
       <h3>{{ intl.formatMessage({ id: 'device.item.name' }, device) }}</h3>
       <h3>{{ intl.formatMessage({ id: 'device.item.type' }, device) }}</h3>

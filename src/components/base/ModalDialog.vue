@@ -7,7 +7,30 @@ export default {
       type: String,
       default: () => 'modal-dialog'
     },
-    open: Boolean
+    open: Boolean,
+    size: {
+      type: String,
+      validator(value) {
+        return ['small', 'regular', 'large'].includes(value)
+      }
+    }
+  },
+  data() {
+    let width
+    switch (this.size) {
+      case 'small':
+        width = 250
+        break
+      case 'large':
+        width = 800
+        break
+      default:
+        width = 400
+    }
+
+    return {
+      width: width + 'px'
+    }
   },
   mounted() {
     // it's okat bcz we can open only one modal dialog at the moment
@@ -23,7 +46,7 @@ export default {
 
 <template>
   <dialog :id="id" class="dialog-container" @click.stop="closeDialog" @close="closeDialog">
-    <div class="dialog-content" @click.stop="() => {}">
+    <div class="dialog-content" :style="{ width: width }" @click.stop="() => {}">
       <slot></slot>
     </div>
   </dialog>
@@ -34,7 +57,6 @@ export default {
   margin: auto;
 }
 .dialog-content {
-  min-width: 400px;
   border: 1px solid var(--color-border);
   border-radius: var(--border-radius);
   background-color: var(--color-background);

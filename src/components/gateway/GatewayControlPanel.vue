@@ -44,7 +44,7 @@ export default {
       this.windowWidth = window.innerWidth
     },
     handleDeviceDelete(ip) {
-      if (this.device.ip === ip) {
+      if (this.device?.ip === ip) {
         this.device = undefined
         this.searchExpanded = true
       }

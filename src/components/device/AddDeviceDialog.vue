@@ -60,7 +60,7 @@ export default {
 </script>
 
 <template>
-  <ModalDialog v-bind="$attrs">
+  <ModalDialog v-bind="$attrs" size="small">
     <BaseContainer class="add-device-dialog" :vertical="true">
       <h2 class="header">
         {{ intl.formatMessage({ id: 'devices.saved.add.title' }) }}
