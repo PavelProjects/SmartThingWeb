@@ -229,7 +229,7 @@ export default {
 
 <template>
   <BaseContainer class="devices-search-view" :vertical="true">
-    <h2 v-if="title" class="title">{{ title }}</h2>
+    <h2 v-if="title" class="header">{{ title }}</h2>
     <BaseContainer class="bordered" :vertical="true" :gap="'0'">
       <div style="position: relative">
         <h2 class="title list-title">{{ intl.formatMessage({ id: 'devices.search' }) }}</h2>
@@ -243,14 +243,18 @@ export default {
           :device="deviceInfo"
           @click="() => handleClick(deviceInfo)"
         />
-        <h2 v-if="!searching && Object.keys(devices).length == 0" class="title">
+        <h2 v-if="!searching && Object.keys(devices).length == 0" class="header">
           {{ intl.formatMessage({ id: 'devices.search.empty' }) }}
         </h2>
-        <h2 v-if="searching && Object.keys(devices).length == 0" class="title">
+        <h2 v-if="searching && Object.keys(devices).length == 0" class="header">
           {{ intl.formatMessage({ id: 'devices.search.in.progress' }) }}
         </h2>
       </BaseContainer>
-      <h2 v-else class="title" :title="intl.formatMessage({ id: 'devices.search.disabled.title' })">
+      <h2
+        v-else
+        class="header"
+        :title="intl.formatMessage({ id: 'devices.search.disabled.title' })"
+      >
         {{ intl.formatMessage({ id: 'devices.search.disabled' }) }}
       </h2>
     </BaseContainer>
@@ -279,7 +283,7 @@ export default {
             </p>
           </ContextMenu>
         </div>
-        <h2 v-if="!loadingSaved && savedDevices.length == 0" class="title">
+        <h2 v-if="!loadingSaved && savedDevices.length == 0" class="header">
           {{ intl.formatMessage({ id: 'devices.saved.empty' }) }}
         </h2>
         <PlusSVG

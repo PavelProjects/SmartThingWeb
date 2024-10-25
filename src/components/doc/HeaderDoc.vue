@@ -89,7 +89,7 @@ export default {
     </router-link>
     <div v-if="gatewayName" class="gateway-info">
       <h1
-        class="title"
+        class="header"
         style="cursor: pointer"
         :title="`Gateway id: ${gateway.id ?? 'ID_MSSING'}`"
         @click.stop="gatewaySelectorVisible = true"

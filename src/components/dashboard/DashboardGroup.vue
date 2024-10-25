@@ -169,7 +169,7 @@ export default {
         :loading="loading"
         :onClick="() => updateValues()"
       />
-      <h2 class="title" :title="deviceTitle">
+      <h2 class="header" :title="deviceTitle">
         {{ group.device.name }}
       </h2>
       <ContextMenu class="context-menu">

@@ -126,13 +126,13 @@ export default {
 <template>
   <div>
     <div class="status" @click="dialogVisible = !dialogVisible">
-      <h2 class="title" :title="intl.formatMessage({ id: 'gateway.cloud.conn.status.title' })">
+      <h2 class="header" :title="intl.formatMessage({ id: 'gateway.cloud.conn.status.title' })">
         {{ connectionStatus }}
       </h2>
     </div>
     <ModalDialog v-if="dialogVisible" @close="dialogVisible = false">
       <BaseContainer class="cloud-info" @click.stop="() => {}" :vertical="true">
-        <h2 class="title">
+        <h2 class="header">
           {{ intl.formatMessage({ id: 'gateway.cloud.info' }) }}
         </h2>
         <BaseContainer v-if="auth" :vertical="true">

@@ -80,7 +80,7 @@ export default {
 
 <template>
   <div class="danger-container">
-    <h1 class="title">
+    <h1 class="header">
       {{ intl.formatMessage({ id: 'danger.title' }) }}
     </h1>
     <BaseContainer :vertical="true" :gap="'var(--default-gap)'">

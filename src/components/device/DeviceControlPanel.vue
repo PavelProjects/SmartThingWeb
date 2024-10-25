@@ -140,7 +140,7 @@ export default {
 <template>
   <div v-if="!unreachable">
     <BaseContainer class="control-panel-header">
-      <h1 class="title">
+      <h1 class="header">
         {{ intl.formatMessage({ id: 'gateway.panel' }, { device: device.name }) }}
       </h1>
       <DeviceIcon :device="device" />

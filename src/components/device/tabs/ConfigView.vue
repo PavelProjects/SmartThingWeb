@@ -132,7 +132,7 @@ export default {
         <h2>{{ intl.formatMessage({ id: 'device.config.button.save' }) }}</h2>
       </LoadingButton>
     </BaseContainer>
-    <h2 v-if="!haveConfigEntries" class="title">
+    <h2 v-if="!haveConfigEntries" class="header">
       {{ intl.formatMessage({ id: 'device.config.empty.entries' }) }}
     </h2>
   </BaseContainer>

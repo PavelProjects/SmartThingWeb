@@ -130,7 +130,7 @@ export default {
 <template>
   <ModalDialog @close="handleClose">
     <BaseContainer :vertical="true">
-      <h2 class="title">
+      <h2 class="header">
         {{ intl.formatMessage({ id: 'dashboard.group.edit.title' }, { name: device.name }) }}
       </h2>
       <BaseContainer :vertical="true">

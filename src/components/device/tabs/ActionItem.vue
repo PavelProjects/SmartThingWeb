@@ -114,7 +114,7 @@ export default {
     />
     <ModalDialog v-if="scheduleVisible" @close="() => (scheduleVisible = false)">
       <BaseContainer class="schedule-dialog" :vertical="true">
-        <h2 class="title">
+        <h2 class="header">
           {{ intl.formatMessage({ id: 'device.actions.delay.title' }) }}
         </h2>
         <InputField

@@ -56,7 +56,7 @@ export default {
         @delayUpdated="() => loadActions()"
       />
     </div>
-    <div v-else class="title">
+    <div v-else class="header">
       <h3>{{ intl.formatMessage({ id: 'device.actions.empty' }) }}</h3>
     </div>
   </div>

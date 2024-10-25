@@ -63,7 +63,7 @@ export default {
 <template>
   <ModalDialog v-bind="$attrs">
     <BaseContainer :vertical="true" class="edit-firmware">
-      <h2 class="title">
+      <h2 class="header">
         {{ intl.formatMessage({ id: 'ota.edit.header' }) }}
       </h2>
       <ComboBoxField

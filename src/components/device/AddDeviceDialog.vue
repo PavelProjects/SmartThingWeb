@@ -62,7 +62,7 @@ export default {
 <template>
   <ModalDialog v-bind="$attrs">
     <BaseContainer class="add-device-dialog" :vertical="true">
-      <h2 class="title">
+      <h2 class="header">
         {{ intl.formatMessage({ id: 'devices.saved.add.title' }) }}
       </h2>
       <InputField

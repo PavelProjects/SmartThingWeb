@@ -77,7 +77,7 @@ export default {
   <BaseContainer class="bordered" :vertical="true" :gap="'0px'">
     <div class="info-view">
       <div class="firmware-info">
-        <h2 class="title">
+        <h2 class="header">
           {{ intl.formatMessage({ id: 'ota.upload.block.firmware' }) }}
         </h2>
         <h3>{{ intl.formatMessage({ id: 'ota.firmware.info.board' }) }}: {{ firmware.board }}</h3>
@@ -87,7 +87,7 @@ export default {
         </h3>
       </div>
       <div class="device-info">
-        <h2 class="title">
+        <h2 class="header">
           {{ intl.formatMessage({ id: 'ota.upload.block.device' }) }}
         </h2>
         <DeviceItem :device="device" />

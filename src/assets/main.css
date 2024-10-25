@@ -11,7 +11,7 @@ a,
   color: var(--color-danger);
 }
 
-.title {
+.header {
   text-align: center;
   text-decoration: none;
   color: var(--color-positive);

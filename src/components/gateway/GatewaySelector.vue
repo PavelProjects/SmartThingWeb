@@ -100,7 +100,7 @@ export default {
   <ModalDialog id="gateway-selector" :class="modalClass" @close="$emit('close')">
     <div class="gateway-selector">
       <div class="header">
-        <h2 class="title">
+        <h2 class="header">
           {{ intl.formatMessage({ id: 'gateway.selector.title' }) }}
         </h2>
         <UpdateButton class="update" :loading="loading" :onClick="loadGateways" />

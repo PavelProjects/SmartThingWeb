@@ -211,7 +211,7 @@ export default {
 
 <template>
   <BaseContainer :vertical="true">
-    <h1 class="title">{{ intl.formatMessage({ id: 'device.settings.manager.menu.header' }) }}</h1>
+    <h1 class="header">{{ intl.formatMessage({ id: 'device.settings.manager.menu.header' }) }}</h1>
     <BaseContainer class="bordered settings-manager">
       <BaseContainer class="items" :vertical="true">
         <MenuItem
@@ -232,7 +232,7 @@ export default {
           :label="intl.formatMessage({ id: 'device.settings.editor.name' })"
           v-model="selectedSettings.name"
         />
-        <h2 class="title">
+        <h2 class="header">
           {{ intl.formatMessage({ id: 'device.settings.editor.title' }) }}
         </h2>
         <textarea class="editor" v-model="selectedSettings.value"></textarea>

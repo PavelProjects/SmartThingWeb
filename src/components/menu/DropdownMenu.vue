@@ -52,7 +52,7 @@ export default {
           <ChevronLeft v-else title="Hide" :size="35" />
         </div>
         <BaseContainer v-else>
-          <h2 v-if="placeholder" class="title">
+          <h2 v-if="placeholder" class="header">
             {{ placeholder }}
           </h2>
           <ChevronRight v-if="!vertical" title="Expand" :size="35" />

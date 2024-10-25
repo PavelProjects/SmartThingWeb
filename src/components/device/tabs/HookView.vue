@@ -261,7 +261,7 @@ export default {
     <BaseContainer>
       <ChevronUp v-if="expanded" @click.stop="() => (expanded = false)" />
       <ChevronDown v-else @click.stop="() => (expanded = true)" />
-      <h3 class="title" style="flex: 1 1 auto; text-align: start">
+      <h3 class="header" style="flex: 1 1 auto; text-align: start">
         [{{ hook.id }}] {{ hook.caption || systemNameToNormal(hook.type) }}
       </h3>
       <BaseContainer>

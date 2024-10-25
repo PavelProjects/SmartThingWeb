@@ -69,7 +69,7 @@ export default {
 <template>
   <BaseContainer id="ota-updates" style="width: fit-content" :gap="'10vw'">
     <BaseContainer :vertical="true">
-      <h1 class="title">
+      <h1 class="header">
         {{ intl.formatMessage({ id: 'ota.saved.header' }) }}
       </h1>
       <TreeView
@@ -84,7 +84,7 @@ export default {
       </LoadingButton>
     </BaseContainer>
     <BaseContainer v-if="!!runningUploads.length" :vertical="true">
-      <h1 class="title">
+      <h1 class="header">
         {{ intl.formatMessage({ id: 'ota.running.header' }) }}
       </h1>
       <OtaFirmwareUploadItem

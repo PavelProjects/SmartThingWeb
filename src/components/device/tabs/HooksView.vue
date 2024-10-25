@@ -104,7 +104,7 @@ export default {
 
 <template>
   <div>
-    <h2 class="title">{{ intl.formatMessage({ id: 'device.hooks.title' }) }}</h2>
+    <h2 class="header">{{ intl.formatMessage({ id: 'device.hooks.title' }) }}</h2>
     <sync-loader class="loading-spinner" :loading="loading"></sync-loader>
     <div v-if="!loading">
       <ComboBoxField
@@ -125,7 +125,7 @@ export default {
           @removeHook="() => hooks.splice(index, 1)"
         />
       </div>
-      <div v-else class="title">
+      <div v-else class="header">
         <h3>{{ intl.formatMessage({ id: 'device.hooks.empty' }) }}</h3>
       </div>
     </div>

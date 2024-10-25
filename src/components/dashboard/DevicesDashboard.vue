@@ -76,7 +76,7 @@ export default {
       />
       <BaseContainer v-if="!loading" :vertical="true">
         <div v-if="!groups?.length">
-          <h2 class="title">
+          <h2 class="header">
             {{ intl.formatMessage({ id: 'dashboard.groups.empty' }) }}
           </h2>
         </div>

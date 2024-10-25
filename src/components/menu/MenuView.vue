@@ -83,7 +83,7 @@ export default {
 
 <template>
   <BaseContainer :vertical="true">
-    <h1 v-if="header" class="title">{{ header }}</h1>
+    <h1 v-if="header" class="header">{{ header }}</h1>
     <div v-if="tabs" class="menu-panel" :style="panelStyle">
       <div class="menu-items" :class="itemsListClass">
         <MenuItem
@@ -102,7 +102,7 @@ export default {
         </KeepAlive>
       </div>
       <div v-else-if="placeholder" class="placeholder">
-        <h2 class="title">
+        <h2 class="header">
           {{ placeholder }}
         </h2>
       </div>

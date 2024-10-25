@@ -90,7 +90,7 @@ export default {
       :placeholder="placeholder"
       :disabled="!hooksEnabled"
     />
-    <h2 v-else class="title">
+    <h2 v-else class="header">
       {{ intl.formatMessage({ id: 'device.sensors.empty' }) }}
     </h2>
   </div>
