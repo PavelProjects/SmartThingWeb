@@ -1,6 +1,6 @@
 <script>
 import { useIntl } from 'vue-intl'
-import PopUpDialog from '../dialogs/PopUpDialog.vue'
+import ModalDialog from '../base/ModalDialog.vue'
 import InputField from '../base/fields/InputField.vue'
 import LoadingButton from '../base/controls/LoadingButton.vue'
 import { toast } from '../../utils/EventBus'
@@ -12,7 +12,7 @@ import { DeviceApi } from '../../api/device/DeviceApi'
 export default {
   name: 'GroupEditDialog',
   components: {
-    PopUpDialog,
+    ModalDialog,
     InputField,
     LoadingButton,
     BaseContainer,
@@ -128,7 +128,7 @@ export default {
 </script>
 
 <template>
-  <PopUpDialog @close="handleClose">
+  <ModalDialog @close="handleClose">
     <BaseContainer :vertical="true">
       <h2 class="title">
         {{ intl.formatMessage({ id: 'dashboard.group.edit.title' }, { name: device.name }) }}
@@ -238,7 +238,7 @@ export default {
         </LoadingButton>
       </BaseContainer>
     </BaseContainer>
-  </PopUpDialog>
+  </ModalDialog>
 </template>
 
 <style scoped>
@@ -283,6 +283,6 @@ export default {
   background-color: var(--color-danger);
 }
 .extra {
-  padding: var(--default-gap);
+  padding: var(--default-padding);
 }
 </style>

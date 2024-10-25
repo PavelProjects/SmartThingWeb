@@ -4,7 +4,7 @@ import { GatewayApi } from '../../api/gateway/GatewayApi'
 import { toast } from '../../utils/EventBus'
 import BaseContainer from '../base/BaseContainer.vue'
 import LoadingButton from '../base/controls/LoadingButton.vue'
-import PopUpDialog from '../dialogs/PopUpDialog.vue'
+import ModalDialog from '../base/ModalDialog.vue'
 import InputField from '../base/fields/InputField.vue'
 
 export default {
@@ -12,7 +12,7 @@ export default {
   components: {
     BaseContainer,
     InputField,
-    PopUpDialog,
+    ModalDialog,
     LoadingButton
   },
   inject: ['gateway'],
@@ -60,7 +60,7 @@ export default {
 </script>
 
 <template>
-  <PopUpDialog v-bind="$attrs">
+  <ModalDialog v-bind="$attrs">
     <BaseContainer class="add-device-dialog" :vertical="true">
       <h2 class="title">
         {{ intl.formatMessage({ id: 'devices.saved.add.title' }) }}
@@ -76,11 +76,11 @@ export default {
         </h2>
       </LoadingButton>
     </BaseContainer>
-  </PopUpDialog>
+  </ModalDialog>
 </template>
 
 <style scoped>
 .add-device-dialog {
-  padding: var(--default-gap);
+  padding: var(--default-padding);
 }
 </style>

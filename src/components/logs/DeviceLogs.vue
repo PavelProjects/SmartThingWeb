@@ -149,7 +149,7 @@ export default {
   max-height: calc(100vh - var(--doc-height));
   overflow-y: auto;
   min-width: 80vw;
-  padding: var(--default-gap);
+  padding: var(--default-padding);
 }
 .filters {
   margin: 0 auto;

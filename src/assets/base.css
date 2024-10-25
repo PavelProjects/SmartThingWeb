@@ -79,11 +79,16 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+button {
+  outline: none;
+}
+
 dialog {
   color: var(--color-text);
   border: none;
   padding: 0;
   background-color: transparent;
+  outline: none;
 }
 
 dialog::backdrop {

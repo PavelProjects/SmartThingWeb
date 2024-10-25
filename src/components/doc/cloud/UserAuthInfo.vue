@@ -1,10 +1,10 @@
 <script>
 import { storeToRefs } from 'pinia'
-import { useCloudAuthStore } from '../../store/cloudAuthStore'
-import { CloudApi } from '../../api/CloudApi'
+import { useCloudAuthStore } from '../../../store/cloudAuthStore'
+import { CloudApi } from '../../../api/CloudApi'
 import { useIntl } from 'vue-intl'
-import { toast } from '../../utils/EventBus'
-import BaseContainer from '../base/BaseContainer.vue'
+import { toast } from '../../../utils/EventBus'
+import BaseContainer from '../../base/BaseContainer.vue'
 export default {
   components: {
     BaseContainer
@@ -70,7 +70,7 @@ export default {
   position: absolute;
   top: var(--default-gap);
   right: var(--default-gap);
-  padding: var(--default-gap);
+  padding: var(--default-padding);
   background-color: var(--color-background-mute);
   border-radius: var(--border-radius);
 }

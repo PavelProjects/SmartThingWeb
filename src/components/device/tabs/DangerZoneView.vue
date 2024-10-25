@@ -100,7 +100,7 @@ export default {
 
 <style scoped>
 .danger-container {
-  padding: var(--default-gap);
+  padding: var(--default-padding);
 }
 .danger-button {
   background-color: var(--color-danger);

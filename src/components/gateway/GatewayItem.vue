@@ -1,5 +1,5 @@
 <script>
-import PopUpDialog from '../dialogs/PopUpDialog.vue'
+import ModalDialog from '../base/ModalDialog.vue'
 import { CLOUD_API_URL, CloudApi } from '../../api/CloudApi'
 import { toast } from '../../utils/EventBus'
 import GatewayEditDialog from './GatewayEditDialog.vue'
@@ -15,7 +15,7 @@ export default {
   },
   emits: ['gatewaysUpdate', 'click'],
   components: {
-    PopUpDialog,
+    ModalDialog,
     GatewayEditDialog,
     InputField,
     ContextMenu,
@@ -170,7 +170,7 @@ export default {
       @save="saveGateway"
       @close="showEditDialog = false"
     />
-    <PopUpDialog v-if="token" @close="token = undefined">
+    <ModalDialog v-if="token" @close="token = undefined">
       <BaseContainer :vertical="true">
         <h2 class="title">
           {{ intl.formatMessage({ id: 'gateway.item.connection.token' }) }}
@@ -192,7 +192,7 @@ export default {
           <p class="token-field">{{ token }}</p>
         </BaseContainer>
       </BaseContainer>
-    </PopUpDialog>
+    </ModalDialog>
   </div>
 </template>
 
@@ -220,7 +220,7 @@ export default {
   right: 0px;
 }
 .token-field {
-  padding: var(--default-gap);
+  padding: var(--default-padding);
   width: 50vw;
   word-wrap: break-word;
   border: 1px solid var(--color-border);

@@ -123,7 +123,7 @@ export default {
   display: flex;
   gap: var(--default-gap);
   overflow: auto;
-  padding: var(--default-gap);
+  padding: var(--default-padding);
 }
 .menu-items:last-child {
   border-right: none;

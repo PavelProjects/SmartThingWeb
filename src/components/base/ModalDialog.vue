@@ -1,12 +1,16 @@
 <script>
 export default {
-  name: 'PopUpDialog',
+  name: 'ModalDialog',
   emits: ['close'],
+  props: {
+    open: Boolean
+  },
   mounted() {
-    document.getElementById("modal-dialog")?.showModal()
+    // it's okat bcz we can open only one modal dialog at the moment
+    document.getElementById('modal-dialog')?.showModal()
   },
   methods: {
-    clickOutside() {
+    closeDialog() {
       this.$emit('close')
     }
   }
@@ -14,7 +18,7 @@ export default {
 </script>
 
 <template>
-  <dialog id="modal-dialog" class="dialog-container" @click.stop="clickOutside" @close="clickOutside">
+  <dialog id="modal-dialog" class="dialog-container" @click.stop="closeDialog" @close="closeDialog">
     <div class="dialog-content" @click.stop="() => {}">
       <slot></slot>
     </div>

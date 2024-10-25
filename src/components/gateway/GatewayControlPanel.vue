@@ -1,11 +1,11 @@
 <script>
-import DevicesSearchView from './device/DevicesSearchView.vue'
-import DeviceControlPanel from './device/DeviceControlPanel.vue'
+import DevicesSearchView from '../device/DevicesSearchView.vue'
+import DeviceControlPanel from '../device/DeviceControlPanel.vue'
 import { useIntl } from 'vue-intl'
-import DropdownMenu from './menu/DropdownMenu.vue'
+import DropdownMenu from '../menu/DropdownMenu.vue'
 
 export default {
-  name: 'DevicesMain',
+  name: 'GatewayControlPanel',
   components: {
     DevicesSearchView,
     DeviceControlPanel,

@@ -3,11 +3,11 @@ import { useIntl } from 'vue-intl'
 import { DashboardApi } from '../../api/gateway/DashboardApi'
 import { toast } from '../../utils/EventBus'
 import DevicesSearchView from '../device/DevicesSearchView.vue'
-import PopUpDialog from '../dialogs/PopUpDialog.vue'
+import ModalDialog from '../base/ModalDialog.vue'
 import BaseContainer from '../base/BaseContainer.vue'
 export default {
   name: 'GroupAddDialog',
-  components: { PopUpDialog, DevicesSearchView, BaseContainer },
+  components: { ModalDialog, DevicesSearchView, BaseContainer },
   props: {
     groups: Array
   },
@@ -52,7 +52,7 @@ export default {
 </script>
 
 <template>
-  <PopUpDialog v-bind="$props">
+  <ModalDialog v-bind="$props">
     <BaseContainer :vertical="true">
       <DevicesSearchView
         :title="intl.formatMessage({ id: 'dashboard.group.create.select.device' })"
@@ -60,7 +60,7 @@ export default {
         v-on:update:model-value="selectDevice"
       />
     </BaseContainer>
-  </PopUpDialog>
+  </ModalDialog>
 </template>
 
 <style lang="css" scoped>

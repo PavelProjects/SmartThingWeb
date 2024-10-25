@@ -45,7 +45,7 @@ export default {
   top: var(--default-gap);
   right: 8px;
   width: fit-content;
-  padding: var(--default-gap);
+  padding: var(--default-padding);
   background-color: var(--color-background-mute);
   border-radius: var(--border-radius);
 }
