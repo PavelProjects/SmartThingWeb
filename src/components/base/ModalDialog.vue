@@ -22,7 +22,7 @@ export default {
         width = 250
         break
       case 'large':
-        width = 800
+        width = 550
         break
       default:
         width = 400

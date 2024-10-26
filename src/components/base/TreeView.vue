@@ -21,17 +21,17 @@ export default {
       }
       return h('div', {}, [key + ': ', this.valueNode(value)])
     },
-    valueNode(value) {
+    valueNode(value, tag = 'span') {
       if (isVNode(value)) {
         return value
       } else if (Array.isArray(value)) {
-        const children = value.map((v) => h('p', {}, v))
+        const children = value.map((v) => this.valueNode(v, 'li'))
         return h('ul', {}, children)
       } else if (value instanceof Object) {
         const children = Object.entries(value).map(([key, v]) => h('li', {}, this.listItem(key, v)))
         return h('ul', {}, children)
       } else {
-        return h('span', {}, value)
+        return h(tag, {}, value)
       }
     }
   }
