@@ -11,18 +11,13 @@ export default {
   props: {
     id: String,
     toast: Object,
-    ttl: {
-      type: Number,
-      default: () => LIFE_TIME
-    },
-    device: Object,
-    gateway: Object
+    source: Object
   },
   data() {
     return {
       toastClass: undefined,
       ttlBarWidth: 0,
-      delay: this.ttl / 50,
+      delay: LIFE_TIME / 50,
       interval: undefined
     }
   },
@@ -34,26 +29,24 @@ export default {
         case SUCCESS_TYPE:
           return 'rgb(2, 147, 74)'
         case WARNING_TYPE:
-          return 'rgb(147, 106, 2)'
+          return 'rgb(184, 81, 1)'
         default:
           return 'rgb(0, 112, 122)'
       }
     },
     from() {
-      if (this.gateway && this.device) {
-        return `${this.gateway.name}@${this.device.name}`
+      if (!this.source) {
+        return undefined
       }
-      if (this.gateway) {
-        return this.gateway.name + '[gateway]'
+      const { gateway, device } = this.source
+      if (gateway && device) {
+        return `${gateway.name}@${device.name}`
       }
-      if (this.device) {
-        return this.device.name + '[device]'
+      if (gateway) {
+        return gateway.name + '[gateway]'
       }
-      return undefined
-    },
-    fromTitle() {
-      if (this.device) {
-        return this.device.ip
+      if (device) {
+        return device.name + '[device]'
       }
       return undefined
     },
@@ -65,7 +58,7 @@ export default {
   },
   mounted() {
     if (this.toast.autoClose) {
-      setTimeout(this.close, this.ttl)
+      setTimeout(this.close, LIFE_TIME)
       this.interval = setInterval(() => {
         if (this.ttlBarWidth < 100) {
           this.ttlBarWidth += 2
@@ -88,8 +81,9 @@ export default {
 <template>
   <div class="toast" :class="toastClass" :style="{ backgroundColor: color }">
     <h2 v-if="toast.caption">{{ toast.caption }}</h2>
-    <h2 v-if="from" :title="fromTitle">From: {{ from }}</h2>
-    <div style="word-wrap: break-word">{{ toast.description }}</div>
+    <h2 v-if="from">From: {{ from }}</h2>
+    <h3 style="word-wrap: break-word">{{ toast.description }}</h3>
+    <p v-if="toast.dateTime" class="date">{{ toast.dateTime }}</p>
     <button @click="close">X</button>
     <div class="ttl-bar" :style="ttlBarStyle"></div>
   </div>
@@ -124,6 +118,11 @@ export default {
 .toast h2,
 h3 {
   text-align: center;
+}
+
+.date {
+  text-align: right;
+  font-size: 12px;
 }
 
 .ttl-bar {

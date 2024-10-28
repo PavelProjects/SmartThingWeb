@@ -2,11 +2,10 @@ import { Client } from '@stomp/stompjs'
 import { defineStore } from 'pinia'
 import { GATEWAY_WS_URL } from '../api/gateway/GatewayFetch'
 import { CLOUD_WS_URL } from '../api/CloudApi'
-import { EVENT, EventBus, LOGGED_IN, LOGGED_OUT, TOAST, WS_CONNECTED } from '../utils/EventBus'
+import { EVENT, EventBus, LOGGED_IN, LOGGED_OUT, WS_CONNECTED } from '../utils/EventBus'
 
 const mode = import.meta.env.VITE_MODE
 
-const NOTIFICATION_TOPIC = '/notifications'
 const EVENT_TOPIC = '/events'
 
 const fixTopicName = (topic) => {
@@ -17,7 +16,6 @@ export const useStompClientStore = defineStore({
   id: 'stomp_client',
   state: () => {
     const brokerURL = mode === 'gateway' ? GATEWAY_WS_URL : CLOUD_WS_URL
-    const notifyTopic = fixTopicName(NOTIFICATION_TOPIC)
 
     const client = new Client({
       brokerURL,
@@ -30,29 +28,6 @@ export const useStompClientStore = defineStore({
     client.onConnect = () => {
       console.debug('Stomp client connected')
       EventBus.emit(WS_CONNECTED)
-
-      client.subscribe(
-        notifyTopic,
-        (message) => {
-          if (!message?.body) {
-            console.error('Empty notification message')
-            return
-          }
-          console.debug('Got notification message! ' + message.body)
-          const { gateway, device, notification } = JSON.parse(message.body)
-          EventBus.emit(TOAST, {
-            gateway,
-            device,
-            toast: {
-              description: notification.message,
-              type: notification.type,
-              autoClose: false
-            }
-          })
-        },
-        { id: 'notification' }
-      )
-      console.debug('Subscribed to notification topic: ' + notifyTopic)
 
       const eventTopic = fixTopicName(EVENT_TOPIC)
       client.subscribe(eventTopic, (message) => {
@@ -91,7 +66,9 @@ export const useStompClientStore = defineStore({
         await promise
       }
       const fixedTopic = fixTopicName(topic)
-      this.client.subscribe(fixedTopic, callback, { id: topic + '_topic' })
+      const id = topic + '_topic'
+      this.client.unsubscribe(id)
+      this.client.subscribe(fixedTopic, callback, { id })
       console.debug('Subscribed to topic ' + fixedTopic)
     },
     unsubscribe(topic) {

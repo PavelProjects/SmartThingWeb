@@ -27,7 +27,7 @@ export default {
       try {
         this.gatewayInfo = await GatewayApi.getBuildInfo(this.gateway)
       } catch (error) {
-        console.log('Failed to load backend build info', error)
+        console.error('Failed to load backend build info', error)
       }
     },
     camelToNormal: (value) => {

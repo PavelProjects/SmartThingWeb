@@ -72,9 +72,9 @@ export default {
             <component :is="Component" :key="path" />
           </keep-alive> -->
         <component :is="Component" :key="path" />
+        <ToatsView id="toasts-list" />
       </GatewayProvider>
     </router-view>
-    <ToatsView id="toasts-list" />
     <CloudAuthDialog
       v-if="!isAuthenticated"
       @authenticated="({ user }) => authStore.setAuthentication(user)"

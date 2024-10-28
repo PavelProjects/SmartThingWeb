@@ -2,6 +2,10 @@
 import { EventBus, TOAST } from '../../utils/EventBus.js'
 import ToastItem from './ToastItem.vue'
 import BaseContainer from '../base/BaseContainer.vue'
+import { useStompClientStore } from '../../store/stompClientStore.js'
+import { NotificationApi } from '../../api/gateway/NotificationApi.js'
+
+const NOTIFICATION_TOPIC = '/notifications'
 
 export default {
   name: 'ToatsView',
@@ -9,26 +13,76 @@ export default {
     ToastItem,
     BaseContainer
   },
+  inject: ['gateway'],
   data() {
+    const stompClient = useStompClientStore()
     return {
-      toasts: {},
+      stompClient,
+      notifications: {},
       idSequence: 0
     }
   },
   mounted() {
+    this.loadNotifications()
+    this.stompClient.subscribe(NOTIFICATION_TOPIC, this.handleMessage)
     EventBus.on(TOAST, this.addToast)
+  },
+  unmounted() {
+    this.stompClient.unsubscribe(NOTIFICATION_TOPIC)
   },
   methods: {
     getId() {
+      if (Object.keys(this.notifications).length === 0) {
+        this.idSequence = 0
+      }
       this.idSequence++
       return this.idSequence
     },
-    addToast(payload) {
-      const id = this.getId()
-      this.toasts[id] = payload
+    async loadNotifications() {
+      try {
+        const notifications =
+          (await NotificationApi.getNotifications({ gateway: this.gateway })) ?? []
+        notifications.forEach(this.addNotification)
+      } catch (error) {
+        console.error('Failed to load notifications', error)
+      }
+    },
+    handleMessage(message) {
+      if (!message?.body) {
+        console.error('Empty notification message')
+        return
+      }
+      this.addNotification(JSON.parse(message.body))
+    },
+    addNotification({ id, gateway, device, notification, dateTime }) {
+      this.addToast({
+        source: {
+          gateway,
+          device
+        },
+        toast: {
+          description: notification.message,
+          type: notification.type,
+          autoClose: false,
+          dateTime
+        },
+        notificationId: id
+      })
+    },
+    addToast(toast) {
+      this.notifications[this.getId()] = toast
     },
     close(id) {
-      delete this.toasts[id]
+      const { notificationId } = this.notifications[id]
+      if (notificationId) {
+        NotificationApi.markNotificationSeen({
+          gateway: this.gateway,
+          notificationId
+        }).catch((e) => {
+          console.error('Failed to mark notification seen id=' + notificationId, e)
+        })
+      }
+      delete this.notifications[id]
     }
   }
 }
@@ -37,11 +91,10 @@ export default {
 <template scoped>
   <BaseContainer :vertical="true">
     <ToastItem
-      v-for="[id, { gateway, device, toast }] of Object.entries(toasts)"
-      :key="id"
-      :id="id"
-      :gateway="gateway"
-      :device="device"
+      v-for="({ source, toast }, index) of notifications"
+      :key="index"
+      :id="index"
+      :source="source"
       :toast="toast"
       @close="close"
     />

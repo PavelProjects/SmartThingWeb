@@ -16,6 +16,7 @@ const PATH_DEVICE_API = '/api/device/api'
 const PATH_DEVICE_LOGS = '/api/devices/logs'
 const PATH_DEVICE_SETTINGS = '/api/devices/settings'
 
+// todo move to different file
 const axiosInstance = axios.create({
   baseURL: GATEWAY_URL,
   timeout: 5000
@@ -124,27 +125,31 @@ const GatewayApi = {
     const response = await gatewayFetch({
       url: `${PATH_DEVICE_SETTINGS}/${id}`,
       method: HTTP_METHOD.DELETE,
-      data: { name },
+      data: { name: id },
       gateway
     })
     return response.status === 200
   },
   async deviceSearchEnabled(gateway) {
-    return (await gatewayFetch({ gateway, url: PATH_SEARCH_ENABLED, method: 'GET' })).data
+    return (await gatewayFetch({ gateway, url: PATH_SEARCH_ENABLED, method: HTTP_METHOD.GET })).data
   },
   async getFoundDevices(gateway) {
-    const response = await gatewayFetch({ gateway, url: PATH_DEVICES_FOUND, method: 'GET' })
+    const response = await gatewayFetch({
+      gateway,
+      url: PATH_DEVICES_FOUND,
+      method: HTTP_METHOD.GET
+    })
     return response.data
   },
   async getSavedDevices(gateway) {
-    return (await gatewayFetch({ gateway, url: PATH_DEVICES_SAVED, method: 'GET' })).data
+    return (await gatewayFetch({ gateway, url: PATH_DEVICES_SAVED, method: HTTP_METHOD.GET })).data
   },
   async addDevice(ip, gateway) {
     return (
       await gatewayFetch({
         gateway,
         url: PATH_DEVICES_SAVED + '?ip=' + ip,
-        method: 'POST'
+        method: HTTP_METHOD.POST
       })
     ).data
   },
@@ -153,7 +158,7 @@ const GatewayApi = {
       await gatewayFetch({
         gateway,
         url: PATH_DEVICES_SAVED + '?ip=' + ip,
-        method: 'PUT'
+        method: HTTP_METHOD.PUT
       })
     ).data
   },
@@ -161,7 +166,7 @@ const GatewayApi = {
     await gatewayFetch({
       gateway,
       url: PATH_DEVICES_SAVED + '?ip=' + ip,
-      method: 'DELETE'
+      method: HTTP_METHOD.DELETE
     })
   }
 }
