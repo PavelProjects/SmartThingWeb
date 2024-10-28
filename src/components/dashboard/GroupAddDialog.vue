@@ -56,7 +56,6 @@ export default {
     <BaseContainer :vertical="true">
       <DevicesSearchView
         :title="intl.formatMessage({ id: 'dashboard.group.create.select.device' })"
-        :style="{ width: '350px' }"
         v-on:update:model-value="selectDevice"
       />
     </BaseContainer>
