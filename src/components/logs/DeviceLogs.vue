@@ -8,6 +8,14 @@ import BaseContainer from '../base/BaseContainer.vue'
 import InputField from '../base/fields/InputField.vue'
 import ComboBoxField from '../base/fields/ComboBoxField.vue'
 
+const LEVEL_INT = {
+  TRACE: 0,
+  DEBUG: 10,
+  INFO: 20,
+  WARN: 30,
+  ERROR: 40
+}
+
 export default {
   name: 'DeviceLogs',
   components: {
@@ -26,6 +34,7 @@ export default {
       idSeq: 0,
       messages: [],
       colors: {},
+      logLevels: Object.keys(LEVEL_INT),
       filters: {
         device: undefined,
         tag: undefined,
@@ -46,15 +55,7 @@ export default {
   },
   async mounted() {
     await this.loadMessages()
-    this.stompClient.subscribe('/devices/logs', (message) => {
-      if (message && message.body) {
-        const parsed = JSON.parse(message.body)
-        if (!parsed?.device?.ip || !parsed?.device?.name) {
-          return
-        }
-        this.messages.unshift({ ...parsed, id: this.idSeq++ })
-      }
-    })
+    this.stompClient.subscribe('/devices/logs', this.handleWsMessage)
   },
   unmounted() {
     this.stompClient.unsubscribe('/devices/logs')
@@ -75,6 +76,34 @@ export default {
         })
       } finally {
         this.loading = false
+      }
+    },
+    handleWsMessage(wsMessage) {
+      if (wsMessage?.body) {
+        const parsed = JSON.parse(wsMessage.body)
+        if (!parsed?.device?.ip || !parsed?.device?.name) {
+          return
+        }
+        console.log(parsed.device.ip)
+
+        const { level, device, message, tag } = this.filters
+        if (level && LEVEL_INT[parsed.level] < LEVEL_INT[level]) {
+          return
+        }
+        if (message && !parsed.message.toLowerCase().includes(message.toLowerCase())) {
+          return
+        }
+        if (tag && !parsed.tag.toLowerCase().includes(tag.toLowerCase())) {
+          return
+        }
+        if (device) {
+          const devDesc = (parsed.device.name + parsed.device.ip)?.toLowerCase()
+          if (!devDesc.includes(device.toLowerCase())) {
+            return
+          }
+        }
+
+        this.messages.unshift({ ...parsed, id: this.idSeq++ })
       }
     },
     generateColorByIp(ip) {
@@ -121,7 +150,7 @@ export default {
       />
       <ComboBoxField
         :label="intl.formatMessage({ id: 'device.logs.columns' }, { column: 'level' })"
-        :items="['DEBUG', 'INFO', 'WARN', 'ERROR']"
+        :items="logLevels"
         v-model="filters.level"
       />
       <InputField
