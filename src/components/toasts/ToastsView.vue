@@ -22,10 +22,12 @@ export default {
       idSequence: 0
     }
   },
+  created() {
+    EventBus.on(TOAST, this.addToast)
+  },
   mounted() {
     this.loadNotifications()
     this.stompClient.subscribe(NOTIFICATION_TOPIC, this.handleMessage)
-    EventBus.on(TOAST, this.addToast)
   },
   unmounted() {
     this.stompClient.unsubscribe(NOTIFICATION_TOPIC)
@@ -91,9 +93,9 @@ export default {
 <template scoped>
   <BaseContainer :vertical="true">
     <ToastItem
-      v-for="({ source, toast }, index) of notifications"
-      :key="index"
-      :id="index"
+      v-for="[id, { source, toast }] of Object.entries(notifications)"
+      :key="id"
+      :id="id"
       :source="source"
       :toast="toast"
       @close="close"
