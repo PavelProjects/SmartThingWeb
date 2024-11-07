@@ -23,14 +23,14 @@ export default {
   },
   data() {
     const intl = useIntl()
-    const { origin } = window.location
+    const { origin, pathname } = window.location
 
     return {
       intl,
       token: undefined, // todo rename
       showEditDialog: false,
       tokenData: {
-        cloudUrl: origin + '/api',
+        cloudUrl: origin + pathname + 'api',
         token: undefined
       }
     }
