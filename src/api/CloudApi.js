@@ -17,7 +17,7 @@ const URL_GATEWAY_DELETE = '/api/gateway/management/delete'
 
 const { pathname } = window.location
 const axiosConfig = {
-  baseUrl: pathname,
+  baseURL: pathname,
   timeout: 5000,
   withCredentials: true
 }
