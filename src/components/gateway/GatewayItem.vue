@@ -1,6 +1,6 @@
 <script>
 import ModalDialog from '../base/ModalDialog.vue'
-import { CLOUD_API_URL, CloudApi } from '../../api/CloudApi'
+import { CloudApi } from '../../api/CloudApi'
 import { toast } from '../../utils/EventBus'
 import GatewayEditDialog from './GatewayEditDialog.vue'
 import InputField from '../base/fields/InputField.vue'
@@ -23,12 +23,14 @@ export default {
   },
   data() {
     const intl = useIntl()
+    const { origin } = window.location
+
     return {
       intl,
       token: undefined, // todo rename
       showEditDialog: false,
       tokenData: {
-        cloudUrl: CLOUD_API_URL,
+        cloudUrl: origin + '/api',
         token: undefined
       }
     }

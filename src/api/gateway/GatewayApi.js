@@ -1,5 +1,4 @@
-import axios from 'axios'
-import { HTTP_METHOD, gatewayFetch, GATEWAY_URL } from './GatewayFetch'
+import { HTTP_METHOD, gatewayAxiosInstance, gatewayFetch } from './GatewayFetch'
 
 const PATH_BUILD_INFO = '/api/build'
 const PATH_AUTHENTICATION = '/api/cloud/identity'
@@ -16,47 +15,41 @@ const PATH_DEVICE_API = '/api/device/api'
 const PATH_DEVICE_LOGS = '/api/devices/logs'
 const PATH_DEVICE_SETTINGS = '/api/devices/settings'
 
-// todo move to different file
-const axiosInstance = axios.create({
-  baseURL: GATEWAY_URL,
-  timeout: 5000
-})
-
 const GatewayApi = {
   // only local
   async callDeviceApi({ device, command, params }) {
-    return await axiosInstance.post(PATH_DEVICE_API, {
+    return await gatewayAxiosInstance.post(PATH_DEVICE_API, {
       command,
       device,
       params
     })
   },
   async getCloudAuthentication() {
-    const response = await axiosInstance.get(PATH_AUTHENTICATION)
+    const response = await gatewayAxiosInstance.get(PATH_AUTHENTICATION)
     return response.data
   },
   async cloudLogin(payload) {
-    const response = await axiosInstance.post(PATH_LOGIN, payload)
+    const response = await gatewayAxiosInstance.post(PATH_LOGIN, payload)
     return response.data
   },
   async cloudLogout() {
-    const response = await axiosInstance.delete(PATH_LOGOUT)
+    const response = await gatewayAxiosInstance.delete(PATH_LOGOUT)
     return response.status === 200
   },
   async getCloudConfig() {
-    const response = await axiosInstance.get(PATH_CLOUD_CONFIG)
+    const response = await gatewayAxiosInstance.get(PATH_CLOUD_CONFIG)
     return response.data
   },
   async getConnectionStatus() {
-    const response = await axiosInstance.get(PATH_CLOUD_CONNECTED)
+    const response = await gatewayAxiosInstance.get(PATH_CLOUD_CONNECTED)
     return response.data
   },
   async cloudConnect() {
-    const response = await axiosInstance.put(PATH_CLOUD_CONNECT)
+    const response = await gatewayAxiosInstance.put(PATH_CLOUD_CONNECT)
     return response.status === 200
   },
   async cloudDisconnect() {
-    const response = await axiosInstance.put(PATH_CLOUD_DISCONNECT)
+    const response = await gatewayAxiosInstance.put(PATH_CLOUD_DISCONNECT)
     return response.status === 200
   },
   // Cloud supported methods

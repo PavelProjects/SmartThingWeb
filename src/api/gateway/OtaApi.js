@@ -1,44 +1,48 @@
-import axios from 'axios'
-import { GATEWAY_URL } from './GatewayFetch'
+import { gatewayAxiosInstance } from './GatewayFetch'
 
-const axiosInstance = axios.create({
-  baseURL: GATEWAY_URL + '/api/ota/firmware',
-  timeout: 5000
-})
+const BASE_PATH = '/api/ota/firmware'
 
 const OtaApi = {
   getSavedFirmwares: async () => {
-    return (await axiosInstance.get()).data
+    return (await gatewayAxiosInstance.get(BASE_PATH)).data
   },
   addFirmware: async (info, file) => {
     const form = new FormData()
     form.append('info', JSON.stringify(info))
     form.append('file', file)
-    return (await axiosInstance.post('', form)).data
+    return (await gatewayAxiosInstance.post(BASE_PATH, form)).data
   },
   updateFirmware: async (info) => {
-    return (await axiosInstance.put('', info)).data
+    return (await gatewayAxiosInstance.put(BASE_PATH, info)).data
   },
   deleteFirmware: async (id) => {
-    return (await axiosInstance.delete('', { params: { id } })).status === 200
+    return (await gatewayAxiosInstance.delete(BASE_PATH, { params: { id } })).status === 200
   },
   uploadFirmware: async (id, device) => {
-    return (await axiosInstance.post('/upload', device, { params: { id } })).status === 200
+    return (
+      (await gatewayAxiosInstance.post(BASE_PATH + '/upload', device, { params: { id } }))
+        .status === 200
+    )
   },
   uploadFirmwareBatch: async (id, devices) => {
-    return (await axiosInstance.post('/upload/batch', devices, { params: { id } })).data
+    return (
+      await gatewayAxiosInstance.post(BASE_PATH + '/upload/batch', devices, { params: { id } })
+    ).data
   },
   abortFirmwareUpload: async (id) => {
-    return (await axiosInstance.delete('/upload', { params: { id } })).status === 200
+    return (
+      (await gatewayAxiosInstance.delete(BASE_PATH + '/upload', { params: { id } })).status === 200
+    )
   },
   getRunningUploads: async () => {
-    return (await axiosInstance.get('/upload')).data
+    return (await gatewayAxiosInstance.get(BASE_PATH + '/upload')).data
   },
   getSupportedBoards: async () => {
-    return (await axiosInstance.get('/boards')).data
+    return (await gatewayAxiosInstance.get(BASE_PATH + '/boards')).data
   },
   buildDownloadFirmwareLink: (id) => {
-    return `${GATEWAY_URL}/api/ota/firmware/download?id=${id}`
+    const { origin } = window.location
+    return `${origin}${BASE_PATH}/download?id=${id}`
   }
 }
 

@@ -1,13 +1,5 @@
 import axios from 'axios'
 
-const { protocol, host, pathname } = document.location
-
-const CLOUD_ADRESS = import.meta.env.VITE_CLOUD_ADRESS
-  ? import.meta.env.VITE_CLOUD_ADRESS
-  : `${host}${pathname.endsWith('/') ? pathname.slice(0, pathname.length - 1) : pathname}`
-const CLOUD_WS_URL = `${protocol === 'https:' ? 'wss' : 'ws'}://${CLOUD_ADRESS}/api/smt-ws`
-const CLOUD_API_URL = `${protocol}//${CLOUD_ADRESS}`
-
 const REFRESH_TOKEN_KEY = 'refresh-token'
 
 const URL_AUTH = '/api/auth'
@@ -24,7 +16,6 @@ const URL_GATEWAY_UPDATE = '/api/gateway/management/update'
 const URL_GATEWAY_DELETE = '/api/gateway/management/delete'
 
 const axiosConfig = {
-  baseURL: CLOUD_API_URL,
   timeout: 5000,
   withCredentials: true
 }
@@ -123,4 +114,4 @@ const CloudApi = {
     })
   }
 }
-export { CloudApi, CLOUD_WS_URL, CLOUD_API_URL }
+export { CloudApi }

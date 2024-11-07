@@ -2,11 +2,6 @@ import axios from 'axios'
 import { CloudApi } from '../CloudApi'
 import { toast } from '../../utils/EventBus'
 
-const GATEWAY_PATH = import.meta.env.VITE_GATEWAY_IP || document.location.hostname
-const GATEWAY_PORT = import.meta.env.VITE_GATEWAY_PORT || document.location.port
-export const GATEWAY_URL = `http://${GATEWAY_PATH}${GATEWAY_PORT ? ':' + GATEWAY_PORT : ''}`
-export const GATEWAY_WS_URL = `ws://${GATEWAY_PATH}${GATEWAY_PORT ? ':' + GATEWAY_PORT : ''}/api/smt-ws`
-
 export const HTTP_METHOD = {
   GET: 'GET',
   POST: 'POST',
@@ -16,21 +11,20 @@ export const HTTP_METHOD = {
 
 const mode = import.meta.env.VITE_MODE
 
-const axiosInstance = axios.create({
-  baseURL: GATEWAY_URL,
+const gatewayAxiosInstance = axios.create({
   timeout: 5000
 })
 
 async function gatewayFetchLocal({ url, method, data }) {
   if (!url || !method) {
-    throw new Error('Url and method is required in api call!')
+    throw new Error('Url and method is required in api call via gateway!')
   }
-  return axiosInstance.request({ url, method, data })
+  return gatewayAxiosInstance.request({ url, method, data })
 }
 
 async function gatewayFetchCloud({ gateway, url, method, data }) {
   if (!gateway || !url || !method) {
-    throw new Error('Gateway, url and method is required in api call!')
+    throw new Error('Gateway, url and method is required in api call vie cloud!')
   }
   if (!gateway?.online) {
     toast.error({
@@ -43,4 +37,4 @@ async function gatewayFetchCloud({ gateway, url, method, data }) {
 
 const gatewayFetch = mode === 'gateway' ? gatewayFetchLocal : gatewayFetchCloud
 
-export { gatewayFetch }
+export { gatewayFetch, gatewayAxiosInstance }

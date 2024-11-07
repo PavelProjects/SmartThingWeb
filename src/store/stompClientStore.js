@@ -1,10 +1,9 @@
 import { Client } from '@stomp/stompjs'
 import { defineStore } from 'pinia'
-import { GATEWAY_WS_URL } from '../api/gateway/GatewayFetch'
-import { CLOUD_WS_URL } from '../api/CloudApi'
 import { EVENT, EventBus, LOGGED_IN, LOGGED_OUT, WS_CONNECTED } from '../utils/EventBus'
 
 const mode = import.meta.env.VITE_MODE
+const { protocol, host } = document.location
 
 const EVENT_TOPIC = '/events'
 
@@ -15,7 +14,7 @@ const fixTopicName = (topic) => {
 export const useStompClientStore = defineStore({
   id: 'stomp_client',
   state: () => {
-    const brokerURL = mode === 'gateway' ? GATEWAY_WS_URL : CLOUD_WS_URL
+    const brokerURL = `${protocol === 'https:' ? 'wss' : 'ws'}://${host}/api/st-ws`
 
     const client = new Client({
       brokerURL,
