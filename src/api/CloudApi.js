@@ -15,7 +15,9 @@ const URL_GATEWAY_CREATE = '/api/gateway/management/create'
 const URL_GATEWAY_UPDATE = '/api/gateway/management/update'
 const URL_GATEWAY_DELETE = '/api/gateway/management/delete'
 
+const { pathname } = window.location
 const axiosConfig = {
+  baseUrl: pathname,
   timeout: 5000,
   withCredentials: true
 }
