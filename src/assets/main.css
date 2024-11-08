@@ -79,11 +79,6 @@ textarea {
   border: 1px solid var(--color-border);
   border-radius: var(--border-radius);
 }
-.field-container {
-  display: grid;
-  grid-template-columns: 50% 50%;
-  border-radius: var(--border-radius);
-}
 .required {
   background-color: hsla(3, 100%, 37%, 0.2);
   color: black;

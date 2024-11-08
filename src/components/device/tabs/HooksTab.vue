@@ -27,6 +27,7 @@ export default {
       intl,
       selectedTemplate: null,
       hooks: [],
+      newHook: undefined,
       templates: {},
       selectedType: null,
       loading: false
@@ -55,6 +56,7 @@ export default {
     async loadHooks() {
       this.loading = true
       try {
+        this.newHook = undefined
         this.hooks = (await DeviceApi.getHooks(this.device, this.observable, this.gateway)) || []
       } catch (error) {
         console.error(error)
@@ -79,21 +81,18 @@ export default {
       }
     },
     addHook(type) {
-      if (this.hooks.length > 0 && this.hooks[0].id == NEW_HOOK_ID) {
-        this.hooks.shift()
-      }
+      this.newHook = undefined
       if (!type) {
         return
       }
       const template = { ...this.templates[type], ...this.templates['default'] }
-      const hookFromTemplate = Object.entries(template).reduce(
+      this.newHook = Object.entries(template).reduce(
         (acc, [key, info]) => {
           acc[key] = info['default'] || ''
           return acc
         },
-        { id: NEW_HOOK_ID, type }
+        { id: NEW_HOOK_ID, type, rnd: Math.random() } // rnd - hack to force rerender
       )
-      this.hooks.unshift(hookFromTemplate)
     },
     templateForType(type) {
       return { ...this.templates[type], ...this.templates.default }
@@ -112,16 +111,28 @@ export default {
         :label="intl.formatMessage({ id: 'device.hooks.button.add' })"
         :items="hookTypes"
         :vertical="false"
+        :modelValue="newHook?.type"
         @update:modelValue="(v) => addHook(v)"
       />
-      <div v-if="hooks.length > 0" class="hooks-list-view list">
+      <div v-if="hooks.length > 0 || newHook" class="hooks-list-view list">
+        <HookView
+          v-if="newHook"
+          :key="newHook.rnd"
+          :observable="observable"
+          :hookProp="newHook"
+          :template="templateForType(newHook.type)"
+          :expand="hooks.length === 1"
+          @hookUpdated="() => loadHooks()"
+          @removeHook="() => (newHook = undefined)"
+        />
         <HookView
           v-for="(hook, index) in hooks"
           :key="hook.id"
           :observable="observable"
           :hookProp="hook"
           :template="templateForType(hook.type)"
-          @updateHooks="loadHooks"
+          :expand="hooks.length === 1"
+          @hookUpdated="() => loadHooks()"
           @removeHook="() => hooks.splice(index, 1)"
         />
       </div>

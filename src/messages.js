@@ -203,7 +203,21 @@ const messages = {
     'device.hook.test.button': 'Test it!',
     'device.hook.test.success': 'Hook called successfully!',
     'device.hook.test.error': 'Failed to call hook',
-    '': 'Sensors values',
+    'device.hook.trigger.enabled': 'Enable trigger',
+    'device.hook.field': `{
+      field, select,
+      type {Type}
+      action {Action}
+      compareType {Compare type}
+      trigger {Trigger}
+      method {Request method}
+      payload {Payload}
+      url {Request URL}
+      message {Message}
+      ntfType {Notification type}
+      lastResponseCode {Last request result}
+      other {{field}}
+    }`,
     'device.sensors.empty': 'No sensors configured',
     'device.states.empty': 'No states configured',
     'devices.search': 'Found devices',
@@ -570,6 +584,21 @@ const messages = {
     'device.hook.test.button': 'Протестировать!',
     'device.hook.test.success': 'Хук успешно вызван',
     'device.hook.test.error': 'Не удалось вызвать хук',
+    'device.hook.trigger.enabled': 'Включить триггер',
+    'device.hook.field': `{
+      field, select,
+      type {Тип}
+      action {Действие}
+      compareType {Метод сравнения}
+      trigger {Триггер}
+      method {Метод запроса}
+      payload {Тело запроса}
+      url {URL запроса}
+      message {Сообщение}
+      ntfType {Тип уведомления}
+      lastResponseCode {Результат последнего запроса}
+      other {{field}}
+    }`,
     'device.sensors.empty': 'Нет настроенных сенсоров',
     'device.states.empty': 'Нет настроенных состояний',
     'devices.search': 'Найденные устройства',

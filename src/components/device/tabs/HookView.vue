@@ -21,7 +21,7 @@ import ChevronDown from 'vue-material-design-icons/ChevronDown.vue'
 import ChevronUp from 'vue-material-design-icons/ChevronUp.vue'
 import { extractDataFromError } from '../../../api/ApiUtils.js'
 
-const SYSTEM_FIELDS = ['id', 'type', 'readonly']
+const SYSTEM_FIELDS = ['id', 'type', 'readonly', 'trigger', 'compareType', 'rnd']
 
 //todo fields names select from messages in intl
 
@@ -30,10 +30,11 @@ export default {
   props: {
     hookProp: Object,
     observable: Object,
-    template: Object
+    template: Object,
+    expand: Boolean
   },
   inject: ['device', 'gateway', 'apiMethods'],
-  emits: ['updateHooks', 'removeHook'],
+  emits: ['hookUpdated', 'removeHook'],
   components: {
     InputField,
     ComboBoxField,
@@ -54,14 +55,14 @@ export default {
     const intl = useIntl()
     const testEnabled = !!this.apiMethods.find(({ name }) => name === DeviceApiMethods.TEST_HOOK)
     const newHook = this.hookProp.id == NEW_HOOK_ID
+
     return {
       intl,
       testEnabled,
-      hook: this.hookProp,
+      hook: JSON.parse(JSON.stringify(this.hookProp)),
       editing: newHook,
-      haveChanges: newHook,
       validationFailed: [],
-      expanded: newHook,
+      expanded: newHook || this.expand,
       loading: false,
       testLoading: false,
       testDialogVisible: false,
@@ -79,7 +80,7 @@ export default {
         const { required } = this.template[field] || false
         return {
           key: field,
-          label: this.systemNameToNormal(field),
+          label: this.intl.formatMessage({ id: 'device.hook.field' }, { field }),
           required,
           value,
           render: this.getFieldComponent(field)
@@ -108,7 +109,7 @@ export default {
       return h(InputField, {})
     },
     async saveHook() {
-      if (!this.haveChanges) {
+      if (this.hook === this.hookProp) {
         console.warn('No changes were made')
         this.editing = false
         return
@@ -142,9 +143,8 @@ export default {
             caption: 'Hook updated'
           })
         }
-        this.$emit('updateHooks')
+        this.$emit('hookUpdated')
         this.editing = false
-        this.haveChanges = false
       } catch (error) {
         console.error(error)
         const { error: description } = await extractDataFromError(error)
@@ -170,7 +170,7 @@ export default {
           toast.success({
             caption: 'Hook deleted'
           })
-          this.$emit('updateHooks')
+          this.$emit('hookUpdated')
         } catch (error) {
           console.error(error)
           const { error: description } = await extractDataFromError(error)
@@ -209,6 +209,7 @@ export default {
     cancel() {
       this.validationFailed = []
       this.editing = false
+      this.hook = this.hookProp
       if (this.hook.id === NEW_HOOK_ID) {
         this.$emit('removeHook')
       }
@@ -250,7 +251,6 @@ export default {
         }
       }
       this.hook[key] = finalValue
-      this.haveChanges = true
     }
   }
 }
@@ -289,7 +289,29 @@ export default {
       </BaseContainer>
     </BaseContainer>
     <BaseContainer v-if="expanded" :vertical="true">
-      <InputField label="type" :modelValue="hook.type" :disabled="true" />
+      <InputField
+        :label="this.intl.formatMessage({ id: 'device.hook.field' }, { field: 'type' })"
+        :modelValue="hook.type"
+        :disabled="true"
+      />
+      <CheckBoxField
+        :label="intl.formatMessage({ id: 'device.hook.trigger.enabled' })"
+        v-model="hook.triggerEnabled"
+        :disabled="!this.editing"
+      />
+      <BaseContainer v-if="hook.triggerEnabled" :vertical="true">
+        <InputField
+          :label="this.intl.formatMessage({ id: 'device.hook.field' }, { field: 'trigger' })"
+          v-model="hook.trigger"
+          :disabled="!this.editing"
+        />
+        <ComboBoxField
+          :label="this.intl.formatMessage({ id: 'device.hook.field' }, { field: 'compareType' })"
+          v-model="hook.compareType"
+          :items="template?.compareType?.values"
+          :disabled="!this.editing"
+        />
+      </BaseContainer>
       <component
         v-for="{ key, label, value, render, required } in fieldsComponents"
         :is="render"

@@ -35,6 +35,7 @@ export default {
       @input="$emit('update:modelValue', $event.target.checked)"
       type="checkbox"
       :class="{ required: validationFailed }"
+      :disabled="disabled"
     />
   </FieldContainer>
 </template>

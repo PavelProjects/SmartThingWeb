@@ -25,7 +25,7 @@ export default {
 </script>
 
 <template>
-  <BaseContainer :vertical="vertical">
+  <BaseContainer :vertical="vertical" class="field-container">
     <h3 v-if="label" class="field-label" :style="labelStyle">{{ label }}</h3>
     <slot></slot>
   </BaseContainer>
