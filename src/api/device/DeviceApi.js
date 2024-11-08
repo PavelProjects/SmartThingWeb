@@ -2,6 +2,8 @@ import { deviceFetch } from './DeviceFetch'
 
 export const DeviceApiMethods = {
   CHECK_HEALTH: 'health',
+  GET_WIFI: 'getWiFi',
+  SET_WIFI: 'setWiFi',
   GET_INFO: 'getInfo',
   GET_HOOKS: 'getHooks',
   GET_ACTIONS: 'getActions',
@@ -34,6 +36,17 @@ export const DeviceApiMethods = {
 export const DeviceApi = {
   async health(device, gateway) {
     return (await deviceFetch({ device, command: DeviceApiMethods.CHECK_HEALTH, gateway })).data
+  },
+  async getWiFi(device, gateway) {
+    return (await deviceFetch({ device, command: DeviceApiMethods.GET_WIFI, gateway })).data
+  },
+  async setWiFi(device, { ssid, password, mode }, gateway) {
+    await deviceFetch({
+      device,
+      gateway,
+      command: DeviceApiMethods.SET_WIFI,
+      params: { ssid, password, mode }
+    })
   },
   async getDeviceInfo(device, gateway) {
     return (await deviceFetch({ device, command: DeviceApiMethods.GET_INFO, gateway })).data

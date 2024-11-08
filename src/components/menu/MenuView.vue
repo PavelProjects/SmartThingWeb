@@ -124,6 +124,7 @@ export default {
   gap: var(--default-gap);
   overflow: auto;
   padding: var(--default-padding);
+  min-width: 200px;
 }
 .menu-items:last-child {
   border-right: none;

@@ -101,6 +101,7 @@ const messages = {
     'device.item.board': 'Board: {board, select, undefined {Unknown} other {{board}}}',
     'device.tabs': `{
       tab, select,
+      wifi {Wi-Fi}
       info {Information}
       actions {Actions}
       sensors {Sensors}
@@ -159,6 +160,13 @@ const messages = {
     'device.actions.delay.save': 'Save',
     'device.actions.delay.disable': 'Disable',
     'device.actions.empty': 'No actions configured',
+    'device.wifi.ssid': 'SSID',
+    'device.wifi.password': 'Password',
+    'device.wifi.mode': 'Mode',
+    'device.wifi.load.error': 'Failed to load wifi configuration',
+    'device.wifi.save.success': 'WiFi configuration updated',
+    'device.wifi.save.success.description': 'Restart device to apply settings',
+    'device.wifi.save.error': 'Failed to save wifi configuration',
     'device.config.button.delete.all': 'Delete all values',
     'device.config.button.save': 'Save',
     'device.config.delete.confirm': 'Are you sure you want to delete all configuration values?',
@@ -455,6 +463,7 @@ const messages = {
     'device.item.board': 'Платформа: {board, select, undefined {Неизвестно} other {{board}}}',
     'device.tabs': `{
       tab, select,
+      wifi {Wi-Fi}
       info {Информация}
       actions {Действия}
       sensors {Сенсоры}
@@ -513,6 +522,13 @@ const messages = {
     'device.actions.delay.save': 'Сохранить',
     'device.actions.delay.disable': 'Отключить',
     'device.actions.empty': 'Нет настроенных действий',
+    'device.wifi.ssid': 'SSID',
+    'device.wifi.password': 'Пароль',
+    'device.wifi.mode': 'Режим',
+    'device.wifi.load.error': 'Не удалось загрузить конфигурацию WiFi',
+    'device.wifi.save.success': 'Конфигурация WiFi обновлена',
+    'device.wifi.save.success.description': 'Перезагрузите устройство для применения изменений',
+    'device.wifi.save.error': 'Не удалось сохранить конфигурацию WiFi',
     'device.config.button.delete.all': 'Удалить все значения',
     'device.config.button.save': 'Сохранить',
     'device.config.delete.confirm': 'Вы уверены, что хотите удалить все значения?',

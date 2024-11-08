@@ -15,6 +15,7 @@ import { toast } from '../../utils/EventBus'
 import DangerZoneView from './tabs/DangerZoneView.vue'
 import BaseContainer from '../base/BaseContainer.vue'
 import DeviceIcon from './DeviceIcon.vue'
+import WiFiTab from './tabs/WiFiTab.vue'
 
 const TAB_REQUIRED_API = {
   danger: [DeviceApiMethods.RESTART, DeviceApiMethods.WIPE]
@@ -63,6 +64,10 @@ export default {
         info: {
           class: DeviceInfoView,
           caption: intl.formatMessage({ id: 'device.tabs' }, { tab: 'info' })
+        },
+        wifi: {
+          class: WiFiTab,
+          caption: intl.formatMessage({ id: 'device.tabs' }, { tab: 'wifi' })
         },
         config: {
           class: ConfigView,
@@ -155,7 +160,7 @@ export default {
 <style scoped>
 #control-panel {
   margin: 0 auto;
-  width: 800px;
+  width: 1000px;
 }
 .control-panel-header {
   width: fit-content;
