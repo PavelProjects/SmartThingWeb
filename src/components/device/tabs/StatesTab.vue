@@ -1,13 +1,13 @@
 <script>
 import SyncLoader from 'vue-spinner/src/SyncLoader.vue'
+import HooksTab from './HooksTab.vue'
 import { DeviceApi } from '../../../api/device/DeviceApi.js'
-import HooksView from './HooksView.vue'
 import MenuView from '../../menu/MenuView.vue'
 import { useIntl } from 'vue-intl'
 import { toast } from '../../../utils/EventBus.js'
 
 export default {
-  name: 'SensorsView',
+  name: 'StatesTab',
   components: {
     SyncLoader,
     MenuView
@@ -16,48 +16,46 @@ export default {
   data() {
     const intl = useIntl()
     const hooksEnabled = this.features?.hooks
-
     return {
       intl,
       hooksEnabled,
-      sensors: {},
+      states: {},
       loading: false,
       tabs: {}
     }
   },
   created() {
-    this.loadSensors()
+    this.loadStates()
   },
   computed: {
-    haveSensors() {
-      return Object.keys(this.sensors).length !== 0
+    haveStates() {
+      return Object.keys(this.states).length !== 0
     },
     placeholder() {
       if (this.hooksEnabled) {
-        return this.intl.formatMessage({ id: 'device.hooks.select.to.manage' }, { type: 'sensor' })
+        return this.intl.formatMessage({ id: 'device.hooks.select.to.manage' }, { type: 'state' })
       }
       return this.intl.formatMessage({ id: 'hooks.disabled' })
     }
   },
   methods: {
-    async loadSensors() {
+    async loadStates() {
       this.loading = true
       try {
-        this.sensors = (await DeviceApi.getDeviceSensors(this.device, this.gateway)) ?? {}
-        Object.entries(this.sensors).forEach(([name, value]) => {
-          const caption = `${name}: ${value}`
+        this.states = (await DeviceApi.getDeviceStates(this.device, this.gateway)) || {}
+        Object.entries(this.states).forEach(([name, value]) => {
           if (this.tabs[name]) {
-            this.tabs[name].caption = caption
+            this.tabs[name].caption = `${name}: ${value}`
           } else {
             this.tabs[name] = {
-              class: HooksView,
-              caption,
+              class: HooksTab,
+              caption: `${name}: ${value}`,
               props: {
-                key: 'sensor_' + name,
+                key: 'state_' + name,
                 device: this.device,
                 observable: {
                   name,
-                  type: 'sensor'
+                  type: 'state'
                 },
                 gateway: this.gateway
               }
@@ -67,31 +65,31 @@ export default {
       } catch (error) {
         console.error(error)
         toast.error({
-          caption: 'Failed to fetch sensors values'
+          type: 'error',
+          caption: 'Failed to fetch device states'
         })
       } finally {
         this.loading = false
       }
     },
     async update() {
-      await this.loadSensors()
+      await this.loadStates()
     }
   }
 }
 </script>
-
 <template>
   <div>
     <sync-loader class="loading-spinner" :loading="loading"></sync-loader>
     <MenuView
-      v-if="haveSensors"
+      v-if="haveStates"
       :tabs="tabs"
       :tabTitle="hooksEnabled ? intl.formatMessage({ id: 'device.hooks.menu.item.title' }) : ''"
       :placeholder="placeholder"
       :disabled="!hooksEnabled"
     />
     <h2 v-else class="header">
-      {{ intl.formatMessage({ id: 'device.sensors.empty' }) }}
+      {{ intl.formatMessage({ id: 'device.states.empty' }) }}
     </h2>
   </div>
 </template>

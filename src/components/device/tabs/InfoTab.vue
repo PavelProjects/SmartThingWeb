@@ -9,7 +9,7 @@ import BaseContainer from '../../base/BaseContainer.vue'
 import { extractDataFromError } from '../../../api/ApiUtils.js'
 
 export default {
-  name: 'DeviceInfoView',
+  name: 'InfoTab',
   components: {
     SyncLoader,
     InputField,

@@ -1,10 +1,9 @@
 <script>
-import DeviceInfoView from './tabs/DeviceInfoView.vue'
-import ActionsView from './tabs/ActionsView.vue'
-import SensorsView from './tabs/SensorsView.vue'
-import StatesView from './tabs/StatesView.vue'
-import ConfigView from './tabs/ConfigView.vue'
-import MetricsView from './tabs/MetricsView.vue'
+import InfoTab from './tabs/InfoTab.vue'
+import ActionsTab from './tabs/ActionsTab.vue'
+import SensorsTab from './tabs/SensorsTab.vue'
+import StatesTab from './tabs/StatesTab.vue'
+import ConfigTab from './tabs/ConfigTab.vue'
 import MenuView from '../menu/MenuView.vue'
 import { useIntl } from 'vue-intl'
 import RiseLoader from 'vue-spinner/src/RiseLoader.vue'
@@ -12,7 +11,7 @@ import { DeviceApi, DeviceApiMethods } from '../../api/device/DeviceApi'
 import { GatewayApi } from '../../api/gateway/GatewayApi'
 import { computed } from 'vue'
 import { toast } from '../../utils/EventBus'
-import DangerZoneView from './tabs/DangerZoneView.vue'
+import DangerZoneTab from './tabs/DangerZoneTab.vue'
 import BaseContainer from '../base/BaseContainer.vue'
 import DeviceIcon from './DeviceIcon.vue'
 import WiFiTab from './tabs/WiFiTab.vue'
@@ -50,19 +49,19 @@ export default {
       apiMethods: {},
       defaultTabs: {
         actions: {
-          class: ActionsView,
+          class: ActionsTab,
           caption: intl.formatMessage({ id: 'device.tabs' }, { tab: 'actions' })
         },
         sensors: {
-          class: SensorsView,
+          class: SensorsTab,
           caption: intl.formatMessage({ id: 'device.tabs' }, { tab: 'sensors' })
         },
         states: {
-          class: StatesView,
+          class: StatesTab,
           caption: intl.formatMessage({ id: 'device.tabs' }, { tab: 'states' })
         },
         info: {
-          class: DeviceInfoView,
+          class: InfoTab,
           caption: intl.formatMessage({ id: 'device.tabs' }, { tab: 'info' })
         },
         wifi: {
@@ -70,15 +69,15 @@ export default {
           caption: intl.formatMessage({ id: 'device.tabs' }, { tab: 'wifi' })
         },
         config: {
-          class: ConfigView,
+          class: ConfigTab,
           caption: intl.formatMessage({ id: 'device.tabs' }, { tab: 'config' })
         },
         metrics: {
-          class: MetricsView,
+          class: SensorsTab,
           caption: intl.formatMessage({ id: 'device.tabs' }, { tab: 'metrics' })
         },
         danger: {
-          class: DangerZoneView,
+          class: DangerZoneTab,
           caption: intl.formatMessage({ id: 'device.tabs' }, { tab: 'danger' })
         }
       }

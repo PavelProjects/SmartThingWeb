@@ -6,7 +6,7 @@ import { toast } from '../../../utils/EventBus'
 import { useIntl } from 'vue-intl'
 
 export default {
-  name: 'DangerZoneView',
+  name: 'DangerZoneTab',
   components: {
     BaseContainer,
     LoadingButton

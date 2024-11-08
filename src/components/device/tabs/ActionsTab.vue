@@ -6,7 +6,7 @@ import { toast } from '../../../utils/EventBus.js'
 import ActionItem from './ActionItem.vue'
 
 export default {
-  name: 'ActionsView',
+  name: 'ActionsTab',
   components: {
     ActionItem,
     SyncLoader

@@ -11,7 +11,7 @@ import { extractDataFromError } from '../../../api/ApiUtils.js'
 export const NEW_HOOK_ID = 'New'
 
 export default {
-  name: 'HooksView',
+  name: 'HooksTab',
   components: {
     HookView,
     ComboBoxField,
