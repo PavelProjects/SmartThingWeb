@@ -21,7 +21,7 @@ import ChevronDown from 'vue-material-design-icons/ChevronDown.vue'
 import ChevronUp from 'vue-material-design-icons/ChevronUp.vue'
 import { extractDataFromError } from '../../../api/ApiUtils.js'
 
-const SYSTEM_FIELDS = ['id', 'type', 'readonly', 'trigger', 'compareType', 'rnd']
+const SYSTEM_FIELDS = ['id', 'type', 'readonly', 'trigger', 'compareType', 'rnd', 'triggerEnabled']
 
 //todo fields names select from messages in intl
 
