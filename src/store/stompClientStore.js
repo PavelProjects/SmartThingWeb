@@ -3,7 +3,7 @@ import { defineStore } from 'pinia'
 import { EVENT, EventBus, LOGGED_IN, LOGGED_OUT, WS_CONNECTED } from '../utils/EventBus'
 
 const mode = import.meta.env.VITE_MODE
-const { protocol, host } = document.location
+const { protocol, host, pathname } = document.location
 
 const EVENT_TOPIC = '/events'
 
@@ -14,7 +14,10 @@ const fixTopicName = (topic) => {
 export const useStompClientStore = defineStore({
   id: 'stomp_client',
   state: () => {
-    const brokerURL = `${protocol === 'https:' ? 'wss' : 'ws'}://${host}/api/st-ws`
+    const correctPath = pathname.endsWith('/')
+      ? pathname.substring(0, pathname.length - 1)
+      : pathname
+    const brokerURL = `${protocol === 'https:' ? 'wss' : 'ws'}://${host}${correctPath}/api/st-ws`
 
     const client = new Client({
       brokerURL,
