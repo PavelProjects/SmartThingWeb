@@ -40,7 +40,7 @@ export default {
 <style scoped>
 .device-item {
   padding: var(--default-padding);
-  width: 300px;
+  width: 100%;
 }
 .device-item h3 {
   word-wrap: break-word;

@@ -309,7 +309,7 @@ export default {
 
 <style scoped>
 .devices-search-view {
-  min-width: 350px;
+  width: 350px;
 }
 
 .devices-search-view .list-title {
