@@ -30,7 +30,7 @@ export default {
       token: undefined, // todo rename
       showEditDialog: false,
       tokenData: {
-        cloudUrl: origin + pathname + 'api',
+        cloudUrl: origin + pathname,
         token: undefined
       }
     }
@@ -173,7 +173,7 @@ export default {
       @close="showEditDialog = false"
     />
     <ModalDialog id="token-generator" v-if="token" @close="token = undefined">
-      <BaseContainer :vertical="true">
+      <BaseContainer class="token-gen-container" :vertical="true">
         <h2 class="header">
           {{ intl.formatMessage({ id: 'gateway.item.connection.token' }) }}
         </h2>
@@ -221,9 +221,11 @@ export default {
   top: 0px;
   right: 0px;
 }
+.token-gen-container {
+  padding: var(--default-padding);
+}
 .token-field {
   padding: var(--default-padding);
-  width: 50vw;
   word-wrap: break-word;
   border: 1px solid var(--color-border);
   border-radius: var(--border-radius);
