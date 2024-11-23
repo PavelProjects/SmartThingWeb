@@ -21,7 +21,16 @@ import ChevronDown from 'vue-material-design-icons/ChevronDown.vue'
 import ChevronUp from 'vue-material-design-icons/ChevronUp.vue'
 import { extractDataFromError } from '../../../api/ApiUtils.js'
 
-const SYSTEM_FIELDS = ['id', 'type', 'readonly', 'trigger', 'compareType', 'rnd', 'triggerEnabled']
+const SYSTEM_FIELDS = [
+  'id',
+  'type',
+  'readonly',
+  'trigger',
+  'compareType',
+  'rnd',
+  'triggerEnabled',
+  'threshold'
+]
 
 //todo fields names select from messages in intl
 
@@ -309,6 +318,12 @@ export default {
           :label="this.intl.formatMessage({ id: 'device.hook.field' }, { field: 'compareType' })"
           v-model="hook.compareType"
           :items="template?.compareType?.values"
+          :disabled="!this.editing"
+        />
+        <InputField
+          v-if="hook.threshold !== undefined"
+          :label="this.intl.formatMessage({ id: 'device.hook.field' }, { field: 'threshold' })"
+          v-model="hook.trigger"
           :disabled="!this.editing"
         />
       </BaseContainer>

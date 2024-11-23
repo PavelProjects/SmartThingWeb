@@ -210,6 +210,7 @@ const messages = {
       action {Action}
       compareType {Compare type}
       trigger {Trigger}
+      threshold {Threshold}
       method {Request method}
       payload {Payload}
       url {Request URL}
@@ -591,6 +592,7 @@ const messages = {
       action {Действие}
       compareType {Метод сравнения}
       trigger {Триггер}
+      threshold {Порог}
       method {Метод запроса}
       payload {Тело запроса}
       url {URL запроса}
