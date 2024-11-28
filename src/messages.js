@@ -215,7 +215,7 @@ const messages = {
       payload {Payload}
       url {Request URL}
       message {Message}
-      ntfType {Notification type}
+      notificationType {Notification type}
       lastResponseCode {Last request result}
       other {{field}}
     }`,
@@ -597,7 +597,7 @@ const messages = {
       payload {Тело запроса}
       url {URL запроса}
       message {Сообщение}
-      ntfType {Тип уведомления}
+      notificationType {Тип уведомления}
       lastResponseCode {Результат последнего запроса}
       other {{field}}
     }`,
