@@ -14,8 +14,12 @@ export default {
   },
   inject: ['gateway', 'mode'],
   data() {
+    const uiInfo = Object.entries(BUILD_INFO).reduce((acc, [key, value]) => {
+      acc[this.camelToNormal(key)] = value
+      return acc
+    }, {})
     return {
-      infoUI: BUILD_INFO,
+      uiInfo,
       gatewayInfo: {}
     }
   },
@@ -51,13 +55,12 @@ export default {
   <ModalDialog v-bind="$attrs" size="large">
     <BaseContainer :vertical="true" class="build-info">
       <BaseContainer :vertical="true">
+        <h2 class="header">Gateway backend build info</h2>
         <TreeView :values="gatewayInfo" />
       </BaseContainer>
       <BaseContainer v-if="mode === 'gateway'" :vertical="true">
-        <h2 class="header">UI build info</h2>
-        <p v-for="[key, value] of Object.entries(infoUI)" :key="key">
-          {{ camelToNormal(key) }}: {{ value }}
-        </p>
+        <h2 class="header">Gateway UI build info</h2>
+        <TreeView :values="uiInfo" />
       </BaseContainer>
     </BaseContainer>
   </ModalDialog>
