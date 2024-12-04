@@ -1,6 +1,6 @@
 import GatewayControlPanel from './components/gateway/GatewayControlPanel.vue'
 import DeviceLogs from './components/logs/DeviceLogs.vue'
-import SettingsManager from './components/settings/SettingsManager.vue'
+import SettingsDumpsManager from './components/settings/SettingsDumpsManager.vue'
 import GatewaySelector from './components/gateway/GatewaySelector.vue'
 import DevicesDashboard from './components/dashboard/DevicesDashboard.vue'
 import { createRouter, createWebHashHistory } from 'vue-router'
@@ -35,7 +35,7 @@ const routes =
         {
           name: 'settings',
           path: '/settings',
-          component: SettingsManager
+          component: SettingsDumpsManager
         },
         {
           name: 'dashboard',
@@ -79,7 +79,7 @@ const routes =
         {
           name: 'settings',
           path: '/:gateway/settings',
-          component: SettingsManager
+          component: SettingsDumpsManager
         },
         unkownRoute
       ]

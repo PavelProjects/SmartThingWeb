@@ -96,20 +96,11 @@ const GatewayApi = {
     })
     return response.data
   },
-  async updateDeviceSettings({ id, name, value }, gateway) {
-    const response = await gatewayFetch({
-      url: PATH_DEVICE_SETTINGS,
-      method: HTTP_METHOD.PUT,
-      data: { id, name, value },
-      gateway
-    })
-    return response.data
-  },
-  async createDeviceSettings({ name, value }, gateway) {
+  async saveDeviceSettings({ device, dump }, gateway) {
     const response = await gatewayFetch({
       url: PATH_DEVICE_SETTINGS,
       method: HTTP_METHOD.POST,
-      data: { name, value },
+      data: { device, dump },
       gateway
     })
     return response.data
@@ -118,7 +109,6 @@ const GatewayApi = {
     const response = await gatewayFetch({
       url: `${PATH_DEVICE_SETTINGS}/${id}`,
       method: HTTP_METHOD.DELETE,
-      data: { name: id },
       gateway
     })
     return response.status === 200

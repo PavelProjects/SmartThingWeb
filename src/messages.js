@@ -111,33 +111,36 @@ const messages = {
       danger {DangerZone}
       other {{tab}}
     }`,
-    'device.settings.editor.name.empty': "Name can't be empty!",
-    'device.settings.editor.name.empty.desc': 'Insert settings name',
-    'device.settings.editor.setting.empty': "Settings can't be empty!",
-    'device.settings.editor.setting.empty.desc': 'Insert settings json',
-    'device.settings.editor.updated': 'Settings updated!',
-    'device.settings.editor.created': 'Settings created!',
-    'device.settings.editor.error': 'Error occured!',
-    'device.settings.editor.delete.confirm':
+    'device.settings.manager.menu.header': 'Devices settings dumps',
+    'device.settings.empty': 'No settings exported from devices yet',
+    'device.settings.created': 'Settings created!',
+    'device.settings.error': 'Error occured!',
+    'device.settings.delete.confirm':
       'This action will delete saved settings permanently. Are you sure?',
-    'device.settings.editor.delete.success': 'Settings deleted',
-    'device.settings.editor.json.parse.error': 'JSON parse failed',
-    'device.settings.editor.export.success': 'Export to  {name} finished!',
-    'device.settings.editor.export.success.desc': 'Device will restart now',
-    'device.settings.editor.name': 'Name',
-    'device.settings.editor.title': 'Settings',
-    'device.settings.editor.button': `{
-      action, select,
-      update {Update}
-      create {Create}
-      delete {Delete}
-      export {Export to device}
-      import {Import from device}
-      other {{action}}
-    }`,
-    'device.settings.editor.select.device': 'Select device',
+    'device.settings.delete.success': 'Settings deleted',
+    'device.settings.delete.error': 'Failed to delete settings',
+    'device.settings.export': 'Export from device',
+    'device.settings.import': 'Import to device',
+    'device.settings.delete': 'Delete',
+    'device.settings.select.device': 'Select device',
     'device.settings.manager.add': 'Add new settings',
-    'device.settings.manager.menu.header': 'Saved devices settings',
+    'device.settings.info.header': 'Settings dump info',
+    'device.settings.info.device': 'Exported from device',
+    'device.settings.info.date': 'Export date time',
+    'device.settings.info.dump': 'Settings dump',
+    'device.settings.import.success': 'Settings successfully imported to device {name}',
+    'device.settings.import.success.desc': 'Device will reboot now',
+    'device.settings.import.error': 'Failed to export settings dump',
+    'device.settings.import.header.danger':
+      'Are you sure, you want to import this settings to selected device?',
+    'device.settings.import.header.desc':
+      'This action will override all exisiting settings on target device',
+    'device.settings.import.target': 'Target device',
+    'device.settings.import.dump': 'Settings dump to imported',
+    'device.settings.import.confirm': 'Yes, i am very sure',
+    'device.settings.export.error.empty': 'Device settings dump is empty',
+    'device.settings.export.success': 'Device settings dump saved',
+    'device.settings.export.error': 'Failed to export settings from device',
     'device.actions.call.succes': 'Done',
     'device.actions.call.error': 'Failed to execute action {action}',
     'device.actions.fetch.error': 'Failed to fetch device actions',
@@ -488,33 +491,36 @@ const messages = {
       danger {Опасная зона}
       other {{tab}}
     }`,
-    'device.settings.editor.name.empty': 'Название не может быть пустым',
-    'device.settings.editor.name.empty.desc': 'Введите название настроек',
-    'device.settings.editor.setting.empty': 'Настройки не могут быть пустыми',
-    'device.settings.editor.setting.empty.desc': 'Вставьте JSON настроек',
-    'device.settings.editor.updated': 'Настройки обновлены!',
-    'device.settings.editor.created': 'Настройки сохранены!',
-    'device.settings.editor.error': 'Произошла ошибка!',
-    'device.settings.editor.delete.confirm':
+    'device.settings.empty': 'Настройки с устройств еще не экспортировались',
+    'device.settings.created': 'Настройки сохранены!',
+    'device.settings.error': 'Произошла ошибка!',
+    'device.settings.delete.confirm':
       'Данное действие удалит данные настройки навсегда. Вы уверены?',
-    'device.settings.editor.delete.success': 'Настройки удалены',
-    'device.settings.editor.json.parse.error': 'Ошибка парсинга JSON',
-    'device.settings.editor.export.success': 'Экспорт на {name} завершен!',
-    'device.settings.editor.export.success.desc': 'Устройство сейчас перезапустится',
-    'device.settings.editor.name': 'Название',
-    'device.settings.editor.title': 'Настройки',
-    'device.settings.editor.button': `{
-      action, select,
-      update {Обновить}
-      create {Создать}
-      delete {Удалить}
-      export {Экспорт на устройство}
-      import {Импорт с устройства}
-      other {{action}}
-    }`,
-    'device.settings.editor.select.device': 'Выберите устройство',
+    'device.settings.delete.success': 'Настройки удалены',
+    'device.settings.delete.error': 'Не удалось удалить настройки',
+    'device.settings.export': 'Экспортировать с устройсва',
+    'device.settings.import': 'Импортировать на устройсво',
+    'device.settings.delete': 'Удалить',
+    'device.settings.select.device': 'Выберите устройство',
     'device.settings.manager.add': 'Добавить',
-    'device.settings.manager.menu.header': 'Сохраненный настройки устройств',
+    'device.settings.info.header': 'Информация о дампе настроек',
+    'device.settings.info.device': 'Экспортировано с устройства',
+    'device.settings.info.date': 'Дата экспорта',
+    'device.settings.info.dump': 'Дамп настроек',
+    'device.settings.import.success': 'Настройки успешно импортированы в {name}',
+    'device.settings.import.success.desc': 'Устройство сейчас перезагрузится',
+    'device.settings.import.error': 'Не удалось импортировать настройки в устройство',
+    'device.settings.import.header.danger':
+      'Вы уверены, что хотите импортировать эти настройки в выбранное устройство?',
+    'device.settings.import.header.desc':
+      'Это действие перезапишет все существующие настройки и это нельзя будет отменить',
+    'device.settings.import.target': 'Выбранное устройство',
+    'device.settings.import.dump': 'Дамп настроек для импорта',
+    'device.settings.import.confirm': 'Да, я уверен на все сто',
+    'device.settings.export.error.empty': 'Выгруженный дамп настроек пуст',
+    'device.settings.export.success': 'Дамп настроек устройства сохранен',
+    'device.settings.export.error': 'Не удалось экспортировать настройки с устройства',
+    'device.settings.manager.menu.header': 'Сохраненные настройки устройств',
     'device.actions.call.succes': 'Выполнено',
     'device.actions.call.error': 'Не удалось выполнить действие {action}',
     'device.actions.fetch.error': 'Не удалось получить список действий устройства',

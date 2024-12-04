@@ -5,7 +5,8 @@ export default {
   name: 'LoadingButton',
   props: {
     testId: String,
-    loading: Boolean
+    loading: Boolean,
+    disabled: Boolean
   },
   components: {
     PulseLoader
@@ -15,7 +16,12 @@ export default {
 </script>
 
 <template>
-  <button :id="testId" :disabled="loading" class="btn" @click.stop="() => $emit('click')">
+  <button
+    class="btn"
+    :id="testId"
+    :disabled="loading || disabled"
+    @click.stop="() => $emit('click')"
+  >
     <slot v-if="!loading"></slot>
     <pulse-loader :loading="loading"></pulse-loader>
   </button>
