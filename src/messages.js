@@ -99,6 +99,8 @@ const messages = {
     'device.item.type': 'Type: {type}',
     'device.item.ip': 'Ip: {ip}',
     'device.item.board': 'Board: {board, select, undefined {Unknown} other {{board}}}',
+    'device.item.st.version': 'SmartThing version: {stVersion}',
+    'device.item.version': 'Firmaware version: {version}',
     'device.tabs': `{
       tab, select,
       wifi {Wi-Fi}
@@ -479,6 +481,8 @@ const messages = {
     'device.item.type': 'Тип: {type}',
     'device.item.ip': 'Ip: {ip}',
     'device.item.board': 'Платформа: {board, select, undefined {Неизвестно} other {{board}}}',
+    'device.item.st.version': 'Версия SmartThing: {stVersion}',
+    'device.item.version': 'Версия прошивки: {version}',
     'device.tabs': `{
       tab, select,
       wifi {Wi-Fi}

@@ -31,7 +31,11 @@ export default {
       <h3 @click.stop="() => {}">
         Ip: <a :href="'http://' + device.ip" target="”_blank”">{{ device.ip }}</a>
       </h3>
-      <h3>{{ intl.formatMessage({ id: 'device.item.board' }, device) }}</h3>
+      <h3>
+        {{ intl.formatMessage({ id: 'device.item.board' }, { board: undefined, ...device }) }}
+      </h3>
+      <h3>{{ intl.formatMessage({ id: 'device.item.st.version' }, device) }}</h3>
+      <h3>{{ intl.formatMessage({ id: 'device.item.version' }, device) }}</h3>
     </div>
     <DeviceIcon :device="device" />
   </BaseContainer>
