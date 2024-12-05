@@ -28,4 +28,4 @@ const switchLocale = (lang) => {
   location.reload()
 }
 
-export { intlInstance, currentLocale, switchLocale, SUPPORTED_LOCALES }
+export { intlInstance, currentLocale, switchLocale }

@@ -1,5 +1,6 @@
 const messages = {
   en: {
+    'locale.switch': 'Переключить на русский язык',
     'doc.title': 'SmartThing',
     'doc.panel': 'Control panel',
     'doc.dashboard': 'Dashboard',
@@ -99,7 +100,7 @@ const messages = {
     'device.item.type': 'Type: {type}',
     'device.item.ip': 'Ip: {ip}',
     'device.item.board': 'Board: {board, select, undefined {Unknown} other {{board}}}',
-    'device.item.st.version': 'SmartThing version: {stVersion}',
+    'device.item.st.version': 'Lib version: {stVersion}',
     'device.item.version': 'Firmaware version: {version}',
     'device.tabs': `{
       tab, select,
@@ -381,6 +382,7 @@ const messages = {
     }`
   },
   ru: {
+    'locale.switch': 'Switch language to english',
     'doc.title': 'SmartThing',
     'doc.panel': 'Панель управления',
     'doc.dashboard': 'Дашборд',
