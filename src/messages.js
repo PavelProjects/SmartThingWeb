@@ -101,7 +101,7 @@ const messages = {
     'device.item.ip': 'Ip: {ip}',
     'device.item.board': 'Board: {board, select, undefined {Unknown} other {{board}}}',
     'device.item.st.version': 'Lib version: {stVersion}',
-    'device.item.version': 'Firmaware version: {version}',
+    'device.item.version': 'Firmware version: {version}',
     'device.tabs': `{
       tab, select,
       wifi {Wi-Fi}
