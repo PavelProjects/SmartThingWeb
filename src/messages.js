@@ -3,7 +3,6 @@ const messages = {
     'locale.switch': 'Переключить на русский язык',
     'doc.title': 'SmartThing',
     'doc.panel': 'Control panel',
-    'doc.dashboard': 'Dashboard',
     'doc.device.settings': 'Device settings',
     'doc.device.logs': 'Device logs',
     'doc.device.ota': 'Arduino OTA',
@@ -108,7 +107,6 @@ const messages = {
       info {Information}
       actions {Actions}
       sensors {Sensors}
-      states {States}
       config {Configuration}
       metrics {Metrics}
       danger {DangerZone}
@@ -256,51 +254,6 @@ const messages = {
     'cloud.auth.logout.confirm': 'Are you sure?',
     'cloud.auth.info.user.id': 'id: {id}',
     'cloud.auth.info.user.login': 'login: {login}',
-    'dashboard.load.error': 'Failed to load dashboard',
-    'dashboard.group.values.load.error': 'Failed to load values',
-    'dashboard.group.values.update.error': 'Failed to update values',
-    'dashboard.group.edit.title': 'Edit group {name}',
-    'dashboard.groups.empty': 'No groups added yet',
-    'dashboard.group.add.new': 'Add new group',
-    'dashboard.group.update.title':
-      'Click to force update\nAuto update every {updateDelay}s\nLast update {count}s ago',
-    'dashboard.group.device.title': 'Group for device:\nname: {name}\nip: {ip}\ntype: {type}',
-    'dashboard.group.delete.confirm': 'Are you sure?',
-    'dashboard.group.delete.success': 'Group deleted',
-    'dashboard.group.delete.error': 'Failed to delete group',
-    'dashboard.group.edit': 'Edit',
-    'dashboard.group.delete': 'Delete group',
-    'dashboard.group.add.values': 'Add values to display',
-    'dashboard.group.create.select.device': 'Select device',
-    'dashboard.group.create.error.exists': 'Group for this device already exists',
-    'dashboard.group.create.success': 'Create new group for device {name}',
-    'dashboard.group.create.error': 'Failed to create group',
-    'dashboard.group.edit.success': 'Group updated',
-    'dashboard.group.edit.error': 'Failed to update group',
-    'dashboard.group.edit.columns': `{
-      column, select,
-      type {type}
-      name {name}
-      units {units}
-      other {{column}}
-    }`,
-    'dashboard.group.edit.types': `{
-      value, select,
-      sensor {sensor}
-      state {state}
-      other {{value}}
-    }`,
-    'dashboard.group.edit.update.delay': 'Update delay (ms)',
-    'dashboard.group.edit.save': 'Save',
-    'dashboard.group.edit.close.confirm': 'All unsaved changes will be lost, close dialog?',
-    'dashboard.group.edit.observables': 'Sensors and states',
-    'dashboard.group.edit.actions': 'Actions',
-    'dashboard.group.edit.config': 'Settings',
-    'dashboard.group.edit.add.action': 'Add action',
-    'dashboard.group.edit.add.observables': 'Add sensors or states',
-    'dashboard.group.edit.validation.error': 'Please fill required fields',
-    'dashboard.value.last.update.data': 'Last update: {date}',
-    'dashboard.value.last.update.error': 'Value not found in device response',
     'danger.title': 'Please, be careful with this actions!',
     'danger.restart.confirm': 'This action will restart device right now! Are u sure?',
     'danger.restart.success': 'Device is restarting',
@@ -385,7 +338,6 @@ const messages = {
     'locale.switch': 'Switch language to english',
     'doc.title': 'SmartThing',
     'doc.panel': 'Панель управления',
-    'doc.dashboard': 'Дашборд',
     'doc.device.settings': 'Настройки устройств',
     'doc.device.logs': 'Логи устройств',
     'doc.device.ota': 'Ardunio OTA',
@@ -491,7 +443,6 @@ const messages = {
       info {Информация}
       actions {Действия}
       sensors {Сенсоры}
-      states {Состояния}
       config {Конфигурация}
       metrics {Метрики}
       danger {Опасная зона}
@@ -644,52 +595,6 @@ const messages = {
     'cloud.auth.logout.confirm': 'Вы уверены?',
     'cloud.auth.info.user.id': 'id: {id}',
     'cloud.auth.info.user.login': 'логин: {login}',
-    'dashboard.load.error': 'Ну удалось загрузить дашбоард',
-    'dashboard.group.values.load.error': 'Не удалось загрузить значения',
-    'dashboard.group.values.update.error': 'Не удалось обновить значения',
-    'dashboard.group.edit.title': 'Редактировать группу {name}',
-    'dashboard.groups.empty': 'Пока еще не было добавлено групп',
-    'dashboard.group.add.new': 'Добавить новую группу',
-    'dashboard.group.update.title':
-      'Нажмите для принудительного обновления\nАвтоматическое обновление каждые {updateDelay}сек\nПоследнее обновление {count}сек назад',
-    'dashboard.group.device.title': 'Группа для устройства:\nимя: {name}\nip: {ip}\nтип: {type}',
-    'dashboard.group.delete.confirm': 'Вы уверены?',
-    'dashboard.group.delete.success': 'Группа удалена',
-    'dashboard.group.delete.error': 'Не удалось удалить группу',
-    'dashboard.group.edit': 'Редактировать',
-    'dashboard.group.delete': 'Удалить группу',
-    'dashboard.group.add.values': 'Добавить значения для отображения',
-    'dashboard.group.create.select.device': 'Выберите устройство',
-    'dashboard.group.create.error.exists': 'Группа для этого устройства уже существует',
-    'dashboard.group.create.success': 'Группа для {name} успешно создна',
-    'dashboard.group.create.error': 'Не удалось создать группу',
-    'dashboard.group.edit.success': 'Группа обновлена',
-    'dashboard.group.edit.error': 'Не удалось обновить группу',
-    'dashboard.group.edit.columns': `{
-      column, select,
-      type {тип}
-      name {имя}
-      units {единицы}
-      other {{column}}
-    }`,
-    'dashboard.group.edit.types': `{
-      value, select,
-      sensor {сенсор}
-      state {состояние}
-      other {{value}}
-    }`,
-    'dashboard.group.edit.update.delay': 'Задержка обновлений (мс)',
-    'dashboard.group.edit.save': 'Сохранить',
-    'dashboard.group.edit.close.confirm':
-      'Все несохраненные изменения будут потеряны, закрыть окно?',
-    'dashboard.group.edit.observables': 'Сенсоры и состояния',
-    'dashboard.group.edit.actions': 'Действия',
-    'dashboard.group.edit.config': 'Настройки',
-    'dashboard.group.edit.add.action': 'Добавить действие',
-    'dashboard.group.edit.add.observables': 'Добавить сенсоры или состояния',
-    'dashboard.group.edit.validation.error': 'Пожалуйста заполните требуемые поля',
-    'dashboard.value.last.update.data': 'Последнее обновление: {date}',
-    'dashboard.value.last.update.error': 'Значение не было найдено в ответе устройства',
     'danger.title': 'Пожалуйста, будьте аккуратны с данными действиями!',
     'danger.restart.confirm': 'Данное действие перезапустит устройство, вы уверены?',
     'danger.restart.success': 'Устройство перезапускается',

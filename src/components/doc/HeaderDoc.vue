@@ -63,9 +63,6 @@ export default {
           <router-link :to="{ name: 'panel', params: { gateway: gatewayId } }">
             <h2>{{ intl.formatMessage({ id: 'doc.panel' }) }}</h2>
           </router-link>
-          <router-link :to="{ name: 'dashboard', params: { gateway: gatewayId } }">
-            <h2>{{ intl.formatMessage({ id: 'doc.dashboard' }) }}</h2>
-          </router-link>
           <router-link :to="{ name: 'settings', params: { gateway: gatewayId } }">
             <h2>{{ intl.formatMessage({ id: 'doc.device.settings' }) }}</h2>
           </router-link>

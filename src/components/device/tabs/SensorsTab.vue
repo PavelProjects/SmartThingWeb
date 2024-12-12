@@ -43,8 +43,8 @@ export default {
     async loadSensors() {
       this.loading = true
       try {
-        this.sensors = (await DeviceApi.getDeviceSensors(this.device, this.gateway)) ?? {}
-        Object.entries(this.sensors).forEach(([name, value]) => {
+        this.sensors = (await DeviceApi.getSensorsFull(this.device, this.gateway)) ?? {}
+        this.sensors.forEach(({ name, value, type }) => {
           const caption = `${name}: ${value}`
           if (this.tabs[name]) {
             this.tabs[name].caption = caption
@@ -53,12 +53,9 @@ export default {
               class: HooksTab,
               caption,
               props: {
-                key: 'sensor_' + name,
+                key: `sensor_${type}_${name}`,
                 device: this.device,
-                observable: {
-                  name,
-                  type: 'sensor'
-                },
+                observable: { name, type },
                 gateway: this.gateway
               }
             }

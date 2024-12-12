@@ -3,7 +3,6 @@ import InfoTab from './tabs/InfoTab.vue'
 import ActionsTab from './tabs/ActionsTab.vue'
 import SensorsTab from './tabs/SensorsTab.vue'
 import MetricsTab from './tabs/MetricsTab.vue'
-import StatesTab from './tabs/StatesTab.vue'
 import ConfigTab from './tabs/ConfigTab.vue'
 import MenuView from '../menu/MenuView.vue'
 import { useIntl } from 'vue-intl'
@@ -56,10 +55,6 @@ export default {
         sensors: {
           class: SensorsTab,
           caption: intl.formatMessage({ id: 'device.tabs' }, { tab: 'sensors' })
-        },
-        states: {
-          class: StatesTab,
-          caption: intl.formatMessage({ id: 'device.tabs' }, { tab: 'states' })
         },
         info: {
           class: InfoTab,
