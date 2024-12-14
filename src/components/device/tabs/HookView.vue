@@ -2,7 +2,7 @@
 import { systemNameToNormal } from '../../../utils/StringUtils.js'
 import InputField from '../../base/fields/InputField.vue'
 import ComboBoxField from '../../base/fields/ComboBoxField.vue'
-import { DeviceApi, DeviceApiMethods } from '../../../api/device/DeviceApi.js'
+import { DeviceApi } from '../../../api/device/DeviceApi.js'
 import { NEW_HOOK_ID } from './HooksTab.vue'
 import { h } from 'vue'
 import { toast } from '../../../utils/EventBus.js'
@@ -32,13 +32,11 @@ const SYSTEM_FIELDS = [
   'threshold'
 ]
 
-//todo fields names select from messages in intl
-
 export default {
   name: 'HookView',
   props: {
     hookProp: Object,
-    observable: Object,
+    sensor: String,
     template: Object,
     expand: Boolean
   },
@@ -62,12 +60,11 @@ export default {
   },
   data() {
     const intl = useIntl()
-    const testEnabled = !!this.apiMethods.find(({ name }) => name === DeviceApiMethods.TEST_HOOK)
     const newHook = this.hookProp.id == NEW_HOOK_ID
+    console.log(this.hookProp)
 
     return {
       intl,
-      testEnabled,
       hook: JSON.parse(JSON.stringify(this.hookProp)),
       editing: newHook,
       validationFailed: [],
@@ -86,13 +83,13 @@ export default {
     },
     fieldsComponents() {
       return this.visibleFields.map(([field, value]) => {
-        const { required } = this.template[field] || false
+        const fieldInfo = this.template[field] ?? {}
         return {
           key: field,
           label: this.intl.formatMessage({ id: 'device.hook.field' }, { field }),
-          required,
+          required: fieldInfo.required ?? false,
           value,
-          render: this.getFieldComponent(field)
+          render: this.getFieldComponent(fieldInfo)
         }
       })
     }
@@ -109,13 +106,14 @@ export default {
       return !(key in this.template)
     },
     getFieldComponent(field) {
-      if (this.template[field] && this.template[field]['values']) {
-        return h(ComboBoxField, { items: this.template[field]['values'] })
+      const { type, values } = field
+      if (values) {
+        return h(ComboBoxField, { items: values })
       }
-      if (this.template[field] && this.template[field].type === 'boolean') {
+      if (type === 'checkbox') {
         return h(CheckBoxField, {})
       }
-      return h(InputField, {})
+      return h(InputField, { type })
     },
     async saveHook() {
       if (this.hook === this.hookProp) {
@@ -137,14 +135,14 @@ export default {
       this.loading = true
       try {
         if (this.hook.id !== NEW_HOOK_ID) {
-          await DeviceApi.updateHook(this.device, this.observable, this.hook, this.gateway)
+          await DeviceApi.updateHook(this.device, this.sensor, this.hook, this.gateway)
           toast.success({
             caption: 'Hook created'
           })
         } else {
           await DeviceApi.createHook(
             this.device,
-            this.observable,
+            this.sensor,
             { id: undefined, ...this.hook },
             this.gateway
           )
@@ -175,7 +173,7 @@ export default {
       ) {
         this.loading = true
         try {
-          await DeviceApi.deleteHook(this.device, this.observable, this.hook.id, this.gateway)
+          await DeviceApi.deleteHook(this.device, this.sensor, this.hook.id, this.gateway)
           toast.success({
             caption: 'Hook deleted'
           })
@@ -197,7 +195,7 @@ export default {
         this.testLoading = true
         await DeviceApi.testHook(
           this.device,
-          this.observable,
+          this.sensor,
           this.hook.id,
           this.testValue,
           this.gateway
@@ -283,7 +281,7 @@ export default {
             <EditSVG class="icon" :onClick="() => (editing = true)" />
             <DeleteSVG class="icon" :onClick="deleteHook" :loading="loading" />
             <TestTubeSvg
-              v-if="testEnabled && !editing"
+              v-if="!editing"
               class="icon"
               :title="intl.formatMessage({ id: 'device.hook.test.it' })"
               @click="() => (testDialogVisible = true)"
@@ -343,7 +341,6 @@ export default {
       <BaseContainer :vertical="true" style="padding: var(--default-padding)">
         <InputField
           :label="intl.formatMessage({ id: 'device.hook.test.label' })"
-          :type="observable.type === 'sensor' ? 'number' : 'text'"
           v-model="testValue"
         />
         <LoadingButton @click="testCall" :loading="testLoading">

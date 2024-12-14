@@ -1,6 +1,7 @@
 <script>
 import FieldContainer from './FieldContainer.vue'
 export default {
+  name: 'CheckBoxField',
   components: { FieldContainer },
   props: {
     label: String,

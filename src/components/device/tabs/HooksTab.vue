@@ -18,7 +18,7 @@ export default {
     SyncLoader
   },
   props: {
-    observable: Object
+    sensor: String
   },
   inject: ['device', 'gateway'],
   data() {
@@ -57,12 +57,12 @@ export default {
       this.loading = true
       try {
         this.newHook = undefined
-        this.hooks = (await DeviceApi.getHooks(this.device, this.observable, this.gateway)) || []
+        this.hooks = (await DeviceApi.getHooks(this.device, this.sensor, this.gateway)) || []
       } catch (error) {
         console.error(error)
         const { error: description } = await extractDataFromError(error)
         toast.error({
-          caption: `Failed to fetch hooks for [${this.observable.type}]${this.observable.name}`,
+          caption: `Failed to fetch hooks for ${this.sensor}`,
           description
         })
       } finally {
@@ -72,7 +72,7 @@ export default {
     async loadTemplates() {
       try {
         this.templates =
-          (await DeviceApi.getHooksTemplates(this.device, this.observable.type, this.gateway)) || {}
+          (await DeviceApi.getHooksTemplates(this.device, this.sensor, this.gateway)) || {}
       } catch (error) {
         console.error(error)
         toast.error({
@@ -88,10 +88,25 @@ export default {
       const template = { ...this.templates[type], ...this.templates['default'] }
       this.newHook = Object.entries(template).reduce(
         (acc, [key, info]) => {
-          acc[key] = info['default'] || ''
+          let defValue
+          switch (info.type) {
+            case 'number':
+              defValue = 0
+              break
+            case 'checkbox':
+              defValue = false
+              break
+            default:
+              defValue = ''
+          }
+          acc[key] = info['default'] || defValue
           return acc
         },
-        { id: NEW_HOOK_ID, type, rnd: Math.random() } // rnd - hack to force rerender
+        {
+          id: NEW_HOOK_ID,
+          type,
+          rnd: Math.random() // rnd - hack to force rerender
+        }
       )
     },
     templateForType(type) {
@@ -118,7 +133,7 @@ export default {
         <HookView
           v-if="newHook"
           :key="newHook.rnd"
-          :observable="observable"
+          :sensor="sensor"
           :hookProp="newHook"
           :template="templateForType(newHook.type)"
           :expand="hooks.length === 1"
@@ -128,7 +143,7 @@ export default {
         <HookView
           v-for="(hook, index) in hooks"
           :key="hook.id"
-          :observable="observable"
+          :sensor="sensor"
           :hookProp="hook"
           :template="templateForType(hook.type)"
           :expand="hooks.length === 1"

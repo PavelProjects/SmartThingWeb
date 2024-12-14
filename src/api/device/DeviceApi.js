@@ -16,7 +16,6 @@ export const DeviceApiMethods = {
   DELETE_CONFIG_VALUE: 'deleteConfigValue',
   DELETE_ALL_CONFIG_VALUES: 'deleteAllConfigValues',
   GET_SENSORS: 'getSensors',
-  GET_SENSORS_FULL: 'getSensorsFull',
   GET_ALL_HOOKS: 'getAllHooks',
   GET_HOOK_BY_ID: 'getHookById',
   GET_HOOKS_TEMPLATES: 'getHooksTemplates',
@@ -119,80 +118,77 @@ export const DeviceApi = {
   async getSensors(device, gateway) {
     return (await deviceFetch({ device, command: DeviceApiMethods.GET_SENSORS, gateway })).data
   },
-  async getSensorsFull(device, gateway) {
-    return (await deviceFetch({ device, command: DeviceApiMethods.GET_SENSORS_FULL, gateway })).data
-  },
   async getAllHooks(device, gateway) {
     return (await deviceFetch({ device, command: DeviceApiMethods.GET_ALL_HOOKS, gateway })).data
   },
-  async getHooks(device, observable, gateway) {
+  async getHooks(device, sensor, gateway) {
     return (
       await deviceFetch({
         device,
         command: DeviceApiMethods.GET_HOOKS,
         params: {
-          observable
+          sensor
         },
         gateway
       })
     ).data
   },
-  async getHookById(device, observable, id, gateway) {
+  async getHookById(device, sensor, id, gateway) {
     return (
       await deviceFetch({
         device,
         command: DeviceApiMethods.GET_HOOK_BY_ID,
-        params: { observable, id },
+        params: { sensor, id },
         gateway
       })
     ).data
   },
-  async getHooksTemplates(device, type, gateway) {
+  async getHooksTemplates(device, sensor, gateway) {
     return (
       await deviceFetch({
         device,
         command: DeviceApiMethods.GET_HOOKS_TEMPLATES,
         gateway,
-        params: { type }
+        params: { sensor }
       })
     ).data
   },
-  async createHook(device, observable, hook, gateway) {
+  async createHook(device, sensor, hook, gateway) {
     await deviceFetch({
       device,
       command: DeviceApiMethods.CREATE_HOOK,
       params: {
-        observable,
+        sensor,
         hook
       },
       gateway
     })
   },
-  async updateHook(device, observable, hook, gateway) {
+  async updateHook(device, sensor, hook, gateway) {
     await deviceFetch({
       device,
       command: DeviceApiMethods.UPDATE_HOOK,
       params: {
-        observable,
+        sensor,
         hook
       },
       gateway
     })
   },
-  async deleteHook(device, observable, id, gateway) {
+  async deleteHook(device, sensor, id, gateway) {
     await deviceFetch({
       device,
       command: DeviceApiMethods.DELETE_HOOK,
-      params: { observable, id },
+      params: { sensor, id },
       gateway
     })
   },
-  async testHook(device, observable, id, value, gateway) {
+  async testHook(device, sensor, id, value, gateway) {
     return deviceFetch({
       device,
       command: DeviceApiMethods.TEST_HOOK,
       params: {
-        observable,
+        sensor,
         id,
         value
       },
