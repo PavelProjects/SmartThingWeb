@@ -11,7 +11,7 @@ const PATH_CLOUD_DISCONNECT = '/api/cloud/connection/disconnect'
 const PATH_SEARCH_ENABLED = '/api/devices/search/enabled'
 const PATH_DEVICES_FOUND = '/api/devices/found'
 const PATH_DEVICES_SAVED = '/api/devices/saved'
-const PATH_DEVICE_API = '/api/device/api'
+const PATH_DEVICE_API = '/api/device/request'
 const PATH_DEVICE_LOGS = '/api/devices/logs'
 const PATH_DEVICE_SETTINGS = '/api/devices/settings'
 
@@ -20,7 +20,7 @@ const GatewayApi = {
   async callDeviceApi({ device, command, params }) {
     return await gatewayAxiosInstance.post(PATH_DEVICE_API, {
       command,
-      device,
+      device: device.ip,
       params
     })
   },

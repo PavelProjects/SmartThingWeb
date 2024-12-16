@@ -110,7 +110,7 @@ const CloudApi = {
   async sendDeviceRequest({ gateway, device, command, params }) {
     return await axiosInstance.post(URL_GATEWAY_REQUEST + '/device', {
       gatewayId: gateway.id,
-      device,
+      device: device.ip,
       command,
       params
     })
