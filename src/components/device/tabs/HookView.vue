@@ -137,7 +137,7 @@ export default {
         if (this.hook.id !== NEW_HOOK_ID) {
           await DeviceApi.updateHook(this.device, this.sensor, this.hook, this.gateway)
           toast.success({
-            caption: 'Hook created'
+            caption: this.intl.formatMessage({ id: 'device.hook.updated' })
           })
         } else {
           await DeviceApi.createHook(
@@ -147,7 +147,7 @@ export default {
             this.gateway
           )
           toast.success({
-            caption: 'Hook updated'
+            caption: this.intl.formatMessage({ id: 'device.hook.created' })
           })
         }
         this.$emit('hookUpdated')
@@ -156,7 +156,7 @@ export default {
         console.error(error)
         const { error: description } = await extractDataFromError(error)
         toast.error({
-          caption: 'Failed to save hook',
+          caption: this.intl.formatMessage({ id: 'device.hook.save.error' }),
           description
         })
       } finally {
@@ -175,14 +175,14 @@ export default {
         try {
           await DeviceApi.deleteHook(this.device, this.sensor, this.hook.id, this.gateway)
           toast.success({
-            caption: 'Hook deleted'
+            caption: this.intl.formatMessage({ id: 'device.hook.delete.success' })
           })
           this.$emit('hookUpdated')
         } catch (error) {
           console.error(error)
           const { error: description } = await extractDataFromError(error)
           toast.error({
-            caption: `Failed to delete hook by id=${this.hook.id}`,
+            caption: this.intl.formatMessage({ id: 'device.hook.delete.error' }),
             description
           })
         } finally {

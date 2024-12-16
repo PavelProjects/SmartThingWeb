@@ -62,7 +62,10 @@ export default {
         console.error(error)
         const { error: description } = await extractDataFromError(error)
         toast.error({
-          caption: `Failed to fetch hooks for ${this.sensor}`,
+          caption: this.intl.formatMessage(
+            { id: 'device.hook.fetch.failed' },
+            { sensor: this.sensor }
+          ),
           description
         })
       } finally {
@@ -76,7 +79,7 @@ export default {
       } catch (error) {
         console.error(error)
         toast.error({
-          caption: 'Failed to fetch hooks templates'
+          caption: this.intl.formatMessage({ id: 'device.hook.template.fetch.failed' })
         })
       }
     },

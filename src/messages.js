@@ -223,6 +223,13 @@ const messages = {
       lastResponseCode {Last request result}
       other {{field}}
     }`,
+    'device.hook.fetch.failed': 'Failed to fetch hooks for {sensor}',
+    'device.hook.template.fetch.failed': 'Failed to fetch hooks templates',
+    'device.hook.updated': 'Hook updated',
+    'device.hook.created': 'Hook created',
+    'device.hook.save.error': 'Failed to save hook',
+    'device.hook.delete.success': 'Hook deleted',
+    'device.hook.delete.error': 'Failed to delete hook',
     'device.sensors.empty': 'No sensors configured',
     'device.states.empty': 'No states configured',
     'devices.search': 'Found devices',
@@ -564,6 +571,13 @@ const messages = {
       lastResponseCode {Результат последнего запроса}
       other {{field}}
     }`,
+    'device.hook.fetch.failed': 'Не удалось загрузить список хуков для {sensor}',
+    'device.hook.template.fetch.failed': 'Не удалось загрузить шаблоны для хуков',
+    'device.hook.updated': 'Хук обновлен',
+    'device.hook.created': 'Хук создан',
+    'device.hook.save.error': 'Не удалось сохранить хук',
+    'device.hook.delete.success': 'Хук удален',
+    'device.hook.delete.error': 'Не удалось удалить хук',
     'device.sensors.empty': 'Нет настроенных сенсоров',
     'device.states.empty': 'Нет настроенных состояний',
     'devices.search': 'Найденные устройства',
