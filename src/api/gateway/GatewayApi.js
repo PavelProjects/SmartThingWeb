@@ -66,7 +66,7 @@ const GatewayApi = {
   async getDeviceApiMethods({ device: { name, ip }, gateway }) {
     return (
       await gatewayFetch({
-        url: `${PATH_DEVICE_API}/methods?name=${name}&ip=${ip}`,
+        url: `${PATH_DEVICE_API}/commands?name=${name}&ip=${ip}`,
         method: HTTP_METHOD.GET,
         gateway
       })

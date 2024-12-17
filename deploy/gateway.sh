@@ -1,4 +1,4 @@
-GATEWAY_PROJECT_DIR="$HOME/projects/smart_thing/smart_thing_gateway"
+GATEWAY_PROJECT_DIR="$HOME/projects/smart_thing/smart_thing_gateway/smart-thing-gateway-app"
 STATIC_DIR="$GATEWAY_PROJECT_DIR/src/main/resources/static"
 
 npm run build && \
