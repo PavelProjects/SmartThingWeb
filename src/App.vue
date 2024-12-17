@@ -61,7 +61,7 @@ export default {
 
 <template>
   <div v-if="!!mode">
-    <router-view v-if="isAuthenticated" :key="$route.fullPath" v-slot="{ Component, path }">
+    <router-view v-if="isAuthenticated" v-slot="{ Component, path }">
       <GatewayProvider>
         <HeaderDoc class="doc" />
         <CloudAuthDialog
