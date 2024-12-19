@@ -10,7 +10,6 @@ export const DeviceApiMethods = {
   SAVE_NAME: 'saveName',
   CALL_ACTION: 'callAction',
   ACTION_SCHEDULE: 'actionSchedule',
-  GET_CONFIG_INFO: 'getConfigInfo',
   GET_CONFIG_VALUES: 'getConfigValues',
   SAVE_CONFIG_VALUES: 'saveConfigValues',
   DELETE_CONFIG_VALUE: 'deleteConfigValue',
@@ -51,9 +50,6 @@ export const DeviceApi = {
   },
   async getDeviceActionsInfo(device, gateway) {
     return (await deviceFetch({ device, command: DeviceApiMethods.GET_ACTIONS, gateway })).data
-  },
-  async getDeviceConfigInfo(device, gateway) {
-    return (await deviceFetch({ device, command: DeviceApiMethods.GET_CONFIG_INFO, gateway })).data
   },
   async saveName(device, name, gateway) {
     await deviceFetch({

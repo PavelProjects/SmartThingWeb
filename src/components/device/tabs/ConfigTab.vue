@@ -3,7 +3,6 @@ import { DeviceApi } from '../../../api/device/DeviceApi.js'
 import InputField from '../../base/fields/InputField.vue'
 import LoadingButton from '../../base/controls/LoadingButton.vue'
 import SyncLoader from 'vue-spinner/src/SyncLoader.vue'
-import CheckBoxField from '../../base/fields/CheckBoxField.vue'
 import { useIntl } from 'vue-intl'
 import { toast } from '../../../utils/EventBus.js'
 import BaseContainer from '../../base/BaseContainer.vue'
@@ -14,7 +13,6 @@ export default {
   inject: ['device', 'gateway'],
   components: {
     InputField,
-    CheckBoxField,
     LoadingButton,
     BaseContainer,
     SyncLoader
@@ -24,7 +22,6 @@ export default {
     return {
       intl,
       values: {},
-      configInfo: {},
       loading: false,
       saveLoading: false,
       deleteLoading: false
@@ -35,30 +32,15 @@ export default {
   },
   computed: {
     haveConfigEntries() {
-      return Object.keys(this.configInfo).length !== 0
+      return Object.keys(this.values).length !== 0
     }
   },
   methods: {
-    async update() {
-      this.loading = true
-      try {
-        await this.loadConfigInfo()
-        await this.loadConfigValues()
-      } finally {
-        this.loading = false
-      }
-    },
-    async loadConfigInfo() {
-      try {
-        this.configInfo = (await DeviceApi.getDeviceConfigInfo(this.device, this.gateway)) ?? {}
-      } catch (error) {
-        console.error(error)
-        toast.error({
-          caption: 'Failed to fetch device configuration information'
-        })
-      }
+    update() {
+      this.loadConfigValues()
     },
     async loadConfigValues() {
+      this.loading = true
       try {
         this.values = (await DeviceApi.getConfig(this.device, this.gateway)) ?? {}
       } catch (error) {
@@ -66,6 +48,8 @@ export default {
         toast.error({
           caption: 'Failed to fetch device configuration values'
         })
+      } finally {
+        this.loading = false
       }
     },
     async saveConfig() {
@@ -114,27 +98,26 @@ export default {
 <template>
   <BaseContainer :vertical="true">
     <sync-loader class="loading-spinner" :loading="loading"></sync-loader>
-    <BaseContainer v-if="haveConfigEntries" class="config-inputs" :vertical="true">
-      <div
-        v-for="[key, { caption, type }] of Object.entries(this.configInfo)"
-        :key="key"
-        :title="intl.formatMessage({ id: 'device.config.field.title' }, { name: key, type })"
-      >
-        <CheckBoxField v-if="type === 'boolean'" :label="caption" v-model="values[key]" />
-        <InputField v-else :label="`${caption} [${key}]`" :type="type" v-model="values[key]" />
-      </div>
-    </BaseContainer>
-    <BaseContainer class="controls-holder" :gap="'10px'">
-      <LoadingButton class="delete" :loading="deleteLoading" @click="deleteAllValues">
-        <h2>{{ intl.formatMessage({ id: 'device.config.button.delete.all' }) }}</h2>
-      </LoadingButton>
-      <LoadingButton :loading="saveLoading" @click="saveConfig">
-        <h2>{{ intl.formatMessage({ id: 'device.config.button.save' }) }}</h2>
-      </LoadingButton>
-    </BaseContainer>
     <h2 v-if="!haveConfigEntries" class="header">
       {{ intl.formatMessage({ id: 'device.config.empty.entries' }) }}
     </h2>
+    <BaseContainer v-if="haveConfigEntries" class="config-inputs" :vertical="true">
+      <div
+        v-for="name of Object.keys(this.values)"
+        :key="name"
+        :title="intl.formatMessage({ id: 'device.config.field.title' }, { name })"
+      >
+        <InputField :label="name" v-model="values[name]" />
+      </div>
+      <BaseContainer class="controls-holder" :gap="'10px'">
+        <LoadingButton class="delete" :loading="deleteLoading" @click="deleteAllValues">
+          <h2>{{ intl.formatMessage({ id: 'device.config.button.delete.all' }) }}</h2>
+        </LoadingButton>
+        <LoadingButton :loading="saveLoading" @click="saveConfig">
+          <h2>{{ intl.formatMessage({ id: 'device.config.button.save' }) }}</h2>
+        </LoadingButton>
+      </BaseContainer>
+    </BaseContainer>
   </BaseContainer>
 </template>
 
@@ -144,7 +127,7 @@ h2 {
 }
 .controls-holder {
   flex: 1 0 auto;
-  padding: var(--default-padding);
+  padding-bottom: var(--default-padding);
 }
 .controls-holder button {
   width: 50%;
