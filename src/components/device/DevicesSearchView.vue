@@ -308,10 +308,6 @@ export default {
 </template>
 
 <style scoped>
-.devices-search-view {
-  width: 400px;
-}
-
 .devices-search-view .list-title {
   border-bottom: 2px solid var(--color-border);
 }

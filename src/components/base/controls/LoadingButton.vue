@@ -29,11 +29,11 @@ export default {
 
 <style scoped>
 .btn {
-  background-color: hsla(160, 100%, 37%, 0.2);
+  background-color: #88c0d0;
   border-color: transparent;
   border-radius: var(--border-radius);
   min-width: 90px;
-  color: black;
+  color: rgb(59, 66, 82);
 }
 
 .btn:hover {

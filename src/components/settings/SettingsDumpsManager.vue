@@ -145,7 +145,4 @@ export default {
 .item:last-child {
   border-bottom: none;
 }
-.export-button {
-  margin: var(--default-padding);
-}
 </style>

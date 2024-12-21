@@ -197,7 +197,6 @@ export default {
   user-select: none;
 }
 .cloud-info {
-  min-width: 400px;
   padding: var(--default-padding);
 }
 </style>

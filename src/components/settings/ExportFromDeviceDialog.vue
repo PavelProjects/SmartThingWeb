@@ -62,7 +62,7 @@ export default {
 
 <template>
   <ModalDialog v-bind="$props">
-    <BaseContainer :vertical="true">
+    <BaseContainer class="export-dialog" :vertical="true">
       <DevicesSearchView v-model="selectedDevices" />
       <LoadingButton
         :loading="loading"
@@ -76,3 +76,9 @@ export default {
     </BaseContainer>
   </ModalDialog>
 </template>
+
+<style lang="css" scoped>
+.export-dialog {
+  padding: var(--default-padding);
+}
+</style>

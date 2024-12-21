@@ -25,13 +25,13 @@ export default {
     color() {
       switch (this.toast.type) {
         case ERROR_TYPE:
-          return 'rgb(171, 12, 12)'
-        case SUCCESS_TYPE:
-          return 'rgb(2, 147, 74)'
+          return 'var(--nord11)'
         case WARNING_TYPE:
-          return 'rgb(184, 81, 1)'
+          return 'var(--nord12)'
+        case SUCCESS_TYPE:
+          return 'var(--nord14)'
         default:
-          return 'rgb(0, 112, 122)'
+          return 'var(--nord9)'
       }
     },
     from() {

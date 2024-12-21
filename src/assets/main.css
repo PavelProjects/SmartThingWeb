@@ -14,20 +14,6 @@ a,
 .header {
   text-align: center;
   text-decoration: none;
-  color: var(--color-positive);
-}
-
-/* todo remove */
-.btn {
-  background-color: hsla(160, 100%, 37%, 0.2);
-  border-color: transparent;
-  border-radius: var(--border-radius);
-  min-width: 90px;
-  color: black;
-}
-
-.btn:hover {
-  opacity: 0.5;
 }
 
 .overlay {
@@ -36,7 +22,6 @@ a,
   left: 0px;
   width: 100vw;
   height: calc(100vh - var(--doc-height));
-  background-color: var(--background-tilt);
   z-index: 998;
 }
 
