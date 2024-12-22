@@ -37,7 +37,7 @@ export default {
     }
   },
   async mounted() {
-    document.title = 'SmartThingWeb ' + this.mode
+    document.title = 'SmartThing ' + this.mode
 
     useStompClientStore() // todo why it's here? some bug ????
     this.tryAuth()
@@ -80,6 +80,7 @@ export default {
       @authenticated="({ user }) => authStore.setAuthentication(user)"
     />
   </div>
+  <div v-else>Mode is undefined</div>
 </template>
 
 <style>
