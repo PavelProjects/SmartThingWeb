@@ -136,6 +136,7 @@ export default {
 }
 
 .search-view {
+  width: 380px;
   box-shadow: rgb(129 133 141 / 35%) 0px 0px 7px 2px;
   background-color: var(--color-background);
 }
