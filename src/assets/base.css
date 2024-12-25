@@ -17,12 +17,15 @@
   --nord14: #a3be8c;
   --nord15: #b48ead;
 
-  /* --color-background: var(--nord0);
+  --color-background: var(--nord0);
   --color-background-mute: var(--nord1);
   --color-background-soft: var(--nord2);
-  --color-text: rgb(236, 239, 244); */
-
   --color-background-tilt: var(--nord3);
+  --color-accent: var(--nord8);
+
+  --color-text: rgb(236, 239, 244);
+  --color-text-button: rgb(59, 66, 82);
+
   --color-border: var(--nord3);
 
   --color-positive: var(--nord14);
@@ -42,20 +45,6 @@
   --icon-size: 35px;
 }
 
-[data-theme="dark"] {
-  --color-background: var(--nord0);
-  --color-background-mute: var(--nord1);
-  --color-background-soft: var(--nord2);
-  --color-text: rgb(236, 239, 244);
-}
-
-[data-theme="light"] {
-  --color-background: var(--nord4);
-  --color-background-mute: var(--nord5);
-  --color-background-soft: var(--nord6);
-  --color-text: rgb(76, 86, 106);
-}
-
 *,
 *::before,
 *::after {
@@ -68,9 +57,8 @@ body {
   min-height: 100vh;
   color: var(--color-text);
   background: var(--color-background);
-  transition:
-    color 0.5s,
-    background-color 0.5s;
+  font-size: 1rem;
+  font-weight: 400;
   line-height: 1.6;
   font-family:
     Inter,

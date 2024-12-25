@@ -87,11 +87,12 @@ export default {
     <div v-if="tabs" class="menu-panel" :style="panelStyle">
       <div class="menu-items" :class="itemsListClass">
         <MenuItem
-          v-for="[name, { caption }] of Object.entries(tabs)"
+          v-for="[name, { caption, icon }] of Object.entries(tabs)"
           :key="name"
           :id="name"
           :title="tabTitle"
           :caption="caption ?? name"
+          :icon="icon"
           :selected="currentTab === name"
           @select="() => switchTab(name)"
         />

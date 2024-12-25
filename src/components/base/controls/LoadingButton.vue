@@ -1,6 +1,4 @@
 <script>
-import PulseLoader from 'vue-spinner/src/PulseLoader.vue'
-
 export default {
   name: 'LoadingButton',
   props: {
@@ -8,35 +6,43 @@ export default {
     loading: Boolean,
     disabled: Boolean
   },
-  components: {
-    PulseLoader
-  },
-  emits: ['click']
+  emits: ['click'],
+  computed: {
+    style() {
+      if (this.disabled) {
+        return { cursor: 'not-allowed' }
+      }
+      if (this.loading) {
+        return { cursor: 'wait' }
+      }
+      return {}
+    }
+  }
 }
 </script>
 
 <template>
   <button
-    class="btn"
+    class="loading-button"
     :id="testId"
     :disabled="loading || disabled"
+    :style="style"
     @click.stop="() => $emit('click')"
   >
-    <slot v-if="!loading"></slot>
-    <pulse-loader :loading="loading"></pulse-loader>
+    <slot></slot>
   </button>
 </template>
 
 <style scoped>
-.btn {
-  background-color: #88c0d0;
+.loading-button {
+  background-color: var(--color-accent);
   border-color: transparent;
   border-radius: var(--border-radius);
   min-width: 90px;
-  color: rgb(59, 66, 82);
+  color: var(--color-text-button);
 }
 
-.btn:hover {
+.loading-button:hover {
   opacity: 0.5;
 }
 </style>

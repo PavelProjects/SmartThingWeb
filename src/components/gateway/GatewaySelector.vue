@@ -7,6 +7,7 @@ import UpdateButton from '../base/controls/UpdateButton.vue'
 import { useIntl } from 'vue-intl'
 import ModalDialog from '../base/ModalDialog.vue'
 import BaseContainer from '../base/BaseContainer.vue'
+import LoadingButton from '../base/controls/LoadingButton.vue'
 
 export default {
   name: 'GatewaySelector',
@@ -15,7 +16,8 @@ export default {
     GatewayEditDialog,
     UpdateButton,
     ModalDialog,
-    BaseContainer
+    BaseContainer,
+    LoadingButton
   },
   emits: ['close'],
   data() {
@@ -113,9 +115,9 @@ export default {
           @click="handleGatewayClick(gateway)"
           @gatewaysUpdate="loadGateways"
         />
-        <button class="btn" @click="showCreateDialog = true">
+        <LoadingButton @click="showCreateDialog = true">
           <h2>{{ intl.formatMessage({ id: 'gateway.create.button' }) }}</h2>
-        </button>
+        </LoadingButton>
       </BaseContainer>
       <GatewayEditDialog
         v-if="showCreateDialog"

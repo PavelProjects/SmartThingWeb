@@ -2,14 +2,18 @@ const messages = {
   en: {
     'locale.switch': 'Переключить на русский язык',
     'doc.title': 'SmartThing',
-    'doc.panel': 'Control panel',
-    'doc.device.settings': 'Device settings',
-    'doc.device.logs': 'Device logs',
-    'doc.device.ota': 'Arduino OTA',
+    'doc.menu': `{
+      item, select,
+      panel {Control panel}
+      settings {Device settings}
+      logs {Device logs}
+      ota {Arduino OTA}
+      other {{item}}
+    }`,
     gateway: 'Gateway: {gateway}',
-    'gateway.panel.devices': 'Devices',
+    'gateway.panel.devices': 'Available devices',
     'gateway.panel': 'Control panel for {device}',
-    'gateway.cloud.auth.conn.token': 'Connection token',
+    'gateway.cloud.auth.conn.token': 'Connect via token',
     'gateway.cloud.auth.url': 'Cloud url',
     'gateway.cloud.auth.token': 'Auth token',
     'gateway.cloud.auth.connect': 'Connect',
@@ -344,14 +348,18 @@ const messages = {
   ru: {
     'locale.switch': 'Switch language to english',
     'doc.title': 'SmartThing',
-    'doc.panel': 'Панель управления',
-    'doc.device.settings': 'Настройки устройств',
-    'doc.device.logs': 'Логи устройств',
-    'doc.device.ota': 'Ardunio OTA',
+    'doc.menu': `{
+      item, select,
+      panel {Панель управления}
+      settings {Настройки устройств}
+      logs {Логи устройств}
+      ota {Обновдение по воздуху}
+      other {{item}}
+    }`,
     gateway: 'Маршрутизатор: {gateway}',
-    'gateway.panel.devices': 'Устройства',
+    'gateway.panel.devices': 'Доступные устройства',
     'gateway.panel': 'Панель управления {device}',
-    'gateway.cloud.auth.conn.token': 'Токен подключения',
+    'gateway.cloud.auth.conn.token': 'Подключиться при помощи токена',
     'gateway.cloud.auth.url': 'Url облака',
     'gateway.cloud.auth.token': 'Авторизационный токен',
     'gateway.cloud.auth.connect': 'Подключиться',

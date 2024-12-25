@@ -98,6 +98,7 @@ export default {
   padding: 5px;
   z-index: 1000;
   transition: all 0.5s ease-in;
+  color: var(--color-text-button);
 }
 
 .toast-hide {

@@ -60,5 +60,6 @@ export default {
   border: 1px solid var(--color-border);
   border-radius: var(--border-radius);
   background-color: var(--color-background);
+  box-shadow: var(--color-background) 0px 0px 20px 5px;
 }
 </style>

@@ -19,14 +19,14 @@ export default {
     levelColor() {
       switch (this.level) {
         case 'ERROR':
-          return 'rgb(142, 63, 43)'
+          return 'var(--nord11)'
         case 'WARNING':
         case 'WARN':
-          return 'rgb(188, 106, 34)'
+          return 'var(--nord12)'
         case 'INFO':
-          return 'rgba(103, 198, 136, 0.8)'
+          return 'var(--nord8)'
         case 'DEBUG':
-          return 'purple'
+          return 'var(--nord15)'
         default:
           return undefined
       }

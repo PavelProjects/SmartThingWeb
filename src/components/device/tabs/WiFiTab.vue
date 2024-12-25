@@ -21,6 +21,7 @@ export default {
     return {
       intl,
       settings: undefined,
+      loading: false,
       modes: {}
     }
   },
@@ -29,6 +30,7 @@ export default {
   },
   methods: {
     async update() {
+      this.loading = true
       try {
         const { settings, modes } = await DeviceApi.getWiFi(this.device, this.gateway)
         this.settings = settings
@@ -37,12 +39,15 @@ export default {
         toast.error({
           caption: this.intl.formatMessage({ id: 'device.wifi.load.error' })
         })
+      } finally {
+        this.loading = false
       }
     },
     async save() {
       if (!this.settings.ssid || !this.settings.mode) {
         return
       }
+      this.loading = true
       try {
         await DeviceApi.setWiFi(this.device, this.settings, this.gateway)
         toast.success({
@@ -53,6 +58,8 @@ export default {
         toast.error({
           caption: this.intl.formatMessage({ id: 'device.wifi.save.error' })
         })
+      } finally {
+        this.loading = false
       }
     }
   }
@@ -76,11 +83,11 @@ export default {
       :items="modes"
       :validationFailed="!settings.mode"
     />
-    <LoadingButton @click="() => save()">
+    <LoadingButton :loading="loading" @click="() => save()">
       <h2>{{ intl.formatMessage({ id: 'device.config.button.save' }) }}</h2>
     </LoadingButton>
   </BaseContainer>
-  <sync-loader v-else class="loading-spinner" :loading="true"></sync-loader>
+  <sync-loader v-else color="var(--color-accent)" :loading="true"></sync-loader>
 </template>
 
 <style scoped>

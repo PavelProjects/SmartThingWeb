@@ -1,9 +1,8 @@
 @import './base.css';
 
-a,
-.green {
+a {
   text-decoration: none;
-  color: var(--color-positive);
+  color: var(--color-text);
 }
 
 .red {
@@ -67,9 +66,6 @@ textarea {
 .required {
   background-color: hsla(3, 100%, 37%, 0.2);
   color: black;
-}
-.loading-spinner {
-  text-align: center;
 }
 
 .hook-title {

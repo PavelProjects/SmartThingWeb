@@ -96,8 +96,8 @@ export default {
 </script>
 
 <template>
-  <BaseContainer :vertical="true">
-    <sync-loader class="loading-spinner" :loading="loading"></sync-loader>
+  <BaseContainer class="config-tab" :vertical="true">
+    <sync-loader color="var(--color-accent)" :loading="loading"></sync-loader>
     <h2 v-if="!haveConfigEntries" class="header">
       {{ intl.formatMessage({ id: 'device.config.empty.entries' }) }}
     </h2>
@@ -122,6 +122,10 @@ export default {
 </template>
 
 <style scoped>
+.config-tab {
+  padding: var(--default-padding);
+}
+
 h2 {
   text-align: center;
 }

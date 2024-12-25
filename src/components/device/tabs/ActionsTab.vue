@@ -46,7 +46,7 @@ export default {
 
 <template>
   <div>
-    <sync-loader class="loading-spinner" :loading="loading"></sync-loader>
+    <sync-loader :loading="loading" color="var(--color-accent)"></sync-loader>
     <div v-if="actions.length > 0" class="buttons-panel">
       <ActionItem
         v-for="action of actions"
