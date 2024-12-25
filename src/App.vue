@@ -40,16 +40,11 @@ export default {
       return !!this.id || this.mode === 'gateway'
     }
   },
-  created() {},
   async mounted() {
     document.title = 'SmartThing ' + this.mode
 
     useStompClientStore() // todo why it's here? some bug ????
     this.tryAuth()
-
-    if (this.mode === 'cloud' && !this.gateway) {
-      this.$router.push({ name: 'gateway-selector' })
-    }
   },
   methods: {
     async tryAuth() {

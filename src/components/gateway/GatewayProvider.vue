@@ -24,6 +24,12 @@ export default {
   unmounted() {
     EventBus.off(EVENT, this.handleGatewayEvent)
   },
+  watch: {
+    $route() {
+      this.gatewayId = this.$route.params.gateway
+      this.loadGateway()
+    }
+  },
   methods: {
     async loadGateway() {
       if (this.mode === 'gateway') {
@@ -31,7 +37,7 @@ export default {
         return
       }
       if (!this.gatewayId) {
-        this.$router.push('/gateways')
+        this.$router.push({ name: 'gateway-selector' })
         return
       }
       try {

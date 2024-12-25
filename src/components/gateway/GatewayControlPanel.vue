@@ -38,7 +38,6 @@ export default {
       return (this.windowWidth - 800) / 2 > 350
     },
     selectedDevice() {
-      console.log(this.device?.[0])
       return this.device?.[0]
     }
   },

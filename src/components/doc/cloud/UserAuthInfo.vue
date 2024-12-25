@@ -50,7 +50,7 @@ export default {
       {{ login }}
     </p>
     <div v-if="openDialog && login" class="overlay" @click.stop="openDialog = false">
-      <BaseContainer class="dialog" @click.stop="() => {}" :vertical="true">
+      <BaseContainer class="dialog bordered" @click.stop="() => {}" :vertical="true">
         <h2>{{ intl.formatMessage({ id: 'cloud.auth.info.user.id' }, { id }) }}</h2>
         <h2>{{ intl.formatMessage({ id: 'cloud.auth.info.user.login' }, { login }) }}</h2>
         <LoadingButton @click.stop="() => logout()">
