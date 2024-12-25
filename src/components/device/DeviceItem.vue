@@ -43,7 +43,7 @@ export default {
 
 <style scoped>
 .device-item {
-  padding: var(--default-padding);
+  padding: 5px;
   width: 100%;
 }
 .device-item h3 {

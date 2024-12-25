@@ -33,5 +33,7 @@ export default {
 <style>
 .locale {
   cursor: pointer;
+  user-select: none;
+  text-align: center;
 }
 </style>

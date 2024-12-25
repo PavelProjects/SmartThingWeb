@@ -355,7 +355,7 @@ export default {
 
 <style scoped>
 .hook {
-  padding: var(--default-padding);
+  padding: 10px;
 }
 .icon {
   cursor: pointer;

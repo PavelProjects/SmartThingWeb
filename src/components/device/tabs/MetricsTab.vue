@@ -57,7 +57,7 @@ export default {
 
 <template>
   <div>
-    <sync-loader class="loading-spinner" :loading="loading"></sync-loader>
+    <sync-loader color="var(--color-accent)" :loading="loading"></sync-loader>
     <TreeView :values="metrics" />
   </div>
 </template>

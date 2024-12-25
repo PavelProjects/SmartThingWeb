@@ -114,7 +114,7 @@ export default {
         :disabled="true"
       />
     </BaseContainer>
-    <sync-loader v-else class="loading-spinner" :loading="true"></sync-loader>
+    <sync-loader v-else color="var(--color-accent)" :loading="true"></sync-loader>
   </div>
 </template>
 

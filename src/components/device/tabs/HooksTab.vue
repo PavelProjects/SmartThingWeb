@@ -7,6 +7,7 @@ import SyncLoader from 'vue-spinner/src/SyncLoader.vue'
 import { useIntl } from 'vue-intl'
 import { toast } from '../../../utils/EventBus.js'
 import { extractDataFromError } from '../../../api/ApiUtils.js'
+import BaseContainer from '../../base/BaseContainer.vue'
 
 export const NEW_HOOK_ID = 'New'
 
@@ -15,6 +16,7 @@ export default {
   components: {
     HookView,
     ComboBoxField,
+    BaseContainer,
     SyncLoader
   },
   props: {
@@ -122,7 +124,7 @@ export default {
 <template>
   <div>
     <h2 class="header">{{ intl.formatMessage({ id: 'device.hooks.title' }) }}</h2>
-    <sync-loader class="loading-spinner" :loading="loading"></sync-loader>
+    <sync-loader color="var(--color-accent)" :loading="loading"></sync-loader>
     <div v-if="!loading">
       <ComboBoxField
         class="hook-selector"
@@ -132,7 +134,7 @@ export default {
         :modelValue="newHook?.type"
         @update:modelValue="(v) => addHook(v)"
       />
-      <div v-if="hooks.length > 0 || newHook" class="hooks-list-view list">
+      <BaseContainer v-if="hooks.length > 0 || newHook" class="hooks-list-view" :vertical="true">
         <HookView
           v-if="newHook"
           :key="newHook.rnd"
@@ -153,7 +155,7 @@ export default {
           @hookUpdated="() => loadHooks()"
           @removeHook="() => hooks.splice(index, 1)"
         />
-      </div>
+      </BaseContainer>
       <div v-else class="header">
         <h3>{{ intl.formatMessage({ id: 'device.hooks.empty' }) }}</h3>
       </div>
@@ -163,7 +165,7 @@ export default {
 
 <style scoped>
 .hook-selector {
-  padding: var(--default-padding);
+  padding: 10px;
 }
 .hooks-list-view {
   max-height: 80vh;

@@ -8,6 +8,7 @@ import { storeToRefs } from 'pinia'
 import { useStompClientStore } from './store/stompClientStore'
 import GatewayProvider from './components/gateway/GatewayProvider.vue'
 import { computed } from 'vue'
+import { useThemeStore } from './store/themeStore'
 
 export default {
   components: {
@@ -19,11 +20,14 @@ export default {
   data() {
     const authStore = useCloudAuthStore()
     const { id, login } = storeToRefs(authStore)
+    const themeStore = useThemeStore()
+
     return {
       mode: import.meta.env.VITE_MODE,
       id,
       login,
-      authStore
+      authStore,
+      themeStore
     }
   },
   provide() {
@@ -36,11 +40,16 @@ export default {
       return !!this.id || this.mode === 'gateway'
     }
   },
+  created() {},
   async mounted() {
-    document.title = 'SmartThingWeb ' + this.mode
+    document.title = 'SmartThing ' + this.mode
 
     useStompClientStore() // todo why it's here? some bug ????
     this.tryAuth()
+
+    if (this.mode === 'cloud' && !this.gateway) {
+      this.$router.push({ name: 'gateway-selector' })
+    }
   },
   methods: {
     async tryAuth() {
@@ -80,6 +89,7 @@ export default {
       @authenticated="({ user }) => authStore.setAuthentication(user)"
     />
   </div>
+  <div v-else>Mode is undefined</div>
 </template>
 
 <style>
