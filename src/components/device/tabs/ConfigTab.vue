@@ -111,10 +111,10 @@ export default {
       </div>
       <BaseContainer class="controls-holder" :gap="'10px'">
         <LoadingButton class="delete" :loading="deleteLoading" @click="deleteAllValues">
-          <h2>{{ intl.formatMessage({ id: 'device.config.button.delete.all' }) }}</h2>
+          <h3>{{ intl.formatMessage({ id: 'device.config.button.delete.all' }) }}</h3>
         </LoadingButton>
         <LoadingButton :loading="saveLoading" @click="saveConfig">
-          <h2>{{ intl.formatMessage({ id: 'device.config.button.save' }) }}</h2>
+          <h3>{{ intl.formatMessage({ id: 'device.config.button.save' }) }}</h3>
         </LoadingButton>
       </BaseContainer>
     </BaseContainer>
@@ -131,7 +131,6 @@ h2 {
 }
 .controls-holder {
   flex: 1 0 auto;
-  padding-bottom: var(--default-padding);
 }
 .controls-holder button {
   width: 50%;

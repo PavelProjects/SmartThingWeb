@@ -84,7 +84,7 @@ export default {
         :validationFailed="!deviceName"
       >
         <LoadingButton :loading="loading" @click="saveName">
-          <h3>{{ intl.formatMessage({ id: 'device.info.name.save' }) }}</h3>
+          <p>{{ intl.formatMessage({ id: 'device.info.name.save' }) }}</p>
         </LoadingButton>
       </InputField>
       <InputField
@@ -122,6 +122,6 @@ export default {
 .fields-list {
   width: 60%;
   margin: auto;
-  padding-bottom: var(--default-gap);
+  padding: var(--default-padding);
 }
 </style>

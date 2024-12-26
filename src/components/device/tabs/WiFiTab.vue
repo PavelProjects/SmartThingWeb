@@ -84,7 +84,7 @@ export default {
       :validationFailed="!settings.mode"
     />
     <LoadingButton :loading="loading" @click="() => save()">
-      <h2>{{ intl.formatMessage({ id: 'device.config.button.save' }) }}</h2>
+      <h3>{{ intl.formatMessage({ id: 'device.config.button.save' }) }}</h3>
     </LoadingButton>
   </BaseContainer>
   <sync-loader v-else color="var(--color-accent)" :loading="true"></sync-loader>
@@ -94,6 +94,6 @@ export default {
 .fields-list {
   width: 60%;
   margin: auto;
-  padding-bottom: var(--default-gap);
+  padding: var(--default-padding);
 }
 </style>

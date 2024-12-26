@@ -129,12 +129,12 @@ export default {
           type="number"
         />
         <BaseContainer class="controls-holder" :vertical="false">
-          <LoadingButton class="disable-button" @click="() => updateDelay(0)">
+          <LoadingButton class="action-button disable-button" @click="() => updateDelay(0)">
             <h2>
               {{ intl.formatMessage({ id: 'device.actions.delay.disable' }) }}
             </h2>
           </LoadingButton>
-          <LoadingButton @click="() => updateDelay()">
+          <LoadingButton class="action-button" @click="() => updateDelay()">
             <h2>
               {{ intl.formatMessage({ id: 'device.actions.delay.save' }) }}
             </h2>
