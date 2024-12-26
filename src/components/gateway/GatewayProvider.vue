@@ -1,13 +1,22 @@
 <script>
+import { useIntl } from 'vue-intl'
 import { CloudApi } from '../../api/CloudApi'
 import { EVENT, EventBus, GATEWAY_EVENT, toast } from '../../utils/EventBus'
 import { computed } from 'vue'
+import RiseLoader from 'vue-spinner/src/RiseLoader.vue'
 
 // used in cloud mode to load gateway from path
 export default {
   name: 'GatewayProvider',
+  components: {
+    RiseLoader
+  },
   data() {
+    const intl = useIntl()
+
     return {
+      intl,
+      loading: false,
       gatewayId: this.$route.params.gateway,
       currentPath: this.$route.path,
       gateway: undefined
@@ -37,9 +46,12 @@ export default {
         return
       }
       if (!this.gatewayId) {
+        this.gateway = undefined
         this.$router.push({ name: 'gateway-selector' })
         return
       }
+
+      this.loading = true
       try {
         const gtw = await CloudApi.getGateway(this.gatewayId)
         if (!gtw || !gtw.online) {
@@ -50,8 +62,10 @@ export default {
       } catch (error) {
         console.error(error)
         toast.error({
-          caption: 'Failed to load gateway ' + this.gatewayId
+          caption: this.intl.formatMessage({ id: 'cloud.gateway.load.failed' })
         })
+      } finally {
+        this.loading = false
       }
     },
     handleGatewayEvent({ gateway, event }) {
@@ -60,11 +74,11 @@ export default {
       }
       if (event === GATEWAY_EVENT.CONNECTED) {
         toast.info({
-          caption: `Gateway ${gateway?.name} connected!`
+          caption: this.intl.formatMessage({ id: 'cloud.gateway.connected' }, gateway)
         })
       } else if (event === GATEWAY_EVENT.DISCONNECTED) {
         toast.error({
-          caption: `Gateway ${gateway?.name} disconnected!`
+          caption: this.intl.formatMessage({ id: 'cloud.gateway.disconnected' }, gateway)
         })
       }
     }
@@ -74,7 +88,8 @@ export default {
 
 <template>
   <div>
-    <div v-if="mode === 'gateway' || gateway || currentPath === '/gateways'">
+    <RiseLoader v-if="loading" color="var(--color-accent)" />
+    <div v-else-if="mode === 'gateway' || gateway || currentPath === '/gateways'">
       <slot></slot>
     </div>
   </div>

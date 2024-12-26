@@ -28,7 +28,8 @@ export default {
     async auth() {
       if (!this.login || !this.password) {
         toast.error({
-          caption: this.intl.formatMessage({ id: 'cloud.auth.lprequired' })
+          caption: this.intl.formatMessage({ id: 'cloud.auth.lprequired' }),
+          autoClose: true
         })
         return
       }
@@ -39,13 +40,21 @@ export default {
         if (!auth) {
           throw new Error('Failed to get authentication')
         }
-        toast.success({ caption: 'Welcome, ' + this.login })
+        toast.success({
+          caption: this.intl.formatMessage(
+            { id: 'cloud.auth.login.success' },
+            { login: this.login }
+          )
+        })
         this.$emit('authenticated', auth)
       } catch (error) {
         console.error(error)
         toast.error({
-          caption: 'Failed to authenticate!',
-          description: error?.response?.status == 401 ? 'Wrong login/password' : 'Service error'
+          caption: this.intl.formatMessage({ id: 'cloud.auth.login.error' }),
+          description: this.intl.formatMessage(
+            { id: 'cloud.auth.login.error.desc' },
+            { status: error?.response?.status }
+          )
         })
       } finally {
         this.loading = false
@@ -56,8 +65,12 @@ export default {
 </script>
 
 <template>
-  <ModalDialog>
-    <BaseContainer :vertical="true" style="padding: var(--default-padding)" :gap="'5px'">
+  <ModalDialog class="clear-background">
+    <BaseContainer
+      :vertical="true"
+      style="padding: var(--default-padding)"
+      gap="var(--default-padding)"
+    >
       <form>
         <InputField
           :label="intl.formatMessage({ id: 'login' })"
@@ -82,3 +95,9 @@ export default {
     </BaseContainer>
   </ModalDialog>
 </template>
+
+<style>
+.clear-background::backdrop {
+  background-color: unset;
+}
+</style>

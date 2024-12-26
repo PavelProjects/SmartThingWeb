@@ -65,7 +65,11 @@ export default {
 
 <template>
   <div v-if="!!mode">
-    <router-view v-if="isAuthenticated" v-slot="{ Component, path }">
+    <div v-if="!isAuthenticated">
+      <CloudAuthDialog @authenticated="({ user }) => authStore.setAuthentication(user)" />
+      <ToatsView id="toasts-list" />
+    </div>
+    <router-view v-else v-slot="{ Component, path }">
       <GatewayProvider>
         <HeaderDoc class="doc" />
         <CloudAuthDialog
@@ -79,10 +83,6 @@ export default {
         <ToatsView id="toasts-list" />
       </GatewayProvider>
     </router-view>
-    <CloudAuthDialog
-      v-if="!isAuthenticated"
-      @authenticated="({ user }) => authStore.setAuthentication(user)"
-    />
   </div>
   <div v-else>Mode is undefined</div>
 </template>

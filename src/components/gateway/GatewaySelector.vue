@@ -5,7 +5,6 @@ import GatewayItem from './GatewayItem.vue'
 import GatewayEditDialog from './GatewayEditDialog.vue'
 import UpdateButton from '../base/controls/UpdateButton.vue'
 import { useIntl } from 'vue-intl'
-import ModalDialog from '../base/ModalDialog.vue'
 import BaseContainer from '../base/BaseContainer.vue'
 import LoadingButton from '../base/controls/LoadingButton.vue'
 
@@ -15,7 +14,6 @@ export default {
     GatewayItem,
     GatewayEditDialog,
     UpdateButton,
-    ModalDialog,
     BaseContainer,
     LoadingButton
   },
@@ -27,8 +25,7 @@ export default {
       intl,
       gateways: [],
       loading: false,
-      showCreateDialog: false,
-      modalClass: this.$route.params.gateway ? '' : 'clear-background'
+      showCreateDialog: false
     }
   },
   async mounted() {
@@ -48,6 +45,7 @@ export default {
           description: this.intl.formatMessage({ id: 'gateway.select.offline.desc' })
         })
       }
+      this.$emit('close')
     },
     async loadGateways() {
       this.loading = true
@@ -99,40 +97,39 @@ export default {
 </script>
 
 <template>
-  <ModalDialog id="gateway-selector" :class="modalClass" @close="$emit('close')">
-    <div class="gateway-selector">
-      <div class="header">
-        <h2 class="header">
-          {{ intl.formatMessage({ id: 'gateway.selector.title' }) }}
-        </h2>
-        <UpdateButton class="update" :loading="loading" :onClick="loadGateways" />
-      </div>
-      <BaseContainer :vertical="true">
-        <GatewayItem
-          v-for="gateway of gateways"
-          :key="gateway.id"
-          :gateway="gateway"
-          @click="handleGatewayClick(gateway)"
-          @gatewaysUpdate="loadGateways"
-        />
-        <LoadingButton @click="showCreateDialog = true">
-          <h2>{{ intl.formatMessage({ id: 'gateway.create.button' }) }}</h2>
-        </LoadingButton>
-      </BaseContainer>
-      <GatewayEditDialog
-        v-if="showCreateDialog"
-        :gateway="{}"
-        @save="createGateway"
-        @close="showCreateDialog = false"
-      />
+  <div class="gateway-selector">
+    <div class="header">
+      <h2 class="header">
+        {{ intl.formatMessage({ id: 'gateway.selector.title' }) }}
+      </h2>
+      <UpdateButton class="update" :loading="loading" :onClick="loadGateways" />
     </div>
-  </ModalDialog>
+    <BaseContainer :vertical="true">
+      <GatewayItem
+        v-for="gateway of gateways"
+        :key="gateway.id"
+        :gateway="gateway"
+        @click="() => handleGatewayClick(gateway)"
+        @gatewaysUpdate="loadGateways"
+      />
+      <LoadingButton @click="showCreateDialog = true">
+        <h2>{{ intl.formatMessage({ id: 'gateway.create.button' }) }}</h2>
+      </LoadingButton>
+    </BaseContainer>
+    <GatewayEditDialog
+      v-if="showCreateDialog"
+      :gateway="{}"
+      @save="createGateway"
+      @close="showCreateDialog = false"
+    />
+  </div>
 </template>
 
 <style scoped>
 .gateway-selector {
   margin: auto;
   padding: var(--default-padding);
+  max-width: 400px;
 }
 .header {
   position: relative;

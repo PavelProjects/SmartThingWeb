@@ -46,7 +46,7 @@ export default {
         return gateway.name + '[gateway]'
       }
       if (device) {
-        return device.name + '[device]'
+        return device.name
       }
       return undefined
     },

@@ -7,6 +7,7 @@ import BaseContainer from '../base/BaseContainer.vue'
 import LocaleSelector from './LocaleSelector.vue'
 import ThemeSwitcher from './ThemeSwitcher.vue'
 import DocMenu from './DocMenu.vue'
+import ModalDialog from '../base/ModalDialog.vue'
 
 export default {
   name: 'HeaderDoc',
@@ -15,6 +16,7 @@ export default {
     GatewayCloudStatus,
     UserAuthInfo,
     GatewaySelector,
+    ModalDialog,
     BaseContainer,
     LocaleSelector,
     ThemeSwitcher
@@ -76,10 +78,12 @@ export default {
       <ThemeSwitcher />
       <LocaleSelector />
     </BaseContainer>
-    <GatewaySelector
+    <ModalDialog
       v-if="mode === 'cloud' && gatewaySelectorVisible"
       @close="gatewaySelectorVisible = false"
-    />
+    >
+      <GatewaySelector @close="gatewaySelectorVisible = false" />
+    </ModalDialog>
   </BaseContainer>
 </template>
 

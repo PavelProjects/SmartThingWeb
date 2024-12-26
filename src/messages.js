@@ -262,9 +262,19 @@ const messages = {
     'devices.saved.add.success.desc': 'Name: {name}, type: {type}',
     'devices.saved.add.error': 'Failed to add device',
     'cloud.auth.lprequired': 'Login and password are required!',
+    'cloud.auth.login.success': 'Welcome, {login}',
+    'cloud.auth.login.error': 'Failed to authenticate',
+    'cloud.auth.login.error.desc': `{
+      status, select,
+      401 {Wrong login/password}
+      other {Service error}
+    }`,
     'cloud.auth.logout.confirm': 'Are you sure?',
     'cloud.auth.info.user.id': 'id: {id}',
     'cloud.auth.info.user.login': 'login: {login}',
+    'cloud.gateway.load.failed': 'Failed to load gateway information',
+    'cloud.gateway.connected': 'Gateway {name} connected!',
+    'cloud.gateway.disconnected': 'Gateway {name} disconnected!',
     'danger.title': 'Please, be careful with this actions!',
     'danger.restart.confirm': 'This action will restart device right now! Are u sure?',
     'danger.restart.success': 'Device is restarting',
@@ -614,9 +624,19 @@ const messages = {
     'devices.saved.add.success.desc': 'Имя: {name}, тип: {type}',
     'devices.saved.add.error': 'Не удалось добавить новое устройство',
     'cloud.auth.lprequired': 'Введите логин и пароль!',
+    'cloud.auth.login.success': 'Добро пожаловать, {login}',
+    'cloud.auth.login.error': 'Не удалось авторизоваться',
+    'cloud.auth.login.error.desc': `{
+      status, select,
+      401 {Неправильный логин/пароль}
+      other {Ошибка сервера}
+    }`,
     'cloud.auth.logout.confirm': 'Вы уверены?',
     'cloud.auth.info.user.id': 'id: {id}',
     'cloud.auth.info.user.login': 'логин: {login}',
+    'cloud.gateway.load.failed': 'Не удалось загрузить информацию о маршрутизаторе',
+    'cloud.gateway.connected': 'Маршрутизатор {name} подключен!',
+    'cloud.gateway.disconnected': 'Маршрутизатор {name} отключен!',
     'danger.title': 'Пожалуйста, будьте аккуратны с данными действиями!',
     'danger.restart.confirm': 'Данное действие перезапустит устройство, вы уверены?',
     'danger.restart.success': 'Устройство перезапускается',

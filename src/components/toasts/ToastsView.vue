@@ -26,7 +26,9 @@ export default {
     EventBus.on(TOAST, this.addToast)
   },
   mounted() {
-    this.loadNotifications()
+    if (this.gateway) {
+      this.loadNotifications()
+    }
     this.stompClient.subscribe(NOTIFICATION_TOPIC, this.handleMessage)
   },
   unmounted() {
