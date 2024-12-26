@@ -4,15 +4,13 @@ import { CloudApi } from '../../api/CloudApi'
 import { toast } from '../../utils/EventBus'
 import LoadingButton from '../base/controls/LoadingButton.vue'
 import InputField from '../base/fields/InputField.vue'
-import ModalDialog from '../base/ModalDialog.vue'
 import BaseContainer from '../base/BaseContainer.vue'
 
 export default {
-  name: 'CloudAuthDialog',
+  name: 'CloudAuth',
   components: {
     InputField,
     LoadingButton,
-    ModalDialog,
     BaseContainer
   },
   data() {
@@ -65,8 +63,10 @@ export default {
 </script>
 
 <template>
-  <ModalDialog class="clear-background">
+  <div>
+    <p class="banner">SmartThing</p>
     <BaseContainer
+      class="cloud-auth bordered"
       :vertical="true"
       style="padding: var(--default-padding)"
       gap="var(--default-padding)"
@@ -93,10 +93,21 @@ export default {
         </h2>
       </LoadingButton>
     </BaseContainer>
-  </ModalDialog>
+  </div>
 </template>
 
 <style>
+.banner {
+  color: var(--color-accent);
+  font-size: 8rem;
+  text-align: center;
+  user-select: none;
+}
+.cloud-auth {
+  margin: auto;
+  align-self: center;
+  width: 400px;
+}
 .clear-background::backdrop {
   background-color: unset;
 }

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if !(npm run lint-check >/dev/null 2>&1)
+if !(npm run lint-fix >/dev/null 2>&1)
 then
   echo "Pre-commit lint check failed!"
   echo "Fix it before commiting changes"
