@@ -45,11 +45,19 @@ export default {
 </script>
 
 <template>
-  <dialog :id="id" class="dialog-container" @click.stop="closeDialog" @close="closeDialog">
-    <div class="dialog-content" :style="{ width: width }" @click.stop="() => {}">
-      <slot></slot>
-    </div>
-  </dialog>
+  <Transition name="fade">
+    <dialog
+      v-if="open"
+      :id="id"
+      class="dialog-container"
+      @click.stop="closeDialog"
+      @close="closeDialog"
+    >
+      <div class="dialog-content" :style="{ width: width }" @click.stop="() => {}">
+        <slot></slot>
+      </div>
+    </dialog>
+  </Transition>
 </template>
 
 <style scoped>

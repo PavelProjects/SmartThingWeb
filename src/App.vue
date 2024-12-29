@@ -79,7 +79,9 @@ export default {
         <!-- <keep-alive>
             <component :is="Component" :key="path" />
           </keep-alive> -->
-        <component :is="Component" :key="path" />
+        <Transition name="fade-in">
+          <component :is="Component" :key="path" />
+        </Transition>
         <ToatsView id="toasts-list" />
       </GatewayProvider>
     </router-view>

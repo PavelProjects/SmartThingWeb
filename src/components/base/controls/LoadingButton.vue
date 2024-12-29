@@ -15,7 +15,7 @@ export default {
       if (this.loading) {
         return {
           cursor: 'wait',
-          animation: 'shadow-pulse 1s infinite alternate'
+          animation: 'shadow-pulse 0.5s infinite alternate'
         }
       }
       return {}
@@ -44,6 +44,7 @@ export default {
   border-radius: var(--border-radius);
   min-width: 90px;
   color: var(--color-text-button);
+  user-select: none;
 }
 
 .loading-button:hover {
