@@ -13,7 +13,10 @@ export default {
         return { cursor: 'not-allowed' }
       }
       if (this.loading) {
-        return { cursor: 'wait' }
+        return {
+          cursor: 'wait',
+          animation: 'shadow-pulse 1s infinite alternate'
+        }
       }
       return {}
     }
@@ -35,6 +38,7 @@ export default {
 
 <style scoped>
 .loading-button {
+  position: relative;
   background-color: var(--color-accent);
   border-color: transparent;
   border-radius: var(--border-radius);
