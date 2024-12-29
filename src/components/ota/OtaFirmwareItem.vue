@@ -124,12 +124,12 @@ export default {
       </a>
     </ContextMenu>
     <EditFirmwareInfoDialog
-      v-if="editVisible"
+      :open="editVisible"
       @close="() => (editVisible = false)"
       @updated="handleUpdated"
       :originalInfo="firmware"
     />
-    <ModalDialog v-if="searchVisible" @close="() => (searchVisible = false)">
+    <ModalDialog :open="searchVisible" @close="() => (searchVisible = false)">
       <BaseContainer class="device-select" :vertical="true">
         <DevicesSearchView
           :title="intl.formatMessage({ id: 'ota.upload.to' })"

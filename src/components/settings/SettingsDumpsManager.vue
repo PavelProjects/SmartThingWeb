@@ -106,14 +106,14 @@ export default {
       </LoadingButton>
     </BaseContainer>
     <SettingsDumpInfoDialog
-      v-if="selectedSettings && !importDialogVisible"
+      :open="selectedSettings && !importDialogVisible"
       :settings="selectedSettings"
       @close="() => (selectedSettings = undefined)"
       @importToDevice="() => (importDialogVisible = true)"
       @delete="() => deleteSettings()"
     />
     <ExportFromDeviceDialog
-      v-if="exportDialogVisible"
+      :open="exportDialogVisible"
       @close="
         () => {
           loadSettings()
@@ -122,7 +122,7 @@ export default {
       "
     />
     <ImportToDeviceDialog
-      v-if="importDialogVisible"
+      :open="importDialogVisible"
       :settings="selectedSettings"
       @close="
         () => {

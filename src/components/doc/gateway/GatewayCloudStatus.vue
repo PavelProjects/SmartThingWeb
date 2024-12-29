@@ -130,7 +130,7 @@ export default {
         {{ connectionStatus }}
       </p>
     </div>
-    <ModalDialog v-if="dialogVisible" @close="dialogVisible = false">
+    <ModalDialog id="cloud-info" :open="dialogVisible" @close="dialogVisible = false">
       <BaseContainer class="cloud-info" @click.stop="() => {}" :vertical="true">
         <h2 class="header">
           {{ intl.formatMessage({ id: 'gateway.cloud.info' }) }}

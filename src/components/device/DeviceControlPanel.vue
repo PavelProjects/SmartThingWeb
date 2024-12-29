@@ -44,6 +44,11 @@ export default {
       features: {},
       apiMethods: {},
       defaultTabs: {
+        info: {
+          class: InfoTab,
+          caption: intl.formatMessage({ id: 'device.tabs' }, { tab: 'info' }),
+          icon: 'M13 9H11V7H13V9M13 17H11V11H13V17M5 3H19C20.1 3 21 3.89 21 5V19C21 19.53 20.79 20.04 20.41 20.41C20.04 20.79 19.53 21 19 21H5C4.47 21 3.96 20.79 3.59 20.41C3.21 20.04 3 19.53 3 19V5C3 3.89 3.89 3 5 3M19 19V5H5V19H19Z'
+        },
         actions: {
           class: ActionsTab,
           caption: intl.formatMessage({ id: 'device.tabs' }, { tab: 'actions' }),
@@ -53,11 +58,6 @@ export default {
           class: SensorsTab,
           caption: intl.formatMessage({ id: 'device.tabs' }, { tab: 'sensors' }),
           icon: 'M15 13V5A3 3 0 0 0 9 5V13A5 5 0 1 0 15 13M12 4A1 1 0 0 1 13 5V8H11V5A1 1 0 0 1 12 4Z'
-        },
-        info: {
-          class: InfoTab,
-          caption: intl.formatMessage({ id: 'device.tabs' }, { tab: 'info' }),
-          icon: 'M13 9H11V7H13V9M13 17H11V11H13V17M5 3H19C20.1 3 21 3.89 21 5V19C21 19.53 20.79 20.04 20.41 20.41C20.04 20.79 19.53 21 19 21H5C4.47 21 3.96 20.79 3.59 20.41C3.21 20.04 3 19.53 3 19V5C3 3.89 3.89 3 5 3M19 19V5H5V19H19Z'
         },
         wifi: {
           class: WiFiTab,

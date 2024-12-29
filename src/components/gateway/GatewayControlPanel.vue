@@ -63,46 +63,44 @@ export default {
 <template>
   <div id="gateway-control-panel">
     <div v-if="mode === 'gateway' || !!gateway">
-      <Transition name="slide-right">
-        <KeepAlive>
-          <LoadingButton
-            class="search-view-item"
-            v-if="!searchExpanded"
-            @click="() => (searchExpanded = true)"
-          >
-            <BaseContainer class="search-expand">
-              <svg fill="currentColor" width="30" height="30" viewBox="0 0 24 24">
-                <path
-                  d="M6,4H18V5H21V7H18V9H21V11H18V13H21V15H18V17H21V19H18V20H6V19H3V17H6V15H3V13H6V11H3V9H6V7H3V5H6V4M11,15V18H12V15H11M13,15V18H14V15H13M15,15V18H16V15H15Z"
-                ></path>
+      <div class="search-view-container">
+        <Transition name="slide-right" mode="out-in">
+          <KeepAlive>
+            <LoadingButton v-if="!searchExpanded" @click="() => (searchExpanded = true)">
+              <BaseContainer class="search-expand">
+                <svg fill="currentColor" width="30" height="30" viewBox="0 0 24 24">
+                  <path
+                    d="M6,4H18V5H21V7H18V9H21V11H18V13H21V15H18V17H21V19H18V20H6V19H3V17H6V15H3V13H6V11H3V9H6V7H3V5H6V4M11,15V18H12V15H11M13,15V18H14V15H13M15,15V18H16V15H15Z"
+                  ></path>
+                </svg>
+                <p>
+                  {{ intl.formatMessage({ id: 'gateway.panel.devices' }) }}
+                </p>
+              </BaseContainer>
+            </LoadingButton>
+            <BaseContainer v-else>
+              <DevicesSearchView
+                key="search-view"
+                class="search-view"
+                v-model="device"
+                @deviceDeleted="handleDeviceDelete"
+              />
+              <svg
+                v-if="selectedDevice"
+                fill="currentColor"
+                width="35"
+                height="35"
+                viewBox="0 0 24 24"
+                style="cursor: pointer"
+                @click="() => (searchExpanded = false)"
+              >
+                <path d="M15.41,16.58L10.83,12L15.41,7.41L14,6L8,12L14,18L15.41,16.58Z"></path>
               </svg>
-              <p>
-                {{ intl.formatMessage({ id: 'gateway.panel.devices' }) }}
-              </p>
             </BaseContainer>
-          </LoadingButton>
-          <BaseContainer v-else class="search-view-item">
-            <DevicesSearchView
-              key="search-view"
-              class="search-view"
-              v-model="device"
-              @deviceDeleted="handleDeviceDelete"
-            />
-            <svg
-              v-if="selectedDevice"
-              fill="currentColor"
-              width="35"
-              height="35"
-              viewBox="0 0 24 24"
-              style="cursor: pointer"
-              @click="() => (searchExpanded = false)"
-            >
-              <path d="M15.41,16.58L10.83,12L15.41,7.41L14,6L8,12L14,18L15.41,16.58Z"></path>
-            </svg>
-          </BaseContainer>
-        </KeepAlive>
-      </Transition>
-      <Transition name="fade-in">
+          </KeepAlive>
+        </Transition>
+      </div>
+      <Transition name="fade" mode="out-in">
         <DeviceControlPanel
           v-if="selectedDevice"
           :key="selectedDevice.ip"
@@ -121,7 +119,7 @@ export default {
   position: relative;
 }
 
-.search-view-item {
+.search-view-container {
   position: absolute;
   top: var(--default-gap);
   left: var(--default-gap);

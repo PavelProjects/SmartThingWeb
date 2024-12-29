@@ -98,9 +98,11 @@ export default {
         />
       </div>
       <div v-if="renders[currentTab]" class="menu-item-content">
-        <KeepAlive>
-          <component ref="content" :key="currentTab" :is="renders[currentTab]" v-bind="$attrs" />
-        </KeepAlive>
+        <Transition name="fade" mode="out-in">
+          <KeepAlive>
+            <component ref="content" :key="currentTab" :is="renders[currentTab]" v-bind="$attrs" />
+          </KeepAlive>
+        </Transition>
       </div>
       <div v-else-if="placeholder" class="placeholder">
         <h2 class="header">

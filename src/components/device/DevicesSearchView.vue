@@ -295,7 +295,7 @@ export default {
       </BaseContainer>
     </BaseContainer>
     <AddDeviceDialog
-      v-if="addDeviceVisible"
+      :open="addDeviceVisible"
       @close="addDeviceVisible = false"
       @added="
         () => {

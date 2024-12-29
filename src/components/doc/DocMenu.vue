@@ -79,7 +79,7 @@ export default {
         </div>
       </div>
     </Transition>
-    <BuildInfoDialog v-if="buildInfoVisible" @close="() => (buildInfoVisible = false)" />
+    <BuildInfoDialog :open="buildInfoVisible" @close="() => (buildInfoVisible = false)" />
   </div>
 </template>
 

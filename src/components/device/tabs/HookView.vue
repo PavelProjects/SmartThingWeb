@@ -337,7 +337,7 @@ export default {
         @update:modelValue="(value) => setValue(key, value)"
       />
     </BaseContainer>
-    <ModalDialog v-if="testDialogVisible" @close="testDialogVisible = false">
+    <ModalDialog :open="testDialogVisible" @close="testDialogVisible = false">
       <BaseContainer :vertical="true" style="padding: var(--default-padding)">
         <InputField
           :label="intl.formatMessage({ id: 'device.hook.test.label' })"

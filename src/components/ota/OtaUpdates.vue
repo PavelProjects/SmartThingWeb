@@ -94,7 +94,7 @@ export default {
       />
     </BaseContainer>
     <AddOtaFirmwareDialog
-      v-if="addVisible"
+      :open="addVisible"
       @close="() => (addVisible = false)"
       @created="
         () => {

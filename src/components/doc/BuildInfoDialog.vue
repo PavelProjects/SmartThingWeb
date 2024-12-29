@@ -52,7 +52,7 @@ export default {
 </script>
 
 <template>
-  <ModalDialog v-bind="$attrs" size="large">
+  <ModalDialog id="build-info" v-bind="$attrs" size="large">
     <BaseContainer :vertical="true" class="build-info">
       <BaseContainer :vertical="true">
         <h2 class="header">Gateway backend build info</h2>

@@ -117,7 +117,7 @@ export default {
       </LoadingButton>
     </BaseContainer>
     <GatewayEditDialog
-      v-if="showCreateDialog"
+      :open="showCreateDialog"
       :gateway="{}"
       @save="createGateway"
       @close="showCreateDialog = false"

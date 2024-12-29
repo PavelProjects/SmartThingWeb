@@ -79,7 +79,8 @@ export default {
       <LocaleSelector />
     </BaseContainer>
     <ModalDialog
-      v-if="mode === 'cloud' && gatewaySelectorVisible"
+      v-if="mode === 'cloud'"
+      :open="gatewaySelectorVisible"
       @close="gatewaySelectorVisible = false"
     >
       <GatewaySelector @close="gatewaySelectorVisible = false" />

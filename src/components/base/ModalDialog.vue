@@ -5,7 +5,7 @@ export default {
   props: {
     id: {
       type: String,
-      default: () => 'modal-dialog'
+      default: () => String(Math.random())
     },
     open: Boolean,
     size: {
@@ -32,9 +32,14 @@ export default {
       width: width + 'px'
     }
   },
-  mounted() {
-    // it's okat bcz we can open only one modal dialog at the moment
-    document.getElementById(this.id)?.showModal()
+  watch: {
+    open(value) {
+      if (value) {
+        document.getElementById(this.id)?.showModal()
+      } else {
+        document.getElementById(this.id)?.close()
+      }
+    }
   },
   methods: {
     closeDialog() {
@@ -45,19 +50,19 @@ export default {
 </script>
 
 <template>
-  <Transition name="fade">
-    <dialog
-      v-if="open"
-      :id="id"
-      class="dialog-container"
-      @click.stop="closeDialog"
-      @close="closeDialog"
-    >
-      <div class="dialog-content" :style="{ width: width }" @click.stop="() => {}">
+  <dialog
+    :id="id"
+    :open="open"
+    @click.stop="closeDialog"
+    @close="closeDialog"
+    class="dialog-container"
+  >
+    <Transition name="fade-in">
+      <div v-if="open" class="dialog-content" :style="{ width: width }" @click.stop="() => {}">
         <slot></slot>
       </div>
-    </dialog>
-  </Transition>
+    </Transition>
+  </dialog>
 </template>
 
 <style scoped>

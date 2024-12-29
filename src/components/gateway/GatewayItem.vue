@@ -167,12 +167,12 @@ export default {
       </ContextMenu>
     </div>
     <GatewayEditDialog
-      v-if="showEditDialog"
+      :open="showEditDialog"
       :gateway="gateway"
       @save="saveGateway"
       @close="showEditDialog = false"
     />
-    <ModalDialog id="token-generator" v-if="token" @close="token = undefined">
+    <ModalDialog id="token-generator" :open="token" @close="token = undefined">
       <BaseContainer class="token-gen-container" :vertical="true">
         <h2 class="header">
           {{ intl.formatMessage({ id: 'gateway.item.connection.token' }) }}
