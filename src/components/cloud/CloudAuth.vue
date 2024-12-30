@@ -5,6 +5,7 @@ import { toast } from '../../utils/EventBus'
 import LoadingButton from '../base/controls/LoadingButton.vue'
 import InputField from '../base/fields/InputField.vue'
 import BaseContainer from '../base/BaseContainer.vue'
+import { useCloudAuthStore } from '../../store/cloudAuthStore'
 
 export default {
   name: 'CloudAuth',
@@ -15,14 +16,30 @@ export default {
   },
   data() {
     const intl = useIntl()
+    const authStore = useCloudAuthStore()
     return {
       intl,
+      authStore,
       login: '',
       password: '',
       loading: false
     }
   },
+  mounted() {
+    this.loadAuth()
+  },
   methods: {
+    async loadAuth() {
+      this.loading = true
+      try {
+        const { user } = (await CloudApi.getAuthentication()) ?? {}
+        this.authStore.setAuthentication(user)
+      } catch (error) {
+        console.error(error)
+      } finally {
+        this.loading = false
+      }
+    },
     async auth() {
       if (!this.login || !this.password) {
         toast.error({
@@ -44,7 +61,7 @@ export default {
             { login: this.login }
           )
         })
-        this.$emit('authenticated', auth)
+        this.authStore.setAuthentication(auth.user)
       } catch (error) {
         console.error(error)
         toast.error({
@@ -107,6 +124,7 @@ export default {
   margin: auto;
   align-self: center;
   width: 400px;
+  box-shadow: 0px 0px 10px 0px var(--color-accent);
 }
 .clear-background::backdrop {
   background-color: unset;

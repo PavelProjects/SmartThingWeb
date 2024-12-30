@@ -26,7 +26,7 @@ export default defineConfig(({ mode }) => {
     server: {
       proxy: {
         '/api': {
-          target: 'http://192.168.1.7',
+          target: 'http://localhost:8080',
           ws: true
         }
       }

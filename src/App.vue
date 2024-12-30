@@ -2,13 +2,11 @@
 import HeaderDoc from './components/doc/HeaderDoc.vue'
 import ToatsView from './components/toasts/ToastsView.vue'
 import CloudAuth from './components/cloud/CloudAuth.vue'
-import { CloudApi } from './api/CloudApi'
-import { useCloudAuthStore } from './store/cloudAuthStore'
-import { storeToRefs } from 'pinia'
-import { useStompClientStore } from './store/stompClientStore'
 import GatewayProvider from './components/gateway/GatewayProvider.vue'
 import { computed } from 'vue'
 import { useThemeStore } from './store/themeStore'
+import { useCloudAuthStore } from './store/cloudAuthStore'
+import { storeToRefs } from 'pinia'
 
 export default {
   components: {
@@ -18,16 +16,16 @@ export default {
     GatewayProvider
   },
   data() {
-    const authStore = useCloudAuthStore()
-    const { id, login } = storeToRefs(authStore)
     const themeStore = useThemeStore()
+    const authStore = useCloudAuthStore()
+    const { id } = storeToRefs(authStore)
+
+    const mode = import.meta.env.VITE_MODE
 
     return {
-      mode: import.meta.env.VITE_MODE,
-      id,
-      login,
-      authStore,
-      themeStore
+      mode,
+      themeStore,
+      userId: id
     }
   },
   provide() {
@@ -36,54 +34,30 @@ export default {
     }
   },
   computed: {
-    isAuthenticated() {
-      return !!this.id || this.mode === 'gateway'
+    authenticated() {
+      return this.mode === 'gateway' || !!this.userId
     }
   },
-  async mounted() {
+  mounted() {
     document.title = 'SmartThing ' + this.mode
-
-    useStompClientStore() // todo why it's here? some bug ????
-    this.tryAuth()
-  },
-  methods: {
-    async tryAuth() {
-      if (this.mode === 'gateway') {
-        this.id = ''
-        return
-      }
-      try {
-        const { user } = (await CloudApi.getAuthentication()) ?? {}
-        this.authStore.setAuthentication(user)
-      } catch (error) {
-        console.error(error)
-      }
-    }
   }
 }
 </script>
 
 <template>
   <div v-if="!!mode">
-    <div v-if="!isAuthenticated">
-      <CloudAuth @authenticated="({ user }) => authStore.setAuthentication(user)" />
-      <ToatsView id="toasts-list" />
-    </div>
-    <router-view v-else v-slot="{ Component, path }">
-      <GatewayProvider>
-        <HeaderDoc class="doc" />
-        <CloudAuth
-          v-if="!isAuthenticated"
-          @authenticated="({ user }) => authStore.setAuthentication(user)"
-        />
-        <!-- <keep-alive>
+    <router-view v-slot="{ Component, path }">
+      <Transition name="fade-in">
+        <GatewayProvider v-if="authenticated">
+          <HeaderDoc class="doc" />
+          <Transition name="fade-in">
             <component :is="Component" :key="path" />
-          </keep-alive> -->
-        <Transition name="fade-in">
-          <component :is="Component" :key="path" />
-        </Transition>
-        <ToatsView id="toasts-list" />
-      </GatewayProvider>
+          </Transition>
+        </GatewayProvider>
+        <CloudAuth v-else-if="mode === 'cloud'" />
+        <div v-else>Something gone wrong</div>
+      </Transition>
+      <ToatsView id="toasts-list" />
     </router-view>
   </div>
   <div v-else>Mode is undefined</div>
