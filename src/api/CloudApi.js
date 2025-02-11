@@ -23,16 +23,23 @@ const axiosConfig = {
 }
 const axiosInstance = axios.create(axiosConfig)
 
+let tokenRefreshPromise = undefined
+
 const refreshToken = async () => {
-  console.debug('Token died, trying to refresh')
+  if (tokenRefreshPromise != undefined) {
+    await tokenRefreshPromise
+    return true
+  }
+
   const localRefresh = localStorage.getItem(REFRESH_TOKEN_KEY)
   if (!localRefresh) {
     console.debug('No refresh token')
     return
   }
+  console.debug('Token died, trying to refresh')
   try {
-    const { refresh } = (await axiosInstance.post(URL_REFRESH_USER, { refreshToken: localRefresh }))
-      .data
+    tokenRefreshPromise = axios.post(URL_REFRESH_USER, { refreshToken: localRefresh })
+    const { refresh } = (await tokenRefreshPromise).data
     localStorage.setItem(REFRESH_TOKEN_KEY, refresh)
     console.debug('Token refreshed')
     return true
@@ -44,15 +51,15 @@ const refreshToken = async () => {
 axiosInstance.interceptors.response.use(
   (response) => response,
   async (error) => {
-    const { status, url } = error?.response ?? {}
-    if (status === 401 && !url?.endWith(URL_AUTH) && !url?.endWith(URL_REFRESH_USER)) {
-      if (error?.config?.retry) {
+    const { status, config } = error?.response ?? { status: 401, config: {} }
+    if (status === 401) {
+      if (config?.retry == true) {
         console.debug('Failed to retry request')
         return error
       }
       if (await refreshToken()) {
         console.debug('Trying to send request again')
-        return axiosInstance.request({ ...error.config, retry: true })
+        return axiosInstance.request({ ...config, retry: true })
       }
     }
     return Promise.reject(error)
