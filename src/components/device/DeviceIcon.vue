@@ -44,6 +44,7 @@ export default {
           '.png image in /img/ folder. You can find this folder ' +
           "in web page's folder on the server."
       )
+      this.loaded = false
     }
   }
 }

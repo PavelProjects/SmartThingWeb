@@ -67,7 +67,7 @@ export default {
 
     EventBus.on('deviceUpdate', ({ device, name }) => {
       let index = this.devices.findIndex(({ ip }) => device.ip === ip)
-      if (index > 0) {
+      if (index >= 0) {
         this.devices[index].name = name
       } else {
         index = this.savedDevices.indexOf(({ ip }) => device.ip === ip)
