@@ -76,7 +76,6 @@ export default {
     <InputField
       :label="intl.formatMessage({ id: 'device.wifi.password' })"
       v-model="settings.password"
-      type="password"
     />
     <ComboBoxField
       :label="intl.formatMessage({ id: 'device.wifi.mode' })"
