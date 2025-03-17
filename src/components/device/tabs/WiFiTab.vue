@@ -67,7 +67,7 @@ export default {
 </script>
 
 <template>
-  <BaseContainer v-if="settings" :vertical="true" class="fields-list">
+  <BaseContainer v-if="settings" :vertical="true" class="wifi-tab">
     <InputField
       :label="intl.formatMessage({ id: 'device.wifi.ssid' })"
       v-model="settings.ssid"
@@ -92,7 +92,7 @@ export default {
 </template>
 
 <style scoped>
-.fields-list {
+.wifi-tab {
   width: 60%;
   margin: auto;
   padding: var(--default-padding);

@@ -118,7 +118,6 @@ export default {
     </BaseContainer>
     <GatewayEditDialog
       :open="showCreateDialog"
-      :gateway="{}"
       @save="createGateway"
       @close="showCreateDialog = false"
     />

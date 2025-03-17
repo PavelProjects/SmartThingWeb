@@ -17,6 +17,7 @@ export default {
     BaseContainer
   },
   props: {
+    open: Boolean,
     gateway: Object
   },
   data() {
@@ -34,6 +35,11 @@ export default {
     }
   },
   methods: {
+    handleClose() {
+      this.name = ''
+      this.description = ''
+      this.$emit('close')
+    },
     handleSave() {
       if (!this.name) {
         toast.error({
@@ -62,7 +68,11 @@ export default {
 </script>
 
 <template>
-  <ModalDialog id="gateway-edit" @close="$emit('close')">
+  <ModalDialog
+    :id="'gateway-edit-' + gateway?.id ?? 'new'"
+    :open="open"
+    @close="() => handleClose()"
+  >
     <BaseContainer class="gateway-editor" :vertical="true">
       <InputField :label="intl.formatMessage({ id: 'gateway.edit.name' })" v-model="name" />
       <InputField
