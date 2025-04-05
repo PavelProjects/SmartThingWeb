@@ -38,7 +38,9 @@ const refreshToken = async () => {
   }
   console.debug('Token died, trying to refresh')
   try {
-    tokenRefreshPromise = axios.post(URL_REFRESH_USER, { refreshToken: localRefresh })
+    tokenRefreshPromise = axios
+      .create({ baseURL: pathname })
+      .post(URL_REFRESH_USER, { refreshToken: localRefresh })
     const { refresh } = (await tokenRefreshPromise).data
     localStorage.setItem(REFRESH_TOKEN_KEY, refresh)
     console.debug('Token refreshed')
