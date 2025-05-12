@@ -172,7 +172,7 @@ export default {
       @save="saveGateway"
       @close="showEditDialog = false"
     />
-    <ModalDialog id="token-generator" :open="token" @close="token = undefined">
+    <ModalDialog :id="`token-generator-${gateway.id}`" :open="token" @close="token = undefined">
       <BaseContainer class="token-gen-container" :vertical="true">
         <h2 class="header">
           {{ intl.formatMessage({ id: 'gateway.item.connection.token' }) }}
