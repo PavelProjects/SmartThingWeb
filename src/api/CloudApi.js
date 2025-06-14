@@ -103,7 +103,7 @@ const CloudApi = {
     await axiosInstance.delete(URL_GATEWAY_DELETE + '/' + gateway.id)
   },
   async sendGatewayRequest(gateway, url, method, data) {
-    return await axiosInstance.post(URL_GATEWAY_REQUEST + '/' + gateway.id, {
+    return await axiosInstance.post(URL_GATEWAY_REQUEST + '/' + gateway.name, {
       url,
       method,
       data
@@ -111,14 +111,14 @@ const CloudApi = {
   },
   async sendGatewayCommand(gateway, command, parameters) {
     return await axiosInstance.post(URL_GATEWAY_REQUEST + '/command', {
-      gatewayId: gateway.id,
+      gatewayName: gateway.name,
       command,
       parameters
     })
   },
   async sendDeviceRequest({ gateway, device, command, params }) {
     return await axiosInstance.post(URL_GATEWAY_REQUEST + '/device', {
-      gatewayId: gateway.id,
+      gatewayName: gateway.name,
       device: device.ip,
       command,
       params
